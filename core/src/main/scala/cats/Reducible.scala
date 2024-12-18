@@ -21,7 +21,6 @@
 
 package cats
 
-import cats.Foldable.Source
 import cats.data.{Ior, NonEmptyList}
 
 /**
@@ -202,31 +201,47 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
    * `A` values will be mapped into `G[B]` and combined using
    * `Apply#map2`.
    *
-   * This method is similar to [[Foldable.traverse_]]. There are two
+   * This method is similar to [[Foldable.traverseVoid]]. There are two
    * main differences:
    *
    * 1. We only need an [[Apply]] instance for `G` here, since we
    * don't need to call [[Applicative.pure]] for a starting value.
    * 2. This performs a strict left-associative traversal and thus
    * must always traverse the entire data structure. Prefer
-   * [[Foldable.traverse_]] if you have an [[Applicative]] instance
+   * [[Foldable.traverseVoid]] if you have an [[Applicative]] instance
    * available for `G` and want to take advantage of short-circuiting
    * the traversal.
    */
-  def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] = {
+  def nonEmptyTraverseVoid[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] = {
     val f1 = f.andThen(G.void)
     reduceRightTo(fa)(f1)((x, y) => G.map2Eval(f1(x), y)((_, b) => b)).value
   }
 
   /**
+   * Alias for `nonEmptyTraverseVoid`.
+   *
+   * @deprecated this method should be considered as deprecated and replaced by `nonEmptyTraverseVoid`.
+   */
+  def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] =
+    nonEmptyTraverseVoid(fa)(f)
+
+  /**
    * Sequence `F[G[A]]` using `Apply[G]`.
    *
-   * This method is similar to [[Foldable.sequence_]] but requires only
+   * This method is similar to [[Foldable.sequenceVoid]] but requires only
    * an [[Apply]] instance for `G` instead of [[Applicative]]. See the
-   * [[nonEmptyTraverse_]] documentation for a description of the differences.
+   * [[nonEmptyTraverseVoid]] documentation for a description of the differences.
+   */
+  def nonEmptySequenceVoid[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
+    nonEmptyTraverseVoid(fga)(identity)
+
+  /**
+   * Alias for `nonEmptySequenceVoid`.
+   *
+   * @deprecated this method should be considered as deprecated and replaced by `nonEmptySequenceVoid`.
    */
   def nonEmptySequence_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
-    nonEmptyTraverse_(fga)(identity)
+    nonEmptySequenceVoid(fga)
 
   def toNonEmptyList[A](fa: F[A]): NonEmptyList[A] =
     reduceRightTo(fa)(a => NonEmptyList(a, Nil)) { (a, lnel) =>
@@ -399,10 +414,14 @@ object Reducible {
       typeClassInstance.reduceMapM[G, A, B](self)(f)(G, B)
     def reduceRightTo[B](f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
       typeClassInstance.reduceRightTo[A, B](self)(f)(g)
+    def nonEmptyTraverseVoid[G[_], B](f: A => G[B])(implicit G: Apply[G]): G[Unit] =
+      typeClassInstance.nonEmptyTraverseVoid[G, A, B](self)(f)
     def nonEmptyTraverse_[G[_], B](f: A => G[B])(implicit G: Apply[G]): G[Unit] =
-      typeClassInstance.nonEmptyTraverse_[G, A, B](self)(f)(G)
+      nonEmptyTraverseVoid[G, B](f)
+    def nonEmptySequenceVoid[G[_], B](implicit ev$1: A <:< G[B], G: Apply[G]): G[Unit] =
+      typeClassInstance.nonEmptySequenceVoid[G, B](self.asInstanceOf[F[G[B]]])
     def nonEmptySequence_[G[_], B](implicit ev$1: A <:< G[B], G: Apply[G]): G[Unit] =
-      typeClassInstance.nonEmptySequence_[G, B](self.asInstanceOf[F[G[B]]])(G)
+      nonEmptySequenceVoid[G, B]
     def toNonEmptyList: NonEmptyList[A] = typeClassInstance.toNonEmptyList[A](self)
     def minimum(implicit A: Order[A]): A = typeClassInstance.minimum[A](self)(A)
     def maximum(implicit A: Order[A]): A = typeClassInstance.maximum[A](self)(A)
