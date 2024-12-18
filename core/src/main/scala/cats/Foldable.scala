@@ -598,8 +598,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Alias for `traverseVoid`.
    *
-   * @deprecated this method should be considered as deprecated;
-   *             refrain from using this method and consider switching to `traverseVoid`.
+   * @deprecated this method should be considered as deprecated and replaced by `traverseVoid`.
    */
   def traverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
     traverseVoid(fa)(f)
@@ -627,8 +626,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Alias for `sequenceVoid`.
    *
-   * @deprecated this method should be considered as deprecated;
-   *             refrain from using this method and consider switching to `sequenceVoid`.
+   * @deprecated this method should be considered as deprecated and replaced by `sequenceVoid`.
    */
   def sequence_[G[_]: Applicative, A](fga: F[G[A]]): G[Unit] =
     sequenceVoid(fga)

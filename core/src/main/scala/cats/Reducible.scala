@@ -220,8 +220,7 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
   /**
    * Alias for `nonEmptyTraverseVoid`.
    *
-   * @deprecated this method should be considered as deprecated;
-   *             refrain from using this method and consider switching to `nonEmptyTraverseVoid`.
+   * @deprecated this method should be considered as deprecated and replaced by `nonEmptyTraverseVoid`.
    */
   def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] =
     nonEmptyTraverseVoid(fa)(f)
@@ -239,8 +238,7 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
   /**
    * Alias for `nonEmptySequenceVoid`.
    *
-   * @deprecated this method should be considered as deprecated;
-   *             refrain from using this method and consider switching to `nonEmptySequenceVoid`.
+   * @deprecated this method should be considered as deprecated and replaced by `nonEmptySequenceVoid`.
    */
   def nonEmptySequence_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
     nonEmptySequenceVoid(fga)

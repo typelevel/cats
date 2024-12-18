@@ -271,8 +271,7 @@ object Parallel extends ParallelArityFunctions2 {
   /**
    * Alias for `parSequenceVoid`.
    *
-   * @deprecated this method should be considered as deprecated;
-   *             refrain from using this method and consider switching to `parSequenceVoid`.
+   * @deprecated this method should be considered as deprecated and replaced by `parSequenceVoid`.
    */
   def parSequence_[T[_]: Foldable, M[_], A](tma: T[M[A]])(implicit P: Parallel[M]): M[Unit] =
     parSequenceVoid(tma)
@@ -289,8 +288,7 @@ object Parallel extends ParallelArityFunctions2 {
   /**
    * Alias for `parTraverseVoid`.
    *
-   * @deprecated this method should be considered as deprecated;
-   *             refrain from using this method and consider switching to `parTraverseVoid`.
+   * @deprecated this method should be considered as deprecated and replaced by `parTraverseVoid`.
    */
   def parTraverse_[T[_]: Foldable, M[_], A, B](ta: T[A])(f: A => M[B])(implicit P: Parallel[M]): M[Unit] =
     parTraverseVoid(ta)(f)
@@ -374,8 +372,7 @@ object Parallel extends ParallelArityFunctions2 {
   /**
    * Alias for `parNonEmptySequenceVoid`.
    *
-   * @deprecated this method should be considered as deprecated;
-   *             refrain from using this method and consider switching to `parNonEmptySequenceVoid`.
+   * @deprecated this method should be considered as deprecated and replaced by `parNonEmptySequenceVoid`.
    */
   def parNonEmptySequence_[T[_]: Reducible, M[_], A](
     tma: T[M[A]]
@@ -396,8 +393,7 @@ object Parallel extends ParallelArityFunctions2 {
   /**
    * Alias for `parNonEmptyTraverseVoid`.
    *
-   * @deprecated this method should be considered as deprecated;
-   *             refrain from using this method and consider switching to `parNonEmptyTraverseVoid`.
+   * @deprecated this method should be considered as deprecated and replaced by `parNonEmptyTraverseVoid`.
    */
   def parNonEmptyTraverse_[T[_]: Reducible, M[_], A, B](
     ta: T[A]
