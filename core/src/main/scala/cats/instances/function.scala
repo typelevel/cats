@@ -178,7 +178,7 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
         }
     }
 
-  implicit val catsStdInstancesForFunction1: ArrowChoice[Function1] with CommutativeArrow[Function1] =
+  implicit val catsStdInstancesForFunction1: ArrowChoice[Function1] & CommutativeArrow[Function1] =
     new ArrowChoice[Function1] with CommutativeArrow[Function1] {
       def choose[A, B, C, D](f: A => C)(g: B => D): Either[A, B] => Either[C, D] = {
         case Left(a)  => Left(f(a))

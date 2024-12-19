@@ -23,7 +23,7 @@ package cats.kernel
 package instances
 
 trait IntInstances {
-  implicit val catsKernelStdOrderForInt: Order[Int] with Hash[Int] with BoundedEnumerable[Int] =
+  implicit val catsKernelStdOrderForInt: Order[Int] & Hash[Int] & BoundedEnumerable[Int] =
     new IntOrder
   implicit val catsKernelStdGroupForInt: CommutativeGroup[Int] = new IntGroup
 }

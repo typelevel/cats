@@ -220,7 +220,7 @@ object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
    *
    * @see [[Order.whenEqual]]
    */
-  def whenEqualMonoid[A]: Monoid[Order[A]] with Band[Order[A]] =
+  def whenEqualMonoid[A]: Monoid[Order[A]] & Band[Order[A]] =
     new Monoid[Order[A]] with Band[Order[A]] {
       val empty: Order[A] = allEqual[A]
       def combine(x: Order[A], y: Order[A]): Order[A] = Order.whenEqual(x, y)

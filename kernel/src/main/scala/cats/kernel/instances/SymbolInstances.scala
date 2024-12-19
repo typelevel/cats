@@ -23,7 +23,7 @@ package cats.kernel
 package instances
 
 trait SymbolInstances {
-  implicit val catsKernelStdOrderForSymbol: Order[Symbol] with Hash[Symbol] with LowerBounded[Symbol] = new SymbolOrder
+  implicit val catsKernelStdOrderForSymbol: Order[Symbol] & Hash[Symbol] & LowerBounded[Symbol] = new SymbolOrder
 }
 
 trait SymbolLowerBounded extends LowerBounded[Symbol] {
