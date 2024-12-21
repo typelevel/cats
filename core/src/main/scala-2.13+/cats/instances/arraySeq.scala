@@ -29,7 +29,7 @@ import scala.collection.mutable.Builder
 
 trait ArraySeqInstances extends cats.kernel.instances.ArraySeqInstances {
   implicit def catsStdInstancesForArraySeq
-    : Traverse[ArraySeq] with Monad[ArraySeq] with Alternative[ArraySeq] with CoflatMap[ArraySeq] with Align[ArraySeq] =
+    : Traverse[ArraySeq] & Monad[ArraySeq] & Alternative[ArraySeq] & CoflatMap[ArraySeq] & Align[ArraySeq] =
     ArraySeqInstances.stdInstances
 
   implicit def catsStdTraverseFilterForArraySeq: TraverseFilter[ArraySeq] =
@@ -41,7 +41,7 @@ trait ArraySeqInstances extends cats.kernel.instances.ArraySeqInstances {
 
 private[cats] object ArraySeqInstances {
   final private val stdInstances
-    : Traverse[ArraySeq] with Monad[ArraySeq] with Alternative[ArraySeq] with CoflatMap[ArraySeq] with Align[ArraySeq] =
+    : Traverse[ArraySeq] & Monad[ArraySeq] & Alternative[ArraySeq] & CoflatMap[ArraySeq] & Align[ArraySeq] =
     new Traverse[ArraySeq]
       with Monad[ArraySeq]
       with Alternative[ArraySeq]

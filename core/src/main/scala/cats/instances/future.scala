@@ -38,7 +38,7 @@ trait FutureInstances extends FutureInstances1 {
 
   implicit def catsStdInstancesForFuture(implicit
     ec: ExecutionContext
-  ): MonadThrow[Future] with CoflatMap[Future] with Monad[Future] =
+  ): MonadThrow[Future] & CoflatMap[Future] & Monad[Future] =
     new FutureCoflatMap with MonadThrow[Future] with Monad[Future] with StackSafeMonad[Future] {
       override def pure[A](x: A): Future[A] =
         Future.successful(x)

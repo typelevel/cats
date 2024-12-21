@@ -1203,7 +1203,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
   implicit def catsDataMonoidForChain[A]: Monoid[Chain[A]] = theMonoid.asInstanceOf[Monoid[Chain[A]]]
 
   implicit val catsDataInstancesForChain
-    : Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] with Align[Chain] =
+    : Traverse[Chain] & Alternative[Chain] & Monad[Chain] & CoflatMap[Chain] & Align[Chain] =
     new Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] with Align[Chain] {
       def foldLeft[A, B](fa: Chain[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
@@ -1357,7 +1357,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
     }
 
   implicit val catsDataTraverseFilterForChain: TraverseFilter[Chain] = new TraverseFilter[Chain] {
-    def traverse: Traverse[Chain] with Alternative[Chain] = Chain.catsDataInstancesForChain
+    def traverse: Traverse[Chain] & Alternative[Chain] = Chain.catsDataInstancesForChain
 
     override def filter[A](fa: Chain[A])(f: A => Boolean): Chain[A] = fa.filter(f)
 

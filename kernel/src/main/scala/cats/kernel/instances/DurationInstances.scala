@@ -26,7 +26,7 @@ import scala.concurrent.duration.Duration
 
 trait DurationInstances {
   implicit val catsKernelStdOrderForDuration
-    : Order[Duration] with Hash[Duration] with LowerBounded[Duration] with UpperBounded[Duration] = new DurationOrder
+    : Order[Duration] & Hash[Duration] & LowerBounded[Duration] & UpperBounded[Duration] = new DurationOrder
   implicit val catsKernelStdGroupForDuration: CommutativeGroup[Duration] = new DurationGroup
 }
 

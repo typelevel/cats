@@ -389,7 +389,7 @@ object Eval extends EvalInstances {
 
 sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
 
-  implicit val catsBimonadForEval: Bimonad[Eval] with CommutativeMonad[Eval] =
+  implicit val catsBimonadForEval: Bimonad[Eval] & CommutativeMonad[Eval] =
     new Bimonad[Eval] with StackSafeMonad[Eval] with CommutativeMonad[Eval] {
       override def map[A, B](fa: Eval[A])(f: A => B): Eval[B] = fa.map(f)
       def pure[A](a: A): Eval[A] = Now(a)

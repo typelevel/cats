@@ -75,7 +75,7 @@ sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
   }
 
   @deprecated("Use catsStdInstancesForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
-  def catsStdInstancesForTuple2[X]: Traverse[(X, *)] with Comonad[(X, *)] with Reducible[(X, *)] =
+  def catsStdInstancesForTuple2[X]: Traverse[(X, *)] & Comonad[(X, *)] & Reducible[(X, *)] =
     new Traverse[(X, *)] with Comonad[(X, *)] with Reducible[(X, *)] {
       def traverse[G[_], A, B](fa: (X, A))(f: A => G[B])(implicit G: Applicative[G]): G[(X, B)] =
         G.map(f(fa._2))((fa._1, _))

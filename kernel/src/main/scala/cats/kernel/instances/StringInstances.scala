@@ -24,7 +24,7 @@ package instances
 import compat.scalaVersionSpecific._
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait StringInstances {
-  implicit val catsKernelStdOrderForString: Order[String] with Hash[String] with LowerBounded[String] = new StringOrder
+  implicit val catsKernelStdOrderForString: Order[String] & Hash[String] & LowerBounded[String] = new StringOrder
   implicit val catsKernelStdMonoidForString: Monoid[String] = new StringMonoid
 }
 
