@@ -25,11 +25,13 @@ package kernel
 import scala.{specialized => sp}
 import scala.collection.immutable.LazyList
 
+@deprecated(message = "Please use UpperBoundableEnumerable", since = "2.10.0")
 trait PartialPreviousUpperBounded[@sp A] extends PartialPrevious[A] with PartialNext[A] with UpperBounded[A] {
 
   /**
    * Enumerate the members in descending order.
    */
+  @deprecated(message = "Please use UpperBoundableEnumerable.enumFromMax.", since = "2.10.0")
   def membersDescending: LazyList[A] = {
     def loop(a: A): LazyList[A] =
       partialPrevious(a) match {
@@ -41,11 +43,13 @@ trait PartialPreviousUpperBounded[@sp A] extends PartialPrevious[A] with Partial
 
 }
 
+@deprecated(message = "Please use LowerBoundableEnumerable", since = "2.10.0")
 trait PartialNextLowerBounded[@sp A] extends PartialPrevious[A] with PartialNext[A] with LowerBounded[A] {
 
   /**
    * Enumerate the members in ascending order.
    */
+  @deprecated(message = "Please use LowerBoundableEnumerable.enumFromMin.", since = "2.10.0")
   def membersAscending: LazyList[A] = {
     def loop(a: A): LazyList[A] =
       partialNext(a) match {

@@ -25,11 +25,13 @@ package kernel
 import scala.{specialized => sp}
 import scala.collection.immutable.Stream
 
+@deprecated(message = "Please use Enumerable instead.", since = "2.10.0")
 trait PartialPreviousUpperBounded[@sp A] extends PartialPrevious[A] with PartialNext[A] with UpperBounded[A] {
 
   /**
    * Enumerate the members in descending order.
    */
+  @deprecated(message = "Please use Enumerable.membersDescending.", since = "2.10.0")
   def membersDescending: Stream[A] = {
     def loop(a: A): Stream[A] =
       partialPrevious(a) match {
@@ -41,11 +43,13 @@ trait PartialPreviousUpperBounded[@sp A] extends PartialPrevious[A] with Partial
 
 }
 
+@deprecated(message = "Please use Enumerable instead.", since = "2.10.0")
 trait PartialNextLowerBounded[@sp A] extends PartialPrevious[A] with PartialNext[A] with LowerBounded[A] {
 
   /**
    * Enumerate the members in ascending order.
    */
+  @deprecated(message = "Please use Enumerable.membersAscending.", since = "2.10.0")
   def membersAscending: Stream[A] = {
     def loop(a: A): Stream[A] =
       partialNext(a) match {

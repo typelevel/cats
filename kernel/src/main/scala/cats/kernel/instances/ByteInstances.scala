@@ -22,10 +22,16 @@
 package cats.kernel
 package instances
 
+import scala.annotation.nowarn
+
 trait ByteInstances {
-  implicit val catsKernelStdOrderForByte: Order[Byte] with Hash[Byte] with BoundedEnumerable[Byte] =
+  implicit val catsKernelStdBoundableEnumerableForByte: Order[Byte] with Hash[Byte] with BoundableEnumerable[Byte] =
     new ByteOrder
   implicit val catsKernelStdGroupForByte: CommutativeGroup[Byte] = new ByteGroup
+
+  @deprecated(message = "Please use catsKernelStdBoundableEnumerableForByte", since = "2.10.0")
+  val catsKernelStdOrderForByte: Order[Byte] with Hash[Byte] with BoundedEnumerable[Byte] =
+    new ByteOrder
 }
 
 class ByteGroup extends CommutativeGroup[Byte] {
@@ -35,6 +41,7 @@ class ByteGroup extends CommutativeGroup[Byte] {
   override def remove(x: Byte, y: Byte): Byte = (x - y).toByte
 }
 
+@deprecated(message = "Please use ByteBoundableEnumerable.", since = "2.10.0")
 trait ByteEnumerable extends BoundedEnumerable[Byte] {
   override def partialNext(a: Byte): Option[Byte] =
     if (order.eqv(a, maxBound)) None else Some((a + 1).toByte)
@@ -42,12 +49,28 @@ trait ByteEnumerable extends BoundedEnumerable[Byte] {
     if (order.eqv(a, minBound)) None else Some((a - 1).toByte)
 }
 
+private[instances] trait ByteBoundableEnumerable extends BoundableEnumerable[Byte] {
+  override final def size: BigInt =
+    (BigInt(minBound.toInt) - BigInt(maxBound.toInt)) + BigInt(1)
+
+  override final def fromEnum(a: Byte): BigInt =
+    BigInt(a.toInt)
+
+  override final def toEnumOpt(i: BigInt): Option[Byte] =
+    if (i >= BigInt(minBound.toInt) && i <= BigInt(maxBound.toInt)) {
+      Some(i.toByte)
+    } else {
+      None
+    }
+}
+
 trait ByteBounded extends LowerBounded[Byte] with UpperBounded[Byte] {
   override def minBound: Byte = Byte.MinValue
   override def maxBound: Byte = Byte.MaxValue
 }
 
-class ByteOrder extends Order[Byte] with Hash[Byte] with ByteBounded with ByteEnumerable { self =>
+@nowarn("msg=ByteBoundableEnumerable")
+class ByteOrder extends Order[Byte] with Hash[Byte] with ByteBounded with ByteEnumerable with ByteBoundableEnumerable { self =>
 
   def hash(x: Byte): Int = x.hashCode()
 
