@@ -47,7 +47,7 @@ abstract class HashFunctions[H[T] <: Hash[T]] extends EqFunctions[H] {
 
 }
 
-object Hash extends HashFunctions[Hash] {
+object Hash extends HashFunctions[Hash] with HashLowPriorityInstances0 {
 
   /**
    * Fetch a `Hash` instance given the specific type.
@@ -79,4 +79,16 @@ object Hash extends HashFunctions[Hash] {
 trait HashToHashingConversion {
   implicit def catsKernelHashToHashing[A](implicit ev: Hash[A]): Hashing[A] =
     ev.hash(_)
+}
+
+private[kernel] trait HashLowPriorityInstances0 {
+
+  implicit def hash1ToHash[F[_], A](implicit F: Hash1[F], A: Hash[A]): Hash[F[A]] =
+    new Hash[F[A]] {
+      override def hash(x: F[A]): Int =
+        F.hash1(x)
+
+      override def eqv(x: F[A], y: F[A]): Boolean =
+        F.liftEq(A.eqv, x, y)
+    }
 }

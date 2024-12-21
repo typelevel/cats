@@ -150,7 +150,10 @@ abstract class PartialOrderFunctions[P[T] <: PartialOrder[T]] extends EqFunction
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific
-object PartialOrder extends PartialOrderFunctions[PartialOrder] with PartialOrderToPartialOrderingConversion {
+object PartialOrder
+    extends PartialOrderFunctions[PartialOrder]
+    with PartialOrderToPartialOrderingConversion
+    with PartialOrderLowPriorityInstances0 {
 
   /**
    * Access an implicit `PartialOrder[A]`.
@@ -184,5 +187,20 @@ trait PartialOrderToPartialOrderingConversion {
     new PartialOrdering[A] {
       def tryCompare(x: A, y: A): Option[Int] = ev.tryCompare(x, y)
       def lteq(x: A, y: A): Boolean = ev.lteqv(x, y)
+    }
+}
+
+private[kernel] trait PartialOrderLowPriorityInstances0 {
+
+  /**
+   * Derive a [[PartialOrder]] instance from a [[PartialOrder1]] instance.
+   */
+  implicit def partialOrder1ToPartialOrder[F[_], A](implicit
+    F: PartialOrder1[F],
+    A: PartialOrder[A]
+  ): PartialOrder[F[A]] =
+    new PartialOrder[F[A]] {
+      override def partialCompare(x: F[A], y: F[A]): Double =
+        F.liftPartialCompare[A, A](A.partialCompare, x, y)
     }
 }
