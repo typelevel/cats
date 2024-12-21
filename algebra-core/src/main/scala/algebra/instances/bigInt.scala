@@ -22,7 +22,7 @@
 package algebra
 package instances
 
-import algebra.ring._
+import algebra.ring.*
 
 package object bigInt extends BigIntInstances
 

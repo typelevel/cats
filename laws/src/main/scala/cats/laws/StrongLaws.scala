@@ -23,8 +23,8 @@ package cats
 package laws
 
 import cats.arrow.Strong
-import cats.syntax.profunctor._
-import cats.syntax.strong._
+import cats.syntax.profunctor.*
+import cats.syntax.strong.*
 
 /**
  * Laws that must be obeyed by any `cats.functor.Strong`.

@@ -35,10 +35,10 @@ import cats.laws.discipline.{
   TraverseFilterTests,
   TraverseTests
 }
-import cats.laws.discipline.arbitrary._
-import cats.syntax.show._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.show.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 import scala.collection.immutable.Seq
 
 class SeqSuite extends CatsSuite {
@@ -90,8 +90,8 @@ class SeqSuite extends CatsSuite {
 final class SeqInstancesSuite extends munit.FunSuite {
 
   test("NonEmptyParallel instance in cats.instances.seq") {
-    import cats.instances.seq._
-    import cats.syntax.parallel._
+    import cats.instances.seq.*
+    import cats.syntax.parallel.*
 
     (Seq(1, 2, 3), Seq("A", "B", "C")).parTupled
   }

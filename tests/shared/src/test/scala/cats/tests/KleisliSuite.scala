@@ -21,19 +21,19 @@
 
 package cats.tests
 
-import cats._
-import cats.arrow._
+import cats.*
+import cats.arrow.*
 import cats.data.{Const, EitherT, Kleisli, Reader, ReaderT}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.{DeferTests, MonoidKTests, SemigroupKTests}
-import cats.syntax.all._
+import cats.syntax.all.*
 import cats.platform.Platform
 import cats.tests.Helpers.CSemi
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 class KleisliSuite extends CatsSuite {
   implicit def kleisliEq[F[_], A, B](implicit ev: Eq[A => F[B]]): Eq[Kleisli[F, A, B]] =

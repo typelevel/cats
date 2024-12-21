@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.Chain
 import cats.data.NonEmptyChain
 import cats.data.NonEmptyChainOps
@@ -29,12 +29,12 @@ import cats.kernel.laws.discipline.EqTests
 import cats.kernel.laws.discipline.OrderTests
 import cats.kernel.laws.discipline.PartialOrderTests
 import cats.kernel.laws.discipline.SemigroupTests
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.either._
-import cats.syntax.eq._
-import cats.syntax.foldable._
-import org.scalacheck.Prop._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.either.*
+import cats.syntax.eq.*
+import cats.syntax.foldable.*
+import org.scalacheck.Prop.*
 
 class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, NonEmptyChainOps] {
   protected def toList[A](value: NonEmptyChain[A]): List[A] = value.toChain.toList

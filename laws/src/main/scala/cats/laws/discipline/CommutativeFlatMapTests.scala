@@ -25,7 +25,7 @@ package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+import Prop.*
 
 trait CommutativeFlatMapTests[F[_]] extends FlatMapTests[F] with CommutativeApplyTests[F] {
   def laws: CommutativeFlatMapLaws[F]

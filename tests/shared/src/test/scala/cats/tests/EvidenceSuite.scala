@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.evidence._
+import cats.evidence.*
 
 class EvidenceSuite extends CatsSuite {
 

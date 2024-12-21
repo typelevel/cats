@@ -22,7 +22,7 @@
 package cats
 package instances
 
-import cats.data._
+import cats.data.*
 import cats.kernel.Semigroup
 import cats.{NonEmptyParallel, Parallel}
 

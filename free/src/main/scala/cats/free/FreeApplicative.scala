@@ -65,7 +65,7 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
    * Tail recursive.
    */
   final def foldMap[G[_]](f: F ~> G)(implicit G: Applicative[G]): G[A] = {
-    import FreeApplicative._
+    import FreeApplicative.*
     // the remaining arguments to G[A => B]'s
     var argsF: List[FA[F, Any]] = this.asInstanceOf[FA[F, Any]] :: Nil
     var argsFLength: Int = 1

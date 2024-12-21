@@ -21,18 +21,18 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.{EitherT, Ior, IorT, State}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.applicative._
-import cats.syntax.applicativeError._
-import cats.syntax.either._
+import cats.syntax.applicative.*
+import cats.syntax.applicativeError.*
+import cats.syntax.either.*
 import scala.util.{Failure, Success, Try}
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class EitherTSuite extends CatsSuite {
   implicit val iso: Isomorphisms[EitherT[ListWrapper, String, *]] = Isomorphisms

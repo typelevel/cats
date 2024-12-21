@@ -27,8 +27,8 @@ package laws
  */
 trait InvariantSemigroupalLaws[F[_]] extends InvariantLaws[F] with SemigroupalLaws[F] {
   implicit override def F: InvariantSemigroupal[F]
-  import cats.syntax.semigroupal._
-  import cats.syntax.invariant._
+  import cats.syntax.semigroupal.*
+  import cats.syntax.invariant.*
 
   def invariantSemigroupalAssociativity[A, B, C](fa: F[A], fb: F[B], fc: F[C]): IsEq[F[(A, (B, C))]] =
     fa.product(fb.product(fc)) <-> fa

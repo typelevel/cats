@@ -23,8 +23,8 @@ package cats.laws
 
 import cats.{Apply, Id, NonEmptyTraverse, Semigroup}
 import cats.data.{Const, Nested}
-import cats.syntax.nonEmptyTraverse._
-import cats.syntax.reducible._
+import cats.syntax.nonEmptyTraverse.*
+import cats.syntax.reducible.*
 
 trait NonEmptyTraverseLaws[F[_]] extends TraverseLaws[F] with ReducibleLaws[F] {
   implicit override def F: NonEmptyTraverse[F]

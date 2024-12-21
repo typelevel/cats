@@ -22,13 +22,13 @@
 package cats
 package laws
 package discipline
-import kernel.compat.scalaVersionSpecific._
+import kernel.compat.scalaVersionSpecific.*
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.data.NonEmptyVector.ZipNonEmptyVector
 
 import scala.util.{Failure, Success, Try}
 import scala.collection.immutable.{Seq, SortedMap, SortedSet}
-import cats.data._
+import cats.data.*
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
 

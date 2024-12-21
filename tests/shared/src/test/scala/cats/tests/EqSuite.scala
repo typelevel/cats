@@ -25,8 +25,8 @@ import cats.{Contravariant, ContravariantMonoidal, ContravariantSemigroupal, Inv
 import cats.kernel.Eq
 import cats.kernel.laws.discipline.SerializableTests
 import cats.laws.discipline.{ContravariantMonoidalTests, DeferTests, MiniInt}
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
 
 class EqSuite extends CatsSuite {
   Invariant[Eq]

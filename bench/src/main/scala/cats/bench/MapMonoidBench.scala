@@ -21,9 +21,9 @@
 
 package cats.bench
 
-import cats.instances.list._
-import cats.instances.int._
-import cats.instances.map._
+import cats.instances.list.*
+import cats.instances.int.*
+import cats.instances.map.*
 
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 

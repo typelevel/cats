@@ -25,7 +25,7 @@ import cats.{Eq, Representable}
 import cats.laws.RepresentableLaws
 import org.scalacheck.Arbitrary
 import org.typelevel.discipline.Laws
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 trait RepresentableTests[F[_], R] extends Laws {
 

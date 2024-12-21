@@ -22,13 +22,13 @@
 package cats.free
 
 import cats.Functor
-import cats.instances.all._
+import cats.instances.all.*
 import cats.kernel.Eq
 import cats.laws.discipline.{FunctorTests, SerializableTests}
 import cats.tests.CatsSuite
 import org.scalacheck.Arbitrary
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class YonedaSuite extends CatsSuite {
   implicit def yonedaArbitrary[F[_]: Functor, A](implicit F: Arbitrary[F[A]]): Arbitrary[Yoneda[F, A]] =

@@ -22,8 +22,8 @@
 package cats.tests
 
 import cats.{CommutativeApplicative, CommutativeApply, Invariant, InvariantMonoidal}
-import cats.kernel._
-import cats.kernel.laws.discipline.{GroupTests, MonoidTests, SemigroupTests, _}
+import cats.kernel.*
+import cats.kernel.laws.discipline.{GroupTests, MonoidTests, SemigroupTests, *}
 import cats.laws.discipline.{
   ExhaustiveCheck,
   InvariantMonoidalTests,
@@ -32,11 +32,11 @@ import cats.laws.discipline.{
   MiniInt,
   SerializableTests
 }
-import cats.laws.discipline.MiniInt._
-import cats.laws.discipline.eq._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.invariant._
-import cats.syntax.order._
+import cats.laws.discipline.MiniInt.*
+import cats.laws.discipline.eq.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.invariant.*
+import cats.syntax.order.*
 import org.scalacheck.{Arbitrary, Gen}
 
 class AlgebraInvariantSuite extends CatsSuite with ScalaVersionSpecificAlgebraInvariantSuite {

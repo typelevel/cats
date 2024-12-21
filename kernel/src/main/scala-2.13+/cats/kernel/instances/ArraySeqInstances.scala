@@ -24,7 +24,7 @@ package instances
 
 import scala.annotation.tailrec
 import scala.collection.immutable.ArraySeq
-import compat.scalaVersionSpecific._
+import compat.scalaVersionSpecific.*
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait ArraySeqInstances extends ArraySeqInstances.ArraySeqInstances1 {

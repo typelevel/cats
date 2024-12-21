@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.NonEmptyList
 import cats.data.NonEmptyList.ZipNonEmptyList
 import cats.data.NonEmptyMap
@@ -31,13 +31,13 @@ import cats.kernel.laws.discipline.EqTests
 import cats.kernel.laws.discipline.OrderTests
 import cats.kernel.laws.discipline.PartialOrderTests
 import cats.kernel.laws.discipline.SemigroupTests
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.eq._
-import cats.syntax.foldable._
-import cats.syntax.reducible._
-import cats.syntax.show._
-import org.scalacheck.Prop._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.eq.*
+import cats.syntax.foldable.*
+import cats.syntax.reducible.*
+import cats.syntax.show.*
+import org.scalacheck.Prop.*
 import org.scalacheck.Test.Parameters
 
 import scala.collection.immutable.SortedMap

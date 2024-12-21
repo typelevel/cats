@@ -23,7 +23,7 @@ package cats
 package laws
 
 import cats.data.Cokleisli
-import cats.syntax.all._
+import cats.syntax.all.*
 
 /**
  * Laws that must be obeyed by any `CoflatMap`.

@@ -21,7 +21,7 @@
 
 package cats.instances
 
-import cats._
+import cats.*
 import cats.data.{Chain, Ior}
 import cats.kernel.{CommutativeMonoid, CommutativeSemigroup}
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq

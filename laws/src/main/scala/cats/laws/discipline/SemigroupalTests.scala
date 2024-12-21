@@ -26,7 +26,7 @@ package discipline
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
-import Prop._
+import Prop.*
 import org.typelevel.discipline.Laws
 
 trait SemigroupalTests[F[_]] extends Laws {
@@ -60,7 +60,7 @@ object SemigroupalTests {
   }
 
   object Isomorphisms {
-    import cats.kernel.laws._
+    import cats.kernel.laws.*
 
     implicit def invariant[F[_]](implicit F: Invariant[F]): Isomorphisms[F] =
       new Isomorphisms[F] {

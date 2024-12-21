@@ -22,11 +22,11 @@
 package cats.tests
 
 import cats.Functor
-import cats.syntax.functor._
+import cats.syntax.functor.*
 import cats.data.{NonEmptyList, NonEmptyMap}
-import cats.laws.discipline.arbitrary._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class FunctorSuite extends CatsSuite {
   test("void replaces values with unit preserving structure") {

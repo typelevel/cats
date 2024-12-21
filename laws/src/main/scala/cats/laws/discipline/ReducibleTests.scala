@@ -23,8 +23,8 @@ package cats
 package laws
 package discipline
 
-import cats.instances.option._
-import cats.instances.long._
+import cats.instances.option.*
+import cats.instances.long.*
 import cats.kernel.CommutativeMonoid
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop.forAll

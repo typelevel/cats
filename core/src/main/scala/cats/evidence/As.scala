@@ -67,7 +67,7 @@ sealed abstract class As[-A, +B] extends Serializable {
 }
 
 sealed abstract class AsInstances {
-  import As._
+  import As.*
 
   /*
    * Subtyping forms a category

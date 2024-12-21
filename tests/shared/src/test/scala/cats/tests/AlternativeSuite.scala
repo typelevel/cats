@@ -24,8 +24,8 @@ package cats.tests
 import cats.Alternative
 import cats.FlatMap
 import cats.laws.discipline.AlternativeTests
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class AlternativeSuite extends CatsSuite {
 

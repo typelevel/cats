@@ -23,7 +23,7 @@ package cats.bench
 
 import cats.Functor
 import cats.data.EitherK
-import cats.syntax.all._
+import cats.syntax.all.*
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 
 @State(Scope.Benchmark)

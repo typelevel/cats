@@ -23,9 +23,9 @@ package cats
 package laws
 
 import cats.arrow.ArrowChoice
-import cats.syntax.arrowChoice._
-import cats.syntax.compose._
-import cats.syntax.profunctor._
+import cats.syntax.arrowChoice.*
+import cats.syntax.compose.*
+import cats.syntax.profunctor.*
 
 /**
  * Laws that must be obeyed by any `cats.arrow.ArrowChoice`.

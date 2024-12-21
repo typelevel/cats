@@ -23,9 +23,9 @@ package cats
 package laws
 package discipline
 
-import cats.instances.option._
+import cats.instances.option.*
 import cats.kernel.CommutativeMonoid
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 
 trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] with UnorderedTraverseTests[F] {
