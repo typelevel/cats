@@ -89,9 +89,10 @@ class TraverseBench {
     }
   }
 
+  // TODO: consider renaming to `traverseVoidList`
   @Benchmark
-  def traverse_List(bh: Blackhole) = {
-    val result = listT.traverse_(list) { i =>
+  def traverse_List(bh: Blackhole): Unit = {
+    val result = listT.traverseVoid(list) { i =>
       Eval.later {
         Blackhole.consumeCPU(Work)
         i * 2
@@ -155,9 +156,10 @@ class TraverseBench {
     bh.consume(result.value)
   }
 
+  // TODO: consider renaming to `traverseVoidVector`
   @Benchmark
-  def traverse_Vector(bh: Blackhole) = {
-    val result = vectorT.traverse_(vector) { i =>
+  def traverse_Vector(bh: Blackhole): Unit = {
+    val result = vectorT.traverseVoid(vector) { i =>
       Eval.later {
         Blackhole.consumeCPU(Work)
         i * 2
@@ -242,9 +244,10 @@ class TraverseBench {
     bh.consume(result.value)
   }
 
+  // TODO: consider renaming to `traverseVoidChain`
   @Benchmark
-  def traverse_Chain(bh: Blackhole) = {
-    val result = chainT.traverse_(chain) { i =>
+  def traverse_Chain(bh: Blackhole): Unit = {
+    val result = chainT.traverseVoid(chain) { i =>
       Eval.later {
         Blackhole.consumeCPU(Work)
         i * 2

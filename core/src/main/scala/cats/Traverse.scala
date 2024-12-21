@@ -296,7 +296,7 @@ object Traverse {
     }
   }
 
-  private[cats] def traverse_Directly[G[_], A, B](
+  private[cats] def traverseVoidDirectly[G[_], A, B](
     fa: IterableOnce[A]
   )(f: A => G[B])(implicit G: StackSafeMonad[G]): G[Unit] = {
     val iter = fa.iterator

@@ -234,11 +234,11 @@ abstract class ReducibleSuite[F[_]: Reducible](name: String)(implicit
     assert(out.toList === List(2, 4, 6, 9))
   }
 
-  test(s"Reducible[$name].nonEmptyTraverse_ can breakout") {
+  test(s"Reducible[$name].nonEmptyTraverseVoid can breakout") {
     val notAllEven = fromValues(2, 4, 6, 9, 10, 12, 14)
     val out = mutable.ListBuffer[Int]()
 
-    notAllEven.nonEmptyTraverse_ { a => out += a; if (a % 2 == 0) Some(a) else None }
+    notAllEven.nonEmptyTraverseVoid { a => out += a; if (a % 2 == 0) Some(a) else None }
 
     assert(out.toList === List(2, 4, 6, 9))
   }
