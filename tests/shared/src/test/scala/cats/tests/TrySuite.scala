@@ -103,6 +103,20 @@ class TrySuite extends CatsSuite {
     }
   }
 
+  test("catchOnlySafe works") {
+    forAll { (e: Either[String, Int]) =>
+      val str = e.fold(identity, _.toString)
+      val res = MonadThrow[Try].catchOnlySafe[Try, NumberFormatException](str.toInt)
+      // the above should never raise an exception in the outer try
+      assertEquals(res.toEither.map(_.isSuccess), Right(e.isRight), clue(res))
+    }
+  }
+
+  test("catchOnlySafe only raise the specified type in Try") {
+    val res = MonadThrow[Try].catchOnlySafe[Try, UnsupportedOperationException]("str".toInt)
+    assert(res.isFailure, clue(res))
+  }
+
   test("fromTry works") {
     forAll { (t: Try[Int]) =>
       assert((MonadThrow[Try].fromTry(t)) === t)
