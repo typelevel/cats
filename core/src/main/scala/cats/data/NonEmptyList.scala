@@ -796,7 +796,7 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
     "2.9.0"
   )
   def catsDataInstancesForNonEmptyList
-    : SemigroupK[NonEmptyList] with Bimonad[NonEmptyList] with NonEmptyTraverse[NonEmptyList] with Align[NonEmptyList] =
+    : SemigroupK[NonEmptyList] & Bimonad[NonEmptyList] & NonEmptyTraverse[NonEmptyList] & Align[NonEmptyList] =
     catsDataInstancesForNonEmptyListBinCompat1
 
   /**
@@ -805,10 +805,10 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
    *
    * Also see the discussion: PR #3541 and issue #3069.
    */
-  implicit val catsDataInstancesForNonEmptyListBinCompat1: NonEmptyAlternative[NonEmptyList]
-    with Bimonad[NonEmptyList]
-    with NonEmptyTraverse[NonEmptyList]
-    with Align[NonEmptyList] =
+  implicit val catsDataInstancesForNonEmptyListBinCompat1
+    : NonEmptyAlternative[NonEmptyList] & Bimonad[NonEmptyList] & NonEmptyTraverse[NonEmptyList] & Align[
+      NonEmptyList
+    ] =
     new NonEmptyReducible[NonEmptyList, List]
       with NonEmptyAlternative[NonEmptyList]
       with Bimonad[NonEmptyList]

@@ -26,7 +26,7 @@ import cats.kernel.CommutativeMonoid
 
 trait SetInstances extends cats.kernel.instances.SetInstances {
 
-  implicit val catsStdInstancesForSet: UnorderedTraverse[Set] with MonoidK[Set] =
+  implicit val catsStdInstancesForSet: UnorderedTraverse[Set] & MonoidK[Set] =
     new UnorderedTraverse[Set] with MonoidK[Set] {
 
       def unorderedTraverse[G[_]: CommutativeApplicative, A, B](sa: Set[A])(f: A => G[B]): G[Set[B]] =

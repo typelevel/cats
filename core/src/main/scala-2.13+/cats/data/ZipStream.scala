@@ -30,7 +30,7 @@ object ZipStream {
 
   def apply[A](value: Stream[A]): ZipStream[A] = new ZipStream(value)
 
-  implicit val catsDataAlternativeForZipStream: Alternative[ZipStream] with CommutativeApplicative[ZipStream] =
+  implicit val catsDataAlternativeForZipStream: Alternative[ZipStream] & CommutativeApplicative[ZipStream] =
     new Alternative[ZipStream] with CommutativeApplicative[ZipStream] {
       def pure[A](x: A): ZipStream[A] = new ZipStream(Stream.continually(x))
 

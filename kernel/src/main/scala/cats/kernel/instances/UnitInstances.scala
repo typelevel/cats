@@ -25,10 +25,10 @@ import compat.scalaVersionSpecific._
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait UnitInstances {
-  implicit val catsKernelStdOrderForUnit: Order[Unit] with Hash[Unit] with BoundedEnumerable[Unit] =
+  implicit val catsKernelStdOrderForUnit: Order[Unit] & Hash[Unit] & BoundedEnumerable[Unit] =
     new UnitOrder
 
-  implicit val catsKernelStdAlgebraForUnit: BoundedSemilattice[Unit] with CommutativeGroup[Unit] =
+  implicit val catsKernelStdAlgebraForUnit: BoundedSemilattice[Unit] & CommutativeGroup[Unit] =
     new UnitAlgebra
 }
 

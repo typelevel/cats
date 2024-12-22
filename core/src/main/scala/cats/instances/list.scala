@@ -34,7 +34,7 @@ import scala.collection.mutable.ListBuffer
 trait ListInstances extends cats.kernel.instances.ListInstances {
 
   implicit val catsStdInstancesForList
-    : Traverse[List] with Alternative[List] with Monad[List] with CoflatMap[List] with Align[List] =
+    : Traverse[List] & Alternative[List] & Monad[List] & CoflatMap[List] & Align[List] =
     new Traverse[List] with Alternative[List] with Monad[List] with CoflatMap[List] with Align[List] {
       def empty[A]: List[A] = Nil
 

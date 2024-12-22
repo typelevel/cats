@@ -33,7 +33,7 @@ trait StreamInstances extends cats.kernel.instances.StreamInstances {
 
   @deprecated("Use cats.instances.lazyList", "2.0.0-RC2")
   implicit val catsStdInstancesForStream
-    : Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] with Align[Stream] =
+    : Traverse[Stream] & Alternative[Stream] & Monad[Stream] & CoflatMap[Stream] & Align[Stream] =
     new Traverse[Stream] with Alternative[Stream] with Monad[Stream] with CoflatMap[Stream] with Align[Stream] {
 
       def empty[A]: Stream[A] = Stream.Empty

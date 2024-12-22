@@ -60,21 +60,24 @@ trait SetInstances {
   // If we accept Monad for Set, we can also have Alternative, as
   // Alternative only requires MonoidK (already accepted by cats-core) and
   // the Applicative that comes from Monad.
-    : Monad[Set] with Alternative[Set] with Traverse[Set] with TraverseFilter[Set] =
+    : Monad[Set] & Alternative[Set] & Traverse[Set] & TraverseFilter[Set] =
     alleycatsStdInstancesForSet_
 
   @deprecated("Use alleycatsStdInstancesForSet", "2.13.0")
   val alleyCatsSetTraverse: Traverse[Set] = alleycatsStdInstancesForSet_
   @deprecated("Use alleycatsStdInstancesForSet", "2.13.0")
-  val alleyCatsStdSetMonad: Monad[Set] with Alternative[Set] = alleycatsStdInstancesForSet_
+  val alleyCatsStdSetMonad: Monad[Set] & Alternative[Set] = alleycatsStdInstancesForSet_
   @deprecated("Use alleycatsStdInstancesForSet", "2.13.0")
   val alleyCatsSetTraverseFilter: TraverseFilter[Set] = alleycatsStdInstancesForSet_
 }
 
 private[alleycats] object SetInstances {
-  private val alleycatsStdInstancesForSet_
-    : Monad[Set] with Alternative[Set] with Traverse[Set] with TraverseFilter[Set] =
+  private val alleycatsStdInstancesForSet_ : Monad[Set] & Alternative[Set] & Traverse[Set] & TraverseFilter[Set] =
     new Monad[Set] with Alternative[Set] with Traverse[Set] with TraverseFilter[Set] {
+
+      // Since iteration order is not guaranteed for sets, folds and other
+      // traversals may produce different results for input sets which
+      // appear to be the same.
       val traverse: Traverse[Set] = this
 
       def traverseFilter[G[_], A, B](fa: Set[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Set[B]] =

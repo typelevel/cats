@@ -149,43 +149,43 @@ object Eq
         }
     }
 
-  implicit def catsKernelInstancesForBitSet: PartialOrder[BitSet] with Hash[BitSet] =
+  implicit def catsKernelInstancesForBitSet: PartialOrder[BitSet] & Hash[BitSet] =
     cats.kernel.instances.bitSet.catsKernelStdOrderForBitSet
   implicit def catsKernelPartialOrderForSet[A]: PartialOrder[Set[A]] =
     cats.kernel.instances.set.catsKernelStdPartialOrderForSet[A]
   implicit def catsKernelOrderForEither[A: Order, B: Order]: Order[Either[A, B]] =
     cats.kernel.instances.either.catsStdOrderForEither[A, B]
 
-  implicit def catsKernelInstancesForUnit: Order[Unit] with Hash[Unit] =
+  implicit def catsKernelInstancesForUnit: Order[Unit] & Hash[Unit] =
     cats.kernel.instances.unit.catsKernelStdOrderForUnit
-  implicit def catsKernelInstancesForBoolean: Order[Boolean] with Hash[Boolean] =
+  implicit def catsKernelInstancesForBoolean: Order[Boolean] & Hash[Boolean] =
     cats.kernel.instances.boolean.catsKernelStdOrderForBoolean
-  implicit def catsKernelInstancesForByte: Order[Byte] with Hash[Byte] =
+  implicit def catsKernelInstancesForByte: Order[Byte] & Hash[Byte] =
     cats.kernel.instances.byte.catsKernelStdOrderForByte
-  implicit def catsKernelInstancesForShort: Order[Short] with Hash[Short] =
+  implicit def catsKernelInstancesForShort: Order[Short] & Hash[Short] =
     cats.kernel.instances.short.catsKernelStdOrderForShort
-  implicit def catsKernelInstancesForInt: Order[Int] with Hash[Int] = cats.kernel.instances.int.catsKernelStdOrderForInt
-  implicit def catsKernelInstancesForLong: Order[Long] with Hash[Long] =
+  implicit def catsKernelInstancesForInt: Order[Int] & Hash[Int] = cats.kernel.instances.int.catsKernelStdOrderForInt
+  implicit def catsKernelInstancesForLong: Order[Long] & Hash[Long] =
     cats.kernel.instances.long.catsKernelStdOrderForLong
-  implicit def catsKernelInstancesForBigInt: Order[BigInt] with Hash[BigInt] =
+  implicit def catsKernelInstancesForBigInt: Order[BigInt] & Hash[BigInt] =
     cats.kernel.instances.bigInt.catsKernelStdOrderForBigInt
-  implicit def catsKernelInstancesForBigDecimal: Order[BigDecimal] with Hash[BigDecimal] =
+  implicit def catsKernelInstancesForBigDecimal: Order[BigDecimal] & Hash[BigDecimal] =
     cats.kernel.instances.bigDecimal.catsKernelStdOrderForBigDecimal
-  implicit def catsKernelInstancesForDuration: Order[Duration] with Hash[Duration] =
+  implicit def catsKernelInstancesForDuration: Order[Duration] & Hash[Duration] =
     cats.kernel.instances.duration.catsKernelStdOrderForDuration
-  implicit def catsKernelInstancesForFiniteDuration: Order[FiniteDuration] with Hash[FiniteDuration] =
+  implicit def catsKernelInstancesForFiniteDuration: Order[FiniteDuration] & Hash[FiniteDuration] =
     cats.kernel.instances.all.catsKernelStdOrderForFiniteDuration
-  implicit def catsKernelInstancesForChar: Order[Char] with Hash[Char] =
+  implicit def catsKernelInstancesForChar: Order[Char] & Hash[Char] =
     cats.kernel.instances.char.catsKernelStdOrderForChar
-  implicit def catsKernelInstancesForSymbol: Order[Symbol] with Hash[Symbol] =
+  implicit def catsKernelInstancesForSymbol: Order[Symbol] & Hash[Symbol] =
     cats.kernel.instances.symbol.catsKernelStdOrderForSymbol
-  implicit def catsKernelInstancesForString: Order[String] with Hash[String] =
+  implicit def catsKernelInstancesForString: Order[String] & Hash[String] =
     cats.kernel.instances.string.catsKernelStdOrderForString
-  implicit def catsKernelInstancesForUUID: Order[UUID] with Hash[UUID] =
+  implicit def catsKernelInstancesForUUID: Order[UUID] & Hash[UUID] =
     cats.kernel.instances.uuid.catsKernelStdOrderForUUID
-  implicit def catsKernelInstancesForDouble: Order[Double] with Hash[Double] =
+  implicit def catsKernelInstancesForDouble: Order[Double] & Hash[Double] =
     cats.kernel.instances.double.catsKernelStdOrderForDouble
-  implicit def catsKernelInstancesForFloat: Order[Float] with Hash[Float] =
+  implicit def catsKernelInstancesForFloat: Order[Float] & Hash[Float] =
     cats.kernel.instances.float.catsKernelStdOrderForFloat
 
   implicit def catsKernelOrderForOption[A: Order]: Order[Option[A]] =

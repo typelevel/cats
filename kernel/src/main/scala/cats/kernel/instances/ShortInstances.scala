@@ -23,7 +23,7 @@ package cats.kernel
 package instances
 
 trait ShortInstances {
-  implicit val catsKernelStdOrderForShort: Order[Short] with Hash[Short] with BoundedEnumerable[Short] = new ShortOrder
+  implicit val catsKernelStdOrderForShort: Order[Short] & Hash[Short] & BoundedEnumerable[Short] = new ShortOrder
   implicit val catsKernelStdGroupForShort: CommutativeGroup[Short] = new ShortGroup
 }
 

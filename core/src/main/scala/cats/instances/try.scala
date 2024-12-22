@@ -30,7 +30,7 @@ import scala.annotation.tailrec
 
 trait TryInstances extends TryInstances1 {
 
-  implicit def catsStdInstancesForTry: MonadThrow[Try] with CoflatMap[Try] with Traverse[Try] with Monad[Try] =
+  implicit def catsStdInstancesForTry: MonadThrow[Try] & CoflatMap[Try] & Traverse[Try] & Monad[Try] =
     new TryCoflatMap with MonadThrow[Try] with Traverse[Try] with Monad[Try] {
       def pure[A](x: A): Try[A] = Success(x)
 

@@ -23,7 +23,7 @@ package cats.kernel
 package instances
 
 trait ByteInstances {
-  implicit val catsKernelStdOrderForByte: Order[Byte] with Hash[Byte] with BoundedEnumerable[Byte] =
+  implicit val catsKernelStdOrderForByte: Order[Byte] & Hash[Byte] & BoundedEnumerable[Byte] =
     new ByteOrder
   implicit val catsKernelStdGroupForByte: CommutativeGroup[Byte] = new ByteGroup
 }

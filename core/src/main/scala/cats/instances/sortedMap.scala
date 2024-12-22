@@ -49,7 +49,7 @@ trait SortedMapInstances extends SortedMapInstances2 {
     catsStdShowForSortedMap(showA, showB)
 
   implicit def catsStdInstancesForSortedMap[K]
-    : Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] with Align[SortedMap[K, *]] =
+    : Traverse[SortedMap[K, *]] & FlatMap[SortedMap[K, *]] & Align[SortedMap[K, *]] =
     new Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] with Align[SortedMap[K, *]] {
 
       def traverse[G[_], A, B](fa: SortedMap[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[SortedMap[K, B]] = {
@@ -174,7 +174,7 @@ trait SortedMapInstances extends SortedMapInstances2 {
   @deprecated("Use catsStdInstancesForSortedMap override without Order", "2.2.0-M3")
   def catsStdInstancesForSortedMap[K](
     orderK: Order[K]
-  ): Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] with Align[SortedMap[K, *]] =
+  ): Traverse[SortedMap[K, *]] & FlatMap[SortedMap[K, *]] & Align[SortedMap[K, *]] =
     catsStdInstancesForSortedMap[K]
 }
 
