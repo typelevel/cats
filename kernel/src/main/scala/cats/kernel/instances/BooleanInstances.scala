@@ -23,7 +23,7 @@ package cats.kernel
 package instances
 
 trait BooleanInstances {
-  implicit val catsKernelStdOrderForBoolean: Order[Boolean] with Hash[Boolean] with BoundedEnumerable[Boolean] =
+  implicit val catsKernelStdOrderForBoolean: Order[Boolean] & Hash[Boolean] & BoundedEnumerable[Boolean] =
     new BooleanOrder
 }
 

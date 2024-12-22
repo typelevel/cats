@@ -403,7 +403,7 @@ sealed abstract private[data] class NonEmptySeqInstances {
     "2.9.0"
   )
   def catsDataInstancesForNonEmptySeq
-    : SemigroupK[NonEmptySeq] with Bimonad[NonEmptySeq] with NonEmptyTraverse[NonEmptySeq] with Align[NonEmptySeq] =
+    : SemigroupK[NonEmptySeq] & Bimonad[NonEmptySeq] & NonEmptyTraverse[NonEmptySeq] & Align[NonEmptySeq] =
     catsDataInstancesForNonEmptySeqBinCompat1
 
   /**
@@ -412,10 +412,8 @@ sealed abstract private[data] class NonEmptySeqInstances {
    *
    * Also see the discussion: PR #3541 and issue #3069.
    */
-  implicit val catsDataInstancesForNonEmptySeqBinCompat1: NonEmptyAlternative[NonEmptySeq]
-    with Bimonad[NonEmptySeq]
-    with NonEmptyTraverse[NonEmptySeq]
-    with Align[NonEmptySeq] =
+  implicit val catsDataInstancesForNonEmptySeqBinCompat1
+    : NonEmptyAlternative[NonEmptySeq] & Bimonad[NonEmptySeq] & NonEmptyTraverse[NonEmptySeq] & Align[NonEmptySeq] =
     new NonEmptyReducible[NonEmptySeq, Seq]
       with NonEmptyAlternative[NonEmptySeq]
       with Bimonad[NonEmptySeq]

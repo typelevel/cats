@@ -38,7 +38,7 @@ object NonEmptyLazyList extends NonEmptyLazyListInstances {
   private[data] type Base
   private[data] trait Tag extends Any
   /* aliased in data package as NonEmptyLazyList */
-  type Type[+A] <: Base with Tag
+  type Type[+A] <: Base & Tag
 
   private[data] def create[A](s: LazyList[A]): Type[A] =
     s.asInstanceOf[Type[A]]
@@ -510,10 +510,9 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
 
 sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLazyListInstances1 {
 
-  implicit val catsDataInstancesForNonEmptyLazyList: Bimonad[NonEmptyLazyList]
-    with NonEmptyTraverse[NonEmptyLazyList]
-    with NonEmptyAlternative[NonEmptyLazyList]
-    with Align[NonEmptyLazyList] =
+  implicit val catsDataInstancesForNonEmptyLazyList: Bimonad[NonEmptyLazyList] & NonEmptyTraverse[
+    NonEmptyLazyList
+  ] & NonEmptyAlternative[NonEmptyLazyList] & Align[NonEmptyLazyList] =
     new AbstractNonEmptyInstances[LazyList, NonEmptyLazyList] with Align[NonEmptyLazyList] {
 
       def extract[A](fa: NonEmptyLazyList[A]): A = fa.head

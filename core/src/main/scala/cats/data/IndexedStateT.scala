@@ -279,7 +279,7 @@ sealed abstract private[data] class IndexedStateTInstances extends IndexedStateT
   implicit def catsDataAlternativeForIndexedStateT[F[_], S](implicit
     FM: Monad[F],
     FA: Alternative[F]
-  ): Alternative[IndexedStateT[F, S, S, *]] with Monad[IndexedStateT[F, S, S, *]] =
+  ): Alternative[IndexedStateT[F, S, S, *]] & Monad[IndexedStateT[F, S, S, *]] =
     new IndexedStateTAlternative[F, S] { implicit def F = FM; implicit def G = FA }
 
   implicit def catsDataDeferForIndexedStateT[F[_], SA, SB](implicit F: Defer[F]): Defer[IndexedStateT[F, SA, SB, *]] =

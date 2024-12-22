@@ -393,10 +393,8 @@ sealed abstract private[data] class NonEmptyVectorInstances extends NonEmptyVect
     "maintained for the sake of binary compatibility only - use catsDataInstancesForNonEmptyChainBinCompat1 instead",
     "2.9.0"
   )
-  def catsDataInstancesForNonEmptyVector: SemigroupK[NonEmptyVector]
-    with Bimonad[NonEmptyVector]
-    with NonEmptyTraverse[NonEmptyVector]
-    with Align[NonEmptyVector] =
+  def catsDataInstancesForNonEmptyVector
+    : SemigroupK[NonEmptyVector] & Bimonad[NonEmptyVector] & NonEmptyTraverse[NonEmptyVector] & Align[NonEmptyVector] =
     catsDataInstancesForNonEmptyVectorBinCompat1
 
   /**
@@ -405,10 +403,10 @@ sealed abstract private[data] class NonEmptyVectorInstances extends NonEmptyVect
    *
    * Also see the discussion: PR #3541 and issue #3069.
    */
-  implicit val catsDataInstancesForNonEmptyVectorBinCompat1: NonEmptyAlternative[NonEmptyVector]
-    with Bimonad[NonEmptyVector]
-    with NonEmptyTraverse[NonEmptyVector]
-    with Align[NonEmptyVector] =
+  implicit val catsDataInstancesForNonEmptyVectorBinCompat1
+    : NonEmptyAlternative[NonEmptyVector] & Bimonad[NonEmptyVector] & NonEmptyTraverse[NonEmptyVector] & Align[
+      NonEmptyVector
+    ] =
     new NonEmptyReducible[NonEmptyVector, Vector]
       with NonEmptyAlternative[NonEmptyVector]
       with Bimonad[NonEmptyVector]
