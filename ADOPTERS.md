@@ -16,6 +16,7 @@ And if you can, consider [supporting us](https://opencollective.com/typelevel).
 - [BabylonHealth](https://www.babylonhealth.com/)
 - [Banno Group inside of Jack Henry & Associates](https://banno.com/)
 - [Basefarm](https://basefarm.com/)
+- [Blue Insight Digital](https://blueinsight.digital)
 - [buildo](https://buildo.io)
 - [BUX](https://getbux.com/)
 - [Chartboost](https://www.chartboost.com/)
