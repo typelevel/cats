@@ -31,6 +31,11 @@ object set extends SetInstances
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait SetInstances {
+  import SetInstances._
+
+  // We use a def instead of val here as a workaround to the MiMa
+  // 'ReversedMissingMethodProblem' error.
+  implicit def alleycatsStdInstancesForSet
   // Monad advertises parametricity, but Set relies on using
   // universal hash codes and equality, which hurts our ability to
   // rely on free theorems.
@@ -55,8 +60,31 @@ trait SetInstances {
   // If we accept Monad for Set, we can also have Alternative, as
   // Alternative only requires MonoidK (already accepted by cats-core) and
   // the Applicative that comes from Monad.
-  implicit val alleyCatsStdSetMonad: Monad[Set] & Alternative[Set] =
-    new Monad[Set] with Alternative[Set] {
+    : Monad[Set] & Alternative[Set] & Traverse[Set] & TraverseFilter[Set] =
+    alleycatsStdInstancesForSet_
+
+  @deprecated("Use alleycatsStdInstancesForSet", "2.13.0")
+  val alleyCatsSetTraverse: Traverse[Set] = alleycatsStdInstancesForSet_
+  @deprecated("Use alleycatsStdInstancesForSet", "2.13.0")
+  val alleyCatsStdSetMonad: Monad[Set] & Alternative[Set] = alleycatsStdInstancesForSet_
+  @deprecated("Use alleycatsStdInstancesForSet", "2.13.0")
+  val alleyCatsSetTraverseFilter: TraverseFilter[Set] = alleycatsStdInstancesForSet_
+}
+
+private[alleycats] object SetInstances {
+  private val alleycatsStdInstancesForSet_ : Monad[Set] & Alternative[Set] & Traverse[Set] & TraverseFilter[Set] =
+    new Monad[Set] with Alternative[Set] with Traverse[Set] with TraverseFilter[Set] {
+
+      // Since iteration order is not guaranteed for sets, folds and other
+      // traversals may produce different results for input sets which
+      // appear to be the same.
+      val traverse: Traverse[Set] = this
+
+      def traverseFilter[G[_], A, B](fa: Set[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Set[B]] =
+        traverse
+          .foldRight(fa, Eval.now(G.pure(Set.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(o + _)))
+          .value
+
       def pure[A](a: A): Set[A] = Set(a)
       override def map[A, B](fa: Set[A])(f: A => B): Set[B] = fa.map(f)
       def flatMap[A, B](fa: Set[A])(f: A => Set[B]): Set[B] = fa.flatMap(f)
@@ -69,7 +97,7 @@ trait SetInstances {
         if (fa.isEmpty) Eval.now(Set.empty[Z]) // no need to evaluate fb
         else fb.map(fb => map2(fa, fb)(f))
 
-      def tailRecM[A, B](a: A)(f: (A) => Set[Either[A, B]]): Set[B] = {
+      def tailRecM[A, B](a: A)(f: A => Set[Either[A, B]]): Set[B] = {
         val bldr = Set.newBuilder[B]
 
         @tailrec def go(set: Set[Either[A, B]]): Unit = {
@@ -98,13 +126,7 @@ trait SetInstances {
       override def prependK[A](a: A, fa: Set[A]): Set[A] = fa + a
 
       override def appendK[A](fa: Set[A], a: A): Set[A] = fa + a
-    }
 
-  // Since iteration order is not guaranteed for sets, folds and other
-  // traversals may produce different results for input sets which
-  // appear to be the same.
-  implicit val alleyCatsSetTraverse: Traverse[Set] =
-    new Traverse[Set] {
       def foldLeft[A, B](fa: Set[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
       def foldRight[A, B](fa: Set[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
@@ -171,15 +193,5 @@ trait SetInstances {
 
       override def collectFirstSome[A, B](fa: Set[A])(f: A => Option[B]): Option[B] =
         fa.collectFirst(Function.unlift(f))
-    }
-
-  implicit val alleyCatsSetTraverseFilter: TraverseFilter[Set] =
-    new TraverseFilter[Set] {
-      val traverse: Traverse[Set] = alleyCatsSetTraverse
-
-      def traverseFilter[G[_], A, B](fa: Set[A])(f: A => G[Option[B]])(implicit G: Applicative[G]): G[Set[B]] =
-        traverse
-          .foldRight(fa, Eval.now(G.pure(Set.empty[B])))((x, xse) => G.map2Eval(f(x), xse)((i, o) => i.fold(o)(o + _)))
-          .value
     }
 }
