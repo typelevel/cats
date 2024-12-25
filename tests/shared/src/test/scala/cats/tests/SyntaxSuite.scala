@@ -39,7 +39,6 @@ import cats.data.{
   ValidatedNec,
   ValidatedNel
 }
-import cats.syntax.OptionOps
 import cats.syntax.all._
 
 import scala.collection.immutable.{SortedMap, SortedSet}
@@ -155,11 +154,11 @@ object SyntaxSuite {
     val a1: A = fz.foldMap(f3)
 
     val f4 = mock[A => G[B]]
-    val gu0: G[Unit] = fa.traverse_(f4)
+    val gu0: G[Unit] = fa.traverseVoid(f4)
 
     val fga = mock[F[G[A]]]
-    val gu1: G[Unit] = fga.sequence_
-    val ga: G[A] = fga.foldK
+    val gu1: G[Unit] = fga.sequenceVoid // NestedFoldableOps
+    val ga1: G[A] = fga.foldK // NestedFoldableOps
 
     val f5 = mock[A => Boolean]
     val oa: Option[A] = fa.find(f5)
@@ -201,7 +200,19 @@ object SyntaxSuite {
     val gunit: G[F[A]] = fga.nonEmptySequence
   }
 
-  def testParallel[M[_]: Parallel, T[_]: Traverse, A, B]: Unit = {
+  def testParallelFoldable[M[_]: Parallel, T[_]: Foldable, A, B](): Unit = {
+    val ta = mock[T[A]]
+    val tma = mock[T[M[A]]]
+    val famb = mock[A => M[B]]
+
+    val mu1 = ta.parTraverseVoid(famb)
+    val mu2 = tma.parSequenceVoid
+
+    // Suppress "unused local val" warnings and make sure the types were inferred correctly.
+    val _ = (mu1: M[Unit], mu2: M[Unit])
+  }
+
+  def testParallelTraverse[M[_]: Parallel, T[_]: Traverse, A, B](): Unit = {
     val ta = mock[T[A]]
     val f = mock[A => M[B]]
     val mtb = ta.parTraverse(f)
@@ -348,7 +359,7 @@ object SyntaxSuite {
     val mtab2 = tmab.parLeftSequence
   }
 
-  def testParallelFoldable[T[_]: Foldable, M[_]: Parallel, A, B: Monoid]: Unit = {
+  def testParallelFoldableMonoid[T[_]: Foldable, M[_]: Parallel, A, B: Monoid](): Unit = {
     val ta = mock[T[A]]
     val f = mock[A => M[B]]
     val mb = ta.parFoldMapA(f)
@@ -379,9 +390,9 @@ object SyntaxSuite {
     val lb: Eval[B] = fa.reduceRightTo(f4)(f6)
 
     val f7 = mock[A => G[B]]
-    val gu1: G[Unit] = fa.nonEmptyTraverse_(f7)
+    val gu1: G[Unit] = fa.nonEmptyTraverseVoid(f7)
 
-    val gu2: G[Unit] = fga.nonEmptySequence_
+    val gu2: G[Unit] = fga.nonEmptySequenceVoid
   }
 
   def testFunctor[F[_]: Functor, A, B]: Unit = {

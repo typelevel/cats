@@ -578,9 +578,9 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * scala> import cats.syntax.all._
    * scala> def parseInt(s: String): Option[Int] = Either.catchOnly[NumberFormatException](s.toInt).toOption
    * scala> val F = Foldable[List]
-   * scala> F.traverse_(List("333", "444"))(parseInt)
+   * scala> F.traverseVoid(List("333", "444"))(parseInt)
    * res0: Option[Unit] = Some(())
-   * scala> F.traverse_(List("333", "zzz"))(parseInt)
+   * scala> F.traverseVoid(List("333", "zzz"))(parseInt)
    * res1: Option[Unit] = None
    * }}}
    *
@@ -588,7 +588,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * or effect, and the specific `A` aspect of `G[A]` is not otherwise
    * needed.
    */
-  def traverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
+  def traverseVoid[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
     foldRight(fa, Always(G.unit)) { (a, acc) =>
       G.map2Eval(f(a), acc) { (_, _) =>
         ()
@@ -596,9 +596,17 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     }.value
 
   /**
+   * Alias for `traverseVoid`.
+   *
+   * @deprecated this method should be considered as deprecated and replaced by `traverseVoid`.
+   */
+  def traverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
+    traverseVoid(fa)(f)
+
+  /**
    * Sequence `F[G[A]]` using `Applicative[G]`.
    *
-   * This is similar to `traverse_` except it operates on `F[G[A]]`
+   * This is similar to `traverseVoid` except it operates on `F[G[A]]`
    * values, so no additional functions are needed.
    *
    * For example:
@@ -606,14 +614,22 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * {{{
    * scala> import cats.syntax.all._
    * scala> val F = Foldable[List]
-   * scala> F.sequence_(List(Option(1), Option(2), Option(3)))
+   * scala> F.sequenceVoid(List(Option(1), Option(2), Option(3)))
    * res0: Option[Unit] = Some(())
-   * scala> F.sequence_(List(Option(1), None, Option(3)))
+   * scala> F.sequenceVoid(List(Option(1), None, Option(3)))
    * res1: Option[Unit] = None
    * }}}
    */
+  def sequenceVoid[G[_]: Applicative, A](fga: F[G[A]]): G[Unit] =
+    traverseVoid(fga)(identity)
+
+  /**
+   * Alias for `sequenceVoid`.
+   *
+   * @deprecated this method should be considered as deprecated and replaced by `sequenceVoid`.
+   */
   def sequence_[G[_]: Applicative, A](fga: F[G[A]]): G[Unit] =
-    traverse_(fga)(identity)
+    sequenceVoid(fga)
 
   /**
    * Fold implemented using the given `MonoidK[G]` instance.
@@ -1053,10 +1069,17 @@ object Foldable {
       typeClassInstance.foldMapM[G, A, B](self)(f)(G, B)
     def foldMapA[G[_], B](f: A => G[B])(implicit G: Applicative[G], B: Monoid[B]): G[B] =
       typeClassInstance.foldMapA[G, A, B](self)(f)(G, B)
+    def traverseVoid[G[_], B](f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
+      typeClassInstance.traverseVoid[G, A, B](self)(f)(G)
     def traverse_[G[_], B](f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
-      typeClassInstance.traverse_[G, A, B](self)(f)(G)
+      traverseVoid[G, B](f)
+    // TODO: looks like these two methods below duplicate the same named methods from `NestedFoldableOps`.
+    //       Moreover, the other two methods take precedence, thereby these two are not in use whatsoever.
+    //       Perhaps it makes sense to deprecate one pair of them either here or there.
+    def sequenceVoid[G[_], B](implicit ev$1: A <:< G[B], ev$2: Applicative[G]): G[Unit] =
+      typeClassInstance.sequenceVoid[G, B](self.asInstanceOf[F[G[B]]])
     def sequence_[G[_], B](implicit ev$1: A <:< G[B], ev$2: Applicative[G]): G[Unit] =
-      typeClassInstance.sequence_[G, B](self.asInstanceOf[F[G[B]]])
+      sequenceVoid[G, B]
     def foldK[G[_], B](implicit ev$1: A <:< G[B], G: MonoidK[G]): G[B] =
       typeClassInstance.foldK[G, B](self.asInstanceOf[F[G[B]]])(G)
     def find(f: A => Boolean): Option[A] = typeClassInstance.find[A](self)(f)

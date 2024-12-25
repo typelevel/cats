@@ -179,7 +179,7 @@ trait ScalaVersionSpecificRegressionSuite { self: RegressionSuite =>
     // shouldn't have ever evaluated validate(8)
     checkAndResetCount(3)
 
-    assert(LazyList(1, 2, 6, 8).traverse_(validate) === (Either.left("6 is greater than 5")))
+    assert(LazyList(1, 2, 6, 8).traverseVoid(validate) === Either.left("6 is greater than 5"))
     checkAndResetCount(3)
   }
 }

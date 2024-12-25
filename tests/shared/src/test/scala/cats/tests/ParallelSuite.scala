@@ -78,24 +78,24 @@ class ParallelSuite
     }
   }
 
-  test("ParTraverse_ identity should be equivalent to parSequence_") {
+  test("ParTraverseVoid identity should be equivalent to parSequenceVoid") {
     forAll { (es: SortedSet[Either[String, Int]]) =>
-      assert(Parallel.parTraverse_(es)(identity) === (Parallel.parSequence_[SortedSet, Either[String, *], Int](es)))
+      assert(Parallel.parTraverseVoid(es)(identity) === Parallel.parSequenceVoid[SortedSet, Either[String, *], Int](es))
     }
   }
 
-  test("ParTraverse_ syntax should be equivalent to Parallel.parTraverse_") {
+  test("ParTraverseVoid syntax should be equivalent to Parallel.parTraverseVoid") {
     forAll { (es: SortedSet[Either[String, Int]]) =>
       assert(
-        Parallel.parTraverse_[SortedSet, Either[String, *], Either[String, Int], Int](es)(identity) === (es
-          .parTraverse_(identity))
+        Parallel.parTraverseVoid[SortedSet, Either[String, *], Either[String, Int], Int](es)(identity) ===
+          es.parTraverseVoid(identity)
       )
     }
   }
 
-  test("ParSequence_ syntax should be equivalent to Parallel.parSequence_") {
+  test("ParSequenceVoid syntax should be equivalent to Parallel.parSequenceVoid") {
     forAll { (es: SortedSet[Either[String, Int]]) =>
-      assert(Parallel.parSequence_[SortedSet, Either[String, *], Int](es) === (es.parSequence_))
+      assert(Parallel.parSequenceVoid[SortedSet, Either[String, *], Int](es) === es.parSequenceVoid)
     }
   }
 
@@ -105,9 +105,9 @@ class ParallelSuite
     }
   }
 
-  test("ParNonEmptyTraverse_ identity should be equivalent to parNonEmptySequence_") {
+  test("ParNonEmptyTraverseVoid identity should be equivalent to parNonEmptySequenceVoid") {
     forAll { (es: NonEmptyList[Either[String, Int]]) =>
-      assert(Parallel.parNonEmptyTraverse_(es)(identity) === (Parallel.parNonEmptySequence_(es)))
+      assert(Parallel.parNonEmptyTraverseVoid(es)(identity) === Parallel.parNonEmptySequenceVoid(es))
     }
   }
 
@@ -310,10 +310,10 @@ class ParallelSuite
     }
   }
 
-  test("ParReplicateA_ should be equivalent to fill parSequence_") {
+  test("ParReplicateA_ should be equivalent to fill parSequenceVoid") {
     forAll(Gen.choose(1, 20), Arbitrary.arbitrary[Either[String, String]]) {
       (repetitions: Int, e: Either[String, String]) =>
-        assert(Parallel.parReplicateA_(repetitions, e) === Parallel.parSequence_(List.fill(repetitions)(e)))
+        assert(Parallel.parReplicateA_(repetitions, e) === Parallel.parSequenceVoid(List.fill(repetitions)(e)))
     }
   }
 
