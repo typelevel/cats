@@ -1265,6 +1265,11 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
             }.value
         }
 
+      final override def toIterable[A](fa: Chain[A]): Iterable[A] = new scala.collection.AbstractIterable[A] {
+        final override def iterator: Iterator[A] =
+          fa.iterator
+      }
+
       override def mapAccumulate[S, A, B](init: S, fa: Chain[A])(f: (S, A) => (S, B)): (S, Chain[B]) =
         StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
 
