@@ -25,13 +25,13 @@ import cats.{Contravariant, ContravariantMonoidal, Monad, Semigroupal}
 import cats.arrow.{ArrowChoice, Choice, CommutativeArrow}
 import cats.data.AndThen
 import cats.kernel.laws.discipline.SerializableTests
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
 import cats.platform.Platform
 import munit.ScalaCheckSuite
 import org.scalacheck.{Arbitrary, Cogen, Gen}
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 class AndThenSuite extends CatsSuite with ScalaCheckSuite {
   checkAll("AndThen[MiniInt, Int]", SemigroupalTests[AndThen[MiniInt, *]].semigroupal[Int, Int, Int])

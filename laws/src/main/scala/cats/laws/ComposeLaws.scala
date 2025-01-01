@@ -23,7 +23,7 @@ package cats
 package laws
 
 import cats.arrow.Compose
-import cats.syntax.compose._
+import cats.syntax.compose.*
 
 /**
  * Laws that must be obeyed by any `cats.arrow.Compose`.

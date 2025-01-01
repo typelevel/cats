@@ -21,21 +21,21 @@
 
 package cats.free
 
-import cats._
+import cats.*
 import cats.arrow.FunctionK
-import cats.data._
-import cats.instances.all._
-import cats.laws.discipline._
-import cats.syntax.applicative._
-import cats.syntax.either._
+import cats.data.*
+import cats.instances.all.*
+import cats.laws.discipline.*
+import cats.syntax.applicative.*
+import cats.syntax.either.*
 import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Cogen, Gen}
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class FreeTSuite extends CatsSuite {
 
-  import FreeTSuite._
+  import FreeTSuite.*
 
   {
     implicit val freeTFlatMap: FlatMap[FreeTOption] = FreeT.catsFreeFlatMapForFreeT[Option, Option]
@@ -245,7 +245,7 @@ class FreeTSuite extends CatsSuite {
 
 object FreeTSuite extends FreeTSuiteInstances {
 
-  import Arbitrary._
+  import Arbitrary.*
   import org.scalacheck.Arbitrary
 
   implicit def freeTArb[F[_], G[_]: Applicative, A](implicit
@@ -283,10 +283,10 @@ object FreeTSuite extends FreeTSuiteInstances {
 
 trait FreeTSuiteInstances {
 
-  import FreeT._
-  import IndexedStateT._
-  import cats.tests.IndexedStateTSuite._
-  import SemigroupalTests._
+  import FreeT.*
+  import IndexedStateT.*
+  import cats.tests.IndexedStateTSuite.*
+  import SemigroupalTests.*
 
   type IntState[A] = State[MiniInt, A]
   type FreeTOption[A] = FreeT[Option, Option, A]

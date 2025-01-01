@@ -21,7 +21,7 @@
 
 package cats
 package instances
-import cats.kernel.instances.unit._
+import cats.kernel.instances.unit.*
 
 import scala.annotation.tailrec
 

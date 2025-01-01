@@ -1,6 +1,6 @@
-import sbt._
+import sbt.*
 
-import Boilerplate._
+import Boilerplate.*
 import Boilerplate.{Template, TemplateVals}
 import sbt.File
 
@@ -10,7 +10,7 @@ object GenTupleShowInstances extends Template {
     root / "cats" / "instances" / "NTupleShowInstances.scala"
 
   override def content(tv: TemplateVals): String = {
-    import tv._
+    import tv.*
 
     val showMethod: String =
       synTypes.zipWithIndex.iterator

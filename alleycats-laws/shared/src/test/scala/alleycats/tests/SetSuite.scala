@@ -21,13 +21,13 @@
 
 package alleycats.tests
 
-import alleycats.laws.discipline._
-import alleycats.std.all._
+import alleycats.laws.discipline.*
+import alleycats.std.all.*
 import cats.{Alternative, Foldable}
-import cats.instances.all._
+import cats.instances.all.*
 import cats.kernel.laws.discipline.SerializableTests
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.arbitrary.*
 import cats.laws.discipline.{AlternativeTests, FunctorTests, ShortCircuitingTests, TraverseFilterTests}
 
 class SetSuite extends AlleycatsSuite {

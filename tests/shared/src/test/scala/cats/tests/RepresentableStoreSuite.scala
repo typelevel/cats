@@ -25,10 +25,10 @@ import cats.Comonad
 import cats.data.{RepresentableStore, Store}
 import cats.kernel.Eq
 import cats.laws.discipline.{ComonadTests, SerializableTests}
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.arbitrary.*
 import org.scalacheck.{Arbitrary, Cogen}
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class RepresentableStoreSuite extends CatsSuite {
 

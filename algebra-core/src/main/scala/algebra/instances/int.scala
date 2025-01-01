@@ -22,8 +22,8 @@
 package algebra
 package instances
 
-import algebra.lattice._
-import algebra.ring._
+import algebra.lattice.*
+import algebra.ring.*
 
 package object int extends IntInstances
 

@@ -25,7 +25,7 @@ package discipline
 
 import cats.arrow.CommutativeArrow
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+import Prop.*
 
 trait CommutativeArrowTests[F[_, _]] extends ArrowTests[F] {
   def laws: CommutativeArrowLaws[F]

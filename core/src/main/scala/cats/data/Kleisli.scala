@@ -23,7 +23,7 @@ package cats
 package data
 
 import cats.{Contravariant, Id}
-import cats.arrow._
+import cats.arrow.*
 import cats.evidence.As
 
 /**

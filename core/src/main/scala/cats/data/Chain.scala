@@ -43,7 +43,7 @@ package cats
 package data
 
 import cats.instances.StaticMethods
-import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.compat.scalaVersionSpecific.*
 import cats.kernel.instances.{StaticMethods => KernelStaticMethods}
 
 import scala.annotation.tailrec

@@ -25,14 +25,14 @@ import cats.{Eval, Now, Reducible, SemigroupK, Show}
 import cats.data.NonEmptySet
 import cats.kernel.{Eq, Order, PartialOrder, Semilattice}
 import cats.kernel.laws.discipline.{EqTests, HashTests, OrderTests, SemilatticeTests}
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.foldable._
-import cats.syntax.reducible._
-import cats.syntax.show._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.foldable.*
+import cats.syntax.reducible.*
+import cats.syntax.show.*
 import scala.collection.immutable.SortedSet
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class NonEmptySetSuite extends CatsSuite {
 

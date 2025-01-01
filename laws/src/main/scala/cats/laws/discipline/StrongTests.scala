@@ -24,7 +24,7 @@ package laws
 package discipline
 
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+import Prop.*
 import cats.arrow.Strong
 
 trait StrongTests[F[_, _]] extends ProfunctorTests[F] {

@@ -1,4 +1,4 @@
-import sbt._
+import sbt.*
 
 import scala.annotation.tailrec
 
@@ -12,7 +12,7 @@ import scala.annotation.tailrec
  * @author Kevin Wright
  */
 object Boilerplate {
-  import scala.StringContext._
+  import scala.StringContext.*
 
   implicit final class BlockHelper(private val sc: StringContext) extends AnyVal {
     def block(args: Any*): String = {
@@ -139,7 +139,7 @@ object Boilerplate {
     def filename(root: File) = root / "cats" / "syntax" / "SemigroupalBuilder.scala"
 
     def content(tv: TemplateVals) = {
-      import tv._
+      import tv.*
 
       val tpes = synTypes.map { tpe =>
         s"F[$tpe]"
@@ -208,7 +208,7 @@ object Boilerplate {
     def filename(root: File) = root / "cats" / "ApplyArityFunctions.scala"
     override def range = 3 to maxArity
     def content(tv: TemplateVals) = {
-      import tv._
+      import tv.*
 
       val tpes = synTypes.map { tpe =>
         s"F[$tpe]"
@@ -281,7 +281,7 @@ object Boilerplate {
     def filename(root: File) = root / "cats" / "FlatMapArityFunctions.scala"
     override def range = 2 to maxArity
     def content(tv: TemplateVals) = {
-      import tv._
+      import tv.*
 
       val vals = (0 until arity).map("f" + _)
       val tpes = synTypes.map(tpe => s"F[$tpe]")
@@ -317,7 +317,7 @@ object Boilerplate {
     def filename(root: File) = root / "cats" / "ParallelArityFunctions.scala"
     override def range = 2 to maxArity
     def content(tv: TemplateVals) = {
-      import tv._
+      import tv.*
 
       val tpes = synTypes.map { tpe =>
         s"M[$tpe]"
@@ -352,7 +352,7 @@ object Boilerplate {
     def filename(root: File) = root / "cats" / "ParallelArityFunctions2.scala"
     override def range = 2 to maxArity
     def content(tv: TemplateVals) = {
-      import tv._
+      import tv.*
 
       val vals = (0 until arity).map("m" + _)
       val tpes = synTypes.map(tpe => s"M[$tpe]")
@@ -382,7 +382,7 @@ object Boilerplate {
     def filename(root: File) = root / "cats" / "SemigroupalArityFunctions.scala"
     override def range = 2 to maxArity
     def content(tv: TemplateVals) = {
-      import tv._
+      import tv.*
 
       val tpes = synTypes.map { tpe =>
         s"F[$tpe]"
@@ -447,7 +447,7 @@ object Boilerplate {
     def filename(root: File) = root / "cats" / "syntax" / "TupleParallelSyntax.scala"
 
     def content(tv: TemplateVals) = {
-      import tv._
+      import tv.*
 
       val tpes = synTypes.map(tpe => s"M[$tpe]")
       val tuple = if (arity == 1) s"Tuple1[${tpes.head}]" else tpes.mkString("(", ", ", ")")
@@ -492,7 +492,7 @@ object Boilerplate {
     def filename(root: File) = root / "cats" / "syntax" / "TupleSemigroupalSyntax.scala"
 
     def content(tv: TemplateVals) = {
-      import tv._
+      import tv.*
 
       val tpes = synTypes.map(tpe => s"F[$tpe]")
       val tuple = if (arity == 1) s"Tuple1[${tpes.head}]" else tpes.mkString("(", ", ", ")")
@@ -563,7 +563,7 @@ object Boilerplate {
     def filename(root: File) = root / "cats" / "FoldableNFunctions.scala"
     override def range = 2 to maxArity
     def content(tv: TemplateVals) = {
-      import tv._
+      import tv.*
 
       val tupleTpe = Iterator.fill(arity)("A").mkString("(", ", ", ")")
       val tupleXN = Iterator.tabulate(arity)(i => s"x($i)").mkString("(", ", ", ")")
@@ -614,7 +614,7 @@ object Boilerplate {
     override def range = 2 to maxArity
 
     def content(tv: TemplateVals) = {
-      import tv._
+      import tv.*
 
       val function = s"Function$arity[${`A..N`}, T]"
 

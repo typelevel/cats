@@ -24,7 +24,7 @@ package laws
 package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 
 trait ApplicativeTests[F[_]] extends ApplyTests[F] {

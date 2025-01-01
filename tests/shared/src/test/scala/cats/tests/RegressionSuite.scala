@@ -21,12 +21,12 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.Const
 import cats.data.NonEmptyList
 import cats.data.StateT
-import cats.kernel.compat.scalaVersionSpecific._
-import cats.syntax.all._
+import cats.kernel.compat.scalaVersionSpecific.*
+import cats.syntax.all.*
 
 import scala.collection.immutable.SortedMap
 import scala.collection.mutable
@@ -183,7 +183,7 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
   }
 
   test("#2022 EitherT syntax no long works the old way") {
-    import cats.data._
+    import cats.data.*
 
     EitherT.right[String](Option(1)).handleErrorWith((_: String) => EitherT.pure(2))
 

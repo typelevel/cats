@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.NonEmptyLazyList
 import cats.data.NonEmptyLazyListOps
 import cats.data.NonEmptyVector
@@ -31,12 +31,12 @@ import cats.kernel.laws.discipline.OrderTests
 import cats.kernel.laws.discipline.PartialOrderTests
 import cats.kernel.laws.discipline.SemigroupTests
 import cats.kernel.laws.discipline.SerializableTests
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.either._
-import cats.syntax.eq._
-import cats.syntax.foldable._
-import org.scalacheck.Prop._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.either.*
+import cats.syntax.eq.*
+import cats.syntax.foldable.*
+import org.scalacheck.Prop.*
 
 class NonEmptyLazyListSuite extends NonEmptyCollectionSuite[LazyList, NonEmptyLazyList, NonEmptyLazyListOps] {
   protected def toList[A](value: NonEmptyLazyList[A]): List[A] = value.toList

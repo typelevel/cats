@@ -25,13 +25,13 @@ import cats.{Applicative, Apply, Contravariant, Functor, Semigroupal, Show}
 import cats.data.{AppFunc, Func}
 import cats.data.Func.appFunc
 import cats.kernel.Eq
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.eq._
+import cats.syntax.eq.*
 
 class FuncSuite extends CatsSuite {
-  import cats.laws.discipline.eq._
+  import cats.laws.discipline.eq.*
   implicit def funcEq[F[_], A, B](implicit ev: Eq[A => F[B]]): Eq[Func[F, A, B]] =
     Eq.by[Func[F, A, B], A => F[B]](_.run)
   implicit def appFuncEq[F[_], A, B](implicit ev: Eq[A => F[B]]): Eq[AppFunc[F, A, B]] =

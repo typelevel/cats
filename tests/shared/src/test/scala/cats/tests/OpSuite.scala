@@ -21,12 +21,12 @@
 
 package cats.tests
 
-import cats.arrow._
+import cats.arrow.*
 import cats.data.{Kleisli, Op}
 import cats.kernel.Eq
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
 import cats.kernel.laws.discipline.EqTests
 
 class OpSuite extends CatsSuite {

@@ -21,12 +21,12 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.ZipStream
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
-import org.scalacheck.Prop._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.all.*
+import org.scalacheck.Prop.*
 
 @annotation.nowarn("cat=deprecation")
 class StreamSuite extends CatsSuite {

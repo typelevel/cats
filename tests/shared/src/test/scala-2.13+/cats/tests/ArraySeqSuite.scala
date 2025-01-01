@@ -33,11 +33,11 @@ import cats.laws.discipline.{
   TraverseFilterTests,
   TraverseTests
 }
-import cats.laws.discipline.arbitrary._
-import cats.syntax.show._
-import cats.syntax.eq._
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.show.*
+import cats.syntax.eq.*
 import scala.collection.immutable.ArraySeq
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 class ArraySeqSuite extends CatsSuite {
   checkAll("ArraySeq[Int]", MonoidTests[ArraySeq[Int]].monoid)

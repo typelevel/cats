@@ -24,7 +24,7 @@ package laws
 package discipline
 
 import org.scalacheck.{Arbitrary, Cogen}
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 import org.typelevel.discipline.Laws
 
 trait BifoldableTests[F[_, _]] extends Laws {

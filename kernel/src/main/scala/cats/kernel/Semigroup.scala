@@ -27,7 +27,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.{specialized => sp}
 import scala.util.{Failure, Success, Try}
-import compat.scalaVersionSpecific._
+import compat.scalaVersionSpecific.*
 
 /**
  * A semigroup is any set `A` with an associative operation (`combine`).

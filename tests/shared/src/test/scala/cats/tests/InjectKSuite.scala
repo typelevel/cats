@@ -25,9 +25,9 @@ import cats.{:<:, Functor, InjectK}
 import cats.data.EitherK
 import cats.kernel.Eq
 import cats.laws.discipline.InjectKTests
-import org.scalacheck._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import org.scalacheck.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class InjectKSuite extends CatsSuite {
 

@@ -24,8 +24,8 @@ package laws
 
 import cats.Id
 import cats.data.{Const, Nested, State, StateT}
-import cats.syntax.traverse._
-import cats.syntax.foldable._
+import cats.syntax.traverse.*
+import cats.syntax.foldable.*
 
 trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with UnorderedTraverseLaws[F] {
   implicit override def F: Traverse[F]

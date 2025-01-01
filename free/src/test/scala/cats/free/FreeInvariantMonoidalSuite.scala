@@ -24,15 +24,15 @@ package cats.free
 import cats.{Id, InvariantMonoidal}
 import cats.arrow.FunctionK
 import cats.kernel.Eq
-import cats.instances.all._
+import cats.instances.all.*
 import cats.laws.discipline.{InvariantMonoidalTests, MiniInt, SerializableTests}
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.arbitrary.*
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.invariant._
-import cats.syntax.semigroupal._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
-import cats.tests.BinCodecInvariantMonoidalSuite._
+import cats.syntax.invariant.*
+import cats.syntax.semigroupal.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
+import cats.tests.BinCodecInvariantMonoidalSuite.*
 import cats.tests.CatsSuite
 import org.scalacheck.{Arbitrary, Gen}
 

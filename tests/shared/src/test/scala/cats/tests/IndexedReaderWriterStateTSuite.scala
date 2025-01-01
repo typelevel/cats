@@ -21,23 +21,23 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.arrow.{Profunctor, Strong}
 import cats.data.{EitherT, IRWST, IndexedReaderWriterStateT, ReaderWriterState, ReaderWriterStateT}
 import cats.kernel.{Eq, Monoid}
-import cats.laws.discipline._
-import cats.laws.discipline.eq._
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.*
+import cats.laws.discipline.eq.*
+import cats.laws.discipline.arbitrary.*
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.apply._
-import cats.syntax.semigroup._
-import cats.syntax.traverse._
+import cats.syntax.apply.*
+import cats.syntax.semigroup.*
+import cats.syntax.traverse.*
 import org.scalacheck.Arbitrary
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class ReaderWriterStateTSuite extends CatsSuite {
-  import ReaderWriterStateTSuite._
+  import ReaderWriterStateTSuite.*
 
   test("Basic ReaderWriterState usage") {
     forAll { (context: String, initial: Int) =>

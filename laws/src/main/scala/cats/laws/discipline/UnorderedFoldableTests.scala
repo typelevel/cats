@@ -24,10 +24,10 @@ package laws
 package discipline
 
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+import Prop.*
 import org.typelevel.discipline.Laws
 import cats.kernel.CommutativeMonoid
-import cats.instances.boolean._
+import cats.instances.boolean.*
 
 trait UnorderedFoldableTests[F[_]] extends Laws {
   def laws: UnorderedFoldableLaws[F]

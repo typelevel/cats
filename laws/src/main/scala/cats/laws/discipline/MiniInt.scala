@@ -24,7 +24,7 @@ package laws
 package discipline
 
 import cats.kernel.{BoundedSemilattice, CommutativeGroup, CommutativeMonoid}
-import cats.instances.int._
+import cats.instances.int.*
 
 /**
  * Similar to `Int`, but with a much smaller domain. The exact range of [[MiniInt]] may be tuned from time to time, so
@@ -34,7 +34,7 @@ import cats.instances.int._
  * and multiplication are commutative and associative.
  */
 final class MiniInt private (val intBits: Int) extends AnyVal with Serializable {
-  import MiniInt._
+  import MiniInt.*
 
   def unary_- : MiniInt = this * negativeOne
 

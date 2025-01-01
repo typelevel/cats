@@ -21,7 +21,7 @@
 
 package cats.kernel
 
-import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.compat.scalaVersionSpecific.*
 
 import java.util.UUID
 import scala.collection.immutable.{BitSet, Queue, Seq, SortedMap, SortedSet}

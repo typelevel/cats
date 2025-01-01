@@ -22,9 +22,9 @@
 package algebra
 package laws
 
-import algebra.lattice._
-import algebra.ring._
-import algebra.instances.all._
+import algebra.lattice.*
+import algebra.ring.*
+import algebra.instances.all.*
 import algebra.instances.BigDecimalAlgebra
 
 import algebra.laws.platform.Platform

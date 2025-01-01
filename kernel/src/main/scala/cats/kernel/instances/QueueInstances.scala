@@ -23,7 +23,7 @@ package cats.kernel
 package instances
 
 import scala.collection.immutable.Queue
-import compat.scalaVersionSpecific._
+import compat.scalaVersionSpecific.*
 
 import scala.annotation.nowarn
 

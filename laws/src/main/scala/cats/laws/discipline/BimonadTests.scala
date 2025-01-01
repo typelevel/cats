@@ -25,7 +25,7 @@ package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+import Prop.*
 
 trait BimonadTests[F[_]] extends MonadTests[F] with ComonadTests[F] {
   def laws: BimonadLaws[F]

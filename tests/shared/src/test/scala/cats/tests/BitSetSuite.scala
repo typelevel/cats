@@ -21,12 +21,12 @@
 
 package cats.tests
 
-import cats.syntax.show._
+import cats.syntax.show.*
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 import scala.collection.immutable.BitSet
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class BitSetSuite extends CatsSuite {
   implicit val arbitraryBitSet: Arbitrary[BitSet] =

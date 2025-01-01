@@ -24,7 +24,7 @@ package data
 
 import NonEmptyLazyList.create
 import kernel.PartialOrder
-import instances.lazyList._
+import instances.lazyList.*
 
 import scala.collection.immutable.{SortedMap, TreeMap, TreeSet}
 import scala.collection.mutable
