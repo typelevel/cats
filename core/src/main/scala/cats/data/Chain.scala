@@ -1264,7 +1264,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
                 case Append(l, r) =>
                   go(l, if (rhs.isEmpty) r else Append(r, rhs), acc)
                 case Wrap(as) =>
-                  val va = Foldable[Seq].traverseVoid(as)(f)
+                  val va = Foldable[collection.immutable.Seq].traverseVoid(as)(f)
                   val acc1 = G.productL(acc)(va)
                   rhs match {
                     case Empty => acc1
