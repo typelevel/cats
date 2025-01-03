@@ -259,24 +259,26 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
   /**
    * take a certain amount of items from the front of the Chain
    */
-  final def take(count: Int): Chain[A] = {
+  final def take(count: Long): Chain[A] = {
     // invariant count >= 1
     @tailrec
-    def go(lhs: Chain[A], count: Int, arg: Chain[A], rhs: Chain[A]): Chain[A] =
+    def go(lhs: Chain[A], count: Long, arg: Chain[A], rhs: Chain[A]): Chain[A] =
       arg match {
         case Wrap(seq) =>
           if (count == 1) {
             lhs.append(seq.head)
           } else {
             // count > 1
-            val taken = seq.take(count)
-            // we may have not takeped all of count
+            val taken =
+              if (count < Int.MaxValue) seq.take(count.toInt)
+              else seq.take(Int.MaxValue)
+            // we may have not taken all of count
             val newCount = count - taken.length
             val wrapped = Wrap(taken)
             // this is more efficient than using concat
             val newLhs = if (lhs.isEmpty) wrapped else Append(lhs, wrapped)
             if (newCount > 0) {
-              // we have to keep takeping on the rhs
+              // we have to keep taking on the rhs
               go(newLhs, newCount, rhs, Chain.nil)
             } else {
               // newCount == 0, we have taken enough
@@ -288,38 +290,42 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
         case s @ Singleton(_) =>
           // due to the invariant count >= 1
           val newLhs = if (lhs.isEmpty) s else Append(lhs, s)
-          if (count > 1) {
-            go(newLhs, count - 1, rhs, Chain.nil)
+          if (count > 1L) {
+            go(newLhs, count - 1L, rhs, Chain.nil)
           } else newLhs
         case Empty =>
+          // this empty check isn't an optimization but to ensure
+          // the recursion terminates.
           if (rhs.isEmpty) lhs
-          else go(lhs, count, rhs, Chain.nil)
+          else go(lhs, count, rhs, Empty)
       }
 
-    if (count <= 0) Empty
+    if (count <= 0L) Empty
     else go(Empty, count, this, Empty)
   }
 
   /**
    * take a certain amount of items from the back of the Chain
    */
-  final def takeRight(count: Int): Chain[A] = {
+  final def takeRight(count: Long): Chain[A] = {
     // invariant count >= 1
     @tailrec
-    def go(lhs: Chain[A], count: Int, arg: Chain[A], rhs: Chain[A]): Chain[A] =
+    def go(lhs: Chain[A], count: Long, arg: Chain[A], rhs: Chain[A]): Chain[A] =
       arg match {
         case Wrap(seq) =>
-          if (count == 1) {
+          if (count == 1L) {
             seq.last +: rhs
           } else {
             // count > 1
-            val taken = seq.takeRight(count)
-            // we may have not takeped all of count
+            val taken =
+              if (count < Int.MaxValue) seq.takeRight(count.toInt)
+              else seq.takeRight(Int.MaxValue)
+            // we may have not taken all of count
             val newCount = count - taken.length
             val wrapped = Wrap(taken)
             val newRhs = if (rhs.isEmpty) wrapped else Append(wrapped, rhs)
             if (newCount > 0) {
-              // we have to keep takeping on the rhs
+              // we have to keep taking on the rhs
               go(Chain.nil, newCount, lhs, newRhs)
             } else {
               // newCount == 0, we have taken enough
@@ -335,8 +341,10 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
             go(Empty, count - 1, lhs, newRhs)
           } else newRhs
         case Empty =>
+          // this empty check isn't an optimization but to ensure
+          // the recursion terminates.
           if (lhs.isEmpty) rhs
-          else go(Chain.nil, count, lhs, rhs)
+          else go(Empty, count, lhs, rhs)
       }
 
     if (count <= 0) Empty
@@ -365,13 +373,13 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
   /**
    * Drop a certain amount of items from the front of the Chain
    */
-  final def drop(count: Int): Chain[A] = {
+  final def drop(count: Long): Chain[A] = {
     // invariant count >= 1
     @tailrec
-    def go(count: Int, arg: Chain[A], rhs: Chain[A]): Chain[A] =
+    def go(count: Long, arg: Chain[A], rhs: Chain[A]): Chain[A] =
       arg match {
         case Wrap(seq) =>
-          val dropped = seq.drop(count)
+          val dropped = if (count < Int.MaxValue) seq.drop(count.toInt) else seq.drop(Int.MaxValue)
           if (dropped.isEmpty) {
             // we may have not dropped all of count
             val newCount = count - seq.length
@@ -393,31 +401,33 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
           go(count, l, if (rhs.isEmpty) r else Append(r, rhs))
         case Singleton(_) =>
           // due to the invariant count >= 1
-          if (count > 1) go(count - 1, rhs, Chain.nil)
+          if (count > 1L) go(count - 1L, rhs, Chain.nil)
           else rhs
         case Empty =>
+          // this empty check isn't an optimization but to ensure
+          // the recursion terminates.
           if (rhs.isEmpty) Empty
-          else go(count, rhs, Chain.nil)
+          else go(count, rhs, Empty)
       }
 
-    if (count <= 0) this
+    if (count <= 0L) this
     else go(count, this, Empty)
   }
 
   /**
    * Drop a certain amount of items from the back of the Chain
    */
-  final def dropRight(count: Int): Chain[A] = {
+  final def dropRight(count: Long): Chain[A] = {
     // invariant count >= 1
     @tailrec
-    def go(lhs: Chain[A], count: Int, arg: Chain[A]): Chain[A] =
+    def go(lhs: Chain[A], count: Long, arg: Chain[A]): Chain[A] =
       arg match {
         case Wrap(seq) =>
-          val dropped = seq.dropRight(count)
+          val dropped = if (count < Int.MaxValue) seq.dropRight(count.toInt) else seq.dropRight(Int.MaxValue)
           if (dropped.isEmpty) {
             // we may have not dropped all of count
             val newCount = count - seq.length
-            if (newCount > 0) {
+            if (newCount > 0L) {
               // we have to keep dropping on the rhs
               go(Chain.nil, newCount, lhs)
             } else {
@@ -435,11 +445,13 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
           go(if (lhs.isEmpty) l else Append(lhs, l), count, r)
         case Singleton(_) =>
           // due to the invariant count >= 1
-          if (count > 1) go(Chain.nil, count - 1, lhs)
+          if (count > 1L) go(Chain.nil, count - 1L, lhs)
           else lhs
         case Empty =>
+          // this empty check isn't an optimization but to ensure
+          // the recursion terminates.
           if (lhs.isEmpty) Empty
-          else go(Chain.nil, count, lhs)
+          else go(Empty, count, lhs)
       }
 
     if (count <= 0) this
