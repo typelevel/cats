@@ -462,24 +462,24 @@ class ChainSuite extends CatsSuite {
 
   test("drop(cnt).toList == toList.drop(cnt)") {
     forAll(genChainDropTakeArgs) { case (chain: Chain[Int], count: Int) =>
-      assert(chain.drop(count).toList == chain.toList.drop(count))
+      assertEquals(chain.drop(count).toList, chain.toList.drop(count))
     }
   }
 
   test("dropRight(cnt).toList == toList.dropRight(cnt)") {
     forAll(genChainDropTakeArgs) { case (chain: Chain[Int], count: Int) =>
-      assert(chain.dropRight(count).toList == chain.toList.dropRight(count))
+      assertEquals(chain.dropRight(count).toList, chain.toList.dropRight(count))
     }
   }
   test("take(cnt).toList == toList.take(cnt)") {
     forAll(genChainDropTakeArgs) { case (chain: Chain[Int], count: Int) =>
-      assert(chain.take(count).toList == chain.toList.take(count))
+      assertEquals(chain.take(count).toList, chain.toList.take(count))
     }
   }
 
   test("takeRight(cnt).toList == toList.takeRight(cnt)") {
     forAll(genChainDropTakeArgs) { case (chain: Chain[Int], count: Int) =>
-      assert(chain.takeRight(count).toList == chain.toList.takeRight(count))
+      assertEquals(chain.takeRight(count).toList, chain.toList.takeRight(count))
     }
   }
 }
