@@ -1259,21 +1259,32 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
           case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa.iterator)(f)(x)
           case _ =>
             @tailrec
-            def go(fa: Chain[A], rhs: Chain[A], acc: G[Unit]): G[Unit] =
+            def go(fa: NonEmpty[A], rhs: Chain[A], acc: G[Unit]): G[Unit] =
               fa match {
-                case Empty =>
-                  if (rhs.isEmpty) acc
-                  else go(rhs, Empty, acc)
-                case Singleton(a) =>
-                  go(rhs, Empty, G.productL(acc)(f(a)))
                 case Append(l, r) =>
                   go(l, if (rhs.isEmpty) r else Append(r, rhs), acc)
                 case Wrap(as) =>
-                  val va = Traverse[Vector].traverseVoid(as.toVector)(f)
-                  go(rhs, Empty, G.productL(acc)(va))
+                  val va = Foldable[Seq].traverseVoid(as)(f)
+                  val acc1 = G.productL(acc)(va)
+                  rhs match {
+                    case Empty => acc1
+                    case ne: NonEmpty[A] =>
+                      go(ne, Empty, acc1)
+                  }
+                case Singleton(a) =>
+                  val acc1 = G.productL(acc)(f(a))
+                  rhs match {
+                    case Empty => acc1
+                    case ne: NonEmpty[A] =>
+                      go(ne, Empty, acc1)
+                  }
               }
 
-            go(fa, Empty, G.unit)
+            fa match {
+              case Empty => G.unit
+              case ne: NonEmpty[A] =>
+                go(ne, Empty, G.unit)
+            }
         }
 
       final override def toIterable[A](fa: Chain[A]): Iterable[A] = new scala.collection.AbstractIterable[A] {
