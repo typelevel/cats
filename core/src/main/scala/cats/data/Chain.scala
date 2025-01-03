@@ -266,13 +266,15 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
       arg match {
         case Wrap(seq) =>
           if (count == 1) {
-            lhs.append(seq(0))
+            lhs.append(seq.head)
           } else {
             // count > 1
             val taken = seq.take(count)
             // we may have not takeped all of count
             val newCount = count - taken.length
-            val newLhs = lhs.concat(Wrap(taken))
+            val wrapped = Wrap(taken)
+            // this is more efficient than using concat
+            val newLhs = if (lhs.isEmpty) wrapped else Append(lhs, wrapped)
             if (newCount > 0) {
               // we have to keep takeping on the rhs
               go(newLhs, newCount, rhs, Chain.nil)
@@ -282,7 +284,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
             }
           }
         case Append(l, r) =>
-          go(lhs, count, l, r.concat(rhs))
+          go(lhs, count, l, if (rhs.isEmpty) r else Append(r, rhs))
         case s @ Singleton(_) =>
           // due to the invariant count >= 1
           val newLhs = if (lhs.isEmpty) s else Append(lhs, s)
@@ -308,13 +310,14 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
       arg match {
         case Wrap(seq) =>
           if (count == 1) {
-            lhs.append(seq.last)
+            seq.last +: rhs
           } else {
             // count > 1
             val taken = seq.takeRight(count)
             // we may have not takeped all of count
             val newCount = count - taken.length
-            val newRhs = Wrap(taken).concat(rhs)
+            val wrapped = Wrap(taken)
+            val newRhs = if (rhs.isEmpty) wrapped else Append(wrapped, rhs)
             if (newCount > 0) {
               // we have to keep takeping on the rhs
               go(Chain.nil, newCount, lhs, newRhs)
@@ -324,7 +327,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
             }
           }
         case Append(l, r) =>
-          go(lhs.concat(l), count, r, rhs)
+          go(if (lhs.isEmpty) l else Append(lhs, l), count, r, rhs)
         case s @ Singleton(_) =>
           // due to the invariant count >= 1
           val newRhs = if (rhs.isEmpty) s else Append(s, rhs)
@@ -381,11 +384,13 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
               rhs
             }
           } else {
+            // dropped is not empty
+            val wrapped = Wrap(dropped)
             // we must be done
-            Chain.fromSeq(dropped).concat(rhs)
+            if (rhs.isEmpty) wrapped else Append(wrapped, rhs)
           }
         case Append(l, r) =>
-          go(count, l, r.concat(rhs))
+          go(count, l, if (rhs.isEmpty) r else Append(r, rhs))
         case Singleton(_) =>
           // due to the invariant count >= 1
           if (count > 1) go(count - 1, rhs, Chain.nil)
@@ -422,10 +427,12 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
             }
           } else {
             // we must be done
-            lhs.concat(Chain.fromSeq(dropped))
+            // note: dropped.nonEmpty
+            val wrapped = Wrap(dropped)
+            if (lhs.isEmpty) wrapped else Append(lhs, wrapped)
           }
         case Append(l, r) =>
-          go(lhs.concat(l), count, r)
+          go(if (lhs.isEmpty) l else Append(lhs, l), count, r)
         case Singleton(_) =>
           // due to the invariant count >= 1
           if (count > 1) go(Chain.nil, count - 1, lhs)

@@ -449,25 +449,36 @@ class ChainSuite extends CatsSuite {
     }
   }
 
+  private val genChainDropTakeArgs =
+    Arbitrary.arbitrary[Chain[Int]].flatMap { chain =>
+      // Bias to values close to the length
+      Gen
+        .oneOf(
+          Gen.choose(Int.MinValue, Int.MaxValue),
+          Gen.choose(-1, chain.length.toInt + 1)
+        )
+        .map((chain, _))
+    }
+
   test("drop(cnt).toList == toList.drop(cnt)") {
-    forAll { (chain: Chain[Int], count: Int) =>
+    forAll(genChainDropTakeArgs) { case (chain: Chain[Int], count: Int) =>
       assert(chain.drop(count).toList == chain.toList.drop(count))
     }
   }
 
   test("dropRight(cnt).toList == toList.dropRight(cnt)") {
-    forAll { (chain: Chain[Int], count: Int) =>
+    forAll(genChainDropTakeArgs) { case (chain: Chain[Int], count: Int) =>
       assert(chain.dropRight(count).toList == chain.toList.dropRight(count))
     }
   }
   test("take(cnt).toList == toList.take(cnt)") {
-    forAll { (chain: Chain[Int], count: Int) =>
+    forAll(genChainDropTakeArgs) { case (chain: Chain[Int], count: Int) =>
       assert(chain.take(count).toList == chain.toList.take(count))
     }
   }
 
   test("takeRight(cnt).toList == toList.takeRight(cnt)") {
-    forAll { (chain: Chain[Int], count: Int) =>
+    forAll(genChainDropTakeArgs) { case (chain: Chain[Int], count: Int) =>
       assert(chain.takeRight(count).toList == chain.toList.takeRight(count))
     }
   }
