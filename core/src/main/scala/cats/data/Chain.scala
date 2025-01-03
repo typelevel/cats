@@ -257,6 +257,90 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
   }
 
   /**
+   * take a certain amount of items from the front of the Chain
+   */
+  final def take(count: Int): Chain[A] = {
+    // invariant count >= 1
+    @tailrec
+    def go(lhs: Chain[A], count: Int, arg: Chain[A], rhs: Chain[A]): Chain[A] =
+      arg match {
+        case Wrap(seq) =>
+          if (count == 1) {
+            lhs.append(seq(0))
+          } else {
+            // count > 1
+            val taken = seq.take(count)
+            // we may have not takeped all of count
+            val newCount = count - taken.length
+            val newLhs = lhs.concat(Wrap(taken))
+            if (newCount > 0) {
+              // we have to keep takeping on the rhs
+              go(newLhs, newCount, rhs, Chain.nil)
+            } else {
+              // newCount == 0, we have taken enough
+              newLhs
+            }
+          }
+        case Append(l, r) =>
+          go(lhs, count, l, r.concat(rhs))
+        case s @ Singleton(_) =>
+          // due to the invariant count >= 1
+          val newLhs = if (lhs.isEmpty) s else Append(lhs, s)
+          if (count > 1) {
+            go(newLhs, count - 1, rhs, Chain.nil)
+          } else newLhs
+        case Empty =>
+          if (rhs.isEmpty) lhs
+          else go(lhs, count, rhs, Chain.nil)
+      }
+
+    if (count <= 0) Empty
+    else go(Empty, count, this, Empty)
+  }
+
+  /**
+   * take a certain amount of items from the back of the Chain
+   */
+  final def takeRight(count: Int): Chain[A] = {
+    // invariant count >= 1
+    @tailrec
+    def go(lhs: Chain[A], count: Int, arg: Chain[A], rhs: Chain[A]): Chain[A] =
+      arg match {
+        case Wrap(seq) =>
+          if (count == 1) {
+            lhs.append(seq.last)
+          } else {
+            // count > 1
+            val taken = seq.takeRight(count)
+            // we may have not takeped all of count
+            val newCount = count - taken.length
+            val newRhs = Wrap(taken).concat(rhs)
+            if (newCount > 0) {
+              // we have to keep takeping on the rhs
+              go(Chain.nil, newCount, lhs, newRhs)
+            } else {
+              // newCount == 0, we have taken enough
+              newRhs
+            }
+          }
+        case Append(l, r) =>
+          go(lhs.concat(l), count, r, rhs)
+        case s @ Singleton(_) =>
+          // due to the invariant count >= 1
+          val newRhs = if (rhs.isEmpty) s else Append(s, rhs)
+          if (count > 1) {
+            go(Empty, count - 1, lhs, newRhs)
+          } else newRhs
+        case Empty =>
+          if (lhs.isEmpty) rhs
+          else go(Chain.nil, count, lhs, rhs)
+      }
+
+    if (count <= 0) Empty
+    else go(Empty, count, this, Empty)
+  }
+
+  /**
    * Drops longest prefix of elements that satisfy a predicate.
    *
    * @param p The predicate used to test elements.
@@ -273,6 +357,86 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
         case None => nil
       }
     go(this)
+  }
+
+  /**
+   * Drop a certain amount of items from the front of the Chain
+   */
+  final def drop(count: Int): Chain[A] = {
+    // invariant count >= 1
+    @tailrec
+    def go(count: Int, arg: Chain[A], rhs: Chain[A]): Chain[A] =
+      arg match {
+        case Wrap(seq) =>
+          val dropped = seq.drop(count)
+          if (dropped.isEmpty) {
+            // we may have not dropped all of count
+            val newCount = count - seq.length
+            if (newCount > 0) {
+              // we have to keep dropping on the rhs
+              go(newCount, rhs, Chain.nil)
+            } else {
+              // we know that count >= seq.length else we wouldn't be empty
+              // so in this case, it is exactly count == seq.length
+              rhs
+            }
+          } else {
+            // we must be done
+            Chain.fromSeq(dropped).concat(rhs)
+          }
+        case Append(l, r) =>
+          go(count, l, r.concat(rhs))
+        case Singleton(_) =>
+          // due to the invariant count >= 1
+          if (count > 1) go(count - 1, rhs, Chain.nil)
+          else rhs
+        case Empty =>
+          if (rhs.isEmpty) Empty
+          else go(count, rhs, Chain.nil)
+      }
+
+    if (count <= 0) this
+    else go(count, this, Empty)
+  }
+
+  /**
+   * Drop a certain amount of items from the back of the Chain
+   */
+  final def dropRight(count: Int): Chain[A] = {
+    // invariant count >= 1
+    @tailrec
+    def go(lhs: Chain[A], count: Int, arg: Chain[A]): Chain[A] =
+      arg match {
+        case Wrap(seq) =>
+          val dropped = seq.dropRight(count)
+          if (dropped.isEmpty) {
+            // we may have not dropped all of count
+            val newCount = count - seq.length
+            if (newCount > 0) {
+              // we have to keep dropping on the rhs
+              go(Chain.nil, newCount, lhs)
+            } else {
+              // we know that count >= seq.length else we wouldn't be empty
+              // so in this case, it is exactly count == seq.length
+              lhs
+            }
+          } else {
+            // we must be done
+            lhs.concat(Chain.fromSeq(dropped))
+          }
+        case Append(l, r) =>
+          go(lhs.concat(l), count, r)
+        case Singleton(_) =>
+          // due to the invariant count >= 1
+          if (count > 1) go(Chain.nil, count - 1, lhs)
+          else lhs
+        case Empty =>
+          if (lhs.isEmpty) Empty
+          else go(Chain.nil, count, lhs)
+      }
+
+    if (count <= 0) this
+    else go(Empty, count, this)
   }
 
   /**

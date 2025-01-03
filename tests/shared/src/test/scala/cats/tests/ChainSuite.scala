@@ -448,4 +448,27 @@ class ChainSuite extends CatsSuite {
       assert(chain.foldRight(init)(fn) == chain.toList.foldRight(init)(fn))
     }
   }
+
+  test("drop(cnt).toList == toList.drop(cnt)") {
+    forAll { (chain: Chain[Int], count: Int) =>
+      assert(chain.drop(count).toList == chain.toList.drop(count))
+    }
+  }
+
+  test("dropRight(cnt).toList == toList.dropRight(cnt)") {
+    forAll { (chain: Chain[Int], count: Int) =>
+      assert(chain.dropRight(count).toList == chain.toList.dropRight(count))
+    }
+  }
+  test("take(cnt).toList == toList.take(cnt)") {
+    forAll { (chain: Chain[Int], count: Int) =>
+      assert(chain.take(count).toList == chain.toList.take(count))
+    }
+  }
+
+  test("takeRight(cnt).toList == toList.takeRight(cnt)") {
+    forAll { (chain: Chain[Int], count: Int) =>
+      assert(chain.takeRight(count).toList == chain.toList.takeRight(count))
+    }
+  }
 }
