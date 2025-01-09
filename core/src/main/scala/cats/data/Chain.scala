@@ -378,7 +378,9 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
       arg match {
         case Wrap(seq) =>
           val dropped = if (count < Int.MaxValue) seq.drop(count.toInt) else seq.drop(Int.MaxValue)
-          if (dropped.isEmpty) {
+          val lc = dropped.lengthCompare(1)
+          if (lc < 0) {
+            // if dropped.length < 1, then it is zero
             // we may have not dropped all of count
             val newCount = count - seq.length
             rhs match {
@@ -392,7 +394,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
             }
           } else {
             // dropped is not empty
-            val wrapped = Wrap(dropped)
+            val wrapped = if (lc > 0) Wrap(dropped) else Singleton(dropped.head)
             // we must be done
             if (rhs.isEmpty) wrapped else Append(wrapped, rhs)
           }
@@ -425,7 +427,9 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
       arg match {
         case Wrap(seq) =>
           val dropped = if (count < Int.MaxValue) seq.dropRight(count.toInt) else seq.dropRight(Int.MaxValue)
-          if (dropped.isEmpty) {
+          val lc = dropped.lengthCompare(1)
+          if (lc < 0) {
+            // if dropped.length < 1, then it is zero
             // we may have not dropped all of count
             val newCount = count - seq.length
             lhs match {
@@ -440,7 +444,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
           } else {
             // we must be done
             // note: dropped.nonEmpty
-            val wrapped = Wrap(dropped)
+            val wrapped = if (lc > 0) Wrap(dropped) else Singleton(dropped.head)
             if (lhs.isEmpty) wrapped else Append(lhs, wrapped)
           }
         case Append(l, r) =>
@@ -1128,7 +1132,8 @@ object Chain extends ChainInstances with ChainCompanionCompat {
    * if the length is one, fromSeq returns Singleton
    *
    * The only places we create Wrap is in fromSeq and in methods that preserve
-   * length: zipWithIndex, map, sort
+   * length: zipWithIndex, map, sort. Additionally, in drop/dropRight we carefully
+   * preserve this invariant.
    */
   final private[data] case class Wrap[A](seq: immutable.Seq[A]) extends NonEmpty[A]
 
