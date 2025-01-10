@@ -22,7 +22,9 @@
 package cats.tests
 
 import cats._
+import cats.data.Chain
 import cats.kernel.compat.scalaVersionSpecific._
+import cats.laws.discipline.arbitrary._
 import cats.syntax.all._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
@@ -119,6 +121,7 @@ object TraverseSuite {
 
 class TraverseListSuite extends TraverseSuite[List]("List")
 class TraverseVectorSuite extends TraverseSuite[Vector]("Vector")
+class TraverseChainSuite extends TraverseSuite[Chain]("Chain")
 
 @annotation.nowarn("cat=deprecation")
 class TraverseStreamSuite extends TraverseSuite[Stream]("Stream")

@@ -1258,11 +1258,33 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         G match {
           case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa.iterator)(f)(x)
           case _ =>
-            foldRight(fa, Eval.now(G.unit)) { (a, acc) =>
-              G.map2Eval(f(a), acc) { (_, _) =>
-                ()
+            @tailrec
+            def go(fa: NonEmpty[A], rhs: Chain[A], acc: G[Unit]): G[Unit] =
+              fa match {
+                case Append(l, r) =>
+                  go(l, if (rhs.isEmpty) r else Append(r, rhs), acc)
+                case Wrap(as) =>
+                  val va = Foldable[collection.immutable.Seq].traverseVoid(as)(f)
+                  val acc1 = G.productL(acc)(va)
+                  rhs match {
+                    case Empty => acc1
+                    case ne: NonEmpty[A] =>
+                      go(ne, Empty, acc1)
+                  }
+                case Singleton(a) =>
+                  val acc1 = G.productL(acc)(f(a))
+                  rhs match {
+                    case Empty => acc1
+                    case ne: NonEmpty[A] =>
+                      go(ne, Empty, acc1)
+                  }
               }
-            }.value
+
+            fa match {
+              case Empty => G.unit
+              case ne: NonEmpty[A] =>
+                go(ne, Empty, G.unit)
+            }
         }
 
       final override def toIterable[A](fa: Chain[A]): Iterable[A] = new scala.collection.AbstractIterable[A] {
