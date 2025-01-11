@@ -40,7 +40,7 @@ private[data] trait ChainCompanionCompat {
   private def fromImmutableSeq[A](s: immutable.Seq[A]): Chain[A] = {
     val lc = s.lengthCompare(1)
     if (lc < 0) nil
-    else if (lc > 0) Wrap(s.toVector)
+    else if (lc > 0) Wrap(s)
     else one(s.head)
   }
 
