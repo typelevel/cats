@@ -240,8 +240,9 @@ class NestedSuite extends CatsSuite {
     checkAll("Nested[NonEmptyList, OneAnd[ListWrapper, *], *]",
              ReducibleTests[Nested[NonEmptyList, OneAnd[ListWrapper, *], *]].reducible[Option, Int, Int]
     )
-    checkAll("Reducible[Nested[NonEmptyList, OneAnd[ListWrapper, *], *]]",
-             SerializableTests.serializable(Reducible[Nested[NonEmptyList, OneAnd[ListWrapper, *], *]])
+    checkAll(
+      "Reducible[Nested[NonEmptyList, OneAnd[ListWrapper, *], *]]",
+      SerializableTests.serializable(Reducible[Nested[NonEmptyList, OneAnd[ListWrapper, *], *]])
     )
   }
 

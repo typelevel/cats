@@ -412,8 +412,9 @@ class IndexedStateTSuite extends CatsSuite {
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, *]",
              FunctorFilterTests[IndexedStateT[ListWrapper, MiniInt, Int, *]].functorFilter[Int, Int, Int]
     )
-    checkAll("FunctorFilter[IndexedStateT[ListWrapper, MiniInt, Int, *]]",
-             SerializableTests.serializable(FunctorFilter[IndexedStateT[ListWrapper, MiniInt, Int, *]])
+    checkAll(
+      "FunctorFilter[IndexedStateT[ListWrapper, MiniInt, Int, *]]",
+      SerializableTests.serializable(FunctorFilter[IndexedStateT[ListWrapper, MiniInt, Int, *]])
     )
 
     FunctorFilter[IndexedStateT[ListWrapper, String, Int, *]]
@@ -438,8 +439,9 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val F: Monad[ListWrapper] = ListWrapper.monad
     implicit val FS: Bifunctor[IndexedStateT[ListWrapper, Int, *, *]] = IndexedStateT.catsDataBifunctorForIndexedStateT
 
-    checkAll("IndexedStateT[ListWrapper, MiniInt, String, Int]",
-             BifunctorTests[IndexedStateT[ListWrapper, MiniInt, *, *]].bifunctor[String, String, String, Int, Int, Int]
+    checkAll(
+      "IndexedStateT[ListWrapper, MiniInt, String, Int]",
+      BifunctorTests[IndexedStateT[ListWrapper, MiniInt, *, *]].bifunctor[String, String, String, Int, Int, Int]
     )
     checkAll("Bifunctor[IndexedStateT[ListWrapper, Int, *, *]]",
              SerializableTests.serializable(Bifunctor[IndexedStateT[ListWrapper, Int, *, *]])
