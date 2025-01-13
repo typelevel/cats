@@ -50,9 +50,9 @@ sealed abstract class As[-A, +B] extends Serializable {
    */
   def substitute[F[-_]](p: F[B]): F[A]
 
-  @inline final def andThen[C](that: (B As C)): (A As C) = As.compose(that, this)
+  @inline final def andThen[C](that: B As C): A As C = As.compose(that, this)
 
-  @inline final def compose[C](that: (C As A)): (C As B) = As.compose(this, that)
+  @inline final def compose[C](that: C As A): C As B = As.compose(this, that)
 
   @inline final def coerce(a: A): B = As.witness(this)(a)
 
@@ -73,9 +73,9 @@ sealed abstract class AsInstances {
    * Subtyping forms a category
    */
   implicit val liskov: Category[As] = new Category[As] {
-    def id[A]: (A As A) = refl[A]
+    def id[A]: A As A = refl[A]
 
-    def compose[A, B, C](bc: B As C, ab: A As B): (A As C) = bc.compose(ab)
+    def compose[A, B, C](bc: B As C, ab: A As B): A As C = bc.compose(ab)
   }
 }
 
@@ -92,7 +92,7 @@ object As extends AsInstances with AsSupport {
   /**
    * Subtyping is reflexive
    */
-  implicit def refl[A]: (A As A) =
+  implicit def refl[A]: A As A =
     reflAny.asInstanceOf[A As A]
 
   /**
@@ -114,7 +114,7 @@ object As extends AsInstances with AsSupport {
   /**
    * reify a subtype relationship as a Liskov relationship
    */
-  @inline def reify[A, B >: A]: (A As B) = refl
+  @inline def reify[A, B >: A]: A As B = refl
 
   /**
    * It can be convenient to convert a <:< value into a `<~<` value.
@@ -127,7 +127,7 @@ object As extends AsInstances with AsSupport {
   /**
    * We can lift subtyping into any covariant type constructor
    */
-  def co[T[+_], A, A2](a: A As A2): (T[A] As T[A2]) = {
+  def co[T[+_], A, A2](a: A As A2): T[A] As T[A2] = {
     type L[-α] = T[α] As T[A2]
     a.substitute[L](refl)
   }
@@ -179,7 +179,7 @@ object As extends AsInstances with AsSupport {
   def lift2[T[+_, +_], A, A2, B, B2](
     a: A As A2,
     b: B As B2
-  ): (T[A, B] As T[A2, B2]) = {
+  ): T[A, B] As T[A2, B2] = {
     type a[-X] = T[X, B2] As T[A2, B2]
     type b[-X] = T[A, X] As T[A2, B2]
     b.substitute[b](a.substitute[a](refl))
@@ -192,7 +192,7 @@ object As extends AsInstances with AsSupport {
    *  Given that F has the shape: F[-_], we show that:
    *     (A As B) implies (F[B] As F[A])
    */
-  def contra[T[-_], A, B](a: A As B): (T[B] As T[A]) = {
+  def contra[T[-_], A, B](a: A As B): T[B] As T[A] = {
     type L[-α] = T[B] As T[α]
     a.substitute[L](refl)
   }
@@ -201,27 +201,27 @@ object As extends AsInstances with AsSupport {
   // parameter. Here we provide the proof for what we expect to be the
   // most common shapes.
 
-  def contra1_2[T[-_, _], Z, A, B](a: A As Z): (T[Z, B] As T[A, B]) = {
+  def contra1_2[T[-_, _], Z, A, B](a: A As Z): T[Z, B] As T[A, B] = {
     type L[-α] = T[Z, B] As T[α, B]
     a.substitute[L](refl)
   }
 
-  def contra2_2[T[_, -_], Z, A, B](a: B As Z): (T[A, Z] As T[A, B]) = {
+  def contra2_2[T[_, -_], Z, A, B](a: B As Z): T[A, Z] As T[A, B] = {
     type L[-α] = T[A, Z] As T[A, α]
     a.substitute[L](refl)
   }
 
-  def contra1_3[T[-_, _, _], Z, A, B, C](a: A As Z): (T[Z, B, C] As T[A, B, C]) = {
+  def contra1_3[T[-_, _, _], Z, A, B, C](a: A As Z): T[Z, B, C] As T[A, B, C] = {
     type L[-α] = T[Z, B, C] As T[α, B, C]
     a.substitute[L](refl)
   }
 
-  def contra2_3[T[_, -_, _], Z, A, B, C](a: B As Z): (T[A, Z, C] As T[A, B, C]) = {
+  def contra2_3[T[_, -_, _], Z, A, B, C](a: B As Z): T[A, Z, C] As T[A, B, C] = {
     type L[-α] = T[A, Z, C] As T[A, α, C]
     a.substitute[L](refl)
   }
 
-  def contra3_3[T[_, _, -_], Z, A, B, C](a: C As Z): (T[A, B, Z] As T[A, B, C]) = {
+  def contra3_3[T[_, _, -_], Z, A, B, C](a: C As Z): T[A, B, Z] As T[A, B, C] = {
     type L[-α] = T[A, B, Z] As T[A, B, α]
     a.substitute[L](refl)
   }
