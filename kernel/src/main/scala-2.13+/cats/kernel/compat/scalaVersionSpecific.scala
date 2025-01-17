@@ -24,8 +24,7 @@ package kernel
 
 package compat
 import scala.annotation.{Annotation, StaticAnnotation}
-import scala.collection.mutable
-import scala.jdk.CollectionConverters.*
+import scala.jdk.javaapi.CollectionConverters
 
 private[cats] object scalaVersionSpecific {
 
@@ -39,6 +38,6 @@ private[cats] object scalaVersionSpecific {
   }
 
   implicit class setExtension[A](private val s: java.util.Set[A]) extends AnyVal {
-    def asScala: mutable.Set[A] = SetHasAsScala(s).asScala
+    def asScala: Iterable[A] = CollectionConverters.asScala(x)
   }
 }

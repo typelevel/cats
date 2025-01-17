@@ -19,23 +19,14 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package cats.kernel
-package laws
+package cats.kernel.laws
+import scala.annotation.{Annotation, StaticAnnotation}
+import scala.collection.{mutable, IterableLike, TraversableLike}
+import scala.collection.JavaConverters._
 
-import cats.kernel.compat.scalaVersionSpecific.*
-import cats.kernel.instances.currency.*
-import cats.kernel.laws.discipline.*
-import cats.kernel.laws.scalaVersionSpecific.*
-import munit.DisciplineSuite
-import java.util.Currency
-import org.scalacheck.{Arbitrary, Cogen, Gen}
+private[cats] object scalaVersionSpecific {
 
-class JvmLawTests extends TestsConfig with DisciplineSuite {
-  implicit private val arbitraryCurrency: Arbitrary[Currency] = Arbitrary(
-    Gen.oneOf(Currency.getAvailableCurrencies().asScala)
-  )
-  implicit private val cogenCurrency: Cogen[Currency] = Cogen[String].contramap(_.getCurrencyCode())
-
-  checkAll("Eq[Currency]", EqTests[Currency].eqv)
-  checkAll("Hash[Currency]", HashTests[Currency].hash)
+  implicit class iterableExtension[A](private val s: java.lang.Iterable[A]) extends AnyVal {
+    def asScala: Iterable[A] = iterableAsScalaIterable(s)
+  }
 }

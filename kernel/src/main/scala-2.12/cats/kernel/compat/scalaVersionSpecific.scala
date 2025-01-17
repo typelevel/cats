@@ -21,8 +21,7 @@
 
 package cats.kernel.compat
 import scala.annotation.{Annotation, StaticAnnotation}
-import scala.collection.{mutable, IterableLike, TraversableLike}
-import scala.collection.convert.ImplicitConversionsToScala.*
+import scala.collection.{IterableLike, TraversableLike}
 
 private[cats] object scalaVersionSpecific {
 
@@ -50,9 +49,5 @@ private[cats] object scalaVersionSpecific {
     def lazyZip[El1, Repr1, El2, Repr2, T](
       that: T
     )(implicit w1: A => TraversableLike[El1, Repr1], w2: T => IterableLike[El2, Repr2]) = (a, that).zipped
-  }
-
-  implicit class setExtension[A](private val s: java.util.Set[A]) extends AnyVal {
-    def asScala: mutable.Set[A] = `set asScala`(s)
   }
 }
