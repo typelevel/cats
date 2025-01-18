@@ -38,15 +38,17 @@ private[data] trait ChainCompanionCompat {
     }
 
   private def fromImmutableSeq[A](s: immutable.Seq[A]): Chain[A] = {
-    if (s.isEmpty) nil
-    else if (s.lengthCompare(1) == 0) one(s.head)
-    else Wrap(s)
+    val lc = s.lengthCompare(1)
+    if (lc < 0) nil
+    else if (lc > 0) Wrap(s)
+    else one(s.head)
   }
 
   private def fromMutableSeq[A](s: Seq[A]): Chain[A] = {
-    if (s.isEmpty) nil
-    else if (s.lengthCompare(1) == 0) one(s.head)
-    else Wrap(s.toVector)
+    val lc = s.lengthCompare(1)
+    if (lc < 0) nil
+    else if (lc > 0) Wrap(s.toVector)
+    else one(s.head)
   }
 
   /**

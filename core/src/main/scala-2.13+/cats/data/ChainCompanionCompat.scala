@@ -28,10 +28,12 @@ private[data] trait ChainCompanionCompat {
   /**
    * Creates a Chain from the specified sequence.
    */
-  def fromSeq[A](s: Seq[A]): Chain[A] =
-    if (s.isEmpty) nil
-    else if (s.lengthCompare(1) == 0) one(s.head)
-    else Wrap(s)
+  def fromSeq[A](s: Seq[A]): Chain[A] = {
+    val lc = s.lengthCompare(1)
+    if (lc < 0) nil
+    else if (lc > 0) Wrap(s)
+    else one(s.head)
+  }
 
   /**
    * Creates a Chain from the specified IterableOnce.
