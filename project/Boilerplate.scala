@@ -639,7 +639,7 @@ object Boilerplate {
       |
          -private[syntax] final class Function${arity}ApplyOps[T, ${`A..N`}](private val f: $function) extends AnyVal with Serializable {
           - def liftN[F[_]: Functor: Semigroupal]($typedParams): F[T] = Semigroupal.map$arity(${`a..n`})(f)
-          - def parLiftN[F[_]: Parallel]($typedParams): F[T] = Parallel.parMap$arity(${`a..n`})(f)
+          - def parLiftN[F[_]: NonEmptyParallel]($typedParams): F[T] = Parallel.parMap$arity(${`a..n`})(f)
          -}
       """
     }
