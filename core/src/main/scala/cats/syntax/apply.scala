@@ -22,7 +22,7 @@
 package cats
 package syntax
 
-trait ApplySyntax extends TupleSemigroupalSyntax with FunctionApplySyntax {
+trait ApplySyntax extends TupleSemigroupalSyntax with FunctionApplySyntax with FunctionApplySyntax2 {
   @deprecated("Kept for binary compatibility", "2.10.0")
   final def catsSyntaxApply[F[_], A](fa: F[A], F: Apply[F]): Apply.Ops[F, A] =
     new Apply.Ops[F, A] {
