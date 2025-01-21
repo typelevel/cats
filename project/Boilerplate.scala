@@ -626,8 +626,8 @@ object Boilerplate {
       |package syntax
       |
       |trait FunctionApplySyntax {
-      |  implicit def catsSyntaxFunction1Apply[T, A0](f: Function1[A0, T]): Function1ApplyOps[T, A0] = new Function1ApplyOps(f)
-         -  implicit def catsSyntaxFunction${arity}Apply[T, ${`A..N`}](f: $function): Function${arity}ApplyOps[T, ${`A..N`}] = new Function${arity}ApplyOps(f)
+      |  def catsSyntaxFunction1Apply[T, A0](f: Function1[A0, T]): Function1ApplyOps[T, A0] = new Function1ApplyOps(f)
+         -  def catsSyntaxFunction${arity}Apply[T, ${`A..N`}](f: $function): Function${arity}ApplyOps[T, ${`A..N`}] = new Function${arity}ApplyOps(f)
       |}
       |
       |private[syntax] final class Function1ApplyOps[T, A0](private val f: Function1[A0, T]) extends AnyVal with Serializable {
@@ -637,7 +637,7 @@ object Boilerplate {
       |
          -private[syntax] final class Function${arity}ApplyOps[T, ${`A..N`}](private val f: $function) extends AnyVal with Serializable {
           - def liftN[F[_]: Functor: Semigroupal]($typedParams): F[T] = Semigroupal.map$arity(${`a..n`})(f)
-          - private[syntax] def parLiftN[F[_]: Parallel]($typedParams): F[T] = Parallel.parMap$arity(${`a..n`})(f)
+          - def parLiftN[F[_]: Parallel]($typedParams): F[T] = Parallel.parMap$arity(${`a..n`})(f)
          -}
       """
     }
@@ -655,18 +655,22 @@ object Boilerplate {
 
       val typedParams = synVals.zip(synTypes).map { case (v, t) => s"$v: F[$t]" }.mkString(", ")
 
-      // arity 1 left out intentionally, for it's part of GenFunctionSyntax already.
-      // SyntaxSuite ensures that it exists.
-
       block"""
       |package cats
       |package syntax
       |
       |trait FunctionApplySyntax2 {
+      |  implicit def catsSyntaxFunction1Apply2[T, A0](f: Function1[A0, T]): Function1ApplyOps2[T, A0] = new Function1ApplyOps2(f)
          -  implicit def catsSyntaxFunction${arity}Apply2[T, ${`A..N`}](f: $function): Function${arity}ApplyOps2[T, ${`A..N`}] = new Function${arity}ApplyOps2(f)
       |}
       |
+      |private[syntax] final class Function1ApplyOps2[T, A0](private val f: Function1[A0, T]) extends AnyVal with Serializable {
+      |  def liftN[F[_]: Functor](a0: F[A0]): F[T] = Functor[F].map(a0)(f)
+      |  def parLiftN[F[_]: Functor](a0: F[A0]): F[T] = Functor[F].map(a0)(f)
+      |}
+      |
          -private[syntax] final class Function${arity}ApplyOps2[T, ${`A..N`}](private val f: $function) extends AnyVal with Serializable {
+          - def liftN[F[_]: Functor: Semigroupal]($typedParams): F[T] = Semigroupal.map$arity(${`a..n`})(f)
           - def parLiftN[F[_]: NonEmptyParallel]($typedParams): F[T] = Parallel.parMap$arity(${`a..n`})(f)
          -}
       """
