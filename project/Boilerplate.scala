@@ -33,6 +33,7 @@ object Boilerplate {
     GenParallelArityFunctions2,
     GenFoldableArityFunctions,
     GenFunctionSyntax,
+    GenFunctionSyntax2,
     GenTupleParallelSyntax,
     GenTupleShowInstances,
     GenTupleMonadInstances,
@@ -624,9 +625,6 @@ object Boilerplate {
       |package cats
       |package syntax
       |
-      |import cats.Functor
-      |import cats.Semigroupal
-      |
       |trait FunctionApplySyntax {
       |  implicit def catsSyntaxFunction1Apply[T, A0](f: Function1[A0, T]): Function1ApplyOps[T, A0] = new Function1ApplyOps(f)
          -  implicit def catsSyntaxFunction${arity}Apply[T, ${`A..N`}](f: $function): Function${arity}ApplyOps[T, ${`A..N`}] = new Function${arity}ApplyOps(f)
@@ -639,6 +637,36 @@ object Boilerplate {
       |
          -private[syntax] final class Function${arity}ApplyOps[T, ${`A..N`}](private val f: $function) extends AnyVal with Serializable {
           - def liftN[F[_]: Functor: Semigroupal]($typedParams): F[T] = Semigroupal.map$arity(${`a..n`})(f)
+          - private[syntax] def parLiftN[F[_]: Parallel]($typedParams): F[T] = Parallel.parMap$arity(${`a..n`})(f)
+         -}
+      """
+    }
+  }
+
+  object GenFunctionSyntax2 extends Template {
+    def filename(root: File) = root / "cats" / "syntax" / "FunctionApplySyntax2.scala"
+
+    override def range = 2 to maxArity
+
+    def content(tv: TemplateVals) = {
+      import tv._
+
+      val function = s"Function$arity[${`A..N`}, T]"
+
+      val typedParams = synVals.zip(synTypes).map { case (v, t) => s"$v: F[$t]" }.mkString(", ")
+
+      // arity 1 left out intentionally, for it's part of GenFunctionSyntax already.
+      // SyntaxSuite ensures that it exists.
+
+      block"""
+      |package cats
+      |package syntax
+      |
+      |trait FunctionApplySyntax2 {
+         -  implicit def catsSyntaxFunction${arity}Apply2[T, ${`A..N`}](f: $function): Function${arity}ApplyOps2[T, ${`A..N`}] = new Function${arity}ApplyOps2(f)
+      |}
+      |
+         -private[syntax] final class Function${arity}ApplyOps2[T, ${`A..N`}](private val f: $function) extends AnyVal with Serializable {
           - def parLiftN[F[_]: NonEmptyParallel]($typedParams): F[T] = Parallel.parMap$arity(${`a..n`})(f)
          -}
       """
