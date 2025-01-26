@@ -257,6 +257,99 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
   }
 
   /**
+   * take a certain amount of items from the front of the Chain
+   */
+  final def take(count: Long): Chain[A] = {
+    // invariant count >= 1
+    @tailrec
+    def go(lhs: Chain[A], count: Long, arg: NonEmpty[A], rhs: Chain[A]): Chain[A] =
+      arg match {
+        case Wrap(seq) =>
+          if (count == 1) {
+            lhs.append(seq.head)
+          } else {
+            // count > 1
+            val taken =
+              if (count < Int.MaxValue) seq.take(count.toInt)
+              else seq.take(Int.MaxValue)
+            // we may have not taken all of count
+            val newCount = count - taken.length
+            val wrapped = Wrap(taken)
+            // this is more efficient than using concat
+            val newLhs = if (lhs.isEmpty) wrapped else Append(lhs, wrapped)
+            rhs match {
+              case rhsNE: NonEmpty[A] if newCount > 0L =>
+                // we have to keep taking on the rhs
+                go(newLhs, newCount, rhsNE, Empty)
+              case _ =>
+                newLhs
+            }
+          }
+        case Append(l, r) =>
+          go(lhs, count, l, if (rhs.isEmpty) r else Append(r, rhs))
+        case s @ Singleton(_) =>
+          // due to the invariant count >= 1
+          val newLhs = if (lhs.isEmpty) s else Append(lhs, s)
+          rhs match {
+            case rhsNE: NonEmpty[A] if count > 1L =>
+              go(newLhs, count - 1L, rhsNE, Empty)
+            case _ => newLhs
+          }
+      }
+
+    this match {
+      case ne: NonEmpty[A] if count > 0L =>
+        go(Empty, count, ne, Empty)
+      case _ => Empty
+    }
+  }
+
+  /**
+   * take a certain amount of items from the back of the Chain
+   */
+  final def takeRight(count: Long): Chain[A] = {
+    // invariant count >= 1
+    @tailrec
+    def go(lhs: Chain[A], count: Long, arg: NonEmpty[A], rhs: Chain[A]): Chain[A] =
+      arg match {
+        case Wrap(seq) =>
+          if (count == 1L) {
+            seq.last +: rhs
+          } else {
+            // count > 1
+            val taken =
+              if (count < Int.MaxValue) seq.takeRight(count.toInt)
+              else seq.takeRight(Int.MaxValue)
+            // we may have not taken all of count
+            val newCount = count - taken.length
+            val wrapped = Wrap(taken)
+            val newRhs = if (rhs.isEmpty) wrapped else Append(wrapped, rhs)
+            lhs match {
+              case lhsNE: NonEmpty[A] if newCount > 0 =>
+                go(Empty, newCount, lhsNE, newRhs)
+              case _ => newRhs
+            }
+          }
+        case Append(l, r) =>
+          go(if (lhs.isEmpty) l else Append(lhs, l), count, r, rhs)
+        case s @ Singleton(_) =>
+          // due to the invariant count >= 1
+          val newRhs = if (rhs.isEmpty) s else Append(s, rhs)
+          lhs match {
+            case lhsNE: NonEmpty[A] if count > 1 =>
+              go(Empty, count - 1, lhsNE, newRhs)
+            case _ => newRhs
+          }
+      }
+
+    this match {
+      case ne: NonEmpty[A] if count > 0L =>
+        go(Empty, count, ne, Empty)
+      case _ => Empty
+    }
+  }
+
+  /**
    * Drops longest prefix of elements that satisfy a predicate.
    *
    * @param p The predicate used to test elements.
@@ -273,6 +366,105 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
         case None => nil
       }
     go(this)
+  }
+
+  /**
+   * Drop a certain amount of items from the front of the Chain
+   */
+  final def drop(count: Long): Chain[A] = {
+    // invariant count >= 1
+    @tailrec
+    def go(count: Long, arg: NonEmpty[A], rhs: Chain[A]): Chain[A] =
+      arg match {
+        case Wrap(seq) =>
+          val dropped = if (count < Int.MaxValue) seq.drop(count.toInt) else seq.drop(Int.MaxValue)
+          val lc = dropped.lengthCompare(1)
+          if (lc < 0) {
+            // if dropped.length < 1, then it is zero
+            // we may have not dropped all of count
+            val newCount = count - seq.length
+            rhs match {
+              case rhsNE: NonEmpty[A] if newCount > 0 =>
+                // we have to keep dropping on the rhs
+                go(newCount, rhsNE, Empty)
+              case _ =>
+                // we know that count >= seq.length else we wouldn't be empty
+                // so in this case, it is exactly count == seq.length
+                rhs
+            }
+          } else {
+            // dropped is not empty
+            val wrapped = if (lc > 0) Wrap(dropped) else Singleton(dropped.head)
+            // we must be done
+            if (rhs.isEmpty) wrapped else Append(wrapped, rhs)
+          }
+        case Append(l, r) =>
+          go(count, l, if (rhs.isEmpty) r else Append(r, rhs))
+        case Singleton(_) =>
+          // due to the invariant count >= 1
+          rhs match {
+            case rhsNE: NonEmpty[A] if count > 1L =>
+              go(count - 1L, rhsNE, Empty)
+            case _ =>
+              rhs
+          }
+      }
+
+    this match {
+      case ne: NonEmpty[A] if count > 0L =>
+        go(count, ne, Empty)
+      case _ => this
+    }
+  }
+
+  /**
+   * Drop a certain amount of items from the back of the Chain
+   */
+  final def dropRight(count: Long): Chain[A] = {
+    // invariant count >= 1
+    @tailrec
+    def go(lhs: Chain[A], count: Long, arg: NonEmpty[A]): Chain[A] =
+      arg match {
+        case Wrap(seq) =>
+          val dropped = if (count < Int.MaxValue) seq.dropRight(count.toInt) else seq.dropRight(Int.MaxValue)
+          val lc = dropped.lengthCompare(1)
+          if (lc < 0) {
+            // if dropped.length < 1, then it is zero
+            // we may have not dropped all of count
+            val newCount = count - seq.length
+            lhs match {
+              case lhsNE: NonEmpty[A] if newCount > 0L =>
+                // we have to keep dropping on the lhs
+                go(Empty, newCount, lhsNE)
+              case _ =>
+                // we know that count >= seq.length else we wouldn't be empty
+                // so in this case, it is exactly count == seq.length
+                lhs
+            }
+          } else {
+            // we must be done
+            // note: dropped.nonEmpty
+            val wrapped = if (lc > 0) Wrap(dropped) else Singleton(dropped.head)
+            if (lhs.isEmpty) wrapped else Append(lhs, wrapped)
+          }
+        case Append(l, r) =>
+          go(if (lhs.isEmpty) l else Append(lhs, l), count, r)
+        case Singleton(_) =>
+          // due to the invariant count >= 1
+          lhs match {
+            case lhsNE: NonEmpty[A] if count > 1L =>
+              go(Empty, count - 1L, lhsNE)
+            case _ =>
+              lhs
+          }
+      }
+
+    this match {
+      case ne: NonEmpty[A] if count > 0L =>
+        go(Empty, count, ne)
+      case _ =>
+        this
+    }
   }
 
   /**
@@ -940,7 +1132,8 @@ object Chain extends ChainInstances with ChainCompanionCompat {
    * if the length is one, fromSeq returns Singleton
    *
    * The only places we create Wrap is in fromSeq and in methods that preserve
-   * length: zipWithIndex, map, sort
+   * length: zipWithIndex, map, sort. Additionally, in drop/dropRight we carefully
+   * preserve this invariant.
    */
   final private[data] case class Wrap[A](seq: immutable.Seq[A]) extends NonEmpty[A]
 
@@ -1258,12 +1451,39 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         G match {
           case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa.iterator)(f)(x)
           case _ =>
-            foldRight(fa, Eval.now(G.unit)) { (a, acc) =>
-              G.map2Eval(f(a), acc) { (_, _) =>
-                ()
+            @tailrec
+            def go(fa: NonEmpty[A], rhs: Chain[A], acc: G[Unit]): G[Unit] =
+              fa match {
+                case Append(l, r) =>
+                  go(l, if (rhs.isEmpty) r else Append(r, rhs), acc)
+                case Wrap(as) =>
+                  val va = Foldable[collection.immutable.Seq].traverseVoid(as)(f)
+                  val acc1 = G.productL(acc)(va)
+                  rhs match {
+                    case Empty => acc1
+                    case ne: NonEmpty[A] =>
+                      go(ne, Empty, acc1)
+                  }
+                case Singleton(a) =>
+                  val acc1 = G.productL(acc)(f(a))
+                  rhs match {
+                    case Empty => acc1
+                    case ne: NonEmpty[A] =>
+                      go(ne, Empty, acc1)
+                  }
               }
-            }.value
+
+            fa match {
+              case Empty => G.unit
+              case ne: NonEmpty[A] =>
+                go(ne, Empty, G.unit)
+            }
         }
+
+      final override def toIterable[A](fa: Chain[A]): Iterable[A] = new scala.collection.AbstractIterable[A] {
+        final override def iterator: Iterator[A] =
+          fa.iterator
+      }
 
       override def mapAccumulate[S, A, B](init: S, fa: Chain[A])(f: (S, A) => (S, B)): (S, Chain[B]) =
         StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)

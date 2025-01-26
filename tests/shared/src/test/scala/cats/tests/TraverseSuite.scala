@@ -19,10 +19,12 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package cats.tests
+package cats
+package tests
 
-import cats.*
+import cats.data.Chain
 import cats.kernel.compat.scalaVersionSpecific.*
+import cats.laws.discipline.arbitrary.*
 import cats.syntax.all.*
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.*
@@ -119,6 +121,7 @@ object TraverseSuite {
 
 class TraverseListSuite extends TraverseSuite[List]("List")
 class TraverseVectorSuite extends TraverseSuite[Vector]("Vector")
+class TraverseChainSuite extends TraverseSuite[Chain]("Chain")
 
 @annotation.nowarn("cat=deprecation")
 class TraverseStreamSuite extends TraverseSuite[Stream]("Stream")

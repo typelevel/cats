@@ -19,29 +19,17 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package cats.data
+package alleycats
+package syntax
 
-import cats.data.Chain.{nil, one, Wrap}
+import alleycats.Extract
 
-private[data] trait ChainCompanionCompat {
+object extract extends ExtractSyntax
 
-  /**
-   * Creates a Chain from the specified sequence.
-   */
-  def fromSeq[A](s: Seq[A]): Chain[A] = {
-    val lc = s.lengthCompare(1)
-    if (lc < 0) nil
-    else if (lc > 0) Wrap(s)
-    else one(s.head)
-  }
+trait ExtractSyntax {
+  implicit final def catsSyntaxExtract[F[_], A](fa: F[A]): ExtractOps[F, A] = new ExtractOps[F, A](fa)
+}
 
-  /**
-   * Creates a Chain from the specified IterableOnce.
-   */
-  def fromIterableOnce[A](xs: IterableOnce[A]): Chain[A] = Chain.fromSeq(
-    xs match {
-      case s: Seq[A] => s // pay O(1) not O(N) cost
-      case notSeq    => notSeq.iterator.to(Vector) // toSeq could return a LazyList, creating potential race conditions
-    }
-  )
+final private[alleycats] class ExtractOps[F[_], A](private val fa: F[A]) extends AnyVal {
+  def extract(implicit F: Extract[F]): A = F.extract(fa)
 }

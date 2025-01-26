@@ -103,12 +103,12 @@ class AsSuite extends CatsSuite {
   test("we can lift subtyping to covariant type constructors") {
     val cAsA: Bottom As Top = implicitly
     val co: List[Bottom] As List[Top] = As.co(cAsA)
-    val co2: ((Bottom, String) As (Top, String)) = As.co2(cAsA)
-    val co2_2: ((String, Bottom) As (String, Top)) = As.co2_2(cAsA)
-    val co3: ((Bottom, Unit, Unit) As (Top, Unit, Unit)) = As.co3(cAsA)
-    val co3_2: ((Unit, Bottom, Unit) As (Unit, Top, Unit)) = As.co3_2(cAsA)
-    val co3_3: ((Unit, Unit, Bottom) As (Unit, Unit, Top)) = As.co3_3(cAsA)
-    val lift2: ((Bottom, String) As (Top, Any)) = As.lift2(cAsA, implicitly)
+    val co2: (Bottom, String) As (Top, String) = As.co2(cAsA)
+    val co2_2: (String, Bottom) As (String, Top) = As.co2_2(cAsA)
+    val co3: (Bottom, Unit, Unit) As (Top, Unit, Unit) = As.co3(cAsA)
+    val co3_2: (Unit, Bottom, Unit) As (Unit, Top, Unit) = As.co3_2(cAsA)
+    val co3_3: (Unit, Unit, Bottom) As (Unit, Unit, Top) = As.co3_3(cAsA)
+    val lift2: (Bottom, String) As (Top, Any) = As.lift2(cAsA, implicitly)
   }
 
   test("we can lift subtyping to contravariant type constructors") {
@@ -119,7 +119,7 @@ class AsSuite extends CatsSuite {
     type EatF23[B, -A, C] = A => (B, C)
     type EatF33[B, C, -A] = A => (B, C)
 
-    val cAsA: (Bottom As Top) = implicitly
+    val cAsA: Bottom As Top = implicitly
     val contra: Eat[Top] As Eat[Bottom] = As.contra(cAsA)
     val contra1_2: EatF[Top, Unit] As EatF[Bottom, Unit] = As.contra1_2(cAsA)
     val contra2_2: Eatꟻ[Unit, Top] As Eatꟻ[Unit, Bottom] = As.contra2_2(cAsA)
