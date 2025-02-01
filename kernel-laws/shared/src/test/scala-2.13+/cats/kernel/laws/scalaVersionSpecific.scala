@@ -19,25 +19,6 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package cats
-package kernel
+package cats.kernel.laws
 
-package compat
-import scala.annotation.{Annotation, StaticAnnotation}
-import scala.jdk.javaapi.CollectionConverters
-
-private[cats] object scalaVersionSpecific {
-
-  /**
-   * a trick to suppress unused import warning for this object
-   */
-  class suppressUnusedImportWarningForScalaVersionSpecific extends Annotation with StaticAnnotation
-
-  implicit class iterableOnceExtension[A](private val io: IterableOnce[A]) extends AnyVal {
-    def reduceOption(f: (A, A) => A): Option[A] = io.iterator.reduceOption(f)
-  }
-
-  implicit class setExtension[A](private val s: java.util.Set[A]) extends AnyVal {
-    def asScala: Iterable[A] = CollectionConverters.asScala(s)
-  }
-}
+private[cats] object scalaVersionSpecific
