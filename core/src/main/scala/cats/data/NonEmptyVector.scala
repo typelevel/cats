@@ -249,10 +249,10 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
   override def distinct[AA >: A](implicit O: Order[AA]): NonEmptyVector[AA] = distinctBy(identity[AA])
 
   override def distinctBy[B](f: A => B)(implicit O: Order[B]): NonEmptyVector[A] = {
-    implicit val ord: Ordering[B] = O.toOrdering
-
     if (toVector.lengthCompare(1) == 0) this
     else {
+      implicit val ord: Ordering[B] = O.toOrdering
+
       val bldr = Vector.newBuilder[A]
       val seen = mutable.TreeSet.empty[B]
       val it = iterator
