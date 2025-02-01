@@ -251,15 +251,19 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
   override def distinctBy[B](f: A => B)(implicit O: Order[B]): NonEmptyVector[A] = {
     implicit val ord: Ordering[B] = O.toOrdering
 
-    val bldr = Vector.newBuilder[A]
-    val seen = mutable.TreeSet.empty[B]
-    val it = iterator
-    while (it.hasNext) {
-      val next = it.next()
-      if (seen.add(f(next)))
-        bldr += next
+    if (toVector.sizeIs == 1) this
+    else {
+      val bldr = Vector.newBuilder[A]
+      val seen = mutable.TreeSet.empty[B]
+      val it = iterator
+      while (it.hasNext) {
+        val next = it.next()
+        if (seen.add(f(next)))
+          bldr += next
+      }
+
+      NonEmptyVector.fromVectorUnsafe(bldr.result())
     }
-    NonEmptyVector.fromVectorUnsafe(bldr.result())
   }
 
   /**

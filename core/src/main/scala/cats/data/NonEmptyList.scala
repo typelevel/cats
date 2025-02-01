@@ -345,15 +345,22 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   override def distinctBy[B](f: A => B)(implicit O: Order[B]): NonEmptyList[A] = {
     implicit val ord: Ordering[B] = O.toOrdering
 
-    val bldr = List.newBuilder[A]
-    val seen = mutable.TreeSet.empty[B]
-    val it = iterator
-    while (it.hasNext) {
-      val next = it.next()
-      if (seen.add(f(next)))
-        bldr += next
+    if (tail.isEmpty) this
+    else {
+      val bldr = List.newBuilder[A]
+      val seen = mutable.TreeSet.empty[B]
+      var rest = tail
+      seen.add(f(head))
+      while (rest.nonEmpty) {
+        val next = rest.head
+        rest = rest.tail
+        if (seen.add(f(next))) {
+          bldr += next
+        }
+      }
+
+      NonEmptyList(head, bldr.result())
     }
-    NonEmptyList.fromListUnsafe(bldr.result())
   }
 
   /**
