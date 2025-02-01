@@ -241,7 +241,7 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
   override def distinctBy[B](f: A => B)(implicit O: Order[B]): NonEmptySeq[A] = {
     implicit val ord: Ordering[B] = O.toOrdering
 
-    if (toSeq.sizeIs == 1) this
+    if (toSeq.lengthCompare(1) == 0) this
     else {
       val bldr = Seq.newBuilder[A]
       val seen = mutable.TreeSet.empty[B]
