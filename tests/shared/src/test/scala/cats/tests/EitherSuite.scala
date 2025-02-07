@@ -23,6 +23,7 @@ package cats.tests
 
 import cats._
 import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, NonEmptyVector, Validated}
+import cats.syntax.option._
 import cats.syntax.bifunctor._
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline._
@@ -134,6 +135,63 @@ class EitherSuite extends CatsSuite {
   test("catchNonFatal catches non-fatal exceptions") {
     assert(Either.catchNonFatal("foo".toInt).isLeft)
     assert(Either.catchNonFatal(throw new Throwable("blargh")).isLeft)
+  }
+
+  test("ApplicativeError instance catchNonFatalAs maps exceptions to E") {
+    val res =
+      ApplicativeError[Either[String, *], String]
+        .catchNonFatalAs[Either[Throwable, *], Int](_.getMessage.some)("foo".toInt)
+        .leftMap(0 -> _.getMessage)
+    assert(res === Right(Left("For input string: \"foo\"")))
+  }
+
+  test("ApplicativeError instance catchNonFatalAs raises unmappable exceptions in G") {
+    val res =
+      ApplicativeError[Either[String, *], String]
+        .catchNonFatalAs[Either[Throwable, *], Int](_ => none[String])("foo".toInt)
+        .leftMap(0 -> _.getMessage)
+    assert(res === Left(0 -> "For input string: \"foo\""))
+  }
+
+  test("ApplicativeError instance catchNonFatalAsUnsafe maps exceptions to E") {
+    val res = ApplicativeError[Either[String, *], String].catchNonFatalAsUnsafe(_.getMessage.some)("foo".toInt)
+    assert(res === Left("For input string: \"foo\""))
+  }
+
+  test("ApplicativeError instance catchNonFatalAsUnsafe rethrows unmappable exceptions") {
+    val _ = intercept[NumberFormatException] {
+      ApplicativeError[Either[String, *], String].catchNonFatalAsUnsafe(_ => none[String])("foo".toInt)
+    }
+  }
+
+  test("ApplicativeError instance catchOnlyAs maps exceptions of the specified type to E") {
+    val res =
+      ApplicativeError[Either[String, *], String]
+        .catchOnlyAs[Either[Throwable, *], NumberFormatException](_.getMessage)("foo".toInt)
+        .leftMap(0 -> _.getMessage)
+    assert(res === Right(Left("For input string: \"foo\"")))
+  }
+
+  test("ApplicativeError instance catchOnlyAs raises non-matching exceptions in G") {
+    val res =
+      ApplicativeError[Either[String, *], String]
+        .catchOnlyAs[Either[Throwable, *], IndexOutOfBoundsException](_.getMessage)("foo".toInt)
+        .leftMap(0 -> _.getMessage)
+    assert(res === Left(0 -> "For input string: \"foo\""))
+  }
+
+  test("ApplicativeError instance catchOnlyAsUnsafe maps exceptions of the specified type to E") {
+    val res =
+      ApplicativeError[Either[String, *], String]
+        .catchOnlyAsUnsafe[NumberFormatException](_.getMessage)("foo".toInt)
+    assert(res === Left("For input string: \"foo\""))
+  }
+
+  test("ApplicativeError instance catchOnlyAsUnsafe propagates non-matching exceptions") {
+    val _ = intercept[NumberFormatException] {
+      ApplicativeError[Either[String, *], String]
+        .catchOnlyAsUnsafe[IndexOutOfBoundsException](_.getMessage)("foo".toInt)
+    }
   }
 
   test("fromTry is left for failed Try") {
