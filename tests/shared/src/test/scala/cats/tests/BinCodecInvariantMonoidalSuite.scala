@@ -23,12 +23,12 @@ package cats.tests
 
 import cats.{InvariantMonoidal, InvariantSemigroupal}
 import cats.kernel.{Eq, Monoid, Semigroup}
-import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.compat.scalaVersionSpecific.*
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
-import cats.laws.discipline.eq._
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.eq.*
+import cats.laws.discipline.arbitrary.*
 import cats.laws.discipline.{ExhaustiveCheck, InvariantMonoidalTests, MiniInt, SerializableTests}
-import cats.syntax.all._
+import cats.syntax.all.*
 import org.scalacheck.{Arbitrary, Gen}
 
 @suppressUnusedImportWarningForScalaVersionSpecific
@@ -184,7 +184,7 @@ object BinCodecInvariantMonoidalSuite {
 
 class BinCodecInvariantMonoidalSuite extends CatsSuite {
   // Everything is defined in a companion object to be serializable.
-  import BinCodecInvariantMonoidalSuite._
+  import BinCodecInvariantMonoidalSuite.*
 
   checkAll("InvariantMonoidal[BinCodec]", InvariantMonoidalTests[BinCodec].invariantMonoidal[MiniInt, MiniInt, MiniInt])
   checkAll("InvariantMonoidal[BinCodec]", SerializableTests.serializable(InvariantMonoidal[BinCodec]))

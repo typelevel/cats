@@ -24,7 +24,7 @@ package laws
 package discipline
 
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+import Prop.*
 import cats.arrow.Profunctor
 import org.typelevel.discipline.Laws
 

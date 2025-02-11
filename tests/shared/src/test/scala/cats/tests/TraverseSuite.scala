@@ -19,15 +19,15 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package cats.tests
+package cats
+package tests
 
-import cats._
 import cats.data.Chain
-import cats.kernel.compat.scalaVersionSpecific._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
+import cats.kernel.compat.scalaVersionSpecific.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.all.*
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 @suppressUnusedImportWarningForScalaVersionSpecific
 abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]]) extends CatsSuite {

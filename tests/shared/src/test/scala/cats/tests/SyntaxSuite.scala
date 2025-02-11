@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.arrow.Compose
 import cats.data.{
   Binested,
@@ -39,7 +39,7 @@ import cats.data.{
   ValidatedNec,
   ValidatedNel
 }
-import cats.syntax.all._
+import cats.syntax.all.*
 
 import scala.collection.immutable.{SortedMap, SortedSet}
 

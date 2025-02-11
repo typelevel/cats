@@ -24,7 +24,7 @@ package instances
 
 import cats.data.{Chain, Ior, ZipSeq}
 import cats.instances.StaticMethods.appendAll
-import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.compat.scalaVersionSpecific.*
 
 import scala.annotation.tailrec
 import scala.collection.mutable

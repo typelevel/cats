@@ -22,7 +22,7 @@
 package cats.kernel.laws
 
 import cats.kernel.{Eq, PartialOrder}
-import cats.kernel.instances.option._
+import cats.kernel.instances.option.*
 
 trait PartialOrderLaws[A] extends EqLaws[A] {
   implicit override def E: PartialOrder[A]

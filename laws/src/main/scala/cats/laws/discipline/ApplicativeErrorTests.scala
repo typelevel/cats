@@ -25,7 +25,7 @@ package discipline
 
 import cats.data.EitherT
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.arbitrary.*
 import org.scalacheck.{Arbitrary, Cogen, Prop}
 import org.scalacheck.Prop.forAll
 

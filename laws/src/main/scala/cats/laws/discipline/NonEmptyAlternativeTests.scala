@@ -25,7 +25,7 @@ package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+import Prop.*
 
 trait NonEmptyAlternativeTests[F[_]] extends ApplicativeTests[F] with SemigroupKTests[F] {
   def laws: NonEmptyAlternativeLaws[F]

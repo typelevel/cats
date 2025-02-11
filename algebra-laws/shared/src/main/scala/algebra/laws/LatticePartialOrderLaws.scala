@@ -21,15 +21,15 @@
 
 package algebra.laws
 
-import algebra._
-import algebra.lattice._
+import algebra.*
+import algebra.lattice.*
 
 import org.typelevel.discipline.Laws
 
 import org.scalacheck.{Arbitrary, Prop}
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
-import algebra.instances.boolean._
+import algebra.instances.boolean.*
 
 object LatticePartialOrderLaws {
   def apply[A: Eq: Arbitrary] = new LatticePartialOrderLaws[A] {

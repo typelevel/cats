@@ -21,20 +21,20 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.{Const, IdT, OptionT, State}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.applicative._
-import cats.syntax.either._
-import cats.syntax.flatMap._
-import cats.syntax.functor._
-import cats.syntax.monadError._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.applicative.*
+import cats.syntax.either.*
+import cats.syntax.flatMap.*
+import cats.syntax.functor.*
+import cats.syntax.monadError.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class OptionTSuite extends CatsSuite {
   implicit val iso: Isomorphisms[OptionT[ListWrapper, *]] = Isomorphisms

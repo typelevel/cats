@@ -26,7 +26,7 @@ package discipline
 import cats.arrow.Category
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
-import Prop._
+import Prop.*
 
 trait CategoryTests[F[_, _]] extends ComposeTests[F] {
   def laws: CategoryLaws[F]

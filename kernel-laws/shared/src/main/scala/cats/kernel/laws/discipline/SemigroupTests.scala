@@ -24,7 +24,7 @@ package kernel
 package laws
 package discipline
 
-import cats.kernel.instances.option._
+import cats.kernel.instances.option.*
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 import org.typelevel.discipline.Laws

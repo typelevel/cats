@@ -23,8 +23,8 @@ package cats.tests
 
 import cats.data.NonEmptyCollection
 import org.scalacheck.Arbitrary
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 abstract class NonEmptyCollectionSuite[U[+_], NE[+_], NEC[x] <: NonEmptyCollection[x, U, NE]](implicit
   arbitraryU: Arbitrary[U[Int]],

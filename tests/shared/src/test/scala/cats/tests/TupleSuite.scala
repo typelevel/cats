@@ -36,13 +36,13 @@ import cats.{
 }
 import cats.data.NonEmptyList
 import cats.kernel.{Eq, Order}
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.show._
+import cats.syntax.show.*
 import cats.tests.Helpers.{CMono, CSemi, Mono, Semi}
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class TupleSuite extends CatsSuite {
 

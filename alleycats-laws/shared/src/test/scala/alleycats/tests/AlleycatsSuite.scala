@@ -22,8 +22,8 @@
 package alleycats.tests
 
 import alleycats.std.MapInstances
-import cats._
-import cats.instances.all._
+import cats.*
+import cats.instances.all.*
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Test.Parameters
 

@@ -23,9 +23,9 @@ package cats
 package laws
 
 import cats.data.Kleisli
-import cats.syntax.apply._
-import cats.syntax.flatMap._
-import cats.syntax.functor._
+import cats.syntax.apply.*
+import cats.syntax.flatMap.*
+import cats.syntax.functor.*
 
 /**
  * Laws that must be obeyed by any `FlatMap`.

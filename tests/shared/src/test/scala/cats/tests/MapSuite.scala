@@ -36,9 +36,9 @@ import cats.laws.discipline.{
   SerializableTests,
   UnorderedTraverseTests
 }
-import cats.laws.discipline.arbitrary._
-import cats.syntax.all._
-import org.scalacheck.Prop._
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.all.*
+import org.scalacheck.Prop.*
 
 class MapSuite extends CatsSuite {
 

@@ -24,7 +24,7 @@ package cats.tests
 import cats.Show
 import cats.laws.discipline.SerializableTests
 import scala.concurrent.duration.{DurationInt, FiniteDuration}
-import cats.syntax.eq._
+import cats.syntax.eq.*
 
 class FiniteDurationSuite extends CatsSuite {
   checkAll("Show[FiniteDuration]", SerializableTests.serializable(Show[FiniteDuration]))

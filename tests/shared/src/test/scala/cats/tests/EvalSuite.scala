@@ -31,15 +31,15 @@ import cats.laws.discipline.{
   SemigroupalTests,
   SerializableTests
 }
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.arbitrary.*
 import cats.kernel.{Eq, Monoid, Order, PartialOrder, Semigroup}
 import cats.kernel.laws.discipline.{EqTests, GroupTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 import scala.annotation.tailrec
 import scala.math.min
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class EvalSuite extends CatsSuite {
   implicit val eqThrow: Eq[Throwable] = Eq.allEqual

@@ -21,14 +21,14 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.EitherK
 import cats.kernel.laws.discipline.EqTests
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class EitherKSuite extends CatsSuite {
 

@@ -22,7 +22,7 @@
 package alleycats
 package std
 
-import cats._
+import cats.*
 import cats.data.Chain
 import cats.kernel.instances.StaticMethods.wrapMutableIndexedSeq
 

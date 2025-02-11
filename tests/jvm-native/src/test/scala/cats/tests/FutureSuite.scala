@@ -23,15 +23,15 @@ package cats.jvm.tests
 
 import cats.kernel.{Eq, Semigroup}
 import cats.kernel.laws.discipline.{MonoidTests => MonoidLawTests, SemigroupTests => SemigroupLawTests}
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.either._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.either.*
 import cats.tests.{CatsSuite, ListWrapper}
 import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.rng.Seed
 import scala.concurrent.{Await, Future}
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class FutureSuite extends CatsSuite {

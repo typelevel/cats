@@ -22,9 +22,9 @@
 package cats.tests
 
 import cats.arrow.FunctionK
-import cats.syntax.all._
-import org.scalacheck.Prop._
-import cats.laws.discipline.arbitrary._
+import cats.syntax.all.*
+import org.scalacheck.Prop.*
+import cats.laws.discipline.arbitrary.*
 
 class FunctionKLiftSuite extends CatsSuite {
 

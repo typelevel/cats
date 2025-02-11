@@ -21,16 +21,16 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.NonEmptyLazyList
 import cats.laws.discipline.ExhaustiveCheck
 import cats.laws.discipline.MiniInt
 import cats.laws.discipline.NonEmptyParallelTests
 import cats.laws.discipline.ParallelTests
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
-import cats.syntax.all._
-import org.scalacheck.Prop._
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
+import cats.syntax.all.*
+import org.scalacheck.Prop.*
 
 trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   test("Foldable[LazyList] monadic folds stack safety")(checkMonadicFoldsStackSafety(_.to(LazyList)))

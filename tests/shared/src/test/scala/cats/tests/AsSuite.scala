@@ -27,7 +27,7 @@ import org.scalacheck.{Arbitrary, Gen}
 import cats.arrow.Category
 
 class AsSuite extends CatsSuite {
-  import cats.evidence._
+  import cats.evidence.*
 
   def toMap[A, B, X](fa: List[X])(implicit ev: X <~< (A, B)): Map[A, B] = {
     type RequiredFunc = (Map[A, B], X) => Map[A, B]

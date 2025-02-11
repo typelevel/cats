@@ -25,7 +25,7 @@ package discipline
 
 import cats.arrow.Choice
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 trait ChoiceTests[F[_, _]] extends CategoryTests[F] {
   def laws: ChoiceLaws[F]

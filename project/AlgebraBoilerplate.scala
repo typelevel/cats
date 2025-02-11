@@ -1,4 +1,4 @@
-import sbt._
+import sbt.*
 
 /**
  * Generate a range of boilerplate classes that would be tedious to write and maintain by hand.
@@ -10,7 +10,7 @@ import sbt._
  * @author Kevin Wright
  */
 object AlgebraBoilerplate {
-  import scala.StringContext._
+  import scala.StringContext.*
 
   implicit class BlockHelper(val sc: StringContext) extends AnyVal {
     def block(args: Any*): String = {
@@ -81,7 +81,7 @@ object AlgebraBoilerplate {
     def filename(root: File): File = root / "algebra" / "instances" / "TupleAlgebra.scala"
 
     def content(tv: TemplateVals): String = {
-      import tv._
+      import tv.*
 
       def constraints(constraint: String) =
         synTypes.map(tpe => s"$tpe: $constraint[$tpe]").mkString(", ")

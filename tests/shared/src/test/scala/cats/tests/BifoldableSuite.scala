@@ -23,8 +23,8 @@ package cats.tests
 
 import cats.Bifoldable
 import cats.laws.discipline.{BifoldableTests, SerializableTests}
-import cats.syntax.either._
-import cats.syntax.eq._
+import cats.syntax.either.*
+import cats.syntax.eq.*
 
 class BifoldableSuite extends CatsSuite {
   type EitherEither[A, B] = Either[Either[A, B], Either[A, B]]

@@ -23,7 +23,7 @@ package cats
 package laws
 
 import cats.Contravariant
-import cats.syntax.contravariant._
+import cats.syntax.contravariant.*
 
 /**
  * Laws that must be obeyed by any `cats.Contravariant`.

@@ -21,9 +21,9 @@
 
 package algebra.ring
 
-import algebra.instances.bigInt._
+import algebra.instances.bigInt.*
 
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 class RingTest extends munit.DisciplineSuite {
   test("Ring.defaultFromBigInt") {

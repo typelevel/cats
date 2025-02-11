@@ -23,8 +23,8 @@ package cats
 package instances
 
 import cats.kernel
-import cats.kernel.compat.scalaVersionSpecific._
-import cats.syntax.show._
+import cats.kernel.compat.scalaVersionSpecific.*
+import cats.syntax.show.*
 import cats.data.Ior
 import cats.data.ZipLazyList
 

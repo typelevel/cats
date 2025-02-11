@@ -24,7 +24,7 @@ package cats.tests
 import cats.{Align, Alternative, SemigroupK}
 import cats.data.{Chain, Validated}
 import cats.laws.discipline.AlignTests
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.arbitrary.*
 
 class SemigroupKSuite extends CatsSuite {
   implicit val listwrapperSemigroupK: Alternative[ListWrapper] = ListWrapper.alternative

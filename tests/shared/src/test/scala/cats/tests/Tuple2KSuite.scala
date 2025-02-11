@@ -21,16 +21,16 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.{Const, Tuple2K, Validated}
 import cats.kernel.laws.discipline.{EqTests, OrderTests, PartialOrderTests}
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
-import cats.syntax.eq._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
+import cats.syntax.eq.*
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 class Tuple2KSuite extends CatsSuite {
   implicit val iso: Isomorphisms[Tuple2K[Option, List, *]] = Isomorphisms.invariant[Tuple2K[Option, List, *]]

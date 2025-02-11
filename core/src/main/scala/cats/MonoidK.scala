@@ -21,7 +21,7 @@
 
 package cats
 
-import cats.kernel.compat.scalaVersionSpecific._
+import cats.kernel.compat.scalaVersionSpecific.*
 
 /**
  * MonoidK is a universal monoid which operates on kinds.

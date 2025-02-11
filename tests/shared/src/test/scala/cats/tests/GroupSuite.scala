@@ -23,7 +23,7 @@ package cats.tests
 
 import cats.kernel.Group
 import cats.kernel.laws.discipline.GroupTests
-import cats.syntax.eq._
+import cats.syntax.eq.*
 
 class GroupSuite extends CatsSuite {
   test("combine minValue") {

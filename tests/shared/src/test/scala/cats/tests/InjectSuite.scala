@@ -23,8 +23,8 @@ package cats.tests
 
 import cats.Inject
 import cats.laws.discipline.InjectTests
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class InjectSuite extends CatsSuite {
 

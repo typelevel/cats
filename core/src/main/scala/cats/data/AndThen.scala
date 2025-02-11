@@ -83,7 +83,7 @@ import scala.annotation.tailrec
  */
 sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Serializable {
 
-  import AndThen._
+  import AndThen.*
 
   final def apply(a: T): R =
     runLoop(a)

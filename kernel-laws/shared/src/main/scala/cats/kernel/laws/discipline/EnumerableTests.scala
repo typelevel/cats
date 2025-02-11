@@ -24,7 +24,7 @@ package kernel
 package laws
 package discipline
 
-import cats.kernel.instances.boolean._
+import cats.kernel.instances.boolean.*
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop.forAll
 

@@ -22,7 +22,7 @@
 package cats.kernel
 package laws
 
-import scala.util.hashing._
+import scala.util.hashing.*
 
 trait HashLaws[A] extends EqLaws[A] {
   implicit override def E: Hash[A]

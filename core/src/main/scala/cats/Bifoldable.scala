@@ -97,7 +97,7 @@ trait Bifoldable[F[_, _]] extends Serializable { self =>
     }
 
   def bifold[A, B](fab: F[A, B])(implicit A: Monoid[A], B: Monoid[B]): (A, B) = {
-    import cats.instances.tuple._
+    import cats.instances.tuple.*
     bifoldMap(fab)((_, B.empty), (A.empty, _))
   }
 }

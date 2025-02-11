@@ -32,10 +32,10 @@ import cats.laws.discipline.{
   TraverseFilterTests,
   TraverseTests
 }
-import cats.laws.discipline.arbitrary._
-import cats.syntax.show._
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.show.*
 import scala.collection.immutable.Queue
-import cats.syntax.eq._
+import cats.syntax.eq.*
 
 class QueueSuite extends CatsSuite {
   checkAll("Queue[Int]", SemigroupalTests[Queue].semigroupal[Int, Int, Int])

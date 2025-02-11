@@ -26,7 +26,7 @@ package discipline
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.platform.Platform
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+import Prop.*
 
 trait MonadTests[F[_]] extends ApplicativeTests[F] with FlatMapTests[F] {
   def laws: MonadLaws[F]

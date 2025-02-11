@@ -27,8 +27,8 @@ package laws
  */
 trait InvariantMonoidalLaws[F[_]] extends InvariantSemigroupalLaws[F] {
   implicit override def F: InvariantMonoidal[F]
-  import cats.syntax.semigroupal._
-  import cats.syntax.invariant._
+  import cats.syntax.semigroupal.*
+  import cats.syntax.invariant.*
 
   def invariantMonoidalLeftIdentity[A, B](fa: F[A]): IsEq[F[A]] =
     F.unit.product(fa).imap(_._2)(a => ((), a)) <-> fa

@@ -30,14 +30,14 @@ import cats.kernel.laws.discipline.HashTests
 import cats.kernel.laws.discipline.MonoidTests
 import cats.kernel.laws.discipline.OrderTests
 import cats.kernel.laws.discipline.PartialOrderTests
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.eq._
-import cats.syntax.foldable._
-import cats.syntax.semigroup._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.eq.*
+import cats.syntax.foldable.*
+import cats.syntax.semigroup.*
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 class ChainSuite extends CatsSuite {
   checkAll("Chain[Int]", AlternativeTests[Chain].alternative[Int, Int, Int])

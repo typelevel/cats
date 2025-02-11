@@ -23,9 +23,9 @@ package cats.tests
 
 import cats.arrow.FunctionK
 import cats.data.{EitherK, NonEmptyList}
-import cats.syntax.eq._
+import cats.syntax.eq.*
 import cats.Id
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 class FunctionKSuite extends CatsSuite {
   type OptionOfNel[+A] = Option[NonEmptyList[A]]

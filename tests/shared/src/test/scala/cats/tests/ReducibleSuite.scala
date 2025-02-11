@@ -21,11 +21,11 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.NonEmptyList
-import cats.syntax.all._
+import cats.syntax.all.*
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 import scala.collection.mutable
 

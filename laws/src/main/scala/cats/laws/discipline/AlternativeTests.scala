@@ -25,7 +25,7 @@ package discipline
 
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+import Prop.*
 
 trait AlternativeTests[F[_]] extends NonEmptyAlternativeTests[F] with MonoidKTests[F] {
   def laws: AlternativeLaws[F]

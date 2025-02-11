@@ -25,7 +25,7 @@ package discipline
 
 import cats.Contravariant
 import org.scalacheck.{Arbitrary, Cogen}
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 trait ContravariantTests[F[_]] extends InvariantTests[F] {
   def laws: ContravariantLaws[F]

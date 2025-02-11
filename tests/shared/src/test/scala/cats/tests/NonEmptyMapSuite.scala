@@ -23,17 +23,17 @@ package cats.tests
 
 import cats.{Align, Eval, Foldable, Now, Semigroup, SemigroupK, Show}
 import cats.data.{NonEmptyList, NonEmptyMap}
-import cats.kernel.laws.discipline.{SerializableTests => _, _}
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.bifunctor._
-import cats.syntax.eq._
-import cats.syntax.foldable._
-import cats.syntax.functor._
-import cats.syntax.reducible._
-import cats.syntax.show._
+import cats.kernel.laws.discipline.{SerializableTests => _, *}
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.bifunctor.*
+import cats.syntax.eq.*
+import cats.syntax.foldable.*
+import cats.syntax.functor.*
+import cats.syntax.reducible.*
+import cats.syntax.show.*
 import scala.collection.immutable.SortedMap
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 class NonEmptyMapSuite extends CatsSuite {
 

@@ -23,7 +23,7 @@ package cats
 package data
 
 import cats.instances.StaticMethods
-import cats.kernel._
+import cats.kernel.*
 
 import scala.collection.immutable.SortedMap
 

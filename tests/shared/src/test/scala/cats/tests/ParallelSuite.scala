@@ -21,17 +21,17 @@
 
 package cats.tests
 
-import cats._
+import cats.*
 import cats.data.NonEmptyList.ZipNonEmptyList
-import cats.data._
-import cats.kernel.compat.scalaVersionSpecific._
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.laws.discipline.eq._
-import cats.syntax.all._
+import cats.data.*
+import cats.kernel.compat.scalaVersionSpecific.*
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.laws.discipline.eq.*
+import cats.syntax.all.*
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
-import org.scalacheck.Prop._
+import org.scalacheck.Prop.*
 
 import scala.collection.immutable.SortedSet
 

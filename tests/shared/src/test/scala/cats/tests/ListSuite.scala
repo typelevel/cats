@@ -35,11 +35,11 @@ import cats.laws.discipline.{
   TraverseFilterTests,
   TraverseTests
 }
-import cats.laws.discipline.arbitrary._
-import cats.syntax.list._
-import cats.syntax.show._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.list.*
+import cats.syntax.show.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class ListSuite extends CatsSuite {
 
@@ -127,8 +127,8 @@ class ListSuite extends CatsSuite {
 final class ListInstancesSuite extends munit.FunSuite {
 
   test("NonEmptyParallel instance in cats.instances.list") {
-    import cats.instances.list._
-    import cats.syntax.parallel._
+    import cats.instances.list.*
+    import cats.syntax.parallel.*
 
     (List(1, 2, 3), List("A", "B", "C")).parTupled
   }

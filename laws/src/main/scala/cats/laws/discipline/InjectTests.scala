@@ -25,7 +25,7 @@ package discipline
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
-import Prop._
+import Prop.*
 import org.typelevel.discipline.Laws
 
 trait InjectTests[A, B] extends Laws {

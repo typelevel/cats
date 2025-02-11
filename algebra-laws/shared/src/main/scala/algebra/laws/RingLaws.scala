@@ -22,15 +22,15 @@
 package algebra
 package laws
 
-import algebra.ring._
+import algebra.ring.*
 
 import algebra.laws.platform.Platform
 
 import org.typelevel.discipline.Predicate
 
 import org.scalacheck.{Arbitrary, Prop}
-import org.scalacheck.Arbitrary._
-import org.scalacheck.Prop._
+import org.scalacheck.Arbitrary.*
+import org.scalacheck.Prop.*
 import scala.annotation.nowarn
 
 object RingLaws {

@@ -25,7 +25,7 @@ package instances
 import scala.annotation.nowarn
 import scala.collection.mutable
 
-import algebra.ring._
+import algebra.ring.*
 
 package object map extends MapInstances
 

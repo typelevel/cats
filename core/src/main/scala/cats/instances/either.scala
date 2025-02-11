@@ -25,7 +25,7 @@ package instances
 import cats.data.Validated
 import cats.kernel.Semigroup
 import cats.syntax.EitherUtil
-import cats.syntax.either._
+import cats.syntax.either.*
 
 import scala.annotation.tailrec
 import cats.data.Ior

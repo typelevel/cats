@@ -25,8 +25,8 @@ package discipline
 
 import cats.kernel.CommutativeMonoid
 import org.scalacheck.{Arbitrary, Cogen}
-import org.scalacheck.Prop._
-import cats.instances.list._
+import org.scalacheck.Prop.*
+import cats.instances.list.*
 import arbitrary.catsLawsArbitraryForPartialFunction
 
 trait FoldableTests[F[_]] extends UnorderedFoldableTests[F] {

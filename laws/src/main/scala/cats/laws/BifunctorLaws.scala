@@ -22,7 +22,7 @@
 package cats.laws
 
 import cats.Bifunctor
-import cats.syntax.bifunctor._
+import cats.syntax.bifunctor.*
 
 /**
  * Laws that must be obeyed by any `Bifunctor`.

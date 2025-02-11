@@ -26,14 +26,14 @@ import cats.data.{NonEmptyStream, OneAnd}
 import cats.kernel.Semigroup
 import cats.kernel.instances.order.catsKernelOrderingForOrder
 import cats.kernel.laws.discipline.{EqTests, SemigroupTests}
-import cats.laws.discipline._
+import cats.laws.discipline.*
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.laws.discipline.arbitrary._
-import cats.syntax.foldable._
-import cats.syntax.reducible._
-import cats.syntax.show._
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.foldable.*
+import cats.syntax.reducible.*
+import cats.syntax.show.*
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 import org.scalacheck.Test.Parameters
 
 class NonEmptyStreamSuite extends CatsSuite {

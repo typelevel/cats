@@ -26,8 +26,8 @@ import java.math.MathContext
 
 import org.scalacheck.Arbitrary
 
-import algebra._
-import algebra.ring._
+import algebra.*
+import algebra.ring.*
 
 /**
  * A wrapper type for approximate floating point values like Float, Double, and

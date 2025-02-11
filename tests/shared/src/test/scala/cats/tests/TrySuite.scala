@@ -25,13 +25,13 @@ import cats.{CoflatMap, Eval, Later, Monad, MonadThrow, Semigroupal, Traverse}
 import cats.kernel.{Eq, Monoid, Semigroup}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.apply._
-import cats.syntax.show._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.apply.*
+import cats.syntax.show.*
 import scala.util.{Success, Try}
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class TrySuite extends CatsSuite {
   implicit val eqThrow: Eq[Throwable] = Eq.allEqual

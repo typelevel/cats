@@ -24,7 +24,7 @@ package laws
 package discipline
 
 import org.scalacheck.{Arbitrary, Cogen, Prop}
-import Prop._
+import Prop.*
 
 trait DistributiveTests[F[_]] extends FunctorTests[F] {
   def laws: DistributiveLaws[F]
