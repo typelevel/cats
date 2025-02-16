@@ -38,8 +38,6 @@ object Empty extends EmptyInstances0 {
   def apply[A](a: => A): Empty[A] =
     new Empty[A] { lazy val empty: A = a }
 
-  def fromEmptyK[F[_], T](implicit ekf: EmptyK[F]): Empty[F[T]] = ekf.synthesize[T]
-
   /**
    * Summon an instance of [[Empty]] for `A`.
    */
@@ -81,8 +79,12 @@ object Empty extends EmptyInstances0 {
 
 private[alleycats] trait EmptyInstances0 extends compat.IterableEmptyInstance with EmptyInstances1
 
-private[alleycats] trait EmptyInstances1 {
+private[alleycats] trait EmptyInstances1 extends EmptyInstances2 {
   // If Monoid extended Empty then this could be an exported subclass instance provided by Monoid
   implicit def monoidIsEmpty[A: Monoid]: Empty[A] =
     Empty(Monoid[A].empty)
+}
+
+private[alleycats] trait EmptyInstances2 {
+  implicit def fromEmptyK[F[_], T](implicit ekf: EmptyK[F]): Empty[F[T]] = ekf.synthesize[T]
 }
