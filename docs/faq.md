@@ -249,3 +249,33 @@ Or if you want, you can add these lines to `~/.ammonite/predef.sc` so that they 
 ## Why aren't monad transformers like `OptionT` and `EitherT` covariant like `Option` and `Either`?
 
 Please see [Variance of Monad Transformers](https://typelevel.org/blog/2018/09/29/monad-transformer-variance.html) on the Typelevel blog.
+
+## Why isn't `Set` a lawful `Functor` (and hence `Applicative`, `Monad`, etc.)?
+
+Although in many cases `Set` can behave as a `Functor` indeed, there are some edge cases where it doesn't.
+For example, `Set` can violate the "covariant composition" law of `Functor`, which is:
+
+```
+fa.map(f).map(g) <-> fa.map(f.andThen(g))
+```
+
+Since `Set` in internally based on universal hashing and equality, it violates this law when used with a data type that
+overrides `equals` and `hashCode` in a such a way that its instances may appear equal but de-facto contain different
+values. One example of this type is `scala.concurrent.duration.Duration`:
+
+```scala mdoc
+import scala.concurrent.duration.*
+
+val f: String => Duration = Duration.apply
+val g: Duration => String = _.toString
+
+val set = Set("1 minute", "60 seconds", "60000 milliseconds")
+
+set.map(f).map(g) // ==> Set("1 minute")
+set.map(f.andThen(g)) // ==> Set("1 minute", "60 seconds", "60000 milliseconds")
+```
+
+Another good real-world example to be aware of is [CIString](https://typelevel.org/case-insensitive).
+
+That said, there's a `Monad[Set]` instance in the [Alleycats](https://typelevel.org/cats/alleycats.html#set-_-instances)
+module, which you can use on your own risk if you are sure about data types you are working with. 
