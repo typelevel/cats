@@ -230,6 +230,7 @@
     <li class="level1 nav-leaf"><a href="#how-can-i-help">How can I help?</a></li>
     <li class="level1 nav-leaf"><a href="#how-to-try-cats-in-a-repl">How to try Cats in a REPL?</a></li>
     <li class="level1 nav-leaf"><a href="#why-aren-t-monad-transformers-like-optiont-and-eithert-covariant-like-option-and-either">Why aren&#39;t monad transformers like <code>OptionT</code> and <code>EitherT</code> covariant like <code>Option</code> and <code>Either</code>?</a></li>
+    <li class="level1 nav-leaf"><a href="#why-isn-t-set-a-lawful-functor-and-hence-applicative-monad-etc">Why isn&#39;t <code>Set</code> a lawful <code>Functor</code> (and hence <code>Applicative</code>, <code>Monad</code>, etc.)?</a></li>
   </ul>
 
   <p class="footer"></p>
@@ -260,6 +261,7 @@
           <li class="level2 nav-leaf"><a href="#how-can-i-help">How can I help?</a></li>
           <li class="level2 nav-leaf"><a href="#how-to-try-cats-in-a-repl">How to try Cats in a REPL?</a></li>
           <li class="level2 nav-leaf"><a href="#why-aren-t-monad-transformers-like-optiont-and-eithert-covariant-like-option-and-either">Why aren&#39;t monad transformers like <code>OptionT</code> and <code>EitherT</code> covariant like <code>Option</code> and <code>Either</code>?</a></li>
+          <li class="level2 nav-leaf"><a href="#why-isn-t-set-a-lawful-functor-and-hence-applicative-monad-etc">Why isn&#39;t <code>Set</code> a lawful <code>Functor</code> (and hence <code>Applicative</code>, <code>Monad</code>, etc.)?</a></li>
         </ul>
         
         <h2 id="what-imports-do-i-need" class="section"><a class="anchor-link left" href="#what-imports-do-i-need"><i class="icofont-laika link">&#xef71;</i></a>What imports do I need?</h2>
@@ -600,6 +602,31 @@
         
         <h2 id="why-aren-t-monad-transformers-like-optiont-and-eithert-covariant-like-option-and-either" class="section"><a class="anchor-link left" href="#why-aren-t-monad-transformers-like-optiont-and-eithert-covariant-like-option-and-either"><i class="icofont-laika link">&#xef71;</i></a>Why aren&#39;t monad transformers like <code>OptionT</code> and <code>EitherT</code> covariant like <code>Option</code> and <code>Either</code>?</h2>
         <p>Please see <a href="https://typelevel.org/blog/2018/09/29/monad-transformer-variance.html">Variance of Monad Transformers</a> on the Typelevel blog.</p>
+        
+        <h2 id="why-isn-t-set-a-lawful-functor-and-hence-applicative-monad-etc" class="section"><a class="anchor-link left" href="#why-isn-t-set-a-lawful-functor-and-hence-applicative-monad-etc"><i class="icofont-laika link">&#xef71;</i></a>Why isn&#39;t <code>Set</code> a lawful <code>Functor</code> (and hence <code>Applicative</code>, <code>Monad</code>, etc.)?</h2>
+        <p>Although in many cases <code>Set</code> can behave as a <code>Functor</code> indeed, there are some edge cases where it doesn&#39;t.
+        For example, <code>Set</code> can violate the &quot;covariant composition&quot; law of <code>Functor</code>, which is:</p>
+        <pre><code>fa.map(f).map(g) &lt;-&gt; fa.map(f.andThen(g))</code></pre>
+        <p>Since <code>Set</code> in internally based on universal hashing and equality, it violates this law when used with a data type that
+        overrides <code>equals</code> and <code>hashCode</code> in a such a way that its instances may appear equal but de-facto contain different
+        values. One example of this type is <code>scala.concurrent.duration.Duration</code>:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="identifier">duration</span><span>.*
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">f</span><span>: </span><span class="type-name">String</span><span> =&gt; </span><span class="type-name">Duration</span><span> = </span><span class="type-name">Duration</span><span>.</span><span class="identifier">apply</span><span>
+</span><span class="comment">// f: String =&gt; Duration = &lt;function1&gt;
+</span><span class="keyword">val</span><span> </span><span class="identifier">g</span><span>: </span><span class="type-name">Duration</span><span> =&gt; </span><span class="type-name">String</span><span> = </span><span class="identifier">_</span><span>.</span><span class="identifier">toString</span><span>
+</span><span class="comment">// g: Duration =&gt; String = &lt;function1&gt;
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">set</span><span> = </span><span class="type-name">Set</span><span>(</span><span class="string-literal">&quot;1 minute&quot;</span><span>, </span><span class="string-literal">&quot;60 seconds&quot;</span><span>, </span><span class="string-literal">&quot;60000 milliseconds&quot;</span><span>)
+</span><span class="comment">// set: Set[String] = Set(&quot;1 minute&quot;, &quot;60 seconds&quot;, &quot;60000 milliseconds&quot;)
+</span><span>
+</span><span class="identifier">set</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">f</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">g</span><span>) </span><span class="comment">// ==&gt; Set(&quot;1 minute&quot;)
+// res6: Set[String] = Set(&quot;1 minute&quot;)
+</span><span class="identifier">set</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">f</span><span>.</span><span class="identifier">andThen</span><span>(</span><span class="identifier">g</span><span>)) </span><span class="comment">// ==&gt; Set(&quot;1 minute&quot;, &quot;60 seconds&quot;, &quot;60000 milliseconds&quot;)
+// res7: Set[String] = Set(&quot;1 minute&quot;, &quot;60 seconds&quot;, &quot;60000 milliseconds&quot;)</span></code></pre>
+        <p>Another good real-world example to be aware of is <a href="https://typelevel.org/case-insensitive">CIString</a>.</p>
+        <p>That said, there&#39;s a <code>Monad[Set]</code> instance in the <a href="https://typelevel.org/cats/alleycats.html#set-_-instances">Alleycats</a>
+        module, which you can use on your own risk if you are sure about data types you are working with. </p>
 
         
 <hr class="footer-rule"/>
