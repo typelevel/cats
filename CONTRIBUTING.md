@@ -1,4 +1,4 @@
-# Contributor guide
+# Contributor Guide
 
 ## About this document
 
@@ -251,7 +251,7 @@ feature, or have a question about the code. Pull requests are also
 gladly accepted.
 
 People are expected to follow the
-[Scala Code of Conduct](https://www.scala-lang.org/conduct/) when
+[Typelevel Code of Conduct](https://typelevel.org/code-of-conduct.html) when
 discussing Cats on GitHub, Discord, or other venues.
 
 We hope that our community will be respectful, helpful, and kind. If
