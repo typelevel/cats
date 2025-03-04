@@ -202,7 +202,7 @@ If any of the checks fails, the resulting `EitherT` will contain a `Left` value.
 Otherwise, if all of the checks yield a `Right` (of course we mean a `Right` wrapped into an `EitherT`), then the final outcome will also contain `Right`.
 This is a fail-fast behavior: we're effectively stopping the `for` comprehension flow at the first `Left`-ish result.
 
-If you're instead looking for validation that accumulates the errors (e.g. when dealing with user-provided form data), [Validated](datatypes/validated.md) or the [Parallel](typeclasses/parallel.md) applicative functor for `Either` may be a good choice.
+If you're instead looking for validation that accumulates the errors (e.g. when dealing with user-provided form data), [Validated](../datatypes/validated.md) or the [Parallel](../typeclasses/parallel.md) applicative functor for `Either` may be a good choice.
 
 ## Pitfalls
 
