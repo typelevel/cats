@@ -117,7 +117,7 @@ The [Typelevel Discord](https://discord.gg/XF3CXcMzqD) has \#cats and \#cats-dev
 channels, as well as community channels such as \#beginners.  Please join us!
 
 People are expected to follow the
-[Scala Code of Conduct](https://www.scala-lang.org/conduct/) when
+[Typelevel Code of Conduct](https://typelevel.org/code-of-conduct.html) when
 discussing Cats on GitHub, Discord, or other venues.
 
 We hope that our community will be respectful, helpful, and kind. If
