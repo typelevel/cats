@@ -3,7 +3,7 @@
 API Documentation: @:api(cats.data.WriterT)
 
 `WriterT[F[_], L, V]` is a type wrapper on an `F[(L,
-V)]`. Speaking technically, it is a monad transformer for [`Writer`](writer.md),
+V)]`. Speaking technically, it is a monad transformer for [`Writer`](../datatypes/writer.md),
 but you don't need to know what that means for it to be
 useful.
 
@@ -11,8 +11,8 @@ useful.
 
 `WriterT` can be more convenient to work with than using
 `F[Writer[L, V]]` directly, because it exposes operations that allow
-you to work with the values of the inner [`Writer`](writer.md) (`L` and
-`V`) abstracting both the `F` and [`Writer`](writer.md).
+you to work with the values of the inner [`Writer`](../datatypes/writer.md) (`L` and
+`V`) abstracting both the `F` and [`Writer`](../datatypes/writer.md).
 
 For example, `map` allow you to transform the inner `V` value, getting
 back a `WriterT` that wraps around it.
@@ -25,13 +25,13 @@ WriterT[Option, String, Int](Some(("value", 10))).map(x => x * x)
 
 Plus, when composing multiple `WriterT` computations, those will be
 composed following the same behaviour of a
-[`Writer`](writer.md) and the
+[`Writer`](../datatypes/writer.md) and the
 generic `F`.  Let's see two examples with `Option` and `Either`: if
 one of the computations has a `None` or a `Left`, the whole
 computation will return a `None` or a `Left` since the way the two
 types compose typically behaves that way. Moreover, when the
 computation succeed, the logging side of the
-[`Writer`](writer.md)s will be
+[`Writer`](../datatypes/writer.md)s will be
 combined.
 
 ```scala mdoc:silent
@@ -75,17 +75,17 @@ for {
 
 Just for completeness, we can have a look at the same example, but
 with
-[`Validated`](validated.md)
+[`Validated`](../datatypes/validated.md)
 since it as a slightly different behaviour than
 `Either`. Instead
 of short-circuiting when the first error is encountered,
-[`Validated`](validated.md)
+[`Validated`](../datatypes/validated.md)
 will accumulate all the errors. In the following example, you can see
 how this behaviour is respected when
-[`Validated`](validated.md) is
+[`Validated`](../datatypes/validated.md) is
 wrapped as the `F` type of a `WriterT`. In addition, notice
 how `flatMap` and for comprehension can't be used in this case, since
-[`Validated`](validated.md)
+[`Validated`](../datatypes/validated.md)
 only extends [`Applicative`](../typeclasses/applicative.md), but not [`Monad`](../typeclasses/monad.md).
 
 ```scala mdoc:silent
@@ -147,7 +147,7 @@ to fill the `L` value not specified in the input.
 
 `put[F[_], L, V](v: V)(l: L)(implicit applicativeF: Applicative[F]): WriterT[F, L, V]`
 :  As soon as there is an [`Applicative`](../typeclasses/applicative.md) instance of `F`, this function
-creates the datatype starting from the inner [`Writer`](writer.md)'s values.
+creates the datatype starting from the inner [`Writer`](../datatypes/writer.md)'s values.
 
 ```scala mdoc:nest
   WriterT.put[Option, String, Int](123)("initial value")
@@ -163,14 +163,14 @@ creates the datatype starting from the inner [`Writer`](writer.md)'s values.
 ## Operations
 
 In the [Writer
-definition](writer.md#definition)
+definition](../datatypes/writer.md#definition)
 section, we showed how it is actually a `WriterT`. Therefore, all the
 operations described into [Writer
-operations](writer.md#operations)
+operations](../datatypes/writer.md#operations)
 are valid for `WriterT` as well.
 
 The only aspect we want to remark here is the following sentence from
-[`Writer`](writer.md)'s page:
+[`Writer`](../datatypes/writer.md)'s page:
 
 > Most of the `WriterT` functions require a `Functor[F]` or
 > `Monad[F]` instance. However, Cats provides all the necessary
