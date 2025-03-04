@@ -143,7 +143,7 @@
     <li class="level1 nav-leaf"><a href="../jump_start_guide.html">Jump Start Guide</a></li>
     <li class="level1 nav-leaf"><a href="../imports.html">Imports</a></li>
     <li class="level1 nav-leaf"><a href="../faq.html">FAQ</a></li>
-    <li class="level1 nav-leaf"><a href="../CONTRIBUTING.html">Contributor guide</a></li>
+    <li class="level1 nav-leaf"><a href="../CONTRIBUTING.html">Contributor Guide</a></li>
     <li class="level1 nav-leaf"><a href="../ADOPTERS.html">Adopters</a></li>
     <li class="level1 nav-leaf"><a href="../colophon.html">Colophon</a></li>
     <li class="level1 nav-leaf"><a href="../nomenclature.html">Glossary</a></li>
@@ -474,7 +474,7 @@
   </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">close</span><span>
   </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">open</span><span>
 } </span><span class="keyword">yield</span><span> ()
-</span><span class="comment">// valid: IndexedStateT[Eval, Closed.type, Open.type, Unit] = cats.data.IndexedStateT@424c8d12</span></code></pre>
+</span><span class="comment">// valid: IndexedStateT[Eval, Closed.type, Open.type, Unit] = cats.data.IndexedStateT@6693e9e6</span></code></pre>
         <p>Note that the inferred type of <code>valid</code> correctly models that this computation can be executed only with an initial <code>Closed</code> state.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">valid</span><span>.</span><span class="identifier">run</span><span>(</span><span class="type-name">Open</span><span>)
 </span><span class="comment">// error: type mismatch;
@@ -483,7 +483,7 @@
 // valid.run(Open)
 //           ^^^^</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">valid</span><span>.</span><span class="identifier">run</span><span>(</span><span class="type-name">Closed</span><span>)
-</span><span class="comment">// res6: Eval[(Open.type, Unit)] = cats.Eval$$anon$1@5dc66d8d</span></code></pre>
+</span><span class="comment">// res6: Eval[(Open.type, Unit)] = cats.Eval$$anon$1@17e7b003</span></code></pre>
 
         
 <hr class="footer-rule"/>
