@@ -2,6 +2,12 @@
 
 API Documentation: @:api(cats.data.EitherT)
 
+@:callout(warning)
+
+`EitherT` can interact poorly with more powerful effect types that provide concurrent computation, such as Cats Effect's `IO` or fs2's `Stream`. Because `IO` already provides its own error channel, `EitherT[IO, Throwable]` can lead to confusing behavior; prefer `IO`'s own error channel instead of carrying a second throwable error channel.
+
+@:@
+
 `Either` can be used for error handling in most situations. However, when
 `Either` is placed into effectful types such as `Option`, a large
 amount of boilerplate is required to handle errors. For example, consider the
@@ -65,8 +71,7 @@ handle the errors will increase dramatically.
 `EitherT[F[_], A, B]` is a lightweight wrapper for `F[Either[A, B]]` that makes
 it easy to compose `Either`s and `F`s together. To use `EitherT`, values of
 `Either`, `F`, `A`, and `B` are first converted into `EitherT`, and the
-resulting `EitherT` values are then composed using combinators. For example, the
-asynchronous division program can be rewritten as follows:
+resulting `EitherT` values are then composed using combinators. For example, the asynchronous division program can be rewritten as follows:
 
 ```scala mdoc:nest
 import cats.data.EitherT
