@@ -7,6 +7,12 @@ V)]`. Speaking technically, it is a monad transformer for [`Writer`](../datatype
 but you don't need to know what that means for it to be
 useful.
 
+@:callout(warning)
+
+`WriterT` interacts poorly with more powerful effect types that provide concurrent computation, such as Cats Effect's `IO` or fs2's `Stream`. You should instead use the concurrent data types provided by those libraries.
+
+@:@
+
 ## Composition
 
 `WriterT` can be more convenient to work with than using
