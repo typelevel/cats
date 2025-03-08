@@ -71,7 +71,7 @@ var sponsors = async function () {
 
             addedSponsors[member.account.slug] = true;
             switch (member.tier ? member.tier.name : null) {
-                case 'Platinum Sponsor':  
+                case 'Platinum Sponsor':
                     addSponsor('platinum-sponsors', member.account, PlatinumSize);
                     break;
                 case 'Gold Sponsor':
