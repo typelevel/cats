@@ -22,6 +22,32 @@ const SilverSize = 60;
 const BackerSize = 45;
 const ContributorSize = 36;
 
+var compareSponsors = function(a, b) {
+    const levelDiff = levelToInt(a) - levelToInt(b);
+    if (levelDiff === 0) {
+        return a.account.name.localeCompare(b.account.name);
+    }
+    return levelDiff;
+}
+
+var levelToInt = function(member) {
+    switch (member.tier ? member.tier.name : null) {
+        case 'Platinum Sponsor':  
+            return 1;
+        case 'Gold Sponsor':
+            return 2;
+        case 'Silver Sponsor':
+            return 3;
+        case 'backer':
+            return 4;
+        default:
+            if (member.totalDonations.valueInCents > 0) {
+                return 5;
+            }
+            return 6;
+    };
+}
+
 var sponsors = async function () {
     var response = await fetch('https://api.opencollective.com/graphql/v2', {
         method: 'POST',
@@ -34,16 +60,26 @@ var sponsors = async function () {
 
     if (response.ok) {
         var json = await response.json();
-        var members = json.data.collective.members.nodes;
+        var members = json.data.collective.members.nodes.sort(compareSponsors);
+        const addedSponsors = {};
+
         for (i = 0; i < members.length; i++) {
             var member = members[i];
+            if (addedSponsors[member.account.slug]) {
+              continue;
+            }
+
+            addedSponsors[member.account.slug] = true;
             switch (member.tier ? member.tier.name : null) {
-                case 'Platinum Sponsor':
+                case 'Platinum Sponsor':  
                     addSponsor('platinum-sponsors', member.account, PlatinumSize);
+                    break;
                 case 'Gold Sponsor':
                     addSponsor('gold-sponsors', member.account, GoldSize);
+                    break;
                 case 'Silver Sponsor':
                     addSponsor('silver-sponsors', member.account, SilverSize);
+                    break;
                 case 'backer':
                     addSponsor('backers', member.account, BackerSize);
                     break;
