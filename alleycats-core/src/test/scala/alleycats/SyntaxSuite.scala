@@ -54,6 +54,18 @@ object SyntaxSuite {
     val a1: Boolean = x.nonEmpty
   }
 
+  def testOptionEmpty: Unit = {
+    case class A[T](x: T)
+    case class B()
+
+    import alleycats.std.option.*
+    implicit def emptyA[T: Empty]: Empty[A[T]] = new Empty[A[T]] {
+      def empty: A[T] = A(Empty[T].empty)
+    }
+
+    Empty[A[Option[B]]].empty
+  }
+
   def testFoldable[F[_]: Foldable, A]: Unit = {
     val x = mock[F[A]]
     val y = mock[A => Unit]
