@@ -77,7 +77,10 @@ object Empty extends EmptyInstances0 {
 
 }
 
-private[alleycats] trait EmptyInstances0 extends compat.IterableEmptyInstance with EmptyInstances1
+private[alleycats] trait EmptyInstances0 extends compat.IterableEmptyInstance with EmptyInstances1 {
+  private[this] val emptyOptionSingleton: Empty[Option[Nothing]] = Empty(None)
+  implicit def alleycatsEmptyForOption[A]: Empty[Option[A]] = emptyOptionSingleton.asInstanceOf[Empty[Option[A]]]
+}
 
 private[alleycats] trait EmptyInstances1 extends EmptyInstances2 {
   // If Monoid extended Empty then this could be an exported subclass instance provided by Monoid
