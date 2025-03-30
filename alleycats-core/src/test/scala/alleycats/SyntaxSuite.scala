@@ -47,33 +47,31 @@ object SyntaxSuite {
   // pretend we have a value of type A
   def mock[A]: A = ???
 
-  def testEmpty[A: Empty]: Unit = {
+  def testEmpty[A: Empty](): Unit = {
     val x = mock[A]
     implicit val y: Eq[A] = mock[Eq[A]]
-    val a0: Boolean = x.isEmpty
-    val a1: Boolean = x.nonEmpty
+    val _ = x.isEmpty | x.nonEmpty
   }
 
-  def testOptionEmpty: Unit = {
+  def testOptionEmpty(): Unit = {
     case class A[T](x: T)
     case class B()
 
-    import alleycats.std.option.*
     implicit def emptyA[T: Empty]: Empty[A[T]] = new Empty[A[T]] {
       def empty: A[T] = A(Empty[T].empty)
     }
 
-    Empty[A[Option[B]]].empty
+    val _ = Empty[A[Option[B]]].empty
   }
 
-  def testFoldable[F[_]: Foldable, A]: Unit = {
+  def testFoldable[F[_]: Foldable, A](): Unit = {
     val x = mock[F[A]]
     val y = mock[A => Unit]
-    x.foreach(y)
+    val _ = x.foreach(y)
   }
 
-  def testExtract[F[_]: Extract, A]: Unit = {
+  def testExtract[F[_]: Extract, A](): Unit = {
     val x = mock[F[A]]
-    val y = x.extract
+    val _ = x.extract
   }
 }
