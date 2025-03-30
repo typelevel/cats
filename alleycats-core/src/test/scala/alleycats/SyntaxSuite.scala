@@ -64,6 +64,12 @@ object SyntaxSuite {
     val _ = Empty[A[Option[B]]].empty
   }
 
+  def testMapEmpty(): Any = {
+    case class Foo[A](foo: A)
+
+    val _ = Empty[Map[Foo[Int], Foo[String]]].empty
+  }
+
   def testFoldable[F[_]: Foldable, A](): Unit = {
     val x = mock[F[A]]
     val y = mock[A => Unit]
