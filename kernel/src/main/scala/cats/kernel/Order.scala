@@ -232,7 +232,7 @@ object Order extends OrderFunctions[Order] with OrderToOrderingConversion {
       override def toOrdering: Ordering[A] = ev
     }
 
-  private type ContravariantComparable[A] = Comparable[_ >: A]
+  private type ContravariantComparable[A] = Comparable[? >: A]
 
   def fromComparable[A <: ContravariantComparable[A]]: Order[A] = _ compareTo _
 }
