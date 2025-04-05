@@ -24,6 +24,8 @@ package alleycats
 import cats.{Eq, Foldable}
 import alleycats.syntax.all.{catsSyntaxExtract, EmptyOps, ExtraFoldableOps}
 
+import scala.collection.immutable.SortedMap
+
 /**
  * Test that our syntax implicits are working.
  *
@@ -68,6 +70,14 @@ object SyntaxSuite {
     case class Foo[A](foo: A)
 
     val _ = Empty[Map[Foo[Int], Foo[String]]].empty
+  }
+
+  def testSortedMapEmpty(): Any = {
+    case class Foo[A](foo: A)
+
+    implicit def fooOrd[A: Ordering]: Ordering[Foo[A]] = Ordering.by(_.foo)
+
+    val _ = Empty[SortedMap[Foo[Int], Foo[String]]].empty
   }
 
   def testFoldable[F[_]: Foldable, A](): Unit = {
