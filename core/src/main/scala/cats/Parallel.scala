@@ -224,7 +224,7 @@ object Parallel extends ParallelArityFunctions2 {
    * corresponding to the Parallel instance instead.
    */
   def parSequence[T[_]: Traverse, M[_], A](tma: T[M[A]])(implicit P: Parallel[M]): M[T[A]] = {
-    val fta: P.F[T[A]] = Traverse[T].traverse(tma)(P.parallel.apply(_))(P.applicative)
+    val fta: P.F[T[A]] = Traverse[T].traverse(tma)(P.parallel.apply(_))(using P.applicative)
     P.sequential(fta)
   }
 
@@ -233,7 +233,7 @@ object Parallel extends ParallelArityFunctions2 {
    * corresponding to the Parallel instance instead.
    */
   def parTraverse[T[_]: Traverse, M[_], A, B](ta: T[A])(f: A => M[B])(implicit P: Parallel[M]): M[T[B]] = {
-    val gtb: P.F[T[B]] = Traverse[T].traverse(ta)(a => P.parallel(f(a)))(P.applicative)
+    val gtb: P.F[T[B]] = Traverse[T].traverse(ta)(a => P.parallel(f(a)))(using P.applicative)
     P.sequential(gtb)
   }
 
@@ -320,7 +320,7 @@ object Parallel extends ParallelArityFunctions2 {
   def parNonEmptySequence[T[_]: NonEmptyTraverse, M[_], A](
     tma: T[M[A]]
   )(implicit P: NonEmptyParallel[M]): M[T[A]] = {
-    val fta: P.F[T[A]] = NonEmptyTraverse[T].nonEmptyTraverse(tma)(P.parallel.apply(_))(P.apply)
+    val fta: P.F[T[A]] = NonEmptyTraverse[T].nonEmptyTraverse(tma)(P.parallel.apply(_))(using P.apply)
     P.sequential(fta)
   }
 
@@ -331,7 +331,7 @@ object Parallel extends ParallelArityFunctions2 {
   def parNonEmptyTraverse[T[_]: NonEmptyTraverse, M[_], A, B](
     ta: T[A]
   )(f: A => M[B])(implicit P: NonEmptyParallel[M]): M[T[B]] = {
-    val gtb: P.F[T[B]] = NonEmptyTraverse[T].nonEmptyTraverse(ta)(a => P.parallel(f(a)))(P.apply)
+    val gtb: P.F[T[B]] = NonEmptyTraverse[T].nonEmptyTraverse(ta)(a => P.parallel(f(a)))(using P.apply)
     P.sequential(gtb)
   }
 
@@ -408,7 +408,7 @@ object Parallel extends ParallelArityFunctions2 {
     tab: T[A, B]
   )(f: A => M[C], g: B => M[D])(implicit P: Parallel[M]): M[T[C, D]] = {
     val ftcd: P.F[T[C, D]] =
-      Bitraverse[T].bitraverse(tab)(a => P.parallel(f(a)), b => P.parallel(g(b)))(P.applicative)
+      Bitraverse[T].bitraverse(tab)(a => P.parallel(f(a)), b => P.parallel(g(b)))(using P.applicative)
     P.sequential(ftcd)
   }
 
@@ -419,7 +419,8 @@ object Parallel extends ParallelArityFunctions2 {
   def parBisequence[T[_, _]: Bitraverse, M[_], A, B](
     tmamb: T[M[A], M[B]]
   )(implicit P: Parallel[M]): M[T[A, B]] = {
-    val ftab: P.F[T[A, B]] = Bitraverse[T].bitraverse(tmamb)(P.parallel.apply(_), P.parallel.apply(_))(P.applicative)
+    val ftab: P.F[T[A, B]] =
+      Bitraverse[T].bitraverse(tmamb)(P.parallel.apply(_), P.parallel.apply(_))(using P.applicative)
     P.sequential(ftab)
   }
 
@@ -431,7 +432,7 @@ object Parallel extends ParallelArityFunctions2 {
     tab: T[A, B]
   )(f: A => M[C])(implicit P: Parallel[M]): M[T[C, B]] = {
     val ftcb: P.F[T[C, B]] =
-      Bitraverse[T].bitraverse(tab)(a => P.parallel.apply(f(a)), P.applicative.pure(_))(P.applicative)
+      Bitraverse[T].bitraverse(tab)(a => P.parallel.apply(f(a)), P.applicative.pure(_))(using P.applicative)
     P.sequential(ftcb)
   }
 
@@ -442,7 +443,8 @@ object Parallel extends ParallelArityFunctions2 {
   def parLeftSequence[T[_, _]: Bitraverse, M[_], A, B](
     tmab: T[M[A], B]
   )(implicit P: Parallel[M]): M[T[A, B]] = {
-    val ftab: P.F[T[A, B]] = Bitraverse[T].bitraverse(tmab)(P.parallel.apply(_), P.applicative.pure(_))(P.applicative)
+    val ftab: P.F[T[A, B]] =
+      Bitraverse[T].bitraverse(tmab)(P.parallel.apply(_), P.applicative.pure(_))(using P.applicative)
     P.sequential(ftab)
   }
 

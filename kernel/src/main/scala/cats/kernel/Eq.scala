@@ -256,7 +256,7 @@ private[kernel] trait HashInstances extends HashInstances0 {
   implicit def catsKernelHashForQueue[A: Hash]: Hash[Queue[A]] =
     cats.kernel.instances.queue.catsKernelStdHashForQueue[A]
   implicit def catsKernelHashForSortedSet[A: Hash]: Hash[SortedSet[A]] =
-    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](Hash[A])
+    cats.kernel.instances.sortedSet.catsKernelStdHashForSortedSet[A](using Hash[A])
   implicit def catsKernelHashForFunction0[A: Hash]: Hash[() => A] =
     cats.kernel.instances.function.catsKernelHashForFunction0[A]
   implicit def catsKernelHashForMap[K: Hash, V: Hash]: Hash[Map[K, V]] =

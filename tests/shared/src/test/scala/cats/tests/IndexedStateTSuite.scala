@@ -521,7 +521,7 @@ class IndexedStateTSuite extends CatsSuite {
     implicit val f: Isomorphisms[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]] = Isomorphisms.invariant(SA)
 
     checkAll("IndexedStateT[ListWrapper, MiniInt, Int, Int]",
-             AlternativeTests[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]](SA).alternative[Int, Int, Int]
+             AlternativeTests[IndexedStateT[ListWrapper, MiniInt, MiniInt, *]](using SA).alternative[Int, Int, Int]
     )
     checkAll("Alternative[IndexedStateT[ListWrapper, Int, Int, *]]", SerializableTests.serializable(SA))
 

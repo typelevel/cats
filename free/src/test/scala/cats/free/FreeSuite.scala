@@ -233,8 +233,8 @@ class FreeSuite extends CatsSuite {
       f: Free[F, A]
     )(implicit F: Functor[F], I0: Test1Algebra :<: F, I1: Test2Algebra :<: F): Option[Free[F, A]] =
       for {
-        Test1(x, h) <- Free.match_[F, Test1Algebra, A](f)
-        Test2(y, k) <- Free.match_[F, Test2Algebra, A](h(x))
+        case Test1(x, h) <- Free.match_[F, Test1Algebra, A](f)
+        case Test2(y, k) <- Free.match_[F, Test2Algebra, A](h(x))
       } yield k(x + y)
 
     forAll { (x: Int, y: Int) =>

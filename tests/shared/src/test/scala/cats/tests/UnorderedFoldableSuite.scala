@@ -76,7 +76,7 @@ sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit
     }
   }
 
-  checkAll("F[Int]", UnorderedFoldableTests[F](instance).unorderedFoldable[Int, Int])
+  checkAll("F[Int]", UnorderedFoldableTests[F](using instance).unorderedFoldable[Int, Int])
 }
 
 final class UnorderedFoldableSetSuite extends UnorderedFoldableSuite[Set]("set") {
