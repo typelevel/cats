@@ -20,11 +20,22 @@
  */
 
 package cats.kernel
-package instances
+package laws
 
-package object all
-    extends AllInstances
-    with AllInstancesBinCompat0
-    with AllInstancesBinCompat1
-    with AllInstancesBinCompat2
-    with AllInstancesBinCompat3
+import cats.kernel.compat.scalaVersionSpecific.*
+import cats.kernel.instances.currency.*
+import cats.kernel.laws.discipline.*
+import cats.kernel.laws.scalaVersionSpecific.*
+import munit.DisciplineSuite
+import java.util.Currency
+import org.scalacheck.{Arbitrary, Cogen, Gen}
+
+class JvmLawTests extends TestsConfig with DisciplineSuite {
+  implicit private val arbitraryCurrency: Arbitrary[Currency] = Arbitrary(
+    Gen.oneOf(Currency.getAvailableCurrencies().asScala)
+  )
+  implicit private val cogenCurrency: Cogen[Currency] = Cogen[String].contramap(_.getCurrencyCode())
+
+  checkAll("Eq[Currency]", EqTests[Currency].eqv)
+  checkAll("Hash[Currency]", HashTests[Currency].hash)
+}
