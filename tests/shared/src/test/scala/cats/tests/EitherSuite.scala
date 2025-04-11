@@ -83,8 +83,8 @@ class EitherSuite extends CatsSuite {
     )
   }
 
-  checkAll("Either[Int, String]", PartialOrderTests[Either[Int, String]](partialOrder).partialOrder)
-  checkAll("Either[Int, String]", OrderTests[Either[Int, String]](order).order)
+  checkAll("Either[Int, String]", PartialOrderTests[Either[Int, String]](using partialOrder).partialOrder)
+  checkAll("Either[Int, String]", OrderTests[Either[Int, String]](using order).order)
 
   test("Left/Right cast syntax") {
     forAll { (e: Either[Int, String]) =>

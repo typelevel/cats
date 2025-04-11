@@ -458,7 +458,7 @@ class ReaderWriterStateTSuite extends CatsSuite {
 
     checkAll(
       "IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, *]",
-      AlternativeTests[IRWST[ListWrapper, Boolean, String, MiniInt, MiniInt, *]](SA).alternative[Int, Int, Int]
+      AlternativeTests[IRWST[ListWrapper, Boolean, String, MiniInt, MiniInt, *]](using SA).alternative[Int, Int, Int]
     )
     checkAll("Alternative[IndexedReaderWriterStateT[ListWrapper, String, String, Int, Int, *]]",
              SerializableTests.serializable(SA)

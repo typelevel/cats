@@ -46,12 +46,12 @@ class ParTraverseBench {
   val f: Int => Either[Int, Int] = Right(_)
 
   def parTraversePointfree[T[_]: Traverse, M[_], A, B](ta: T[A])(f: A => M[B])(implicit P: Parallel[M]): M[T[B]] = {
-    val gtb: P.F[T[B]] = Traverse[T].traverse(ta)(f.andThen(P.parallel.apply(_)))(P.applicative)
+    val gtb: P.F[T[B]] = Traverse[T].traverse(ta)(f.andThen(P.parallel.apply(_)))(using P.applicative)
     P.sequential(gtb)
   }
 
   def parTraversePointfull[T[_]: Traverse, M[_], A, B](ta: T[A])(f: A => M[B])(implicit P: Parallel[M]): M[T[B]] = {
-    val gtb: P.F[T[B]] = Traverse[T].traverse(ta)(a => P.parallel(f(a)))(P.applicative)
+    val gtb: P.F[T[B]] = Traverse[T].traverse(ta)(a => P.parallel(f(a)))(using P.applicative)
     P.sequential(gtb)
   }
 
@@ -59,7 +59,7 @@ class ParTraverseBench {
     tab: T[A, B]
   )(f: A => M[C], g: B => M[D])(implicit P: Parallel[M]): M[T[C, D]] = {
     val ftcd: P.F[T[C, D]] =
-      Bitraverse[T].bitraverse(tab)(f.andThen(P.parallel.apply(_)), g.andThen(P.parallel.apply(_)))(P.applicative)
+      Bitraverse[T].bitraverse(tab)(f.andThen(P.parallel.apply(_)), g.andThen(P.parallel.apply(_)))(using P.applicative)
     P.sequential(ftcd)
   }
 
@@ -67,7 +67,7 @@ class ParTraverseBench {
     tab: T[A, B]
   )(f: A => M[C], g: B => M[D])(implicit P: Parallel[M]): M[T[C, D]] = {
     val ftcd: P.F[T[C, D]] =
-      Bitraverse[T].bitraverse(tab)(a => P.parallel.apply(f(a)), b => P.parallel.apply(g(b)))(P.applicative)
+      Bitraverse[T].bitraverse(tab)(a => P.parallel.apply(f(a)), b => P.parallel.apply(g(b)))(using P.applicative)
     P.sequential(ftcd)
   }
 

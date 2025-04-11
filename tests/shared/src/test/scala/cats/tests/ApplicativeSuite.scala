@@ -90,12 +90,12 @@ class ApplicativeSuite extends CatsSuite {
 
   {
     implicit val optionMonoid: Monoid[Option[Int]] = Applicative.monoid[Option, Int]
-    checkAll("Applicative[Option].monoid", MonoidTests[Option[Int]](optionMonoid).monoid)
+    checkAll("Applicative[Option].monoid", MonoidTests[Option[Int]](using optionMonoid).monoid)
   }
 
   {
     val optionSemigroupFromApply = Apply.semigroup[Option, Int]
-    checkAll("Apply[Option].semigroup", SemigroupTests[Option[Int]](optionSemigroupFromApply).semigroup)
+    checkAll("Apply[Option].semigroup", SemigroupTests[Option[Int]](using optionSemigroupFromApply).semigroup)
   }
 
   {

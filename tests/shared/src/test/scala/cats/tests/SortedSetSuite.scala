@@ -43,14 +43,14 @@ class SortedSetSuite extends CatsSuite {
 
   checkAll("SortedSet[Int]", FoldableTests[SortedSet].foldable[Int, Int])
   checkAll("Order[SortedSet[Int]]", OrderTests[SortedSet[Int]].order)
-  checkAll("Order.reverse(Order[SortedSet[Int]])", OrderTests(Order.reverse(Order[SortedSet[Int]])).order)
+  checkAll("Order.reverse(Order[SortedSet[Int]])", OrderTests(using Order.reverse(Order[SortedSet[Int]])).order)
   checkAll("PartialOrder[SortedSet[Int]]", PartialOrderTests[SortedSet[Int]].partialOrder)
   checkAll("PartialOrder.reverse(PartialOrder[SortedSet[Int]])",
-           PartialOrderTests(PartialOrder.reverse(PartialOrder[SortedSet[Int]])).partialOrder
+           PartialOrderTests(using PartialOrder.reverse(PartialOrder[SortedSet[Int]])).partialOrder
   )
   checkAll(
     "PartialOrder.reverse(PartialOrder.reverse(PartialOrder[SortedSet[Int]]))",
-    PartialOrderTests(PartialOrder.reverse(PartialOrder.reverse(PartialOrder[SortedSet[Int]]))).partialOrder
+    PartialOrderTests(using PartialOrder.reverse(PartialOrder.reverse(PartialOrder[SortedSet[Int]]))).partialOrder
   )
 
   checkAll("BoundedSemilattice[SortedSet[String]]", BoundedSemilatticeTests[SortedSet[String]].boundedSemilattice)
@@ -59,10 +59,10 @@ class SortedSetSuite extends CatsSuite {
   )
 
   checkAll("Semilattice.asMeetPartialOrder[SortedSet[Int]]",
-           PartialOrderTests(Semilattice.asMeetPartialOrder[SortedSet[Int]]).partialOrder
+           PartialOrderTests(using Semilattice.asMeetPartialOrder[SortedSet[Int]]).partialOrder
   )
   checkAll("Semilattice.asJoinPartialOrder[SortedSet[Int]]",
-           PartialOrderTests(Semilattice.asJoinPartialOrder[SortedSet[Int]]).partialOrder
+           PartialOrderTests(using Semilattice.asJoinPartialOrder[SortedSet[Int]]).partialOrder
   )
   checkAll("Hash[SortedSet[Int]]", HashTests[SortedSet[Int]].hash)
 

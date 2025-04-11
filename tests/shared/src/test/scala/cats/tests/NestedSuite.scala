@@ -77,9 +77,9 @@ class NestedSuite extends CatsSuite {
   {
     // Invariant + Covariant = Invariant
     val instance: Invariant[Nested[ListWrapper, ListWrapper, *]] =
-      Nested.catsDataInvariantForCovariantNested(ListWrapper.invariant, ListWrapper.functor)
+      Nested.catsDataInvariantForCovariantNested(using ListWrapper.invariant, ListWrapper.functor)
     checkAll("Nested[ListWrapper, ListWrapper] - Invariant + Covariant",
-             InvariantTests[Nested[ListWrapper, ListWrapper, *]](instance).invariant[Int, Int, Int]
+             InvariantTests[Nested[ListWrapper, ListWrapper, *]](using instance).invariant[Int, Int, Int]
     )
     checkAll("Invariant[Nested[ListWrapper, ListWrapper, *]] - Invariant + Covariant",
              SerializableTests.serializable(instance)
@@ -88,9 +88,9 @@ class NestedSuite extends CatsSuite {
 
   {
     // Invariant + Contravariant = Invariant
-    val instance = Nested.catsDataInvariantForNestedContravariant(ListWrapper.invariant, Contravariant[Show])
+    val instance = Nested.catsDataInvariantForNestedContravariant(using ListWrapper.invariant, Contravariant[Show])
     checkAll("Nested[ListWrapper, Show, *]",
-             InvariantTests[Nested[ListWrapper, Show, *]](instance).invariant[MiniInt, Int, Boolean]
+             InvariantTests[Nested[ListWrapper, Show, *]](using instance).invariant[MiniInt, Int, Boolean]
     )
     checkAll("Invariant[Nested[ListWrapper, Show, *]]", SerializableTests.serializable(instance))
   }

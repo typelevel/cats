@@ -84,7 +84,7 @@ trait Representable[F[_]] extends Serializable { self =>
     G: Representable[G]
   ): Representable.Aux[λ[α => F[G[α]]], (self.Representation, G.Representation)] =
     new Representable[λ[α => F[G[α]]]] { inner =>
-      override val F = self.F.compose(G.F)
+      override val F = self.F.compose(using G.F)
 
       type Representation = (self.Representation, G.Representation)
 

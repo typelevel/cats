@@ -54,7 +54,7 @@ trait UnorderedFoldable[F[_]] extends Serializable {
   def unorderedFoldMapA[G[_], A, B](fa: F[A])(
     f: A => G[B]
   )(implicit G: CommutativeApplicative[G], B: CommutativeMonoid[B]): G[B] =
-    unorderedFoldMap(fa)(f)(CommutativeApplicative.commutativeMonoidFor)
+    unorderedFoldMap(fa)(f)(using CommutativeApplicative.commutativeMonoidFor)
 
   /**
    * Tests if `fa` contains `v` using the `Eq` instance for `A`
@@ -77,7 +77,7 @@ trait UnorderedFoldable[F[_]] extends Serializable {
    * If there are no elements, the result is `false`.
    */
   def exists[A](fa: F[A])(p: A => Boolean): Boolean =
-    unorderedFoldMap(fa)(a => Eval.later(p(a)))(UnorderedFoldable.orEvalMonoid).value
+    unorderedFoldMap(fa)(a => Eval.later(p(a)))(using UnorderedFoldable.orEvalMonoid).value
 
   /**
    * Check whether all elements satisfy the predicate.
@@ -85,7 +85,7 @@ trait UnorderedFoldable[F[_]] extends Serializable {
    * If there are no elements, the result is `true`.
    */
   def forall[A](fa: F[A])(p: A => Boolean): Boolean =
-    unorderedFoldMap(fa)(a => Eval.later(p(a)))(UnorderedFoldable.andEvalMonoid).value
+    unorderedFoldMap(fa)(a => Eval.later(p(a)))(using UnorderedFoldable.andEvalMonoid).value
 
   /**
    * The size of this UnorderedFoldable.

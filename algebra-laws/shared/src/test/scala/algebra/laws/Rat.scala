@@ -118,7 +118,7 @@ object Rat {
     new RatAlgebra
 
   val RatMinMaxLattice: DistributiveLattice[Rat] =
-    DistributiveLattice.minMax[Rat](ratAlgebra)
+    DistributiveLattice.minMax[Rat](using ratAlgebra)
 
   // Is this horrible? Yes. Am I ashamed? Yes.
   private[this] def genNonZero: Gen[BigInt] =
