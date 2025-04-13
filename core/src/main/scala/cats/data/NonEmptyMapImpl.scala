@@ -362,7 +362,7 @@ sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInst
 
   @deprecated("Use catsDataHashForNonEmptyMap override without Order", "2.2.0-M3")
   def catsDataHashForNonEmptyMap[K, A](hashK: Hash[K], orderK: Order[K], hashA: Hash[A]): Hash[NonEmptyMap[K, A]] =
-    catsDataHashForNonEmptyMap(hashK, hashA)
+    catsDataHashForNonEmptyMap(using hashK, hashA)
 
   implicit def catsDataShowForNonEmptyMap[K: Show, A: Show]: Show[NonEmptyMap[K, A]] = _.show
 
@@ -378,5 +378,5 @@ sealed abstract private[data] class NonEmptyMapInstances0 {
 
   @deprecated("Use catsDataEqForNonEmptyMap override without Order", "2.2.0-M3")
   def catsDataEqForNonEmptyMap[K, A](orderK: Order[K], eqA: Eq[A]): Eq[NonEmptyMap[K, A]] =
-    catsDataEqForNonEmptyMap(eqA)
+    catsDataEqForNonEmptyMap(using eqA)
 }

@@ -104,7 +104,7 @@ abstract class TraverseSuite[F[_]: Traverse](name: String)(implicit ArbFInt: Arb
 object TraverseSuite {
   // forces testing of the underlying implementation (avoids overridden methods)
   abstract class Underlying[F[_]: Traverse](name: String)(implicit ArbFInt: Arbitrary[F[Int]])
-      extends TraverseSuite(s"$name (underlying)")(proxyTraverse[F], ArbFInt)
+      extends TraverseSuite(s"$name (underlying)")(using proxyTraverse[F], ArbFInt)
 
   // proxies a traverse instance so we can test default implementations
   // to achieve coverage using default datatype instances

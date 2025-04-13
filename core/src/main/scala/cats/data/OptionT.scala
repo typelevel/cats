@@ -609,7 +609,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * }}}
    */
   def traverse[G[_], B](f: A => G[B])(implicit F: Traverse[F], G: Applicative[G]): G[OptionT[F, B]] =
-    G.map(F.compose(Traverse[Option]).traverse(value)(f))(OptionT.apply)
+    G.map(F.compose(using Traverse[Option]).traverse(value)(f))(OptionT.apply)
 
   /**
    * Example:
@@ -637,7 +637,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * }}}
    */
   def foldLeft[B](b: B)(f: (B, A) => B)(implicit F: Foldable[F]): B =
-    F.compose(Foldable[Option]).foldLeft(value, b)(f)
+    F.compose(using Foldable[Option]).foldLeft(value, b)(f)
 
   /**
    * Example:
@@ -651,7 +651,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * }}}
    */
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B])(implicit F: Foldable[F]): Eval[B] =
-    F.compose(Foldable[Option]).foldRight(value, lb)(f)
+    F.compose(using Foldable[Option]).foldRight(value, lb)(f)
 
   /**
    * Transform this `OptionT[F, A]` into a `[[Nested]][F, Option, A]`.
@@ -858,7 +858,8 @@ sealed abstract private[data] class OptionTInstances extends OptionTInstances0 {
       implicit val monadM: Monad[M] = P.monad
 
       def applicative: Applicative[Nested[P.F, Option, *]] =
-        cats.data.Nested.catsDataApplicativeForNested(P.applicative, cats.instances.option.catsStdInstancesForOption)
+        cats.data.Nested
+          .catsDataApplicativeForNested(using P.applicative, cats.instances.option.catsStdInstancesForOption)
 
       def monad: Monad[OptionT[M, *]] = cats.data.OptionT.catsDataMonadErrorMonadForOptionT[M]
 

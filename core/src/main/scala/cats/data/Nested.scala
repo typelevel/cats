@@ -118,7 +118,7 @@ sealed abstract private[data] class NestedInstances0 extends NestedInstances1 {
     val FG = F0.compose(G0)
 
     val F: Functor[Nested[F, G, *]] = new NestedFunctor[F, G] {
-      val FG = F0.F.compose(G0.F)
+      val FG = F0.F.compose(using G0.F)
     }
 
     type Representation = FG.Representation
@@ -301,7 +301,7 @@ abstract private[data] class NestedApplicativeError[F[_], G[_], E]
   def G: Applicative[G]
   def AEF: ApplicativeError[F, E]
 
-  def FG: Applicative[λ[α => F[G[α]]]] = AEF.compose[G](G)
+  def FG: Applicative[λ[α => F[G[α]]]] = AEF.compose[G](using G)
 
   def raiseError[A](e: E): Nested[F, G, A] = Nested(AEF.map(AEF.raiseError[A](e))(G.pure))
 
@@ -421,7 +421,7 @@ abstract private[data] class NestedFunctorFilter[F[_], G[_]] extends FunctorFilt
 
   implicit val G: FunctorFilter[G]
 
-  def functor: Functor[Nested[F, G, *]] = Nested.catsDataFunctorForNested(F, G.functor)
+  def functor: Functor[Nested[F, G, *]] = Nested.catsDataFunctorForNested(using F, G.functor)
 
   def mapFilter[A, B](fa: Nested[F, G, A])(f: (A) => Option[B]): Nested[F, G, B] =
     Nested[F, G, B](F.map(fa.value)(G.mapFilter(_)(f)))
@@ -447,7 +447,7 @@ abstract private[data] class NestedTraverseFilter[F[_], G[_]]
 
   implicit val G: TraverseFilter[G]
 
-  def traverse: Traverse[Nested[F, G, *]] = Nested.catsDataTraverseForNested(F, G.traverse)
+  def traverse: Traverse[Nested[F, G, *]] = Nested.catsDataTraverseForNested(using F, G.traverse)
 
   override def filterA[H[_], A](
     fa: Nested[F, G, A]
@@ -465,7 +465,7 @@ abstract private[data] class NestedAlign[F[_], G[_]] extends Align[Nested[F, G, 
   implicit val G: Align[G]
 
   override def functor: Functor[Nested[F, G, *]] =
-    Nested.catsDataFunctorForNested(F.functor, G.functor)
+    Nested.catsDataFunctorForNested(using F.functor, G.functor)
 
   override def align[A, B](
     fa: Nested[F, G, A],

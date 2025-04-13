@@ -88,8 +88,8 @@ class InjectKSuite extends CatsSuite {
                        f2: F[A]
     )(implicit F: Functor[F], I0: Test1Algebra :<: F, I1: Test2Algebra :<: F): Option[Int] =
       for {
-        Test1(x, _) <- I0.prj(f1)
-        Test2(y, _) <- I1.prj(f2)
+        case Test1(x, _) <- I0.prj(f1)
+        case Test2(y, _) <- I1.prj(f2)
       } yield x + y
 
     forAll { (x: Int, y: Int) =>
@@ -105,8 +105,8 @@ class InjectKSuite extends CatsSuite {
                        f2: F[A]
     )(implicit F: Functor[F], I0: Test1Algebra :<: F, I1: Test2Algebra :<: F): Option[Int] =
       for {
-        Test1(x, _) <- I0.unapply(f1)
-        Test2(y, _) <- I1.unapply(f2)
+        case Test1(x, _) <- I0.unapply(f1)
+        case Test2(y, _) <- I1.unapply(f2)
       } yield x + y
 
     forAll { (x: Int, y: Int) =>

@@ -158,11 +158,11 @@ class Tests extends TestsConfig with DisciplineSuite {
 
   checkAll("PartialOrder[Set[Int]]", PartialOrderTests[Set[Int]].partialOrder)
   checkAll("PartialOrder.reverse(PartialOrder[Set[Int]])",
-           PartialOrderTests(PartialOrder.reverse(PartialOrder[Set[Int]])).partialOrder
+           PartialOrderTests(using PartialOrder.reverse(PartialOrder[Set[Int]])).partialOrder
   )
   checkAll(
     "PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))",
-    PartialOrderTests(PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))).partialOrder
+    PartialOrderTests(using PartialOrder.reverse(PartialOrder.reverse(PartialOrder[Set[Int]]))).partialOrder
   )
   checkAll("PartialOrder[Option[HasPartialOrder[Int]]]", PartialOrderTests[Option[HasPartialOrder[Int]]].partialOrder)
   checkAll("PartialOrder[List[HasPartialOrder[Int]]]", PartialOrderTests[List[HasPartialOrder[Int]]].partialOrder)
@@ -173,10 +173,10 @@ class Tests extends TestsConfig with DisciplineSuite {
            PartialOrderTests[SortedMap[Int, HasPartialOrder[Int]]].partialOrder
   )
   checkAll("Semilattice.asMeetPartialOrder[Set[Int]]",
-           PartialOrderTests(Semilattice.asMeetPartialOrder[Set[Int]]).partialOrder
+           PartialOrderTests(using Semilattice.asMeetPartialOrder[Set[Int]]).partialOrder
   )
   checkAll("Semilattice.asJoinPartialOrder[Set[Int]]",
-           PartialOrderTests(Semilattice.asJoinPartialOrder[Set[Int]]).partialOrder
+           PartialOrderTests(using Semilattice.asJoinPartialOrder[Set[Int]]).partialOrder
   )
 
   checkAll("Order[String]", OrderTests[String].order)
@@ -196,10 +196,10 @@ class Tests extends TestsConfig with DisciplineSuite {
   checkAll("Order[Queue[Int]]", OrderTests[Queue[Int]].order)
   checkAll("Order[SortedSet[String]", OrderTests[SortedSet[String]].order)
   checkAll("Order[SortedMap[Int, String]]", OrderTests[SortedMap[Int, String]].order)
-  checkAll("fromOrdering[Int]", OrderTests(Order.fromOrdering[Int]).order)
-  checkAll("Order.reverse(Order[Int])", OrderTests(Order.reverse(Order[Int])).order)
-  checkAll("Order.reverse(Order.reverse(Order[Int]))", OrderTests(Order.reverse(Order.reverse(Order[Int]))).order)
-  checkAll("Order.fromLessThan[Int](_ < _)", OrderTests(Order.fromLessThan[Int](_ < _)).order)
+  checkAll("fromOrdering[Int]", OrderTests(using Order.fromOrdering[Int]).order)
+  checkAll("Order.reverse(Order[Int])", OrderTests(using Order.reverse(Order[Int])).order)
+  checkAll("Order.reverse(Order.reverse(Order[Int]))", OrderTests(using Order.reverse(Order.reverse(Order[Int]))).order)
+  checkAll("Order.fromLessThan[Int](_ < _)", OrderTests(using Order.fromLessThan[Int](_ < _)).order)
 
   checkAll("LowerBounded[Duration]", LowerBoundedTests[Duration].lowerBounded)
   checkAll("LowerBounded[FiniteDuration]", LowerBoundedTests[FiniteDuration].lowerBounded)
@@ -218,13 +218,14 @@ class Tests extends TestsConfig with DisciplineSuite {
   checkAll("BoundedEnumerable[Int]", BoundedEnumerableTests[Int].boundedEnumerable)
   checkAll("BoundedEnumerable[Char]", BoundedEnumerableTests[Char].boundedEnumerable)
   checkAll("BoundedEnumerable[Long]", BoundedEnumerableTests[Long].boundedEnumerable)
-  checkAll("BoundedEnumerable.reverse(BoundedEnumerable[Int])",
-           BoundedEnumerableTests(BoundedEnumerable.reverse(BoundedEnumerable[Int])).boundedEnumerable
+  checkAll(
+    "BoundedEnumerable.reverse(BoundedEnumerable[Int])",
+    BoundedEnumerableTests(using BoundedEnumerable.reverse(BoundedEnumerable[Int])).boundedEnumerable
   )
   checkAll(
     "BoundedEnumerable.reverse(BoundedEnumerable.reverse(BoundedEnumerable[Int]))",
     BoundedEnumerableTests(
-      BoundedEnumerable.reverse(BoundedEnumerable.reverse(BoundedEnumerable[Int]))
+      using BoundedEnumerable.reverse(BoundedEnumerable.reverse(BoundedEnumerable[Int]))
     ).boundedEnumerable
   )
 
@@ -359,7 +360,7 @@ class Tests extends TestsConfig with DisciplineSuite {
     else if (y.subsetOf(x)) 1.0
     else Double.NaN
 
-  checkAll("subsetPartialOrder[Int]", PartialOrderTests(subsetPartialOrder[Int]).partialOrder)
+  checkAll("subsetPartialOrder[Int]", PartialOrderTests(using subsetPartialOrder[Int]).partialOrder)
 
   {
     implicit def subsetPartialOrdering[A]: PartialOrdering[Set[A]] =
@@ -373,7 +374,9 @@ class Tests extends TestsConfig with DisciplineSuite {
 
         override def lteq(x: Set[A], y: Set[A]): Boolean = (x.subsetOf(y)) || (x == y)
       }
-    checkAll("fromPartialOrdering[Int]", PartialOrderTests(PartialOrder.fromPartialOrdering[Set[Int]]).partialOrder)
+    checkAll("fromPartialOrdering[Int]",
+             PartialOrderTests(using PartialOrder.fromPartialOrdering[Set[Int]]).partialOrder
+    )
   }
 
   implicit val arbitraryComparison: Arbitrary[Comparison] =

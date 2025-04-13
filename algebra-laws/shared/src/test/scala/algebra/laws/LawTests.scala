@@ -134,7 +134,7 @@ class LawTests extends munit.DisciplineSuite {
         Arbitrary(arbitrary[Double].map(x => BigDecimal(x, mc)))
       implicit val epsBigDecimal = FPApprox.Epsilon.bigDecimalEpsilon(mc)
       implicit val algebra: FPApproxAlgebra[BigDecimal] =
-        FPApprox.fpApproxAlgebra(new BigDecimalAlgebra(mc), Order[BigDecimal], epsBigDecimal)
+        FPApprox.fpApproxAlgebra(using new BigDecimalAlgebra(mc), Order[BigDecimal], epsBigDecimal)
       checkAll("FPApprox[BigDecimal]", RingLaws[FPApprox[BigDecimal]].field(algebra))
     }
   } else ()

@@ -76,7 +76,7 @@ class FutureTests extends CatsSuite {
     Cogen[Unit].contramap(_ => ())
 
   checkAll("Future[Int]", MonadErrorTests[Future, Throwable].monadError[Int, Int, Int])
-  checkAll("Future[Int]", ComonadTests[Future](comonad).comonad[Int, Int, Int])
+  checkAll("Future[Int]", ComonadTests[Future](using comonad).comonad[Int, Int, Int])
   checkAll("Future", MonadTests[Future].monad[Int, Int, Int])
 
   {

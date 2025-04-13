@@ -131,7 +131,7 @@ sealed abstract class AppFunc[F[_], A, B] extends Func[F, A, B] { self =>
   }
 
   def compose[G[_], C](g: AppFunc[G, C, A]): AppFunc[Nested[G, F, *], C, B] = {
-    implicit val gfApplicative: Applicative[Nested[G, F, *]] = Nested.catsDataApplicativeForNested[G, F](g.F, F)
+    implicit val gfApplicative: Applicative[Nested[G, F, *]] = Nested.catsDataApplicativeForNested[G, F](using g.F, F)
     Func.appFunc[Nested[G, F, *], C, B] { (c: C) =>
       Nested(g.F.map(g.run(c))(self.run))
     }
@@ -146,7 +146,7 @@ sealed abstract class AppFunc[F[_], A, B] extends Func[F, A, B] { self =>
   }
 
   def traverse[G[_]](ga: G[A])(implicit GG: Traverse[G]): F[G[B]] =
-    GG.traverse(ga)(self.run)(F)
+    GG.traverse(ga)(self.run)(using F)
 }
 
 object AppFunc extends AppFuncInstances

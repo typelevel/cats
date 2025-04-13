@@ -31,9 +31,9 @@ import cats.laws.discipline.arbitrary.{catsLawsArbitraryForMiniInt, catsLawsCoge
 class CategorySuite extends CatsSuite {
   val functionCategory = Category[Function1]
 
-  checkAll("Category[Function1].algebraK", MonoidKTests[Endo](functionCategory.algebraK).monoidK[MiniInt])
+  checkAll("Category[Function1].algebraK", MonoidKTests[Endo](using functionCategory.algebraK).monoidK[MiniInt])
   checkAll("Category[Function1].algebraK", SerializableTests.serializable(functionCategory.algebraK))
 
   val functionAlgebra = functionCategory.algebra[MiniInt]
-  checkAll("Category[Function1].algebra[MiniInt]", MonoidTests[Endo[MiniInt]](functionAlgebra).monoid)
+  checkAll("Category[Function1].algebra[MiniInt]", MonoidTests[Endo[MiniInt]](using functionAlgebra).monoid)
 }

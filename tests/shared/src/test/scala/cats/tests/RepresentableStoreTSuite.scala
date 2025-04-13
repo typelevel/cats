@@ -48,26 +48,9 @@ class RepresentableStoreTSuite extends CatsSuite {
   val h: Eq[StoreT[Id, MiniInt, StoreT[Id, MiniInt, StoreT[Id, MiniInt, Int]]]] =
     Eq[StoreT[Id, MiniInt, StoreT[Id, MiniInt, StoreT[Id, MiniInt, Int]]]]
 
-  checkAll("StoreT[Id, MiniInt, *]",
-           ComonadTests[StoreT[Id, MiniInt, *]].comonad[Int, Int, Int](
-             a,
-             b,
-             a,
-             b,
-             a,
-             b,
-             c,
-             d,
-             d,
-             d,
-             e,
-             e,
-             f,
-             g,
-             h,
-             f,
-             f
-           )
+  checkAll(
+    "StoreT[Id, MiniInt, *]",
+    ComonadTests[StoreT[Id, MiniInt, *]].comonad[Int, Int, Int](using a, b, a, b, a, b, c, d, d, d, e, e, f, g, h, f, f)
   )
 
   checkAll("Comonad[StoreT[Id, MiniInt, *]]", SerializableTests.serializable(Comonad[StoreT[Id, MiniInt, *]]))

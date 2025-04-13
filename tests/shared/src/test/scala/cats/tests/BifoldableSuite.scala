@@ -31,7 +31,7 @@ class BifoldableSuite extends CatsSuite {
   val eitherComposeEither: Bifoldable[EitherEither] =
     Bifoldable[Either].compose[Either]
 
-  checkAll("Either compose Either", BifoldableTests(eitherComposeEither).bifoldable[Int, Int, Int])
+  checkAll("Either compose Either", BifoldableTests(using eitherComposeEither).bifoldable[Int, Int, Int])
   checkAll("Bifoldable[Either compose Either]", SerializableTests.serializable(eitherComposeEither))
 
   test("bifold works for 2 monoids") {

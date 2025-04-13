@@ -46,7 +46,7 @@ trait EuclideanRing[@sp(Int, Long, Float, Double) A] extends Any with GCDRing[A]
   def emod(a: A, b: A): A
   def equotmod(a: A, b: A): (A, A) = (equot(a, b), emod(a, b))
   def gcd(a: A, b: A)(implicit ev: Eq[A]): A =
-    EuclideanRing.euclid(a, b)(ev, self)
+    EuclideanRing.euclid(a, b)(using ev, self)
   def lcm(a: A, b: A)(implicit ev: Eq[A]): A =
     if (isZero(a) || isZero(b)) zero else times(equot(a, gcd(a, b)), b)
 }
