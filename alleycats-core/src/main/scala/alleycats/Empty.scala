@@ -24,6 +24,8 @@ package alleycats
 import cats.{Eq, Monoid}
 import cats.syntax.eq.*
 
+import scala.collection.immutable.SortedMap
+
 trait Empty[A] extends Serializable {
   def empty: A
 
@@ -78,8 +80,15 @@ object Empty extends EmptyInstances0 {
 }
 
 private[alleycats] trait EmptyInstances0 extends compat.IterableEmptyInstance with EmptyInstances1 {
+
   private[this] val emptyOptionSingleton: Empty[Option[Nothing]] = Empty(None)
   implicit def alleycatsEmptyForOption[A]: Empty[Option[A]] = emptyOptionSingleton.asInstanceOf[Empty[Option[A]]]
+
+  private[this] val emptyMapSingleton: Empty[Map[Nothing, Nothing]] = Empty(Map.empty)
+  implicit def alleycatsEmptyForMap[A, B]: Empty[Map[A, B]] = emptyMapSingleton.asInstanceOf[Empty[Map[A, B]]]
+
+  implicit def alleycatsEmptyForSortedMap[A: Ordering, B]: Empty[SortedMap[A, B]] =
+    Empty(SortedMap.empty[A, B])
 }
 
 private[alleycats] trait EmptyInstances1 extends EmptyInstances2 {
