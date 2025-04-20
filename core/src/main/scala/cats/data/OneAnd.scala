@@ -34,12 +34,12 @@ import kernel.compat.scalaVersionSpecific.*
  * type NonEmptyStream[A] = OneAnd[Stream, A]
  * }}}
  */
-final case class OneAnd[F[_], A](head: A, tail: F[A]) {
+final case class OneAnd[F[_], A](head: A, tail: F[A]) extends OneAndBinCompat0[F, A] {
 
   /**
    * Combine the head and tail into a single `F[A]` value.
    */
-  def unwrap(implicit F: Alternative[F]): F[A] =
+  def unwrap(implicit F: NonEmptyAlternative[F]): F[A] =
     F.prependK(head, tail)
 
   /**
@@ -53,7 +53,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
   /**
    * Append another OneAnd to this
    */
-  def combine(other: OneAnd[F, A])(implicit F: Alternative[F]): OneAnd[F, A] =
+  def combine(other: OneAnd[F, A])(implicit F: NonEmptyAlternative[F]): OneAnd[F, A] =
     OneAnd(head, F.combineK(tail, other.unwrap))
 
   /**
@@ -123,8 +123,21 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) {
     s"OneAnd(${A.show(head)}, ${FA.show(tail)})"
 }
 
+private[data] trait OneAndBinCompat0[F[_], A] {
+  val head: A
+  val tail: F[A]
+
+  @deprecated("Kept for binary compatibility", "2.14.0")
+  private[data] def unwrap(implicit F: Alternative[F]): F[A] =
+    F.prependK(head, tail)
+
+  @deprecated("Kept for binary compatibility", "2.14.0")
+  private[data] def combine(other: OneAnd[F, A])(implicit F: Alternative[F]): OneAnd[F, A] =
+    OneAnd(head, F.combineK(tail, other.unwrap))
+}
+
 @suppressUnusedImportWarningForScalaVersionSpecific
-sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
+sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 with OneAndInstancesBinCompat0 {
 
   implicit def catsDataParallelForOneAnd[A, M[_]: Alternative, F0[_]: Alternative](implicit
     P: Parallel.Aux[M, F0]
@@ -158,13 +171,13 @@ sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
 
   implicit def catsDataShowForOneAnd[A, F[_]](implicit A: Show[A], FA: Show[F[A]]): Show[OneAnd[F, A]] = _.show
 
-  implicit def catsDataSemigroupKForOneAnd[F[_]: Alternative]: SemigroupK[OneAnd[F, *]] =
+  implicit def catsDataSemigroupKForOneAnd[F[_]: NonEmptyAlternative]: SemigroupK[OneAnd[F, *]] =
     new SemigroupK[OneAnd[F, *]] {
       def combineK[A](a: OneAnd[F, A], b: OneAnd[F, A]): OneAnd[F, A] =
         a.combine(b)
     }
 
-  implicit def catsDataSemigroupForOneAnd[F[_]: Alternative, A]: Semigroup[OneAnd[F, A]] =
+  implicit def catsDataSemigroupForOneAnd[F[_]: NonEmptyAlternative, A]: Semigroup[OneAnd[F, A]] =
     catsDataSemigroupKForOneAnd[F].algebra
 
   implicit def catsDataMonadForOneAnd[F[_]](implicit
@@ -329,6 +342,20 @@ sealed abstract private[data] class OneAndLowPriority0 extends OneAndLowPriority
 
       def split[A](fa: OneAnd[F, A]): (A, F[A]) = (fa.head, fa.tail)
     }
+}
+
+private[data] trait OneAndInstancesBinCompat0 {
+
+  @deprecated("Kept for binary compatibility", "2.14.0")
+  private[data] def catsDataSemigroupKForOneAnd[F[_]: Alternative]: SemigroupK[OneAnd[F, *]] =
+    new SemigroupK[OneAnd[F, *]] {
+      def combineK[A](a: OneAnd[F, A], b: OneAnd[F, A]): OneAnd[F, A] =
+        a.combine(b)
+    }
+
+  @deprecated("Kept for binary compatibility", "2.14.0")
+  private[data] def catsDataSemigroupForOneAnd[F[_]: Alternative, A]: Semigroup[OneAnd[F, A]] =
+    catsDataSemigroupKForOneAnd[F].algebra
 }
 
 object OneAnd extends OneAndInstances
