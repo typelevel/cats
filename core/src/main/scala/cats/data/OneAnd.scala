@@ -347,14 +347,14 @@ sealed abstract private[data] class OneAndLowPriority0 extends OneAndLowPriority
 private[data] trait OneAndInstancesBinCompat0 {
 
   @deprecated("Kept for binary compatibility", "2.14.0")
-  private[data] def catsDataSemigroupKForOneAnd[F[_]: Alternative]: SemigroupK[OneAnd[F, *]] =
+  def catsDataSemigroupKForOneAnd[F[_]: Alternative]: SemigroupK[OneAnd[F, *]] =
     new SemigroupK[OneAnd[F, *]] {
       def combineK[A](a: OneAnd[F, A], b: OneAnd[F, A]): OneAnd[F, A] =
         a.combine(b)
     }
 
   @deprecated("Kept for binary compatibility", "2.14.0")
-  private[data] def catsDataSemigroupForOneAnd[F[_]: Alternative, A]: Semigroup[OneAnd[F, A]] =
+  def catsDataSemigroupForOneAnd[F[_]: Alternative, A]: Semigroup[OneAnd[F, A]] =
     catsDataSemigroupKForOneAnd[F].algebra
 }
 
