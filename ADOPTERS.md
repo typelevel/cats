@@ -45,6 +45,7 @@ And if you can, consider [supporting us](https://opencollective.com/typelevel).
 - [Evolution Gaming](https://www.evolutiongaming.com/)
 - [Evotor Marketplace](https://market.evotor.ru/)
 - [Exelonix](https://exelonix.com/)
+- [Famly ApS](https://www.famly.co/)
 - [formation.ai](https://formation.ai)
 - [Free2Move](https://free2move.com)
 - [Gemini Observatory](https://www.gemini.edu)
