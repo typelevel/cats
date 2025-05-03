@@ -21,6 +21,7 @@
 
 package cats.syntax
 
+import cats.kernel.Monoid
 import cats.{Alternative, Monad}
 
 final class MonadOps[F[_], A](private val fa: F[A]) extends AnyVal {
@@ -32,4 +33,8 @@ final class MonadOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def iterateUntil(p: A => Boolean)(implicit M: Monad[F]): F[A] = M.iterateUntil(fa)(p)
   def flatMapOrKeep[A1 >: A](pfa: PartialFunction[A, F[A1]])(implicit M: Monad[F]): F[A1] =
     M.flatMapOrKeep[A, A1](fa)(pfa)
+  def ifTrueM[B: Monoid](ifTrue: => F[B])(implicit env: F[A] <:< F[Boolean], M: Monad[F]): F[B] =
+    M.ifTrueM(fa)(ifTrue)
+  def ifFalseM[B: Monoid](ifFalse: => F[B])(implicit env: F[A] <:< F[Boolean], M: Monad[F]): F[B] =
+    M.ifFalseM(fa)(ifFalse)
 }
