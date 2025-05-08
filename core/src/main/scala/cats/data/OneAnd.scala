@@ -123,10 +123,7 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) extends OneAndBinCompat0[F
     s"OneAnd(${A.show(head)}, ${FA.show(tail)})"
 }
 
-private[data] trait OneAndBinCompat0[F[_], A] {
-  val head: A
-  val tail: F[A]
-
+sealed private[data] trait OneAndBinCompat0[F[_], A] { self: OneAnd[F, A] =>
   @deprecated("Kept for binary compatibility", "2.14.0")
   private[data] def unwrap(implicit F: Alternative[F]): F[A] =
     F.prependK(head, tail)
