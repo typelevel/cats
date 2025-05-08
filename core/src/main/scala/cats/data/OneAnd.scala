@@ -125,12 +125,12 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) extends OneAndBinCompat0[F
 
 sealed private[data] trait OneAndBinCompat0[F[_], A] { self: OneAnd[F, A] =>
   // Kept for binary compatibility
-  private[data] def unwrap(implicit F: Alternative[F]): F[A] =
-    F.prependK(head, tail)
+  private[data] def unwrap(F: Alternative[F]): F[A] =
+    self.unwrap(F)
 
   // Kept for binary compatibility
-  private[data] def combine(other: OneAnd[F, A])(implicit F: Alternative[F]): OneAnd[F, A] =
-    OneAnd(head, F.combineK(tail, other.unwrap))
+  private[data] def combine(other: OneAnd[F, A])(F: Alternative[F]): OneAnd[F, A] =
+    self.combine(other)(F)
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific
@@ -341,18 +341,15 @@ sealed abstract private[data] class OneAndLowPriority0 extends OneAndLowPriority
     }
 }
 
-sealed private[data] trait OneAndInstancesBinCompat0 {
+sealed private[data] trait OneAndInstancesBinCompat0 { self: OneAndInstances =>
 
   // Kept for binary compatibility
   def catsDataSemigroupKForOneAnd[F[_]](F: Alternative[F]): SemigroupK[OneAnd[F, *]] =
-    new SemigroupK[OneAnd[F, *]] {
-      def combineK[A](a: OneAnd[F, A], b: OneAnd[F, A]): OneAnd[F, A] =
-        a.combine(b)(F)
-    }
+    self.catsDataSemigroupKForOneAnd[F](F)
 
   // Kept for binary compatibility
   def catsDataSemigroupForOneAnd[F[_], A](F: Alternative[F]): Semigroup[OneAnd[F, A]] =
-    catsDataSemigroupKForOneAnd[F](F).algebra
+    self.catsDataSemigroupKForOneAnd[F](F).algebra
 }
 
 object OneAnd extends OneAndInstances
