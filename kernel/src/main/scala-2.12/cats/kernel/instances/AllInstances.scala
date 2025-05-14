@@ -60,3 +60,5 @@ private[instances] trait AllInstancesBinCompat0 extends FiniteDurationInstances
 private[instances] trait AllInstancesBinCompat1 extends SortedMapInstances with SortedSetInstances
 
 private[instances] trait AllInstancesBinCompat2 extends DeadlineInstances
+
+private[instances] trait AllInstancesBinCompat3 extends CurrencyInstances
