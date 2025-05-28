@@ -21,7 +21,7 @@
 
 package cats.instances
 
-import cats.Functor
+import cats.{Functor, FunctorFilter}
 
 import scala.collection.mutable.Builder
 
@@ -68,6 +68,20 @@ private[cats] object StaticMethods {
       idx += 1
       b
     }
+  }
+
+  def mapAccumulateFilterFromStrictFunctorFilter[S, F[_], A, B](init: S, fa: F[A], f: (S, A) => (S, Option[B]))(implicit
+    ev: FunctorFilter[F]
+  ): (S, F[B]) = {
+    var state = init
+
+    val fb = ev.mapFilter(fa) { a =>
+      val (newState, b) = f(state, a)
+      state = newState
+      b
+    }
+
+    (state, fb)
   }
 
 }
