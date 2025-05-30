@@ -31,7 +31,7 @@ object ZipStream {
   def apply[A](value: Stream[A]): ZipStream[A] = new ZipStream(value)
 
   implicit val catsDataAlternativeForZipStream: Alternative[ZipStream] & CommutativeApplicative[ZipStream] =
-    new Alternative[ZipStream] with CommutativeApplicative[ZipStream] {
+    new Apply.AbstractApply[ZipStream] with Alternative[ZipStream] with CommutativeApplicative[ZipStream] {
       def pure[A](x: A): ZipStream[A] = new ZipStream(Stream.continually(x))
 
       override def map[A, B](fa: ZipStream[A])(f: (A) => B): ZipStream[B] =

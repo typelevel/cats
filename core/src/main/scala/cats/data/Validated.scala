@@ -991,7 +991,7 @@ sealed abstract private[data] class ValidatedInstances2 {
   implicit def catsDataEqForValidated[A: Eq, B: Eq]: Eq[Validated[A, B]] = _ === _
 
   implicit def catsDataTraverseFunctorForValidated[E]: Traverse[Validated[E, *]] =
-    new Traverse[Validated[E, *]] {
+    new Foldable.AbstractFoldable[Validated[E, *]] with Traverse[Validated[E, *]] {
 
       override def traverse[G[_]: Applicative, A, B](fa: Validated[E, A])(f: (A) => G[B]): G[Validated[E, B]] =
         fa.traverse(f)
@@ -1060,7 +1060,10 @@ sealed abstract private[data] class ValidatedInstances2 {
     }
 }
 
-private[data] class ValidatedApplicative[E: Semigroup] extends CommutativeApplicative[Validated[E, *]] {
+private[data] class ValidatedApplicative[E: Semigroup]
+    extends Apply.AbstractApply[Validated[E, *]]
+    with CommutativeApplicative[Validated[E, *]] {
+
   override def map[A, B](fa: Validated[E, A])(f: A => B): Validated[E, B] =
     fa.map(f)
 

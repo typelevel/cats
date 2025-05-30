@@ -614,7 +614,9 @@ sealed private[data] trait WriterTInvariant[F[_], L] extends Invariant[WriterT[F
     fa.imap(f)(g)
 }
 
-sealed private[data] trait WriterTApply[F[_], L] extends WriterTFunctor[F, L] with Apply[WriterT[F, L, *]] {
+sealed private[data] trait WriterTApply[F[_], L]
+    extends Apply.AbstractApply[WriterT[F, L, *]]
+    with WriterTFunctor[F, L] {
   implicit override def F0: Apply[F]
   implicit def L0: Semigroup[L]
 
@@ -631,7 +633,9 @@ sealed private[data] trait WriterTApply[F[_], L] extends WriterTFunctor[F, L] wi
     WriterT(F0.map(F0.product(fa.run, fb.run)) { case ((l1, a), (l2, b)) => (L0.combine(l1, l2), (a, b)) })
 }
 
-sealed private[data] trait WriterTFlatMap1[F[_], L] extends WriterTApply[F, L] with FlatMap[WriterT[F, L, *]] {
+sealed private[data] trait WriterTFlatMap1[F[_], L]
+    extends FlatMap.AbstractFlatMap[WriterT[F, L, *]]
+    with WriterTApply[F, L] {
   implicit override def F0: FlatMap[F]
   implicit def L0: Monoid[L]
 
@@ -659,9 +663,14 @@ sealed private[data] trait WriterTFlatMap1[F[_], L] extends WriterTApply[F, L] w
   }
 }
 
-sealed private[data] trait WriterTFlatMap2[F[_], L] extends WriterTApply[F, L] with FlatMap[WriterT[F, L, *]] {
+sealed private[data] trait WriterTFlatMap2[F[_], L]
+    extends FlatMap.AbstractFlatMap[WriterT[F, L, *]]
+    with WriterTApply[F, L] {
   implicit override def F0: Monad[F]
   implicit def L0: Semigroup[L]
+
+  override def ap[A, B](f: WriterT[F, L, A => B])(fa: WriterT[F, L, A]) =
+    super[WriterTApply].ap(f)(fa)
 
   def flatMap[A, B](fa: WriterT[F, L, A])(f: A => WriterT[F, L, B]): WriterT[F, L, B] =
     fa.flatMap(f)
@@ -698,16 +707,16 @@ sealed private[data] trait WriterTApplicative[F[_], L] extends WriterTApply[F, L
 }
 
 sealed private[data] trait WriterTMonad[F[_], L]
-    extends WriterTApplicative[F, L]
-    with WriterTFlatMap1[F, L]
+    extends WriterTFlatMap1[F, L]
+    with WriterTApplicative[F, L]
     with Monad[WriterT[F, L, *]] {
   implicit override def F0: Monad[F]
   implicit override def L0: Monoid[L]
 }
 
 sealed private[data] trait WriterTApplicativeError[F[_], L, E]
-    extends ApplicativeError[WriterT[F, L, *], E]
-    with WriterTApplicative[F, L] {
+    extends WriterTApplicative[F, L]
+    with ApplicativeError[WriterT[F, L, *], E] {
   implicit override def F0: ApplicativeError[F, E]
 
   def raiseError[A](e: E): WriterT[F, L, A] = WriterT(F0.raiseError[(L, A)](e))
@@ -717,9 +726,9 @@ sealed private[data] trait WriterTApplicativeError[F[_], L, E]
 }
 
 sealed private[data] trait WriterTMonadError[F[_], L, E]
-    extends MonadError[WriterT[F, L, *], E]
-    with WriterTMonad[F, L]
-    with WriterTApplicativeError[F, L, E] {
+    extends WriterTMonad[F, L]
+    with WriterTApplicativeError[F, L, E]
+    with MonadError[WriterT[F, L, *], E] {
   implicit override def F0: MonadError[F, E]
 }
 
@@ -740,9 +749,9 @@ sealed private[data] trait WriterTMonoidK[F[_], L] extends MonoidK[WriterT[F, L,
 }
 
 sealed private[data] trait WriterTAlternative[F[_], L]
-    extends Alternative[WriterT[F, L, *]]
+    extends WriterTApplicative[F, L]
     with WriterTMonoidK[F, L]
-    with WriterTApplicative[F, L] {
+    with Alternative[WriterT[F, L, *]] {
   implicit override def F0: Alternative[F]
 }
 
@@ -782,7 +791,7 @@ sealed private[data] trait WriterTCoflatMap[F[_], L] extends CoflatMap[WriterT[F
   def coflatMap[A, B](fa: WriterT[F, L, A])(f: WriterT[F, L, A] => B): WriterT[F, L, B] = fa.map(_ => f(fa))
 }
 
-sealed private[data] trait WriterTFoldable[F[_], L] extends Foldable[WriterT[F, L, *]] {
+sealed private[data] trait WriterTFoldable[F[_], L] extends Foldable.AbstractFoldable[WriterT[F, L, *]] {
 
   implicit def F0: Foldable[F]
 
@@ -791,9 +800,9 @@ sealed private[data] trait WriterTFoldable[F[_], L] extends Foldable[WriterT[F, 
 }
 
 sealed private[data] trait WriterTTraverse[F[_], L]
-    extends Traverse[WriterT[F, L, *]]
-    with WriterTFoldable[F, L]
-    with WriterTFunctor[F, L] {
+    extends WriterTFoldable[F, L]
+    with WriterTFunctor[F, L]
+    with Traverse[WriterT[F, L, *]] {
 
   implicit override def F0: Traverse[F]
 

@@ -417,11 +417,15 @@ sealed abstract private[data] class NonEmptySeqInstances {
    */
   implicit val catsDataInstancesForNonEmptySeqBinCompat1
     : NonEmptyAlternative[NonEmptySeq] & Bimonad[NonEmptySeq] & NonEmptyTraverse[NonEmptySeq] & Align[NonEmptySeq] =
-    new NonEmptyReducible[NonEmptySeq, Seq]
+    new FlatMap.FoldableFlatMap[NonEmptySeq]
+      with NonEmptyReducibleTrait[NonEmptySeq, Seq]
       with NonEmptyAlternative[NonEmptySeq]
       with Bimonad[NonEmptySeq]
       with NonEmptyTraverse[NonEmptySeq]
       with Align[NonEmptySeq] {
+
+      override def G: Foldable[Seq] =
+        cats.instances.seq.catsStdInstancesForSeq
 
       def combineK[A](a: NonEmptySeq[A], b: NonEmptySeq[A]): NonEmptySeq[A] =
         a.concatNeSeq(b)
@@ -617,7 +621,7 @@ object NonEmptySeq extends NonEmptySeqInstances with Serializable {
       new ZipNonEmptySeq(nev)
 
     implicit val catsDataCommutativeApplyForZipNonEmptySeq: CommutativeApply[ZipNonEmptySeq] =
-      new CommutativeApply[ZipNonEmptySeq] {
+      new Apply.AbstractApply[ZipNonEmptySeq] with CommutativeApply[ZipNonEmptySeq] {
         def ap[A, B](ff: ZipNonEmptySeq[A => B])(fa: ZipNonEmptySeq[A]): ZipNonEmptySeq[B] =
           ZipNonEmptySeq(ff.value.zipWith(fa.value)(_.apply(_)))
 

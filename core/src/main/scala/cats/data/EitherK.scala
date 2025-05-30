@@ -238,7 +238,7 @@ private[data] trait EitherKContravariant[F[_], G[_]] extends Contravariant[Eithe
     a.contramap(f)
 }
 
-private[data] trait EitherKFoldable[F[_], G[_]] extends Foldable[EitherK[F, G, *]] {
+private[data] trait EitherKFoldable[F[_], G[_]] extends Foldable.AbstractFoldable[EitherK[F, G, *]] {
   implicit def F: Foldable[F]
 
   implicit def G: Foldable[G]

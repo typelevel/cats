@@ -399,7 +399,7 @@ abstract private[data] class StateFunctions {
   def set[S](s: S): State[S, Unit] = State(_ => (s, ()))
 }
 
-sealed abstract private[data] class IndexedStateTFunctor[F[_], SA, SB] extends Functor[IndexedStateT[F, SA, SB, *]] {
+sealed private[data] trait IndexedStateTFunctor[F[_], SA, SB] extends Functor[IndexedStateT[F, SA, SB, *]] {
   implicit def F: Functor[F]
 
   override def map[A, B](fa: IndexedStateT[F, SA, SB, A])(f: A => B): IndexedStateT[F, SA, SB, B] =
@@ -445,7 +445,8 @@ sealed abstract private[data] class IndexedStateTStrong[F[_], V]
 }
 
 sealed abstract private[data] class IndexedStateTMonad[F[_], S]
-    extends IndexedStateTFunctor[F, S, S]
+    extends FlatMap.AbstractFlatMap[IndexedStateT[F, S, S, *]]
+    with IndexedStateTFunctor[F, S, S]
     with Monad[IndexedStateT[F, S, S, *]] {
   implicit def F: Monad[F]
 

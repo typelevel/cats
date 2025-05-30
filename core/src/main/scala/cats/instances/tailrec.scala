@@ -31,7 +31,7 @@ trait TailRecInstances {
 
 private object TailRecInstances {
   val catsInstancesForTailRec: StackSafeMonad[TailRec] & Defer[TailRec] =
-    new StackSafeMonad[TailRec] with Defer[TailRec] {
+    new FlatMap.AbstractFlatMap[TailRec] with StackSafeMonad[TailRec] with Defer[TailRec] {
       def defer[A](fa: => TailRec[A]): TailRec[A] = tailcall(fa)
 
       def pure[A](a: A): TailRec[A] = done(a)

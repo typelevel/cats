@@ -22,6 +22,8 @@
 package cats
 package instances
 
+abstract private[instances] class AbstractAnyValInstances extends AbstractTupleInstances with AnyValInstances
+
 trait AnyValInstances
     extends IntInstances
     with ByteInstances

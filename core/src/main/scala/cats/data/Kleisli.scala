@@ -643,9 +643,9 @@ sealed private[data] trait KleisliMonoidK[F[_], A] extends MonoidK[Kleisli[F, A,
 }
 
 private[data] trait KleisliAlternative[F[_], A]
-    extends Alternative[Kleisli[F, A, *]]
-    with KleisliApplicative[F, A]
-    with KleisliMonoidK[F, A] {
+    extends KleisliApplicative[F, A]
+    with KleisliMonoidK[F, A]
+    with Alternative[Kleisli[F, A, *]] {
   implicit def F: Alternative[F]
 }
 
@@ -662,15 +662,15 @@ sealed private[data] trait KleisliContravariantMonoidal[F[_], D] extends Contrav
 }
 
 private[data] trait KleisliMonadError[F[_], A, E]
-    extends MonadError[Kleisli[F, A, *], E]
+    extends KleisliMonad[F, A]
     with KleisliApplicativeError[F, A, E]
-    with KleisliMonad[F, A] {
+    with MonadError[Kleisli[F, A, *], E] {
   def F: MonadError[F, E]
 }
 
 private[data] trait KleisliApplicativeError[F[_], A, E]
-    extends ApplicativeError[Kleisli[F, A, *], E]
-    with KleisliApplicative[F, A] {
+    extends KleisliApplicative[F, A]
+    with ApplicativeError[Kleisli[F, A, *], E] {
   type K[T] = Kleisli[F, A, T]
 
   implicit def F: ApplicativeError[F, E]
@@ -684,13 +684,13 @@ private[data] trait KleisliApplicativeError[F[_], A, E]
 }
 
 private[data] trait KleisliMonad[F[_], A]
-    extends Monad[Kleisli[F, A, *]]
-    with KleisliFlatMap[F, A]
-    with KleisliApplicative[F, A] {
+    extends KleisliFlatMap[F, A]
+    with KleisliApplicative[F, A]
+    with Monad[Kleisli[F, A, *]] {
   implicit def F: Monad[F]
 }
 
-private[data] trait KleisliFlatMap[F[_], A] extends FlatMap[Kleisli[F, A, *]] with KleisliApply[F, A] {
+private[data] trait KleisliFlatMap[F[_], A] extends FlatMap.AbstractFlatMap[Kleisli[F, A, *]] with KleisliApply[F, A] {
   implicit def F: FlatMap[F]
 
   def flatMap[B, C](fa: Kleisli[F, A, B])(f: B => Kleisli[F, A, C]): Kleisli[F, A, C] =
@@ -702,14 +702,14 @@ private[data] trait KleisliFlatMap[F[_], A] extends FlatMap[Kleisli[F, A, *]] wi
     }
 }
 
-private[data] trait KleisliApplicative[F[_], A] extends Applicative[Kleisli[F, A, *]] with KleisliApply[F, A] {
+private[data] trait KleisliApplicative[F[_], A] extends KleisliApply[F, A] with Applicative[Kleisli[F, A, *]] {
   implicit def F: Applicative[F]
 
   def pure[B](x: B): Kleisli[F, A, B] =
     Kleisli.pure[F, A, B](x)
 }
 
-private[data] trait KleisliApply[F[_], A] extends Apply[Kleisli[F, A, *]] with KleisliFunctor[F, A] {
+private[data] trait KleisliApply[F[_], A] extends Apply.AbstractApply[Kleisli[F, A, *]] with KleisliFunctor[F, A] {
   implicit def F: Apply[F]
 
   override def ap[B, C](f: Kleisli[F, A, B => C])(fa: Kleisli[F, A, B]): Kleisli[F, A, C] =

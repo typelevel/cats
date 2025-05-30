@@ -637,6 +637,8 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
     new AbstractNonEmptyInstances[Chain, NonEmptyChain] with Align[NonEmptyChain] {
       def extract[A](fa: NonEmptyChain[A]): A = fa.head
 
+      override def split[A](fa: NonEmptyChain[A]): (A, Chain[A]) = (fa.head, fa.tail)
+
       def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] = {
         def loop(head: A, tail: Chain[A]): Eval[G[NonEmptyChain[B]]] =
           tail.uncons.fold(Eval.now(Apply[G].map(f(head))(NonEmptyChain(_)))) { case (h, t) =>
@@ -666,9 +668,11 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
       override def reduce[A](fa: NonEmptyChain[A])(implicit A: Semigroup[A]): A =
         fa.reduce
 
-      def reduceLeftTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
+      override def reduceLeftTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
-      def reduceRightTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
+      override def reduceRightTo[A, B](
+        fa: NonEmptyChain[A]
+      )(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
         Eval.defer(fa.reduceRightTo(a => Eval.later(f(a))) { (a, b) =>
           Eval.defer(g(a, b))
         })

@@ -179,10 +179,10 @@ private trait CofreeComonad[S[_]] extends Comonad[Cofree[S, *]] {
 
   final override def coflatten[A](a: Cofree[S, A]): Cofree[S, Cofree[S, A]] = a.coflatten
 
-  final override def map[A, B](a: Cofree[S, A])(f: A => B): Cofree[S, B] = a.map(f)
+  override def map[A, B](a: Cofree[S, A])(f: A => B): Cofree[S, B] = a.map(f)
 }
 
-private trait CofreeReducible[F[_]] extends Reducible[Cofree[F, *]] {
+private trait CofreeReducible[F[_]] extends Foldable.AbstractFoldable[Cofree[F, *]] with Reducible[Cofree[F, *]] {
   implicit def F: Foldable[F]
 
   final override def foldMap[A, B](fa: Cofree[F, A])(f: A => B)(implicit M: Monoid[B]): B =
@@ -207,10 +207,12 @@ private trait CofreeReducible[F[_]] extends Reducible[Cofree[F, *]] {
 
 }
 
-private trait CofreeTraverse[F[_]] extends Traverse[Cofree[F, *]] with CofreeReducible[F] with CofreeComonad[F] {
+private trait CofreeTraverse[F[_]] extends CofreeReducible[F] with CofreeComonad[F] with Traverse[Cofree[F, *]] {
   implicit def F: Traverse[F]
+
+  override def map[A, B](fa: Cofree[F, A])(f: A => B): Cofree[F, B] =
+    super[CofreeComonad].map(fa)(f)
 
   final override def traverse[G[_], A, B](fa: Cofree[F, A])(f: A => G[B])(implicit G: Applicative[G]): G[Cofree[F, B]] =
     G.map2(f(fa.head), F.traverse(fa.tailForced)(traverse(_)(f)))((h, t) => Cofree[F, B](h, Eval.now(t)))
-
 }

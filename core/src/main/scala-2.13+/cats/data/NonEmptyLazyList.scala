@@ -514,8 +514,9 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
     NonEmptyLazyList
   ] & NonEmptyAlternative[NonEmptyLazyList] & Align[NonEmptyLazyList] =
     new AbstractNonEmptyInstances[LazyList, NonEmptyLazyList] with Align[NonEmptyLazyList] {
-
       def extract[A](fa: NonEmptyLazyList[A]): A = fa.head
+
+      override def split[A](fa: NonEmptyLazyList[A]): (A, LazyList[A]) = (fa.head, fa.tail)
 
       def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyLazyList[A])(f: A => G[B]): G[NonEmptyLazyList[B]] = {
         def loop(head: A, tail: LazyList[A]): Eval[G[NonEmptyLazyList[B]]] =
@@ -526,9 +527,12 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
         loop(fa.head, fa.tail).value
       }
 
-      def reduceLeftTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
+      override def reduceLeftTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (B, A) => B): B =
+        fa.reduceLeftTo(f)(g)
 
-      def reduceRightTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
+      override def reduceRightTo[A, B](
+        fa: NonEmptyLazyList[A]
+      )(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
         fa.tail match {
           case head +: tail =>
             val nell = NonEmptyLazyList.fromLazyListPrepend(head, tail)

@@ -954,7 +954,7 @@ sealed private[data] trait OptionTContravariant[F[_]] extends Contravariant[Opti
     fa.contramap(f)
 }
 
-private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, *]] {
+private[data] trait OptionTMonad[F[_]] extends FlatMap.AbstractFlatMap[OptionT[F, *]] with Monad[OptionT[F, *]] {
   implicit def F: Monad[F]
 
   def pure[A](a: A): OptionT[F, A] = OptionT.pure(a)
@@ -973,7 +973,7 @@ private[data] trait OptionTMonad[F[_]] extends Monad[OptionT[F, *]] {
     )
 }
 
-private[data] trait OptionTMonadErrorMonad[F[_]] extends MonadError[OptionT[F, *], Unit] with OptionTMonad[F] {
+private[data] trait OptionTMonadErrorMonad[F[_]] extends OptionTMonad[F] with MonadError[OptionT[F, *], Unit] {
   implicit def F: Monad[F]
 
   override def raiseError[A](e: Unit): OptionT[F, A] = OptionT.none
@@ -985,7 +985,7 @@ private[data] trait OptionTMonadErrorMonad[F[_]] extends MonadError[OptionT[F, *
     })
 }
 
-private trait OptionTMonadError[F[_], E] extends MonadError[OptionT[F, *], E] with OptionTMonad[F] {
+private trait OptionTMonadError[F[_], E] extends OptionTMonad[F] with MonadError[OptionT[F, *], E] {
   override def F: MonadError[F, E]
 
   override def raiseError[A](e: E): OptionT[F, A] =
@@ -1014,7 +1014,7 @@ private trait OptionTContravariantMonoidal[F[_]] extends ContravariantMonoidal[O
     )
 }
 
-private[data] trait OptionTFoldable[F[_]] extends Foldable[OptionT[F, *]] {
+private[data] trait OptionTFoldable[F[_]] extends Foldable.AbstractFoldable[OptionT[F, *]] {
   implicit def F: Foldable[F]
 
   def foldLeft[A, B](fa: OptionT[F, A], b: B)(f: (B, A) => B): B =
@@ -1024,7 +1024,7 @@ private[data] trait OptionTFoldable[F[_]] extends Foldable[OptionT[F, *]] {
     fa.foldRight(lb)(f)
 }
 
-sealed private[data] trait OptionTTraverse[F[_]] extends Traverse[OptionT[F, *]] with OptionTFoldable[F] {
+sealed private[data] trait OptionTTraverse[F[_]] extends OptionTFoldable[F] with Traverse[OptionT[F, *]] {
   implicit def F: Traverse[F]
 
   def traverse[G[_]: Applicative, A, B](fa: OptionT[F, A])(f: A => G[B]): G[OptionT[F, B]] =

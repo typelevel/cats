@@ -171,7 +171,7 @@ sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 {
     monad: Monad[F],
     alternative: Alternative[F]
   ): Monad[OneAnd[F, *]] =
-    new Monad[OneAnd[F, *]] {
+    new FlatMap.AbstractFlatMap[OneAnd[F, *]] with Monad[OneAnd[F, *]] {
       override def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
         fa.map(f)(monad)
 
@@ -236,7 +236,7 @@ sealed abstract private[data] class OneAndLowPriority3 extends OneAndLowPriority
 sealed abstract private[data] class OneAndLowPriority2 extends OneAndLowPriority3 {
 
   implicit def catsDataApplicativeForOneAnd[F[_]](implicit F: Alternative[F]): Applicative[OneAnd[F, *]] =
-    new Applicative[OneAnd[F, *]] {
+    new Apply.AbstractApply[OneAnd[F, *]] with Applicative[OneAnd[F, *]] {
       override def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
         fa.map(f)
 

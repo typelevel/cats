@@ -279,7 +279,7 @@ private[data] trait NestedFunctor[F[_], G[_]] extends Functor[Nested[F, G, *]] w
     Nested(FG.map(fga.value)(f))
 }
 
-private[data] trait NestedApply[F[_], G[_]] extends Apply[Nested[F, G, *]] with NestedFunctor[F, G] {
+private[data] trait NestedApply[F[_], G[_]] extends Apply.AbstractApply[Nested[F, G, *]] with NestedFunctor[F, G] {
   override def FG: Apply[λ[α => F[G[α]]]]
 
   override def ap[A, B](fgf: Nested[F, G, A => B])(fga: Nested[F, G, A]): Nested[F, G, B] =
@@ -289,15 +289,15 @@ private[data] trait NestedApply[F[_], G[_]] extends Apply[Nested[F, G, *]] with 
     Nested(FG.product(fga.value, fgb.value))
 }
 
-private[data] trait NestedApplicative[F[_], G[_]] extends Applicative[Nested[F, G, *]] with NestedApply[F, G] {
+private[data] trait NestedApplicative[F[_], G[_]] extends NestedApply[F, G] with Applicative[Nested[F, G, *]] {
   def FG: Applicative[λ[α => F[G[α]]]]
 
   def pure[A](x: A): Nested[F, G, A] = Nested(FG.pure(x))
 }
 
 abstract private[data] class NestedApplicativeError[F[_], G[_], E]
-    extends ApplicativeError[Nested[F, G, *], E]
-    with NestedApplicative[F, G] {
+    extends NestedApplicative[F, G]
+    with ApplicativeError[Nested[F, G, *], E] {
   def G: Applicative[G]
   def AEF: ApplicativeError[F, E]
 
@@ -323,13 +323,13 @@ private[data] trait NestedMonoidK[F[_], G[_]] extends MonoidK[Nested[F, G, *]] w
 }
 
 private[data] trait NestedAlternative[F[_], G[_]]
-    extends Alternative[Nested[F, G, *]]
-    with NestedApplicative[F, G]
-    with NestedMonoidK[F, G] {
+    extends NestedApplicative[F, G]
+    with NestedMonoidK[F, G]
+    with Alternative[Nested[F, G, *]] {
   def FG: Alternative[λ[α => F[G[α]]]]
 }
 
-private[data] trait NestedFoldable[F[_], G[_]] extends Foldable[Nested[F, G, *]] {
+private[data] trait NestedFoldable[F[_], G[_]] extends Foldable.AbstractFoldable[Nested[F, G, *]] {
   def FG: Foldable[λ[α => F[G[α]]]]
 
   def foldLeft[A, B](fga: Nested[F, G, A], b: B)(f: (B, A) => B): B =
@@ -340,9 +340,9 @@ private[data] trait NestedFoldable[F[_], G[_]] extends Foldable[Nested[F, G, *]]
 }
 
 private[data] trait NestedTraverse[F[_], G[_]]
-    extends Traverse[Nested[F, G, *]]
-    with NestedFoldable[F, G]
-    with NestedFunctor[F, G] {
+    extends NestedFoldable[F, G]
+    with NestedFunctor[F, G]
+    with Traverse[Nested[F, G, *]] {
   def FG: Traverse[λ[α => F[G[α]]]]
 
   override def traverse[H[_]: Applicative, A, B](fga: Nested[F, G, A])(f: A => H[B]): H[Nested[F, G, B]] =
@@ -367,7 +367,7 @@ private[data] trait NestedDistributive[F[_], G[_]] extends Distributive[Nested[F
     })
 }
 
-private[data] trait NestedReducible[F[_], G[_]] extends Reducible[Nested[F, G, *]] with NestedFoldable[F, G] {
+private[data] trait NestedReducible[F[_], G[_]] extends NestedFoldable[F, G] with Reducible[Nested[F, G, *]] {
   def FG: Reducible[λ[α => F[G[α]]]]
 
   def reduceLeftTo[A, B](fga: Nested[F, G, A])(f: A => B)(g: (B, A) => B): B =
@@ -378,8 +378,8 @@ private[data] trait NestedReducible[F[_], G[_]] extends Reducible[Nested[F, G, *
 }
 
 private[data] trait NestedNonEmptyTraverse[F[_], G[_]]
-    extends NonEmptyTraverse[Nested[F, G, *]]
-    with NestedTraverse[F, G]
+    extends NestedTraverse[F, G]
+    with NonEmptyTraverse[Nested[F, G, *]]
     with NestedReducible[F, G] {
   def FG: NonEmptyTraverse[λ[α => F[G[α]]]]
 

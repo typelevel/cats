@@ -103,7 +103,7 @@ trait Representable[F[_]] extends Serializable { self =>
     }
 }
 
-private trait RepresentableMonad[F[_], R] extends Monad[F] {
+abstract private class RepresentableMonad[F[_], R] extends FlatMap.AbstractFlatMap[F] with Monad[F] {
 
   def R: Representable.Aux[F, R]
 
@@ -125,7 +125,7 @@ private trait RepresentableMonad[F[_], R] extends Monad[F] {
     }
 }
 
-private trait RepresentableBimonad[F[_], R] extends RepresentableMonad[F, R] with Bimonad[F] {
+abstract private class RepresentableBimonad[F[_], R] extends RepresentableMonad[F, R] with Bimonad[F] {
 
   def M: Monoid[R]
 

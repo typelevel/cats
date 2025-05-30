@@ -22,7 +22,8 @@
 package cats
 
 object implicits
-    extends syntax.AllSyntax
+    extends instances.AbstractAllInstances
+    with syntax.AllSyntax
     with syntax.AllSyntaxBinCompat0
     with syntax.AllSyntaxBinCompat1
     with syntax.AllSyntaxBinCompat2
@@ -30,7 +31,6 @@ object implicits
     with syntax.AllSyntaxBinCompat4
     with syntax.AllSyntaxBinCompat5
     with syntax.AllSyntaxBinCompat6
-    with instances.AllInstances
     with instances.AllInstancesBinCompat0
     with instances.AllInstancesBinCompat1
     with instances.AllInstancesBinCompat2

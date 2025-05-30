@@ -777,7 +777,7 @@ object NonEmptyList extends NonEmptyListInstances {
       new ZipNonEmptyList(nev)
 
     implicit val catsDataCommutativeApplyForZipNonEmptyList: CommutativeApply[ZipNonEmptyList] =
-      new CommutativeApply[ZipNonEmptyList] {
+      new Apply.AbstractApply[ZipNonEmptyList] with CommutativeApply[ZipNonEmptyList] {
         def ap[A, B](ff: ZipNonEmptyList[A => B])(fa: ZipNonEmptyList[A]): ZipNonEmptyList[B] =
           ZipNonEmptyList(ff.value.zipWith(fa.value)(_.apply(_)))
 
@@ -815,11 +815,15 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
     : NonEmptyAlternative[NonEmptyList] & Bimonad[NonEmptyList] & NonEmptyTraverse[NonEmptyList] & Align[
       NonEmptyList
     ] =
-    new NonEmptyReducible[NonEmptyList, List]
+    new FlatMap.FoldableFlatMap[NonEmptyList]
+      with NonEmptyReducibleTrait[NonEmptyList, List]
       with NonEmptyAlternative[NonEmptyList]
       with Bimonad[NonEmptyList]
       with NonEmptyTraverse[NonEmptyList]
       with Align[NonEmptyList] {
+
+      override def G: Foldable[List] =
+        cats.instances.list.catsStdInstancesForList
 
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
         a.concatNel(b)

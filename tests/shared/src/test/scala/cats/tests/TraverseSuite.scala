@@ -109,7 +109,7 @@ object TraverseSuite {
   // proxies a traverse instance so we can test default implementations
   // to achieve coverage using default datatype instances
   private def proxyTraverse[F[_]: Traverse]: Traverse[F] =
-    new Traverse[F] {
+    new Foldable.AbstractFoldable[F] with Traverse[F] {
       def foldLeft[A, B](fa: F[A], b: B)(f: (B, A) => B): B =
         Traverse[F].foldLeft(fa, b)(f)
       def foldRight[A, B](fa: F[A], lb: cats.Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =

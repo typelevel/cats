@@ -66,7 +66,7 @@ trait Semigroupal[F[_]] extends Serializable {
   def product[A, B](fa: F[A], fb: F[B]): F[(A, B)]
 }
 
-object Semigroupal extends ScalaVersionSpecificSemigroupalInstances with SemigroupalArityFunctions {
+object Semigroupal extends SemigroupalArityFunctions with ScalaVersionSpecificSemigroupalInstances {
   implicit def catsSemigroupalForId: Semigroupal[Id] = catsInstancesForId
   implicit def catsSemigroupalForOption: Semigroupal[Option] = cats.instances.option.catsStdInstancesForOption
   implicit def catsSemigroupalForTry: Semigroupal[Try] = cats.instances.try_.catsStdInstancesForTry

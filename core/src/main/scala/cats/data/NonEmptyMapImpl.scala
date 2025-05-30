@@ -297,7 +297,10 @@ sealed abstract private[data] class NonEmptyMapInstances extends NonEmptyMapInst
 
   implicit def catsDataInstancesForNonEmptyMap[K]
     : SemigroupK[NonEmptyMap[K, *]] & NonEmptyTraverse[NonEmptyMap[K, *]] & Align[NonEmptyMap[K, *]] =
-    new SemigroupK[NonEmptyMap[K, *]] with NonEmptyTraverse[NonEmptyMap[K, *]] with Align[NonEmptyMap[K, *]] {
+    new Foldable.AbstractFoldable[NonEmptyMap[K, *]]
+      with SemigroupK[NonEmptyMap[K, *]]
+      with NonEmptyTraverse[NonEmptyMap[K, *]]
+      with Align[NonEmptyMap[K, *]] {
 
       override def map[A, B](fa: NonEmptyMap[K, A])(f: A => B): NonEmptyMap[K, B] =
         fa.map(f)
