@@ -1397,7 +1397,13 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
   implicit val catsDataInstancesForChain
     : Traverse[Chain] & Alternative[Chain] & Monad[Chain] & CoflatMap[Chain] & Align[Chain] =
-    new Traverse[Chain] with Alternative[Chain] with Monad[Chain] with CoflatMap[Chain] with Align[Chain] {
+    new FlatMap.FoldableFlatMap[Chain]
+      with Traverse[Chain]
+      with Alternative[Chain]
+      with Monad[Chain]
+      with CoflatMap[Chain]
+      with Align[Chain] {
+
       def foldLeft[A, B](fa: Chain[A], b: B)(f: (B, A) => B): B =
         fa.foldLeft(b)(f)
       def foldRight[A, B](fa: Chain[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] = {

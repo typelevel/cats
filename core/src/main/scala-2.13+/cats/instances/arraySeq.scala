@@ -42,11 +42,13 @@ trait ArraySeqInstances extends cats.kernel.instances.ArraySeqInstances {
 private[cats] object ArraySeqInstances {
   final private val stdInstances
     : Traverse[ArraySeq] & Monad[ArraySeq] & Alternative[ArraySeq] & CoflatMap[ArraySeq] & Align[ArraySeq] =
-    new Traverse[ArraySeq]
+    new FlatMap.FoldableFlatMap[ArraySeq]
+      with Traverse[ArraySeq]
       with Monad[ArraySeq]
       with Alternative[ArraySeq]
       with CoflatMap[ArraySeq]
       with Align[ArraySeq] {
+
       def empty[A]: ArraySeq[A] =
         ArraySeq.untagged.empty
 
