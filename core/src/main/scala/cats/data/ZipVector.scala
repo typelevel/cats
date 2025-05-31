@@ -31,7 +31,8 @@ object ZipVector {
 
   def apply[A](value: Vector[A]): ZipVector[A] = new ZipVector(value)
 
-  implicit val catsDataCommutativeApplyForZipVector: CommutativeApply[ZipVector] = new CommutativeApply[ZipVector] {
+  implicit val catsDataCommutativeApplyForZipVector: CommutativeApply[ZipVector] = new Apply.AbstractApply[ZipVector]
+    with CommutativeApply[ZipVector] {
 
     override def map[A, B](fa: ZipVector[A])(f: (A) => B): ZipVector[B] =
       ZipVector(fa.value.map(f))

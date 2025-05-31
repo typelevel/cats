@@ -37,9 +37,15 @@ import scala.util.{Failure, Success}
 trait FutureInstances extends FutureInstances1 {
 
   implicit def catsStdInstancesForFuture(implicit
-    ec: ExecutionContext
+    ctx: ExecutionContext
   ): MonadThrow[Future] & CoflatMap[Future] & Monad[Future] =
-    new FutureCoflatMap with MonadThrow[Future] with Monad[Future] with StackSafeMonad[Future] {
+    new FlatMap.AbstractFlatMap[Future]
+      with FutureCoflatMap
+      with MonadThrow[Future]
+      with Monad[Future]
+      with StackSafeMonad[Future] {
+
+      override def ec: ExecutionContext = ctx
       override def pure[A](x: A): Future[A] =
         Future.successful(x)
       override def flatMap[A, B](fa: Future[A])(f: A => Future[B]): Future[B] =
@@ -87,7 +93,8 @@ sealed private[instances] trait FutureInstances2 {
     new FutureSemigroup[A]
 }
 
-abstract private[cats] class FutureCoflatMap(implicit ec: ExecutionContext) extends CoflatMap[Future] {
+private[cats] trait FutureCoflatMap extends CoflatMap[Future] {
+  implicit def ec: ExecutionContext
   def map[A, B](fa: Future[A])(f: A => B): Future[B] = fa.map(f)
   def coflatMap[A, B](fa: Future[A])(f: Future[A] => B): Future[B] = Future(f(fa))
 }
