@@ -274,6 +274,12 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
   final def foldRight[B](z: B)(f: (A, B) => B): B =
     toLazyList.foldRight(z)(f)
 
+  final def scanLeft[B](b: B)(f: (B, A) => B): NonEmptyLazyList[B] =
+    create(toLazyList.scanLeft(b)(f))
+
+  final def scanLeftTail[B](b: B)(f: (B, A) => B): NonEmptyLazyList[B] =
+    create(toLazyList.scanLeft(b)(f).tail)
+
   /**
    * Left-associative reduce using f.
    */
