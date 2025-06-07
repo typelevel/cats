@@ -27,9 +27,13 @@ abstract private[data] class AbstractNonEmptyInstances[F[_], NonEmptyF[_]](impli
   CF: CoflatMap[F],
   TF: Traverse[F],
   SF: Alternative[F]
-) extends Bimonad[NonEmptyF]
+) extends FlatMap.FoldableFlatMap[NonEmptyF]
+    with NonEmptyReducibleTrait[NonEmptyF, F]
+    with Bimonad[NonEmptyF]
     with NonEmptyTraverse[NonEmptyF]
     with NonEmptyAlternative[NonEmptyF] {
+
+  override def G: Foldable[F] = TF
   val monadInstance = MF.asInstanceOf[Monad[NonEmptyF]]
   val coflatMapInstance = CF.asInstanceOf[CoflatMap[NonEmptyF]]
   val traverseInstance = Traverse[F].asInstanceOf[Traverse[NonEmptyF]]
@@ -63,10 +67,10 @@ abstract private[data] class AbstractNonEmptyInstances[F[_], NonEmptyF[_]](impli
   def tailRecM[A, B](a: A)(f: A => NonEmptyF[Either[A, B]]): NonEmptyF[B] =
     monadInstance.tailRecM(a)(f)
 
-  def foldLeft[A, B](fa: NonEmptyF[A], b: B)(f: (B, A) => B): B =
+  override def foldLeft[A, B](fa: NonEmptyF[A], b: B)(f: (B, A) => B): B =
     traverseInstance.foldLeft(fa, b)(f)
 
-  def foldRight[A, B](fa: NonEmptyF[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+  override def foldRight[A, B](fa: NonEmptyF[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
     traverseInstance.foldRight(fa, lb)(f)
 
   override def foldMap[A, B](fa: NonEmptyF[A])(f: A => B)(implicit B: Monoid[B]): B =

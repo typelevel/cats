@@ -54,7 +54,8 @@ private[cats] trait ComposedFunctorBifunctor[F[_], G[_, _]] extends Bifunctor[λ
     F.map(fab)(G.bimap(_)(f, g))
 }
 
-private[cats] trait ComposedApply[F[_], G[_]] extends Apply[λ[α => F[G[α]]]] with ComposedFunctor[F, G] { outer =>
+private[cats] trait ComposedApply[F[_], G[_]] extends Apply.AbstractApply[λ[α => F[G[α]]]] with ComposedFunctor[F, G] {
+  outer =>
   def F: Apply[F]
   def G: Apply[G]
 
@@ -65,7 +66,7 @@ private[cats] trait ComposedApply[F[_], G[_]] extends Apply[λ[α => F[G[α]]]] 
     F.map2(fga, fgb)(G.product)
 }
 
-private[cats] trait ComposedApplicative[F[_], G[_]] extends Applicative[λ[α => F[G[α]]]] with ComposedApply[F, G] {
+private[cats] trait ComposedApplicative[F[_], G[_]] extends ComposedApply[F, G] with Applicative[λ[α => F[G[α]]]] {
   outer =>
   def F: Applicative[F]
   def G: Applicative[G]
@@ -87,17 +88,17 @@ private[cats] trait ComposedMonoidK[F[_], G[_]] extends MonoidK[λ[α => F[G[α]
 }
 
 private[cats] trait ComposedNonEmptyAlternative[F[_], G[_]]
-    extends NonEmptyAlternative[λ[α => F[G[α]]]]
-    with ComposedApplicative[F, G]
-    with ComposedSemigroupK[F, G] { outer =>
+    extends ComposedApplicative[F, G]
+    with ComposedSemigroupK[F, G]
+    with NonEmptyAlternative[λ[α => F[G[α]]]] { outer =>
 
   def F: NonEmptyAlternative[F]
 }
 
 private[cats] trait ComposedAlternative[F[_], G[_]]
-    extends Alternative[λ[α => F[G[α]]]]
-    with ComposedNonEmptyAlternative[F, G]
-    with ComposedMonoidK[F, G] { outer =>
+    extends ComposedNonEmptyAlternative[F, G]
+    with ComposedMonoidK[F, G]
+    with Alternative[λ[α => F[G[α]]]] { outer =>
 
   def F: Alternative[F]
 
@@ -106,7 +107,7 @@ private[cats] trait ComposedAlternative[F[_], G[_]]
   override def appendK[A](fa: F[G[A]], a: A): F[G[A]] = F.appendK(fa, G.pure(a))
 }
 
-private[cats] trait ComposedFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[α]]]] { outer =>
+private[cats] trait ComposedFoldable[F[_], G[_]] extends Foldable.AbstractFoldable[λ[α => F[G[α]]]] { outer =>
   def F: Foldable[F]
   def G: Foldable[G]
 
@@ -124,9 +125,9 @@ private[cats] trait ComposedFoldable[F[_], G[_]] extends Foldable[λ[α => F[G[�
 }
 
 private[cats] trait ComposedTraverse[F[_], G[_]]
-    extends Traverse[λ[α => F[G[α]]]]
-    with ComposedFoldable[F, G]
-    with ComposedFunctor[F, G] {
+    extends ComposedFoldable[F, G]
+    with ComposedFunctor[F, G]
+    with Traverse[λ[α => F[G[α]]]] {
   def F: Traverse[F]
   def G: Traverse[G]
 
@@ -138,9 +139,9 @@ private[cats] trait ComposedTraverse[F[_], G[_]]
 }
 
 private[cats] trait ComposedNonEmptyTraverse[F[_], G[_]]
-    extends NonEmptyTraverse[λ[α => F[G[α]]]]
+    extends ComposedReducible[F, G]
     with ComposedTraverse[F, G]
-    with ComposedReducible[F, G] {
+    with NonEmptyTraverse[λ[α => F[G[α]]]] {
   def F: NonEmptyTraverse[F]
   def G: NonEmptyTraverse[G]
 
@@ -148,7 +149,7 @@ private[cats] trait ComposedNonEmptyTraverse[F[_], G[_]]
     F.nonEmptyTraverse(fga)(ga => G.nonEmptyTraverse(ga)(f))
 }
 
-private[cats] trait ComposedReducible[F[_], G[_]] extends Reducible[λ[α => F[G[α]]]] with ComposedFoldable[F, G] {
+private[cats] trait ComposedReducible[F[_], G[_]] extends ComposedFoldable[F, G] with Reducible[λ[α => F[G[α]]]] {
   outer =>
   def F: Reducible[F]
   def G: Reducible[G]
