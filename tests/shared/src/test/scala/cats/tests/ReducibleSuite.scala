@@ -94,7 +94,7 @@ sealed trait ReducibleSuiteAdditionalStreamSpecific { self: ReducibleSuiteAdditi
   }
 
   object NES {
-    implicit val nesReducible: Reducible[NES] = new Reducible[NES] {
+    implicit val nesReducible: Reducible[NES] = new Foldable.AbstractFoldable[NES] with Reducible[NES] {
       def foldLeft[A, B](fa: NES[A], b: B)(f: (B, A) => B): B = fa.toStream.foldLeft(b)(f)
       def foldRight[A, B](fa: NES[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
         (fa: @unchecked) match {

@@ -88,7 +88,7 @@ private[instances] trait FunctionInstancesBinCompat0 {
 
 sealed private[instances] trait Function0Instances extends Function0Instances0 {
   implicit val catsStdBimonadForFunction0: Bimonad[Function0] =
-    new Bimonad[Function0] {
+    new FlatMap.AbstractFlatMap[Function0] with Bimonad[Function0] {
       def extract[A](x: () => A): A = x()
 
       def coflatMap[A, B](fa: () => A)(f: (() => A) => B): () => B =
@@ -148,7 +148,7 @@ sealed private[instances] trait Function1Instances extends Function1Instances0 {
     }
 
   implicit def catsStdMonadForFunction1[T1]: Monad[T1 => *] =
-    new Monad[T1 => *] {
+    new FlatMap.AbstractFlatMap[T1 => *] with Monad[T1 => *] {
       def pure[R](r: R): T1 => R = _ => r
 
       def flatMap[R1, R2](fa: T1 => R1)(f: R1 => T1 => R2): T1 => R2 =
