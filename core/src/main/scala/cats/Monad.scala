@@ -162,6 +162,12 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
     tailRecM(branches.toList)(step)
   }
 
+  def whenM[A](cond: F[Boolean])(f: => F[A]): F[Unit] =
+    ifM(cond)(ifTrue = void(f), ifFalse = unit)
+
+  def unlessM[A](cond: F[Boolean])(f: => F[A]): F[Unit] =
+    ifM(cond)(ifTrue = unit, ifFalse = void(f))
+
   /**
    * Modifies the `A` value in `F[A]` with the supplied function, if the function is defined for the value.
    * Example:
