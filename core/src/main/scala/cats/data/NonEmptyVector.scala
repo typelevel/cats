@@ -410,11 +410,15 @@ sealed abstract private[data] class NonEmptyVectorInstances extends NonEmptyVect
     : NonEmptyAlternative[NonEmptyVector] & Bimonad[NonEmptyVector] & NonEmptyTraverse[NonEmptyVector] & Align[
       NonEmptyVector
     ] =
-    new NonEmptyReducible[NonEmptyVector, Vector]
+    new FlatMap.FoldableFlatMap[NonEmptyVector]
+      with NonEmptyReducibleTrait[NonEmptyVector, Vector]
       with NonEmptyAlternative[NonEmptyVector]
       with Bimonad[NonEmptyVector]
       with NonEmptyTraverse[NonEmptyVector]
       with Align[NonEmptyVector] {
+
+      override def G: Foldable[Vector] =
+        cats.instances.vector.catsStdInstancesForVector
 
       def combineK[A](a: NonEmptyVector[A], b: NonEmptyVector[A]): NonEmptyVector[A] =
         a.concatNev(b)
@@ -625,7 +629,7 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
       new ZipNonEmptyVector(nev)
 
     implicit val catsDataCommutativeApplyForZipNonEmptyVector: CommutativeApply[ZipNonEmptyVector] =
-      new CommutativeApply[ZipNonEmptyVector] {
+      new Apply.AbstractApply[ZipNonEmptyVector] with CommutativeApply[ZipNonEmptyVector] {
         def ap[A, B](ff: ZipNonEmptyVector[A => B])(fa: ZipNonEmptyVector[A]): ZipNonEmptyVector[B] =
           ZipNonEmptyVector(ff.value.zipWith(fa.value)(_.apply(_)))
 

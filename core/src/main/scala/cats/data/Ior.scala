@@ -865,7 +865,7 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
   implicit def catsDataSemigroupForIor[A: Semigroup, B: Semigroup]: Semigroup[Ior[A, B]] = _ combine _
 
   implicit def catsDataMonadErrorForIor[A: Semigroup]: MonadError[Ior[A, *], A] =
-    new MonadError[Ior[A, *], A] {
+    new FlatMap.AbstractFlatMap[Ior[A, *]] with MonadError[Ior[A, *], A] {
 
       def raiseError[B](e: A): Ior[A, B] = Ior.left(e)
 
@@ -921,7 +921,7 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
       def parallel: Ior[E, *] ~> Ior[E, *] = identityK
       def sequential: Ior[E, *] ~> Ior[E, *] = identityK
 
-      val applicative: Applicative[Ior[E, *]] = new Applicative[Ior[E, *]] {
+      val applicative: Applicative[Ior[E, *]] = new Apply.AbstractApply[Ior[E, *]] with Applicative[Ior[E, *]] {
         def pure[A](a: A): Ior[E, A] = Ior.right(a)
         def ap[A, B](ff: Ior[E, A => B])(fa: Ior[E, A]): Ior[E, B] =
           fa match {
@@ -954,7 +954,7 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
 sealed abstract private[data] class IorInstances0 {
 
   implicit def catsDataTraverseFunctorForIor[A]: Traverse[Ior[A, *]] =
-    new Traverse[Ior[A, *]] {
+    new Foldable.AbstractFoldable[Ior[A, *]] with Traverse[Ior[A, *]] {
       def traverse[F[_]: Applicative, B, C](fa: A Ior B)(f: B => F[C]): F[A Ior C] =
         fa.traverse(f)
 
