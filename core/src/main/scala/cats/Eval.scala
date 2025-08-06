@@ -390,7 +390,7 @@ object Eval extends EvalInstances {
 sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
 
   implicit val catsBimonadForEval: Bimonad[Eval] & CommutativeMonad[Eval] =
-    new Bimonad[Eval] with StackSafeMonad[Eval] with CommutativeMonad[Eval] {
+    new FlatMap.AbstractFlatMap[Eval] with Bimonad[Eval] with StackSafeMonad[Eval] with CommutativeMonad[Eval] {
       override def map[A, B](fa: Eval[A])(f: A => B): Eval[B] = fa.map(f)
       def pure[A](a: A): Eval[A] = Now(a)
       def flatMap[A, B](fa: Eval[A])(f: A => Eval[B]): Eval[B] = fa.flatMap(f)
@@ -407,7 +407,7 @@ sealed abstract private[cats] class EvalInstances extends EvalInstances0 {
     }
 
   implicit val catsReducibleForEval: Reducible[Eval] =
-    new Reducible[Eval] {
+    new Foldable.AbstractFoldable[Eval] with Reducible[Eval] {
       def foldLeft[A, B](fa: Eval[A], b: B)(f: (B, A) => B): B =
         f(b, fa.value)
       def foldRight[A, B](fa: Eval[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
