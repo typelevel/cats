@@ -32,7 +32,8 @@ object ZipSeq {
 
   def apply[A](value: Seq[A]): ZipSeq[A] = new ZipSeq(value)
 
-  implicit val catsDataCommutativeApplyForZipSeq: CommutativeApply[ZipSeq] = new CommutativeApply[ZipSeq] {
+  implicit val catsDataCommutativeApplyForZipSeq: CommutativeApply[ZipSeq] = new Apply.AbstractApply[ZipSeq]
+    with CommutativeApply[ZipSeq] {
 
     override def map[A, B](fa: ZipSeq[A])(f: (A) => B): ZipSeq[B] =
       ZipSeq(fa.value.map(f))

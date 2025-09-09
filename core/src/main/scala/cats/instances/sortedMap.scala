@@ -50,7 +50,7 @@ trait SortedMapInstances extends SortedMapInstances2 {
 
   implicit def catsStdInstancesForSortedMap[K]
     : Traverse[SortedMap[K, *]] & FlatMap[SortedMap[K, *]] & Align[SortedMap[K, *]] =
-    new Traverse[SortedMap[K, *]] with FlatMap[SortedMap[K, *]] with Align[SortedMap[K, *]] {
+    new FlatMap.FoldableFlatMap[SortedMap[K, *]] with Traverse[SortedMap[K, *]] with Align[SortedMap[K, *]] {
 
       def traverse[G[_], A, B](fa: SortedMap[K, A])(f: A => G[B])(implicit G: Applicative[G]): G[SortedMap[K, B]] = {
         implicit val ordering: Ordering[K] = fa.ordering
