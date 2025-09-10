@@ -607,7 +607,7 @@
         <p>Although in many cases <code>Set</code> can behave as a <code>Functor</code> indeed, there are some edge cases where it doesn&#39;t.
         For example, <code>Set</code> can violate the &quot;covariant composition&quot; law of <code>Functor</code>, which is:</p>
         <pre><code>fa.map(f).map(g) &lt;-&gt; fa.map(f.andThen(g))</code></pre>
-        <p>Since <code>Set</code> in internally based on universal hashing and equality, it violates this law when used with a data type that
+        <p>Since <code>Set</code> is internally based on universal hashing and equality, it violates this law when used with a data type that
         overrides <code>equals</code> and <code>hashCode</code> in a such a way that its instances may appear equal but de-facto contain different
         values. One example of this type is <code>scala.concurrent.duration.Duration</code>:</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="identifier">duration</span><span>.*
