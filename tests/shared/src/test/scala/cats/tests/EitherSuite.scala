@@ -21,19 +21,19 @@
 
 package cats.tests
 
-import cats._
-import cats.data.{EitherT, NonEmptyChain, NonEmptyList, NonEmptySet, NonEmptyVector, Validated}
-import cats.syntax.option._
-import cats.syntax.bifunctor._
+import cats.*
+import cats.data.*
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
+import cats.laws.discipline.*
 import cats.laws.discipline.SemigroupalTests.Isomorphisms
-import cats.syntax.either._
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.bifunctor.*
+import cats.syntax.either.*
+import cats.syntax.eq.*
+import cats.syntax.option.*
+import org.scalacheck.Prop.*
 
 import scala.util.Try
-import cats.syntax.eq._
-import org.scalacheck.Prop._
 
 class EitherSuite extends CatsSuite {
   implicit val iso: Isomorphisms[Either[Int, *]] = Isomorphisms.invariant[Either[Int, *]]
@@ -140,57 +140,33 @@ class EitherSuite extends CatsSuite {
   test("ApplicativeError instance catchNonFatalAs maps exceptions to E") {
     val res =
       ApplicativeError[Either[String, *], String]
-        .catchNonFatalAs[Either[Throwable, *], Int](_.getMessage.some)("foo".toInt)
-        .leftMap(0 -> _.getMessage)
-    assert(res === Right(Left("For input string: \"foo\"")))
-  }
-
-  test("ApplicativeError instance catchNonFatalAs raises unmappable exceptions in G") {
-    val res =
-      ApplicativeError[Either[String, *], String]
-        .catchNonFatalAs[Either[Throwable, *], Int](_ => none[String])("foo".toInt)
-        .leftMap(0 -> _.getMessage)
-    assert(res === Left(0 -> "For input string: \"foo\""))
-  }
-
-  test("ApplicativeError instance catchNonFatalAsUnsafe maps exceptions to E") {
-    val res = ApplicativeError[Either[String, *], String].catchNonFatalAsUnsafe(_.getMessage.some)("foo".toInt)
+        .catchNonFatalAs(_.getMessage)("foo".toInt)
     assert(res === Left("For input string: \"foo\""))
   }
 
-  test("ApplicativeError instance catchNonFatalAsUnsafe rethrows unmappable exceptions") {
-    val _ = intercept[NumberFormatException] {
-      ApplicativeError[Either[String, *], String].catchNonFatalAsUnsafe(_ => none[String])("foo".toInt)
-    }
+  test("ApplicativeError instance catchNonFatalAs maps exceptions to E") {
+    val res = ApplicativeError[Either[String, *], String].catchNonFatalAs(_.getMessage)("foo".toInt)
+    assert(res === Left("For input string: \"foo\""))
   }
 
   test("ApplicativeError instance catchOnlyAs maps exceptions of the specified type to E") {
     val res =
       ApplicativeError[Either[String, *], String]
-        .catchOnlyAs[Either[Throwable, *], NumberFormatException](_.getMessage)("foo".toInt)
-        .leftMap(0 -> _.getMessage)
-    assert(res === Right(Left("For input string: \"foo\"")))
-  }
-
-  test("ApplicativeError instance catchOnlyAs raises non-matching exceptions in G") {
-    val res =
-      ApplicativeError[Either[String, *], String]
-        .catchOnlyAs[Either[Throwable, *], IndexOutOfBoundsException](_.getMessage)("foo".toInt)
-        .leftMap(0 -> _.getMessage)
-    assert(res === Left(0 -> "For input string: \"foo\""))
+        .catchOnlyAs[NumberFormatException](_.getMessage)("foo".toInt)
+    assert(res === Left("For input string: \"foo\""))
   }
 
   test("ApplicativeError instance catchOnlyAsUnsafe maps exceptions of the specified type to E") {
     val res =
       ApplicativeError[Either[String, *], String]
-        .catchOnlyAsUnsafe[NumberFormatException](_.getMessage)("foo".toInt)
+        .catchOnlyAs[NumberFormatException](_.getMessage)("foo".toInt)
     assert(res === Left("For input string: \"foo\""))
   }
 
   test("ApplicativeError instance catchOnlyAsUnsafe propagates non-matching exceptions") {
     val _ = intercept[NumberFormatException] {
       ApplicativeError[Either[String, *], String]
-        .catchOnlyAsUnsafe[IndexOutOfBoundsException](_.getMessage)("foo".toInt)
+        .catchOnlyAs[IndexOutOfBoundsException](_.getMessage)("foo".toInt)
     }
   }
 
@@ -487,8 +463,8 @@ class EitherSuite extends CatsSuite {
 final class EitherInstancesSuite extends munit.FunSuite {
 
   test("parallel instance in cats.instances.either") {
-    import cats.instances.either._
-    import cats.syntax.parallel._
+    import cats.instances.either.*
+    import cats.syntax.parallel.*
 
     def either: Either[String, Int] = Left("Test")
     (either, either).parTupled

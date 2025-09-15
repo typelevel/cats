@@ -25,13 +25,16 @@ import cats.{CoflatMap, Eval, Later, Monad, MonadThrow, Semigroupal, Traverse}
 import cats.kernel.{Eq, Monoid, Semigroup}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
-import cats.laws.discipline._
-import cats.laws.discipline.arbitrary._
-import cats.syntax.apply._
-import cats.syntax.show._
+import cats.laws.discipline.*
+import cats.laws.discipline.arbitrary.*
+import cats.syntax.either.*
+import cats.syntax.apply.*
+import cats.syntax.show.*
+
 import scala.util.{Success, Try}
-import cats.syntax.eq._
-import org.scalacheck.Prop._
+import cats.syntax.eq.*
+import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Prop.*
 
 class TrySuite extends CatsSuite {
   implicit val eqThrow: Eq[Throwable] = Eq.allEqual
@@ -103,18 +106,40 @@ class TrySuite extends CatsSuite {
     }
   }
 
-  test("catchOnlySafe works") {
-    forAll { (e: Either[String, Int]) =>
+  test("catchOnlyAs works") {
+    forAll(Gen.either(Gen.alphaStr, Arbitrary.arbitrary[Int])) { (e: Either[String, Int]) =>
       val str = e.fold(identity, _.toString)
-      val res = MonadThrow[Try].catchOnlySafe[Try, NumberFormatException](str.toInt)
-      // the above should never raise an exception in the outer try
-      assertEquals(res.toEither.map(_.isSuccess), Right(e.isRight), clue(res))
+      val res =
+        MonadThrow[Try]
+          .catchOnlyAs[NumberFormatException](new IllegalArgumentException("Bad Number", _))(str.toInt)
+          .toEither
+
+      assertEquals(
+        res.leftMap { t =>
+          // Shenanigans because Throwable doesn't have a well-behaved equals
+          (t.getClass.getCanonicalName, t.getMessage, Option(t.getCause).map(_.getClass.getCanonicalName))
+        },
+        e.leftMap { _ =>
+          (
+            "java.lang.IllegalArgumentException",
+            "Bad Number",
+            Some("java.lang.NumberFormatException")
+          )
+        },
+        clues(res)
+      )
     }
   }
 
-  test("catchOnlySafe only raise the specified type in Try") {
-    val res = MonadThrow[Try].catchOnlySafe[Try, UnsupportedOperationException]("str".toInt)
-    assert(res.isFailure, clue(res))
+  test("catchOnlyAs catches only a specified type") {
+    val res =
+      Either
+        .catchNonFatal {
+          MonadThrow[Try]
+            .catchOnlyAs[UnsupportedOperationException](new IllegalArgumentException("Bad Number", _))("str".toInt)
+            .toEither
+        }
+    assertEquals(res.leftMap(_.getClass.getCanonicalName), Left("java.lang.NumberFormatException"), clues(res))
   }
 
   test("fromTry works") {
