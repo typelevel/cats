@@ -21,11 +21,10 @@
 
 package cats.free
 
-import cats.{Applicative, Eq, Eval, Functor, Show, Traverse}
+import cats.{Applicative, Eq, Eval, Foldable, Functor, Show, Traverse}
 import cats.kernel.laws.discipline.{EqTests, HashTests, PartialOrderTests}
 import cats.syntax.all.*
 import cats.tests.CatsSuite
-
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 
 // this functionality doesn't exist on Scala 2.12
@@ -70,7 +69,7 @@ object FreeStructuralSuite {
     }
 
     implicit def traverse: Traverse[ExprF] =
-      new Traverse[ExprF] {
+      new Foldable.AbstractFoldable[ExprF] with Traverse[ExprF] {
 
         def foldLeft[A, B](fa: ExprF[A], b: B)(f: (B, A) => B): B =
           fa match {
