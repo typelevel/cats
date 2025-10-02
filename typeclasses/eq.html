@@ -230,7 +230,9 @@
         The Scala compiler may warn us in some cases, but not all, which can lead to some weird bugs.
         For example this code will raise a warning at compile time:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="number-literal">42</span><span> == </span><span class="string-literal">&quot;Hello&quot;</span><span>
-</span><span class="comment">//</span></code></pre>
+</span><span class="comment">// warning: comparing values of types Int and String using `==` will always yield false
+// 42 == &quot;Hello&quot;
+// ^^^^^^^^^^^^^</span></code></pre>
         <p>While this code will compile without a hitch:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="string-literal">&quot;Hello&quot;</span><span> == </span><span class="number-literal">42</span><span>
 </span><span class="comment">// res1: Boolean = false</span></code></pre>
@@ -257,7 +259,7 @@
 
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">eqFoo</span><span>: </span><span class="type-name">Eq</span><span>[</span><span class="type-name">Foo</span><span>] = </span><span class="type-name">Eq</span><span>.</span><span class="identifier">fromUniversalEquals</span><span>
-</span><span class="comment">// eqFoo: Eq[Foo] = cats.kernel.Eq$$anonfun$fromUniversalEquals$2@cbc109e
+</span><span class="comment">// eqFoo: Eq[Foo] = cats.kernel.Eq$$anonfun$fromUniversalEquals$2@318fd084
 </span><span>
 
 </span><span class="type-name">Foo</span><span>(</span><span class="number-literal">10</span><span>, </span><span class="string-literal">&quot;&quot;</span><span>) === </span><span class="type-name">Foo</span><span>(</span><span class="number-literal">10</span><span>, </span><span class="string-literal">&quot;&quot;</span><span>)
