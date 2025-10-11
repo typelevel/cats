@@ -30,20 +30,6 @@ package data
  *
  * For more information, see the [[http://typelevel.org/cats/datatypes/optiont.html documentation]].
  */
- /**
- * OptionT is a wrapper for computations of type F[Option[A]].
- *
- * Example:
- * {{{
- * import cats.data.OptionT
- * import cats.implicits._
- *
- * val result = OptionT(List(Option(1), None, Option(3)))
- * result.map(_ + 1)
- * // res0: cats.data.OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
- * }}}
- */
-
 final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   def fold[B](default: => B)(f: A => B)(implicit F: Functor[F]): F[B] =
