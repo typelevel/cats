@@ -41,6 +41,18 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
     flatMap(fa)(a => if (predicate(a)) pure(a) else raiseError(error(a)))
 
   /**
+   * Ensures that a `F[Boolean]` is `true`, otherwise raises an error.
+   */
+  def ensureTrue(fa: F[Boolean])(error: => E): F[Boolean] =
+    ensure(fa)(error)(identity)
+
+  /**
+   * Ensures that a `F[Boolean]` is `false`, otherwise raises an error.
+   */
+  def ensureFalse(fa: F[Boolean])(error: => E): F[Boolean] =
+    ensure(fa)(error)(bool => !bool)
+
+  /**
    * Inverse of `attempt`
    *
    * Example:
