@@ -19,12 +19,6 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package cats.kernel
-package instances
+package cats.kernel.laws
 
-package object all
-    extends AllInstances
-    with AllInstancesBinCompat0
-    with AllInstancesBinCompat1
-    with AllInstancesBinCompat2
-    with AllInstancesBinCompat3
+private[cats] object scalaVersionSpecific
