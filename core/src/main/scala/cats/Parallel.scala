@@ -100,7 +100,7 @@ trait Parallel[M[_]] extends NonEmptyParallel[M] {
    * then you can get `ApplicativeError[F, E]` from `MonadError[M, E]`.
    */
   def applicativeError[E](implicit E: MonadError[M, E]): ApplicativeError[F, E] =
-    new ApplicativeError[F, E] {
+    new Apply.AbstractApply[F] with ApplicativeError[F, E] {
 
       def raiseError[A](e: E): F[A] =
         parallel(MonadError[M, E].raiseError(e))

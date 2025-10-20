@@ -310,7 +310,7 @@ sealed private[data] trait Tuple2KContravariantMonoidal[F[_], G[_]]
 }
 
 sealed private[data] trait Tuple2KApply[F[_], G[_]]
-    extends Apply[λ[α => Tuple2K[F, G, α]]]
+    extends Apply.AbstractApply[λ[α => Tuple2K[F, G, α]]]
     with Tuple2KFunctor[F, G]
     with Tuple2KSemigroupal[F, G] {
   def F: Apply[F]
@@ -329,8 +329,8 @@ sealed private[data] trait Tuple2KApply[F[_], G[_]]
 }
 
 sealed private[data] trait Tuple2KApplicative[F[_], G[_]]
-    extends Applicative[λ[α => Tuple2K[F, G, α]]]
-    with Tuple2KApply[F, G] {
+    extends Tuple2KApply[F, G]
+    with Applicative[λ[α => Tuple2K[F, G, α]]] {
   def F: Applicative[F]
   def G: Applicative[G]
   def pure[A](a: A): Tuple2K[F, G, A] = Tuple2K(F.pure(a), G.pure(a))
@@ -353,16 +353,17 @@ sealed private[data] trait Tuple2KMonoidK[F[_], G[_]]
 }
 
 sealed private[data] trait Tuple2KAlternative[F[_], G[_]]
-    extends Alternative[λ[α => Tuple2K[F, G, α]]]
-    with Tuple2KApplicative[F, G]
-    with Tuple2KMonoidK[F, G] {
+    extends Tuple2KApplicative[F, G]
+    with Tuple2KMonoidK[F, G]
+    with Alternative[λ[α => Tuple2K[F, G, α]]] {
   def F: Alternative[F]
   def G: Alternative[G]
 }
 
 sealed private[data] trait Tuple2KMonad[F[_], G[_]]
-    extends Monad[λ[α => Tuple2K[F, G, α]]]
-    with Tuple2KApplicative[F, G] {
+    extends FlatMap.AbstractFlatMap[λ[α => Tuple2K[F, G, α]]]
+    with Tuple2KApplicative[F, G]
+    with Monad[λ[α => Tuple2K[F, G, α]]] {
   def F: Monad[F]
   def G: Monad[G]
   override def pure[A](a: A): Tuple2K[F, G, A] =
@@ -375,7 +376,7 @@ sealed private[data] trait Tuple2KMonad[F[_], G[_]]
     Tuple2K(F.tailRecM(a)(f(_).first), G.tailRecM(a)(f(_).second))
 }
 
-sealed private[data] trait Tuple2KFoldable[F[_], G[_]] extends Foldable[λ[α => Tuple2K[F, G, α]]] {
+sealed private[data] trait Tuple2KFoldable[F[_], G[_]] extends Foldable.AbstractFoldable[λ[α => Tuple2K[F, G, α]]] {
   def F: Foldable[F]
   def G: Foldable[G]
 
@@ -387,8 +388,8 @@ sealed private[data] trait Tuple2KFoldable[F[_], G[_]] extends Foldable[λ[α =>
 }
 
 sealed private[data] trait Tuple2KTraverse[F[_], G[_]]
-    extends Traverse[λ[α => Tuple2K[F, G, α]]]
-    with Tuple2KFoldable[F, G] {
+    extends Tuple2KFoldable[F, G]
+    with Traverse[λ[α => Tuple2K[F, G, α]]] {
   def F: Traverse[F]
   def G: Traverse[G]
 
