@@ -28,12 +28,35 @@ import cats.arrow.*
  * The dual category of some other category, `Arr`.
  */
 final case class Op[Arr[_, _], A, B](run: Arr[B, A]) {
+
+  /**
+   * Compose two `Op` values. Note that composition order is reversed compared to `Arr`.
+   *
+   * Example:
+   * {{{
+   * import cats._
+   * import cats.data._
+   *
+   * val f: Int => String = _.toString
+   * val g: String => Int = _.length
+   *
+   * val opF = Op(f)
+   * val opG = Op(g)
+   *
+   * val composed = opF.compose(opG)
+   * // composed: cats.data.Op[Function1, Int, Int]
+   *
+   * composed.run(1234)
+   * // res0: Int = 4
+   * }}}
+   */
   def compose[Z](op: Op[Arr, Z, A])(implicit Arr: Compose[Arr]): Op[Arr, Z, B] =
     Op(Arr.compose(op.run, run))
 
   def eqv(op: Op[Arr, A, B])(implicit Arr: Eq[Arr[B, A]]): Boolean =
     Arr.eqv(run, op.run)
 }
+
 
 object Op extends OpInstances
 
