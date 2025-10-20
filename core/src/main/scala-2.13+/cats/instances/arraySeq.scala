@@ -247,5 +247,10 @@ private[cats] object ArraySeqInstances {
         fa.foldRight(Eval.now(G.pure(ArraySeq.untagged.empty[A]))) { case (x, xse) =>
           G.map2Eval(f(x), xse)((b, vec) => if (b) x +: vec else vec)
         }.value
+
+      override def mapAccumulateFilter[S, A, B](init: S, fa: ArraySeq[A])(
+        f: (S, A) => (S, Option[B])
+      ): (S, ArraySeq[B]) =
+        StaticMethods.mapAccumulateFilterFromStrictFunctorFilter(init, fa, f)(this)
     }
 }
