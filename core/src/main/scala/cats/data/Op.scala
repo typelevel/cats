@@ -22,7 +22,7 @@
 package cats.data
 
 import cats.kernel.Eq
-import cats.arrow.Compose
+import cats.arrow.{Category, Compose}
 
 /**
  * The `Op` class represents the dual of a morphism in category theory.
