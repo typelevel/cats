@@ -17,44 +17,41 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+  */
 
-package cats.data
+package cats
+package data
 
+import cats.arrow.*
 import cats.kernel.Eq
-import cats.arrow.{Category, Compose}
+import cats.arrow.Compose
 
 /**
- * The `Op` class represents the dual of a morphism in category theory.
+ * The dual category of some other category, `Arr`.
  *
- * In a normal category, arrows (or morphisms) have a direction `A => B`. 
- * The dual category reverses these arrows, making them `B => A`. 
- * The `Op` type is a simple wrapper that provides this “reversed” view.
+ * In a normal category, `Arr` has a direction `A => B`.
+ * The dual category reverses the direction, making it `B => A`.
  *
- * Practically, `Op` can be useful when you want to reason about or define
+ * The dual category can be useful when you want to reason about or define
  * operations in terms of their duals without modifying the original category.
- * For example, when you have an existing `Compose` instance for a category,
- * `Op` allows you to flip the composition order and explore properties of
- * the dual structure.
- *
- * While `Compose` already defines both `compose` and `andThen` (and the `<<<` / `>>>` operators),
- * `Op` exists as a separate abstraction to explicitly capture and work with
- * the *dual category* concept in functional programming.
+ * In other words, the dual category provides a "reversed" view to the original category.
  *
  * Example:
  * {{{
- * import cats._
- * import cats.data._
+ * import cats.arrow.Compose
+ * import cats.data.Op
+ * import cats.syntax.all.*
  *
- * val f: Int => String = _.toString
- * val g: String => Double = _.length.toDouble
+ * val f: String => String = a => s"f($a)"
+ * val g: String => String = b => s"g($b)"
  *
- * val opF = Op(f)
- * val opG = Op(g)
+ * // `>>>` is an alias for `andThen`
+ * (f >>> g)("a")
+ * // res0: String = g(f(a))
  *
- * // Composition in Op reverses direction
- * val composed = opF.compose(opG) // equivalent to g andThen f
- * composed.run(1234) // 4.0
+ * // `Op` reverses the composition
+ * (Op(f) >>> Op(g)).run("a")
+ * // res1: String = f(g(a))
  * }}}
  */
 final case class Op[Arr[_, _], A, B](run: Arr[B, A]) {
