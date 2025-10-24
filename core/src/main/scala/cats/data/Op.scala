@@ -23,8 +23,6 @@ package cats
 package data
 
 import cats.arrow.*
-import cats.kernel.Eq
-import cats.arrow.Compose
 
 /**
  * The dual category of some other category, `Arr`.
