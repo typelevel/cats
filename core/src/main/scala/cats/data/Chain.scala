@@ -600,7 +600,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
    */
   final def zipWithIndex: Chain[(A, Int)] =
     this match {
-      case Singleton(a) => Singleton((a, 0))
+      case Singleton(a)     => Singleton((a, 0))
       case a @ Append(_, _) =>
         Wrap(a.iterator.zipWithIndex.toVector)
       case Wrap(seq) => Wrap(seq.zipWithIndex)
@@ -724,7 +724,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
     @annotation.tailrec
     def loop[B <: A](h: Chain.NonEmpty[B], tail: List[Chain.NonEmpty[B]], acc: Chain[A]): Chain[A] =
       h match {
-        case Append(l, r) => loop(l, r :: tail, acc)
+        case Append(l, r)        => loop(l, r :: tail, acc)
         case sing @ Singleton(_) =>
           val nextAcc = sing.concat(acc)
           tail match {
@@ -1450,7 +1450,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       override def traverseVoid[G[_], A, B](fa: Chain[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
         G match {
           case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa.iterator)(f)(x)
-          case _ =>
+          case _                    =>
             @tailrec
             def go(fa: NonEmpty[A], rhs: Chain[A], acc: G[Unit]): G[Unit] =
               fa match {
@@ -1460,21 +1460,21 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
                   val va = Foldable[collection.immutable.Seq].traverseVoid(as)(f)
                   val acc1 = G.productL(acc)(va)
                   rhs match {
-                    case Empty => acc1
+                    case Empty           => acc1
                     case ne: NonEmpty[A] =>
                       go(ne, Empty, acc1)
                   }
                 case Singleton(a) =>
                   val acc1 = G.productL(acc)(f(a))
                   rhs match {
-                    case Empty => acc1
+                    case Empty           => acc1
                     case ne: NonEmpty[A] =>
                       go(ne, Empty, acc1)
                   }
               }
 
             fa match {
-              case Empty => G.unit
+              case Empty           => G.unit
               case ne: NonEmpty[A] =>
                 go(ne, Empty, G.unit)
             }

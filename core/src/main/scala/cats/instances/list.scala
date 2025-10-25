@@ -123,7 +123,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         else
           G match {
             case x: StackSafeMonad[G] => x.map(Traverse.traverseDirectly[G, A, B](fa)(f)(x))(_.toList)
-            case _ =>
+            case _                    =>
               G.map(Chain.traverseViaChain {
                 val as = collection.mutable.ArrayBuffer[A]()
                 as ++= fa
@@ -216,7 +216,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       @tailrec
       override def get[A](fa: List[A])(idx: Long): Option[A] =
         fa match {
-          case Nil => None
+          case Nil       => None
           case h :: tail =>
             if (idx < 0) None
             else if (idx == 0) Some(h)
@@ -234,7 +234,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def foldM[G[_], A, B](fa: List[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
         def step(in: (List[A], B)): G[Either[(List[A], B), B]] =
           in match {
-            case (Nil, b) => G.pure(Right(b))
+            case (Nil, b)       => G.pure(Right(b))
             case (a :: tail, b) =>
               G.map(f(b, a)) { bnext =>
                 Left((tail, bnext))
@@ -321,7 +321,7 @@ private[instances] trait ListInstancesBinCompat0 {
       else
         G match {
           case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(_.toList)
-          case _ =>
+          case _                    =>
             G.map(Chain.traverseFilterViaChain {
               val as = collection.mutable.ArrayBuffer[A]()
               as ++= fa

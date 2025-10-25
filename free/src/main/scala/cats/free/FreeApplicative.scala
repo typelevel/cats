@@ -53,7 +53,7 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
   final def map2[B, C](fb: FA[F, B])(f: (A, B) => C): FA[F, C] =
     this match {
       case Pure(a) => fb.map(f(a, _))
-      case _ =>
+      case _       =>
         fb match {
           case Pure(b) => Ap(Pure(f(_: A, b)), this)
           case _       => Ap(Ap(Pure((a: A) => (b: B) => f(a, b)), this), fb)

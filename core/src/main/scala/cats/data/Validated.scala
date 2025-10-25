@@ -235,7 +235,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def findValid[EE >: E, AA >: A](that: => Validated[EE, AA])(implicit EE: Semigroup[EE]): Validated[EE, AA] =
     this match {
       case v @ Valid(_) => v
-      case Invalid(e) =>
+      case Invalid(e)   =>
         that match {
           case v @ Valid(_) => v
           case Invalid(ee)  => Invalid(EE.combine(e, ee))
@@ -885,7 +885,7 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
       def combineK[B](x: Validated[A, B], y: Validated[A, B]): Validated[A, B] =
         x match {
           case v @ Valid(_) => v
-          case Invalid(ix) =>
+          case Invalid(ix)  =>
             y match {
               case Invalid(iy)  => Invalid(A.combine(ix, iy))
               case v @ Valid(_) => v

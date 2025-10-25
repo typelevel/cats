@@ -95,7 +95,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         @tailrec
         def loop(): Unit =
           state match {
-            case Nil => ()
+            case Nil                    => ()
             case h :: tail if h.isEmpty =>
               state = tail
               loop()
@@ -272,7 +272,7 @@ private[instances] trait VectorInstancesBinCompat0 {
     def traverseFilter[G[_], A, B](fa: Vector[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
       G match {
         case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(_.toVector)
-        case _ =>
+        case _                    =>
           G.map(Chain.traverseFilterViaChain(fa)(f))(_.toVector)
       }
 

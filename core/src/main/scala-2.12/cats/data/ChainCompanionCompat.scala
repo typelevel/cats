@@ -58,7 +58,7 @@ private[data] trait ChainCompanionCompat {
     xs match {
       case s: immutable.Seq[A] => fromImmutableSeq(s) // pay O(1) not O(N) cost
       case s: Seq[A]           => fromMutableSeq(s)
-      case notSeq =>
+      case notSeq              =>
         fromImmutableSeq(notSeq.toVector) // toSeq could return a Stream, creating potential race conditions
     }
 }

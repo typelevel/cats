@@ -802,11 +802,11 @@ sealed abstract class Ior[+A, +B] extends Product with Serializable {
 
   final def compare[AA >: A, BB >: B](that: AA Ior BB)(implicit AA: Order[AA], BB: Order[BB]): Int =
     (this, that) match {
-      case (Ior.Left(a1), Ior.Left(a2))   => AA.compare(a1, a2)
-      case (Ior.Left(_), _)               => -1
-      case (Ior.Right(b1), Ior.Right(b2)) => BB.compare(b1, b2)
-      case (Ior.Right(_), Ior.Left(_))    => 1
-      case (Ior.Right(_), Ior.Both(_, _)) => -1
+      case (Ior.Left(a1), Ior.Left(a2))         => AA.compare(a1, a2)
+      case (Ior.Left(_), _)                     => -1
+      case (Ior.Right(b1), Ior.Right(b2))       => BB.compare(b1, b2)
+      case (Ior.Right(_), Ior.Left(_))          => 1
+      case (Ior.Right(_), Ior.Both(_, _))       => -1
       case (Ior.Both(a1, b1), Ior.Both(a2, b2)) => {
         val r = AA.compare(a1, a2)
         if (r == 0) BB.compare(b1, b2) else r
@@ -891,7 +891,7 @@ sealed abstract private[data] class IorInstances extends IorInstances0 {
             case Ior.Right(Right(c))   => Ior.right(c)
             case Ior.Both(a, Right(c)) => Ior.both(a, c)
             case Ior.Right(Left(b))    => loop(fn(b))
-            case Ior.Both(a, Left(b)) =>
+            case Ior.Both(a, Left(b))  =>
               fn(b) match {
                 case Ior.Left(aa)    => Ior.left(Semigroup[A].combine(a, aa))
                 case Ior.Both(aa, x) => loop(Ior.both(Semigroup[A].combine(a, aa), x))
@@ -961,7 +961,7 @@ sealed abstract private[data] class IorInstances0 {
       override def mapAccumulate[S, B, C](init: S, fa: Ior[A, B])(f: (S, B) => (S, C)): (S, Ior[A, C]) =
         fa match {
           case l @ Ior.Left(_) => (init, l)
-          case Ior.Right(b) =>
+          case Ior.Right(b)    =>
             val (snext, c) = f(init, b)
             (snext, Ior.Right(c))
           case Ior.Both(a, b) =>

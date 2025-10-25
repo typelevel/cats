@@ -55,7 +55,7 @@ class ListOrder[A](implicit ev: Order[A]) extends Order[List[A]] {
           if (ys.isEmpty) 0 else -1
         case x :: xs =>
           ys match {
-            case Nil => 1
+            case Nil     => 1
             case y :: ys =>
               val n = ev.compare(x, y)
               if (n != 0) n else loop(xs, ys)
@@ -73,7 +73,7 @@ class ListPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[Lis
           if (ys.isEmpty) 0.0 else -1.0
         case x :: xs =>
           ys match {
-            case Nil => 1.0
+            case Nil     => 1.0
             case y :: ys =>
               val n = ev.partialCompare(x, y)
               if (n != 0.0) n else loop(xs, ys)

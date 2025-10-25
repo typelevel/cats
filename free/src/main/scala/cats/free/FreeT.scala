@@ -125,7 +125,7 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
   def resume(implicit S: Functor[S], M: Monad[M]): M[Either[S[FreeT[S, M, A]], A]] = {
     def go(ft: FreeT[S, M, A]): M[Either[FreeT[S, M, A], Either[S[FreeT[S, M, A]], A]]] =
       ft match {
-        case Suspend(f) => M.map(f)(as => Right(as.left.map(S.map(_)(pure(_)))))
+        case Suspend(f)            => M.map(f)(as => Right(as.left.map(S.map(_)(pure(_)))))
         case g1 @ FlatMapped(_, _) =>
           g1.a match {
             case Suspend(m1) =>

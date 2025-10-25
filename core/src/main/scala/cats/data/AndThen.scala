@@ -110,7 +110,7 @@ sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Seriali
     // technique implemented for `cats.effect.IO#map`
     g match {
       case atg: AndThen[A, T] => AndThen.andThen(atg, this)
-      case _ =>
+      case _                  =>
         this match {
           case Single(f, index) if index < fusionMaxStackDepth =>
             Single(f.compose(g), index + 1)
