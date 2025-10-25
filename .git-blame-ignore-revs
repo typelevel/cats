@@ -21,3 +21,6 @@ b4d207e9fa9f1463f0827fe20101e7901fecf820
 
 # Fix errors under Scala 3.6.3
 fab4479a6b2975e5243565671a3a33a24469662d
+
+# Scala Steward: Reformat with scalafmt 3.9.10
+cdc7d21b5cca65d410b89d480b3ccf19594946c1

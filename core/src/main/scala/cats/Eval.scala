@@ -313,7 +313,7 @@ object Eval extends EvalInstances {
     def value: A =
       result match {
         case Some(a) => a
-        case None =>
+        case None    =>
           val a = evaluate(this)
           result = Some(a)
           a

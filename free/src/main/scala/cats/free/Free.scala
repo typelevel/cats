@@ -84,8 +84,8 @@ sealed abstract class Free[S[_], A] extends Product with Serializable with FreeF
   @tailrec
   final def resume(implicit S: Functor[S]): Either[S[Free[S, A]], A] =
     this match {
-      case Pure(a)    => Right(a)
-      case Suspend(t) => Left(S.map(t)(Pure(_)))
+      case Pure(a)          => Right(a)
+      case Suspend(t)       => Left(S.map(t)(Pure(_)))
       case FlatMapped(c, f) =>
         c match {
           case Pure(a)          => f(a).resume

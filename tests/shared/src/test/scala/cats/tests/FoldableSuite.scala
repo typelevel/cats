@@ -451,7 +451,7 @@ class FoldableSuiteAdditional
 
     // foldMapM should short-circuit and not call the function when not necessary
     val f = (_: String) match {
-      case "Calvin" => None
+      case "Calvin"  => None
       case "Deirdra" =>
         assert(false)
         None

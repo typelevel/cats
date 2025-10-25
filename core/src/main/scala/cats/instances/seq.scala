@@ -96,7 +96,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
         @tailrec
         def loop(): Unit =
           state match {
-            case Nil => ()
+            case Nil                    => ()
             case h :: tail if h.isEmpty =>
               state = tail
               loop()
@@ -136,7 +136,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
       override def traverseVoid[G[_], A, B](fa: Seq[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
         G match {
           case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa)(f)(x)
-          case _ =>
+          case _                    =>
             foldRight(fa, Eval.now(G.unit)) { (a, acc) =>
               G.map2Eval(f(a), acc) { (_, _) =>
                 ()
@@ -210,7 +210,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
     def traverseFilter[G[_], A, B](fa: Seq[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Seq[B]] =
       G match {
         case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(_.toVector)
-        case _ =>
+        case _                    =>
           G.map(Chain.traverseFilterViaChain(fa.toIndexedSeq)(f))(_.toVector)
       }
 

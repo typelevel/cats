@@ -125,7 +125,7 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       override def map2Eval[A, B, Z](fa: Option[A], fb: Eval[Option[B]])(f: (A, B) => Z): Eval[Option[Z]] =
         fa match {
-          case None => Now(None)
+          case None    => Now(None)
           case Some(a) =>
             fb.map {
               case Some(b) => Some(f(a, b))

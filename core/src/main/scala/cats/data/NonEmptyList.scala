@@ -321,7 +321,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     val buf = ListBuffer.empty[B]
     @tailrec def consume(as: List[A]): List[B] =
       as match {
-        case Nil => buf.toList
+        case Nil     => buf.toList
         case a :: as =>
           buf += f(NonEmptyList(a, as))
           consume(as)

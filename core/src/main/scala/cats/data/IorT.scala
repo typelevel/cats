@@ -118,7 +118,7 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
     IorT(F.flatMap(value) {
       case Ior.Left(a)      => f(a).value
       case r @ Ior.Right(_) => F.pure(r.asInstanceOf[Ior[C, BB]])
-      case Ior.Both(a, b) =>
+      case Ior.Both(a, b)   =>
         F.map(f(a).value) {
           case Ior.Left(c)     => Ior.Both(c, b)
           case Ior.Right(b1)   => Ior.Right(BB.combine(b, b1))
@@ -142,7 +142,7 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
     IorT(F.flatMap(value) {
       case l @ Ior.Left(_) => F.pure(l.asInstanceOf[Ior[AA, D]])
       case Ior.Right(b)    => f(b).value
-      case Ior.Both(a, b) =>
+      case Ior.Both(a, b)  =>
         F.map(f(b).value) {
           case Ior.Left(a1)    => Ior.Left(AA.combine(a, a1))
           case Ior.Right(d)    => Ior.Both(a, d)
