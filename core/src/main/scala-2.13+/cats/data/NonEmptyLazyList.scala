@@ -516,8 +516,6 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
     new AbstractNonEmptyInstances[LazyList, NonEmptyLazyList] with Align[NonEmptyLazyList] {
       def extract[A](fa: NonEmptyLazyList[A]): A = fa.head
 
-      override def split[A](fa: NonEmptyLazyList[A]): (A, LazyList[A]) = (fa.head, fa.tail)
-
       def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyLazyList[A])(f: A => G[B]): G[NonEmptyLazyList[B]] = {
         def loop(head: A, tail: LazyList[A]): Eval[G[NonEmptyLazyList[B]]] =
           tail.headOption.fold(Eval.now(Apply[G].map(f(head))(NonEmptyLazyList(_)))) { h =>

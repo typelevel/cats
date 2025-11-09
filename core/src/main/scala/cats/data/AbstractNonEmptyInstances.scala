@@ -28,16 +28,14 @@ abstract private[data] class AbstractNonEmptyInstances[F[_], NonEmptyF[_]](impli
   TF: Traverse[F],
   SF: Alternative[F]
 ) extends FlatMap.FoldableFlatMap[NonEmptyF]
-    with NonEmptyReducibleTrait[NonEmptyF, F]
     with Bimonad[NonEmptyF]
     with NonEmptyTraverse[NonEmptyF]
     with NonEmptyAlternative[NonEmptyF] {
 
-  override def G: Foldable[F] = TF
-  val monadInstance = MF.asInstanceOf[Monad[NonEmptyF]]
-  val coflatMapInstance = CF.asInstanceOf[CoflatMap[NonEmptyF]]
-  val traverseInstance = Traverse[F].asInstanceOf[Traverse[NonEmptyF]]
-  val alternativeInstance = Alternative[F].asInstanceOf[Alternative[NonEmptyF]]
+  private[this] val monadInstance = MF.asInstanceOf[Monad[NonEmptyF]]
+  private[this] val coflatMapInstance = CF.asInstanceOf[CoflatMap[NonEmptyF]]
+  private[this] val traverseInstance = Traverse[F].asInstanceOf[Traverse[NonEmptyF]]
+  private[this] val alternativeInstance = Alternative[F].asInstanceOf[Alternative[NonEmptyF]]
 
   def combineK[A](a: NonEmptyF[A], b: NonEmptyF[A]): NonEmptyF[A] =
     alternativeInstance.combineK(a, b)
