@@ -637,8 +637,6 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
     new AbstractNonEmptyInstances[Chain, NonEmptyChain] with Align[NonEmptyChain] {
       def extract[A](fa: NonEmptyChain[A]): A = fa.head
 
-      override def split[A](fa: NonEmptyChain[A]): (A, Chain[A]) = (fa.head, fa.tail)
-
       def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyChain[A])(f: A => G[B]): G[NonEmptyChain[B]] = {
         def loop(head: A, tail: Chain[A]): Eval[G[NonEmptyChain[B]]] =
           tail.uncons.fold(Eval.now(Apply[G].map(f(head))(NonEmptyChain(_)))) { case (h, t) =>
