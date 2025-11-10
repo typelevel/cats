@@ -34,11 +34,10 @@ import cats.data.NonEmptyList
  * This class is only a helper, does not define a typeclass and should not be used outside of Cats.
  * Also see the discussion: PR #3541 and issue #3069.
  */
-abstract class NonEmptyReducible[F[_], G[_]](implicit foldable: Foldable[G])
-    extends Foldable.AbstractFoldable[F]
-    with NonEmptyReducibleTrait[F, G] {
-  final protected[cats] def G: Foldable[G] = foldable
-}
+abstract class NonEmptyReducible[F[_], G[_]](implicit
+  override protected[cats] val G: Foldable[G]
+) extends Foldable.AbstractFoldable[F]
+    with NonEmptyReducibleTrait[F, G]
 
 private[cats] trait NonEmptyReducibleTrait[F[_], G[_]] extends Reducible[F] {
   implicit protected[cats] def G: Foldable[G]
