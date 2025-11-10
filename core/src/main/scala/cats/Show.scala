@@ -68,7 +68,7 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
   /**
    * creates an instance of [[Show]] using object toString
    */
-  def fromToString[A]: Show[A] = _.toString
+  def fromToString[A]: Show[A] = String.valueOf(_)
 
   final case class Shown(override val toString: String) extends AnyVal
   object Shown {
