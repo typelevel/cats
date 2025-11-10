@@ -58,7 +58,7 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
 
   implicit def catsStdInstancesForEither[A]
     : MonadError[Either[A, *], A] & Traverse[Either[A, *]] & Align[Either[A, *]] =
-    new FlatMap.FoldableFlatMap[Either[A, *]]
+    new FlatMap.AbstractFoldableFlatMap[Either[A, *]]
       with MonadError[Either[A, *], A]
       with Traverse[Either[A, *]]
       with Align[Either[A, *]] {

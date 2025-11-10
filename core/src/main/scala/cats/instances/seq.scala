@@ -33,7 +33,7 @@ import scala.collection.immutable.Seq
 @suppressUnusedImportWarningForScalaVersionSpecific
 trait SeqInstances extends cats.kernel.instances.SeqInstances {
   implicit val catsStdInstancesForSeq: Traverse[Seq] & Monad[Seq] & Alternative[Seq] & CoflatMap[Seq] & Align[Seq] =
-    new FlatMap.FoldableFlatMap[Seq]
+    new FlatMap.AbstractFoldableFlatMap[Seq]
       with Traverse[Seq]
       with Monad[Seq]
       with Alternative[Seq]

@@ -1397,7 +1397,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
   implicit val catsDataInstancesForChain
     : Traverse[Chain] & Alternative[Chain] & Monad[Chain] & CoflatMap[Chain] & Align[Chain] =
-    new FlatMap.FoldableFlatMap[Chain]
+    new FlatMap.AbstractFoldableFlatMap[Chain]
       with Traverse[Chain]
       with Alternative[Chain]
       with Monad[Chain]
