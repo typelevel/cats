@@ -417,7 +417,7 @@ sealed abstract private[data] class NonEmptySeqInstances {
    */
   implicit val catsDataInstancesForNonEmptySeqBinCompat1
     : NonEmptyAlternative[NonEmptySeq] & Bimonad[NonEmptySeq] & NonEmptyTraverse[NonEmptySeq] & Align[NonEmptySeq] =
-    new FlatMap.FoldableFlatMap[NonEmptySeq]
+    new FlatMap.AbstractFoldableFlatMap[NonEmptySeq]
       with NonEmptyReducibleTrait[NonEmptySeq, Seq]
       with NonEmptyAlternative[NonEmptySeq]
       with Bimonad[NonEmptySeq]

@@ -31,7 +31,7 @@ import scala.annotation.tailrec
 trait TryInstances extends TryInstances1 {
 
   implicit def catsStdInstancesForTry: MonadThrow[Try] & CoflatMap[Try] & Traverse[Try] & Monad[Try] =
-    new FlatMap.FoldableFlatMap[Try] with TryCoflatMap with MonadThrow[Try] with Traverse[Try] with Monad[Try] {
+    new FlatMap.AbstractFoldableFlatMap[Try] with TryCoflatMap with MonadThrow[Try] with Traverse[Try] with Monad[Try] {
       def pure[A](x: A): Try[A] = Success(x)
 
       override def product[A, B](ta: Try[A], tb: Try[B]): Try[(A, B)] =

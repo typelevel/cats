@@ -97,7 +97,7 @@ package object cats {
   type Endo[A] = A => A
 
   val catsInstancesForId: Bimonad[Id] & CommutativeMonad[Id] & NonEmptyTraverse[Id] & Distributive[Id] =
-    new FlatMap.FoldableFlatMap[Id]
+    new FlatMap.AbstractFoldableFlatMap[Id]
       with Bimonad[Id]
       with CommutativeMonad[Id]
       with NonEmptyTraverse[Id]

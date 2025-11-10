@@ -35,7 +35,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
   implicit val catsStdInstancesForList
     : Traverse[List] & Alternative[List] & Monad[List] & CoflatMap[List] & Align[List] =
-    new FlatMap.FoldableFlatMap[List]
+    new FlatMap.AbstractFoldableFlatMap[List]
       with Traverse[List]
       with Alternative[List]
       with Monad[List]

@@ -34,7 +34,7 @@ import scala.util.Try
 trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
   implicit val catsStdInstancesForQueue: Traverse[Queue] & Alternative[Queue] & Monad[Queue] & CoflatMap[Queue] =
-    new FlatMap.FoldableFlatMap[Queue]
+    new FlatMap.AbstractFoldableFlatMap[Queue]
       with Traverse[Queue]
       with Alternative[Queue]
       with Monad[Queue]

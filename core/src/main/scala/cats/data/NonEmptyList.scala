@@ -815,7 +815,7 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
     : NonEmptyAlternative[NonEmptyList] & Bimonad[NonEmptyList] & NonEmptyTraverse[NonEmptyList] & Align[
       NonEmptyList
     ] =
-    new FlatMap.FoldableFlatMap[NonEmptyList]
+    new FlatMap.AbstractFoldableFlatMap[NonEmptyList]
       with NonEmptyReducibleTrait[NonEmptyList, List]
       with NonEmptyAlternative[NonEmptyList]
       with Bimonad[NonEmptyList]

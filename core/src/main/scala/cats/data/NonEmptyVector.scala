@@ -410,7 +410,7 @@ sealed abstract private[data] class NonEmptyVectorInstances extends NonEmptyVect
     : NonEmptyAlternative[NonEmptyVector] & Bimonad[NonEmptyVector] & NonEmptyTraverse[NonEmptyVector] & Align[
       NonEmptyVector
     ] =
-    new FlatMap.FoldableFlatMap[NonEmptyVector]
+    new FlatMap.AbstractFoldableFlatMap[NonEmptyVector]
       with NonEmptyReducibleTrait[NonEmptyVector, Vector]
       with NonEmptyAlternative[NonEmptyVector]
       with Bimonad[NonEmptyVector]

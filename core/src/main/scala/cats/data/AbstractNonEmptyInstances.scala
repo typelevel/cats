@@ -27,7 +27,7 @@ abstract private[data] class AbstractNonEmptyInstances[F[_], NonEmptyF[_]](impli
   CF: CoflatMap[F],
   TF: Traverse[F],
   SF: Alternative[F]
-) extends FlatMap.FoldableFlatMap[NonEmptyF]
+) extends FlatMap.AbstractFoldableFlatMap[NonEmptyF]
     with Bimonad[NonEmptyF]
     with NonEmptyTraverse[NonEmptyF]
     with NonEmptyAlternative[NonEmptyF] {

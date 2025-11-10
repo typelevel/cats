@@ -221,7 +221,7 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
 
 object FlatMap {
   abstract private[cats] class AbstractFlatMap[F[_]] extends Apply.AbstractApply[F] with FlatMap[F]
-  abstract private[cats] class FoldableFlatMap[F[_]] extends AbstractFlatMap[F] with Foldable[F]
+  abstract private[cats] class AbstractFoldableFlatMap[F[_]] extends AbstractFlatMap[F] with Foldable[F]
 
   /**
    * Summon an instance of [[FlatMap]] for `F`.
