@@ -113,6 +113,17 @@ class ShowSuite extends CatsSuite {
     val mapSorted: SortedMap[Int, String] = SortedMap(3 -> "three", 1 -> "one", 4 -> "four", 2 -> "two")
     assertEquals(show"$mapSorted", "SortedMap(1 -> one, 2 -> two, 3 -> three, 4 -> four)")
   }
+
+  test("fromToString should be consistent with toString on non-null references") {
+    case class ExplicitToString() { override val toString = "explicit toString" }
+    val show = Show.fromToString[ExplicitToString]
+    assertEquals(show.show(ExplicitToString()), "explicit toString")
+  }
+
+  test("fromToString should be null safe") {
+    val show = Show.fromToString[AnyRef]
+    assertEquals(show.show(null), "null")
+  }
 }
 
 final class ShowSuite2 extends munit.FunSuite {
