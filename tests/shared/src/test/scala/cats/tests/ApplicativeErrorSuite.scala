@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.ApplicativeError
+import cats.{ApplicativeError, Apply}
 import cats.data.EitherT
 import cats.kernel.Eq
 import cats.syntax.applicativeError.*
@@ -103,7 +103,7 @@ class ApplicativeErrorSuite extends CatsSuite {
     implicit def mayBeApplicativeError[E](implicit
       ev: ApplicativeError[Option, E]
     ): ApplicativeError[OptionWrapper, E] =
-      new ApplicativeError[OptionWrapper, E] {
+      new Apply.AbstractApply[OptionWrapper] with ApplicativeError[OptionWrapper, E] {
 
         def raiseError[A](e: E): OptionWrapper[A] =
           OptionWrapper(ev.raiseError(e))

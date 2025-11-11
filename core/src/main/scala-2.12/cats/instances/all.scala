@@ -23,7 +23,7 @@ package cats
 package instances
 
 abstract class AllInstancesBinCompat
-    extends AllInstances
+    extends AbstractAllInstances
     with AllInstancesBinCompat0
     with AllInstancesBinCompat1
     with AllInstancesBinCompat2
@@ -33,6 +33,8 @@ abstract class AllInstancesBinCompat
     with AllInstancesBinCompat6
     with AllInstancesBinCompat7
     with AllInstancesBinCompat8
+
+abstract private[cats] class AbstractAllInstances extends AbstractAnyValInstances with AllInstances
 
 trait AllInstances
     extends AnyValInstances

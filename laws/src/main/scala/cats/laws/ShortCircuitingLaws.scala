@@ -22,13 +22,12 @@
 package cats.laws
 
 import java.util.concurrent.atomic.AtomicLong
-
 import cats.instances.option.*
 import cats.syntax.foldable.*
 import cats.syntax.traverse.*
 import cats.syntax.nonEmptyTraverse.*
 import cats.syntax.traverseFilter.*
-import cats.{Applicative, Foldable, MonoidK, NonEmptyTraverse, Traverse, TraverseFilter}
+import cats.{Applicative, Apply, Foldable, MonoidK, NonEmptyTraverse, Traverse, TraverseFilter}
 
 trait ShortCircuitingLaws[F[_]] {
 
@@ -140,7 +139,8 @@ trait ShortCircuitingLaws[F[_]] {
         empty
   }
 
-  private[this] val nonShortCircuitingApplicative: Applicative[Option] = new Applicative[Option] {
+  private[this] val nonShortCircuitingApplicative: Applicative[Option] = new Apply.AbstractApply[Option]
+    with Applicative[Option] {
     override def pure[A](a: A): Option[A] = Some(a)
     override def ap[A, B](ff: Option[A => B])(fa: Option[A]): Option[B] = ff.flatMap(f => fa.map(f))
   }

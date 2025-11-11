@@ -23,7 +23,7 @@ object GenTupleUnorderedFoldableInstances extends Template {
     |  private def instance[F[_] <: Product](
     |    trav: (F[Any], Applicative[γ], Any => γ[Any]) => γ[F[Any]]
     |  ): Traverse[F] with Reducible[F] =
-    |    new Traverse[F] with Reducible[F] {
+    |    new Foldable.AbstractFoldable[F] with Traverse[F] with Reducible[F] {
     |      def traverse[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]) =
     |        trav(fa.asInstanceOf[F[Any]], G.asInstanceOf[Applicative[γ]], f.asInstanceOf[Any => γ[Any]]).asInstanceOf[G[F[B]]]
     |      @inline private def last[A](fa: F[A]): A =
