@@ -628,7 +628,7 @@ sealed trait FoldableSuiteAdditionalStreamSpecific { self: FoldableSuiteAddition
   }
 
   def foldableStreamWithDefaultImpl: Foldable[Stream] =
-    new Foldable[Stream] {
+    new Foldable.AbstractFoldable[Stream] {
       def foldLeft[A, B](fa: Stream[A], b: B)(f: (B, A) => B): B =
         Foldable[Stream].foldLeft(fa, b)(f)
 

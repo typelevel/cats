@@ -339,7 +339,7 @@ object Free extends FreeInstances {
   implicit def catsFreeDeferForId: Defer[Free[Id, *]] = catsFreeDeferForFree[Id]
 }
 
-private trait FreeFoldable[F[_]] extends Foldable[Free[F, *]] {
+private trait FreeFoldable[F[_]] extends Foldable.AbstractFoldable[Free[F, *]] {
 
   implicit def F: Foldable[F]
 
@@ -350,7 +350,7 @@ private trait FreeFoldable[F[_]] extends Foldable[Free[F, *]] {
     fa.foldRight(fa, lb)(f)
 }
 
-private trait FreeTraverse[F[_]] extends Traverse[Free[F, *]] with FreeFoldable[F] {
+private trait FreeTraverse[F[_]] extends FreeFoldable[F] with Traverse[Free[F, *]] {
   implicit def TraversableF: Traverse[F]
 
   def F: Foldable[F] = TraversableF
@@ -371,7 +371,7 @@ sealed abstract private[free] class FreeInstances extends FreeInstances1 with Fr
    * `Free[S, *]` has a monad for any type constructor `S[_]`.
    */
   implicit def catsFreeMonadForFree[S[_]]: Monad[Free[S, *]] =
-    new Monad[Free[S, *]] with StackSafeMonad[Free[S, *]] {
+    new FlatMap.AbstractFlatMap[Free[S, *]] with Monad[Free[S, *]] with StackSafeMonad[Free[S, *]] {
       def pure[A](a: A): Free[S, A] = Free.pure(a)
       override def map[A, B](fa: Free[S, A])(f: A => B): Free[S, B] = fa.map(f)
       def flatMap[A, B](a: Free[S, A])(f: A => Free[S, B]): Free[S, B] = a.flatMap(f)
