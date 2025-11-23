@@ -1610,6 +1610,9 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         )
         .value
 
+    override def mapAccumulateFilter[S, A, B](init: S, fa: Chain[A])(f: (S, A) => (S, Option[B])): (S, Chain[B]) =
+      StaticMethods.mapAccumulateFilterFromStrictFunctorFilter(init, fa, f)(this)
+
   }
 
   private[this] val theMonoid: Monoid[Chain[Any]] = new Monoid[Chain[Any]] {
