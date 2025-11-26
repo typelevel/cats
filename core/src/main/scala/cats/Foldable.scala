@@ -963,6 +963,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
 }
 
 object Foldable {
+  abstract private[cats] class AbstractFoldable[F[_]] extends Foldable[F]
+
   private val sentinel: Function1[Any, Any] = new scala.runtime.AbstractFunction1[Any, Any] {
     def apply(a: Any): Any = this
   }
