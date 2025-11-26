@@ -269,23 +269,23 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Semigroup</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Semigroup</span><span>[</span><span class="type-name">Int</span><span>]
-</span><span class="comment">// res8: Semigroup[Int] = cats.kernel.instances.IntGroup@75c1646e
+</span><span class="comment">// res8: Semigroup[Int] = cats.kernel.instances.IntGroup@be82a20
 </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">String</span><span>]
-</span><span class="comment">// res9: Semigroup[String] = cats.kernel.instances.StringMonoid@1c16224d</span></code></pre>
+</span><span class="comment">// res9: Semigroup[String] = cats.kernel.instances.StringMonoid@276851dd</span></code></pre>
         <p>Instances for type constructors regardless of their type parameter such as <code>List</code> (<code>++</code>)
         and <code>Set</code> (<code>union</code>)...</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Semigroup</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">Byte</span><span>]]
-</span><span class="comment">// res10: Semigroup[List[Byte]] = cats.kernel.instances.ListMonoid@24e07f6f
+</span><span class="comment">// res10: Semigroup[List[Byte]] = cats.kernel.instances.ListMonoid@5ab7081e
 </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">Set</span><span>[</span><span class="type-name">Int</span><span>]]
-</span><span class="comment">// res11: Semigroup[Set[Int]] = cats.kernel.instances.SetSemilattice@54270c1a
+</span><span class="comment">// res11: Semigroup[Set[Int]] = cats.kernel.instances.SetSemilattice@139c6b4b
 </span><span>
 </span><span class="keyword">trait</span><span> </span><span class="type-name">Foo</span><span>
 </span><span class="type-name">Semigroup</span><span>[</span><span class="type-name">List</span><span>[</span><span class="type-name">Foo</span><span>]]
-</span><span class="comment">// res12: Semigroup[List[Foo]] = cats.kernel.instances.ListMonoid@24e07f6f</span></code></pre>
+</span><span class="comment">// res12: Semigroup[List[Foo]] = cats.kernel.instances.ListMonoid@5ab7081e</span></code></pre>
         <p>And instances for type constructors that depend on (one of) their type parameters having instances such
         as tuples (pointwise <code>combine</code>).</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">Semigroup</span><span>[(</span><span class="type-name">List</span><span>[</span><span class="type-name">Foo</span><span>], </span><span class="type-name">Int</span><span>)]
-</span><span class="comment">// res13: Semigroup[(List[Foo], Int)] = cats.kernel.Monoid$$anon$2@2a3bf0e4</span></code></pre>
+</span><span class="comment">// res13: Semigroup[(List[Foo], Int)] = cats.kernel.Monoid$$anon$2@59efea32</span></code></pre>
         
         <h1 id="example-usage-merging-maps" class="section"><a class="anchor-link left" href="#example-usage-merging-maps"><i class="icofont-laika link">&#xef71;</i></a>Example usage: Merging maps</h1>
         <p>Consider a function that merges two <code>Map</code>s that combines values if they share
