@@ -59,6 +59,18 @@ trait MapInstances extends cats.kernel.instances.MapInstances {
       override def map[A, B](fa: Map[K, A])(f: A => B): Map[K, B] =
         fa.map { case (k, a) => (k, f(a)) }
 
+      override def unzip[A, B](fab: Map[K, (A, B)]): (Map[K, A], Map[K, B]) = {
+        val leftBuilder = Map.newBuilder[K, A]
+        val rightBuilder = Map.newBuilder[K, B]
+        leftBuilder.sizeHint(fab.size)
+        rightBuilder.sizeHint(fab.size)
+        fab.foreach { case (k, (a, b)) =>
+          leftBuilder += k -> a
+          rightBuilder += k -> b
+        }
+        (leftBuilder.result(), rightBuilder.result())
+      }
+
       override def map2[A, B, Z](fa: Map[K, A], fb: Map[K, B])(f: (A, B) => Z): Map[K, Z] =
         if (fb.isEmpty) Map.empty // do O(1) work if fb is empty
         else fa.flatMap { case (k, a) => fb.get(k).map(b => (k, f(a, b))) }

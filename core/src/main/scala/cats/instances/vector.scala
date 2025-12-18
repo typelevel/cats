@@ -218,6 +218,9 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def algebra[A]: Monoid[Vector[A]] = kernel.instances.VectorMonoid[A]
 
+      override def unzip[A, B](fab: Vector[(A, B)]): (Vector[A], Vector[B]) =
+        fab.unzip
+
       def functor: Functor[Vector] = this
 
       def align[A, B](fa: Vector[A], fb: Vector[B]): Vector[A Ior B] = {

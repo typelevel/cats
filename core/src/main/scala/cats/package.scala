@@ -109,6 +109,12 @@ package object cats {
         }
       override def distribute[F[_], A, B](fa: F[A])(f: A => B)(implicit F: Functor[F]): Id[F[B]] = F.map(fa)(f)
       override def map[A, B](fa: A)(f: A => B): B = f(fa)
+      override def as[A, B](fa: A, b: B): B = b
+      override def tupleLeft[A, B](fa: A, b: B): (B, A) = (b, fa)
+      override def tupleRight[A, B](fa: A, b: B): (A, B) = (fa, b)
+      override def fproduct[A, B](fa: A)(f: A => B): (A, B) = (fa, f(fa))
+      override def fproductLeft[A, B](fa: A)(f: A => B): (B, A) = (f(fa), fa)
+      override def unzip[A, B](fab: (A, B)): (A, B) = fab
       override def ap[A, B](ff: A => B)(fa: A): B = ff(fa)
       override def flatten[A](ffa: A): A = ffa
       override def map2[A, B, Z](fa: A, fb: B)(f: (A, B) => Z): Z = f(fa, fb)
