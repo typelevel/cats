@@ -1008,6 +1008,36 @@ sealed abstract private[data] class ValidatedInstances2 {
       override def map[A, B](fa: Validated[E, A])(f: (A) => B): Validated[E, B] =
         fa.map(f)
 
+      override def as[A, B](fa: Validated[E, A], b: B): Validated[E, B] =
+        fa match {
+          case Valid(_)       => Valid(b)
+          case i @ Invalid(_) => i.asInstanceOf[Validated[E, B]]
+        }
+
+      override def tupleLeft[A, B](fa: Validated[E, A], b: B): Validated[E, (B, A)] =
+        fa match {
+          case Valid(a)       => Valid((b, a))
+          case i @ Invalid(_) => i.asInstanceOf[Validated[E, (B, A)]]
+        }
+
+      override def tupleRight[A, B](fa: Validated[E, A], b: B): Validated[E, (A, B)] =
+        fa match {
+          case Valid(a)       => Valid((a, b))
+          case i @ Invalid(_) => i.asInstanceOf[Validated[E, (A, B)]]
+        }
+
+      override def fproduct[A, B](fa: Validated[E, A])(f: A => B): Validated[E, (A, B)] =
+        fa match {
+          case Valid(a)       => Valid((a, f(a)))
+          case i @ Invalid(_) => i.asInstanceOf[Validated[E, (A, B)]]
+        }
+
+      override def fproductLeft[A, B](fa: Validated[E, A])(f: A => B): Validated[E, (B, A)] =
+        fa match {
+          case Valid(a)       => Valid((f(a), a))
+          case i @ Invalid(_) => i.asInstanceOf[Validated[E, (B, A)]]
+        }
+
       override def reduceLeftToOption[A, B](fa: Validated[E, A])(f: A => B)(g: (B, A) => B): Option[B] =
         fa.map(f).toOption
 
@@ -1050,6 +1080,13 @@ sealed abstract private[data] class ValidatedInstances2 {
         fa match {
           case Valid(a) => a :: Nil
           case _        => Nil
+        }
+
+      override def unzip[A, B](fab: Validated[E, (A, B)]): (Validated[E, A], Validated[E, B]) =
+        fab match {
+          case Valid((a, b))  => (Valid(a), Valid(b))
+          case i @ Invalid(_) =>
+            (i.asInstanceOf[Validated[E, A]], i.asInstanceOf[Validated[E, B]])
         }
 
       override def isEmpty[A](fa: Validated[E, A]): Boolean = fa.isInvalid
