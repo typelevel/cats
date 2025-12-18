@@ -79,7 +79,7 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
 
       override def as[B, C](fa: Either[A, B], c: C): Either[A, C] =
         fa match {
-          case Right(_)    => Right(c)
+          case Right(_)       => Right(c)
           case left @ Left(_) => left.rightCast[C]
         }
 
