@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.{Bitraverse, MonadError, Semigroupal, Show, Traverse}
+import cats.{Bitraverse, Functor, MonadError, Semigroupal, Show, Traverse}
 import cats.data.{EitherT, Ior, NonEmptyChain, NonEmptyList, NonEmptySet, NonEmptyVector}
 import cats.kernel.{Eq, Semigroup}
 import cats.kernel.laws.discipline.{OrderTests, SemigroupTests}
@@ -74,6 +74,21 @@ class IorSuite extends CatsSuite {
   test("right Option is defined for right and both") {
     forAll { (i: Int Ior String) =>
       assert((i.isRight || i.isBoth) === (i.right.isDefined))
+    }
+  }
+
+  test("functor default methods match map-based implementations") {
+    val F = Functor[Ior[String, *]]
+    forAll { (fa: Ior[String, Int], b: String, f: Int => Long) =>
+      assert(F.as(fa, b) === F.map(fa)(_ => b))
+      assert(F.tupleLeft(fa, b) === F.map(fa)(a => (b, a)))
+      assert(F.tupleRight(fa, b) === F.map(fa)(a => (a, b)))
+      assert(F.fproduct(fa)(f) === F.map(fa)(a => (a, f(a))))
+      assert(F.fproductLeft(fa)(f) === F.map(fa)(a => (f(a), a)))
+      assert(F.void(fa) === F.map(fa)(_ => ()))
+    }
+    forAll { (fab: Ior[String, (Int, String)]) =>
+      assert(F.unzip(fab) === (F.map(fab)(_._1), F.map(fab)(_._2)))
     }
   }
 

@@ -122,31 +122,31 @@ trait TryInstances extends TryInstances1 {
 
       override def as[A, B](ta: Try[A], b: B): Try[B] =
         ta match {
-          case Success(_)    => Success(b)
+          case Success(_)      => Success(b)
           case err: Failure[?] => castFailure[B](err)
         }
 
       override def tupleLeft[A, B](ta: Try[A], b: B): Try[(B, A)] =
         ta match {
-          case Success(a)    => Success((b, a))
+          case Success(a)      => Success((b, a))
           case err: Failure[?] => castFailure[(B, A)](err)
         }
 
       override def tupleRight[A, B](ta: Try[A], b: B): Try[(A, B)] =
         ta match {
-          case Success(a)    => Success((a, b))
+          case Success(a)      => Success((a, b))
           case err: Failure[?] => castFailure[(A, B)](err)
         }
 
       override def fproduct[A, B](ta: Try[A])(f: A => B): Try[(A, B)] =
         ta match {
-          case Success(a)    => Success((a, f(a)))
+          case Success(a)      => Success((a, f(a)))
           case err: Failure[?] => castFailure[(A, B)](err)
         }
 
       override def fproductLeft[A, B](ta: Try[A])(f: A => B): Try[(B, A)] =
         ta match {
-          case Success(a)    => Success((f(a), a))
+          case Success(a)      => Success((f(a), a))
           case err: Failure[?] => castFailure[(B, A)](err)
         }
 
@@ -198,7 +198,7 @@ trait TryInstances extends TryInstances1 {
       override def unzip[A, B](fab: Try[(A, B)]): (Try[A], Try[B]) =
         fab match {
           case Success((a, b)) => (Success(a), Success(b))
-          case err: Failure[?]   => (castFailure[A](err), castFailure[B](err))
+          case err: Failure[?] => (castFailure[A](err), castFailure[B](err))
         }
 
       override def isEmpty[A](fa: Try[A]): Boolean = fa.isFailure
