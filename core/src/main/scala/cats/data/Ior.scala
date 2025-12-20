@@ -985,6 +985,55 @@ sealed abstract private[data] class IorInstances0 {
 
       override def map[B, C](fa: A Ior B)(f: B => C): A Ior C =
         fa.map(f)
+
+      override def as[B, C](fa: A Ior B, c: C): A Ior C =
+        fa match {
+          case Ior.Left(_)    => fa.asInstanceOf[A Ior C]
+          case Ior.Right(_)   => Ior.Right(c)
+          case Ior.Both(a, _) => Ior.Both(a, c)
+        }
+
+      override def tupleLeft[B, C](fa: A Ior B, c: C): A Ior (C, B) =
+        fa match {
+          case Ior.Left(_)    => fa.asInstanceOf[A Ior (C, B)]
+          case Ior.Right(b)   => Ior.Right((c, b))
+          case Ior.Both(a, b) => Ior.Both(a, (c, b))
+        }
+
+      override def tupleRight[B, C](fa: A Ior B, c: C): A Ior (B, C) =
+        fa match {
+          case Ior.Left(_)    => fa.asInstanceOf[A Ior (B, C)]
+          case Ior.Right(b)   => Ior.Right((b, c))
+          case Ior.Both(a, b) => Ior.Both(a, (b, c))
+        }
+
+      override def fproduct[B, C](fa: A Ior B)(f: B => C): A Ior (B, C) =
+        fa match {
+          case Ior.Left(_)    => fa.asInstanceOf[A Ior (B, C)]
+          case Ior.Right(b)   => Ior.Right((b, f(b)))
+          case Ior.Both(a, b) => Ior.Both(a, (b, f(b)))
+        }
+
+      override def fproductLeft[B, C](fa: A Ior B)(f: B => C): A Ior (C, B) =
+        fa match {
+          case Ior.Left(_)    => fa.asInstanceOf[A Ior (C, B)]
+          case Ior.Right(b)   => Ior.Right((f(b), b))
+          case Ior.Both(a, b) => Ior.Both(a, (f(b), b))
+        }
+
+      override def unzip[B, C](fab: A Ior (B, C)): (A Ior B, A Ior C) =
+        fab match {
+          case Ior.Left(a)         => (Ior.Left(a), Ior.Left(a))
+          case Ior.Right((b, c))   => (Ior.Right(b), Ior.Right(c))
+          case Ior.Both(a, (b, c)) => (Ior.Both(a, b), Ior.Both(a, c))
+        }
+
+      override def void[B](fa: A Ior B): A Ior Unit =
+        fa match {
+          case Ior.Left(_)    => fa.asInstanceOf[A Ior Unit]
+          case Ior.Right(_)   => Ior.Right(())
+          case Ior.Both(a, _) => Ior.Both(a, ())
+        }
     }
 
   implicit def catsDataEqForIor[A: Eq, B: Eq]: Eq[A Ior B] = _ === _

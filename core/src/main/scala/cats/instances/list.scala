@@ -203,6 +203,9 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       override def zipWithIndex[A](fa: List[A]): List[(A, Int)] =
         fa.zipWithIndex
 
+      override def unzip[A, B](fab: List[(A, B)]): (List[A], List[B]) =
+        fab.unzip
+
       override def partitionEither[A, B, C](
         fa: List[A]
       )(f: A => Either[B, C])(implicit A: Alternative[List]): (List[B], List[C]) =

@@ -33,6 +33,7 @@ import cats.{
   CoflatMap,
   CommutativeMonad,
   Eval,
+  Functor,
   Later,
   MonadError,
   Semigroupal,
@@ -73,6 +74,21 @@ class OptionSuite extends CatsSuite {
 
     forAll { (fs: Option[String]) =>
       assert(fs.show === (fs.toString))
+    }
+  }
+
+  test("functor default methods match map-based implementations") {
+    val F = Functor[Option]
+    forAll { (fa: Option[Int], b: String, f: Int => Long) =>
+      assert(F.as(fa, b) === F.map(fa)(_ => b))
+      assert(F.tupleLeft(fa, b) === F.map(fa)(a => (b, a)))
+      assert(F.tupleRight(fa, b) === F.map(fa)(a => (a, b)))
+      assert(F.fproduct(fa)(f) === F.map(fa)(a => (a, f(a))))
+      assert(F.fproductLeft(fa)(f) === F.map(fa)(a => (f(a), a)))
+      assert(F.void(fa) === F.map(fa)(_ => ()))
+    }
+    forAll { (fab: Option[(Int, String)]) =>
+      assert(F.unzip(fab) === (F.map(fab)(_._1), F.map(fab)(_._2)))
     }
   }
 

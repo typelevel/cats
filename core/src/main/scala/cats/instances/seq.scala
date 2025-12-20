@@ -150,6 +150,9 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
       override def zipWithIndex[A](fa: Seq[A]): Seq[(A, Int)] =
         fa.zipWithIndex
 
+      override def unzip[A, B](fab: Seq[(A, B)]): (Seq[A], Seq[B]) =
+        fab.unzip
+
       override def exists[A](fa: Seq[A])(p: A => Boolean): Boolean =
         fa.exists(p)
 
