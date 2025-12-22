@@ -34,7 +34,12 @@ import scala.util.Try
 trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
   implicit val catsStdInstancesForQueue: Traverse[Queue] & Alternative[Queue] & Monad[Queue] & CoflatMap[Queue] =
-    new Traverse[Queue] with Alternative[Queue] with Monad[Queue] with CoflatMap[Queue] {
+    new FlatMap.AbstractFoldableFlatMap[Queue]
+      with Traverse[Queue]
+      with Alternative[Queue]
+      with Monad[Queue]
+      with CoflatMap[Queue] {
+
       def empty[A]: Queue[A] = Queue.empty
 
       def combineK[A](x: Queue[A], y: Queue[A]): Queue[A] = x ++ y

@@ -270,7 +270,7 @@ abstract private[data] class AndThenInstances0 extends AndThenInstances1 {
    * [[cats.Monad]] instance for [[AndThen]].
    */
   implicit def catsDataMonadForAndThen[T]: Monad[AndThen[T, *]] =
-    new Monad[AndThen[T, *]] {
+    new FlatMap.AbstractFlatMap[AndThen[T, *]] with Monad[AndThen[T, *]] {
       // Piggybacking on the instance for Function1
       private[this] val fn1 = instances.all.catsStdMonadForFunction1[T]
 

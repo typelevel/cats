@@ -31,7 +31,8 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
   implicit val catsStdInstancesForOption: Traverse[Option] & MonadError[Option, Unit] & Alternative[
     Option
   ] & CommutativeMonad[Option] & CoflatMap[Option] & Align[Option] =
-    new Traverse[Option]
+    new FlatMap.AbstractFoldableFlatMap[Option]
+      with Traverse[Option]
       with MonadError[Option, Unit]
       with Alternative[Option]
       with CommutativeMonad[Option]

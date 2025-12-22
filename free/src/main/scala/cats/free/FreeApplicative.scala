@@ -223,7 +223,7 @@ object FreeApplicative {
     Lift(fa)
 
   implicit final def freeApplicative[S[_]]: Applicative[FA[S, *]] =
-    new Applicative[FA[S, *]] {
+    new Apply.AbstractApply[FA[S, *]] with Applicative[FA[S, *]] {
       override def product[A, B](fa: FA[S, A], fb: FA[S, B]): FA[S, (A, B)] =
         map2(fa, fb)((_, _))
 
