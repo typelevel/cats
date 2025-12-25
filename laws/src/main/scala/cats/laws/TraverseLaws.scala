@@ -166,6 +166,9 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with Unorde
 
     lhs <-> rhs
   }
+
+  def traverseConsistentFoldMap[A, B: Monoid](fa: F[A], fn: A => B): IsEq[B] =
+    F.traverse(fa)(a => Const[B, B](fn(a))).getConst <-> F.foldMap(fa)(fn)
 }
 
 object TraverseLaws {
