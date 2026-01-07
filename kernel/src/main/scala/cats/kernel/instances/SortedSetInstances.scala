@@ -102,6 +102,6 @@ class SortedSetHash[A](implicit hashA: Hash[A]) extends Hash[SortedSet[A]] {
 }
 
 class SortedSetSemilattice[A: Order] extends BoundedSemilattice[SortedSet[A]] {
-  def empty: SortedSet[A] = SortedSet.empty(implicitly[Order[A]].toOrdering)
+  def empty: SortedSet[A] = SortedSet.empty(using implicitly[Order[A]].toOrdering)
   def combine(x: SortedSet[A], y: SortedSet[A]): SortedSet[A] = x | y
 }
