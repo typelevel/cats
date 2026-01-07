@@ -178,5 +178,5 @@ class SortedMapMonoid[K, V](implicit V: Semigroup[V], O: Order[K])
     extends SortedMapSemigroup[K, V]
     with Monoid[SortedMap[K, V]] {
 
-  def empty: SortedMap[K, V] = SortedMap.empty(O.toOrdering)
+  def empty: SortedMap[K, V] = SortedMap.empty(using O.toOrdering)
 }

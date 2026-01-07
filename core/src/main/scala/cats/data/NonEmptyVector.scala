@@ -373,7 +373,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
    * }}}
    */
   final def toNem[T, U](implicit ev: A <:< (T, U), order: Order[T]): NonEmptyMap[T, U] =
-    NonEmptyMap.fromMapUnsafe(SortedMap(toVector.map(ev): _*)(order.toOrdering))
+    NonEmptyMap.fromMapUnsafe(SortedMap(toVector.map(ev): _*)(using order.toOrdering))
 
   /**
    * Creates new `NonEmptySet`, similarly to List#toSet from scala standard library.

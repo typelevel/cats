@@ -475,7 +475,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * }}}
    */
   final def toNem[T, U](implicit ev: A <:< (T, U), order: Order[T]): NonEmptyMap[T, U] =
-    NonEmptyMap.fromMapUnsafe(SortedMap(toLazyList.map(ev): _*)(order.toOrdering))
+    NonEmptyMap.fromMapUnsafe(SortedMap(toLazyList.map(ev): _*)(using order.toOrdering))
 
   /**
    * Creates new `NonEmptySet`, similarly to List#toSet from scala standard library.
