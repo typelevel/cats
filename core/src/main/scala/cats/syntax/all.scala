@@ -85,6 +85,15 @@ trait AllSyntax
     with ParallelFoldMapASyntax
     with ParallelTraverseFilterSyntax
     with ParallelReduceMapASyntax
+    with PartialNextSyntax
+    with NextSyntax
+    with PartialPreviousSyntax
+    with PreviousSyntax
+    with BoundedEnumerableSyntax
+
+// Note, since we dropped 2.11.x support, we no longer need to use bincompat
+// traits. All future syntax additions should be added to AllSyntax
+// directly. In 3.x.x we should clean this up.
 
 trait AllSyntaxBinCompat0 extends UnorderedTraverseSyntax with ApplicativeErrorExtension with TrySyntax
 
