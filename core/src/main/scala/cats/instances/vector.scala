@@ -285,5 +285,8 @@ private[instances] trait VectorInstancesBinCompat0 {
           G.map2Eval(f(x), xse)((b, vector) => if (b) x +: vector else vector)
         )
         .value
+
+    override def mapAccumulateFilter[S, A, B](init: S, fa: Vector[A])(f: (S, A) => (S, Option[B])): (S, Vector[B]) =
+      StaticMethods.mapAccumulateFilterFromStrictFunctorFilter(init, fa, f)(this)
   }
 }
