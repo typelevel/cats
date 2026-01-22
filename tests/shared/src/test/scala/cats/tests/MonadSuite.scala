@@ -67,6 +67,22 @@ class MonadSuite extends CatsSuite {
     }
   }
 
+  test("whenM should void when true") {
+    assert(List(1, 2).whenM(List(true)) == List((), ()))
+  }
+
+  test("whenM should unit when false") {
+    assert(List(1, 2).whenM(List(false)) == List(()))
+  }
+
+  test("unlessM should unit when true") {
+    assert(List(1, 2).unlessM(List(true)) == List(()))
+  }
+
+  test("unlessM should void when false") {
+    assert(List(1, 2).unlessM(List(false)) == List((), ()))
+  }
+
   test("whileM_ stack safety") {
     val (result, _) = increment.whileM_(StateT.inspect(i => !(i >= 50000))).run(0)
     assert(result === 50000)
