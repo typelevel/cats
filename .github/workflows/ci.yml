@@ -28,17 +28,17 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04]
-        scala: [2.12, 2.13, 3]
+        scala: [2.12.21, 3.8.1, 3.3.7]
         java: [temurin@8, temurin@17, graalvm@21]
         project: [catsNative, catsJS, catsJVM]
         exclude:
-          - scala: 2.12
+          - scala: 2.12.21
             java: temurin@17
-          - scala: 2.12
+          - scala: 2.12.21
             java: graalvm@21
-          - scala: 3
+          - scala: 3.3.7
             java: temurin@17
-          - scala: 3
+          - scala: 3.3.7
             java: graalvm@21
           - project: catsNative
             java: temurin@17
@@ -196,92 +196,92 @@ jobs:
         if: matrix.java == 'graalvm@21' && steps.setup-java-graalvm-21.outputs.cache-hit == 'false'
         run: sbt +update
 
-      - name: Download target directories (2.12, catsNative)
+      - name: Download target directories (2.12.21, catsNative)
         uses: actions/download-artifact@v6
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-catsNative
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.21-catsNative
 
-      - name: Inflate target directories (2.12, catsNative)
+      - name: Inflate target directories (2.12.21, catsNative)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.12, catsJS)
+      - name: Download target directories (2.12.21, catsJS)
         uses: actions/download-artifact@v6
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-catsJS
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.21-catsJS
 
-      - name: Inflate target directories (2.12, catsJS)
+      - name: Inflate target directories (2.12.21, catsJS)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.12, catsJVM)
+      - name: Download target directories (2.12.21, catsJVM)
         uses: actions/download-artifact@v6
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-catsJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12.21-catsJVM
 
-      - name: Inflate target directories (2.12, catsJVM)
+      - name: Inflate target directories (2.12.21, catsJVM)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.13, catsNative)
+      - name: Download target directories (3.8.1, catsNative)
         uses: actions/download-artifact@v6
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-catsNative
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3.8.1-catsNative
 
-      - name: Inflate target directories (2.13, catsNative)
+      - name: Inflate target directories (3.8.1, catsNative)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.13, catsJS)
+      - name: Download target directories (3.8.1, catsJS)
         uses: actions/download-artifact@v6
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-catsJS
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3.8.1-catsJS
 
-      - name: Inflate target directories (2.13, catsJS)
+      - name: Inflate target directories (3.8.1, catsJS)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.13, catsJVM)
+      - name: Download target directories (3.8.1, catsJVM)
         uses: actions/download-artifact@v6
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-catsJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3.8.1-catsJVM
 
-      - name: Inflate target directories (2.13, catsJVM)
+      - name: Inflate target directories (3.8.1, catsJVM)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (3, catsNative)
+      - name: Download target directories (3.3.7, catsNative)
         uses: actions/download-artifact@v6
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3-catsNative
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3.3.7-catsNative
 
-      - name: Inflate target directories (3, catsNative)
+      - name: Inflate target directories (3.3.7, catsNative)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (3, catsJS)
+      - name: Download target directories (3.3.7, catsJS)
         uses: actions/download-artifact@v6
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3-catsJS
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3.3.7-catsJS
 
-      - name: Inflate target directories (3, catsJS)
+      - name: Inflate target directories (3.3.7, catsJS)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (3, catsJVM)
+      - name: Download target directories (3.3.7, catsJVM)
         uses: actions/download-artifact@v6
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-3-catsJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3.3.7-catsJVM
 
-      - name: Inflate target directories (3, catsJVM)
+      - name: Inflate target directories (3.3.7, catsJVM)
         run: |
           tar xf targets.tar
           rm targets.tar
@@ -369,7 +369,7 @@ jobs:
       - name: Submit Dependencies
         uses: scalacenter/sbt-dependency-submission@v2
         with:
-          modules-ignore: catsnative_2.12 catsnative_2.13 catsnative_3 docs_2.12 docs_2.13 docs_3 cats-tests_sjs1_2.12 cats-tests_sjs1_2.13 cats-tests_sjs1_3 cats-tests_2.12 cats-tests_2.13 cats-tests_3 catsjs_2.12 catsjs_2.13 catsjs_3 catsjvm_2.12 catsjvm_2.13 catsjvm_3 bincompattest_2.12 bincompattest_2.13 bincompattest_3 cats-tests_native0.5_2.12 cats-tests_native0.5_2.13 cats-tests_native0.5_3 cats-bench_2.12 cats-bench_2.13 cats-bench_3
+          modules-ignore: catsnative_2.12 catsnative_3 catsnative_3 docs_2.12 docs_3 docs_3 cats-tests_sjs1_2.12 cats-tests_sjs1_3 cats-tests_sjs1_3 cats-tests_2.12 cats-tests_3 cats-tests_3 catsjs_2.12 catsjs_3 catsjs_3 catsjvm_2.12 catsjvm_3 catsjvm_3 bincompattest_2.12 bincompattest_3 bincompattest_3 cats-tests_native0.5_2.12 cats-tests_native0.5_3 cats-tests_native0.5_3 cats-bench_2.12 cats-bench_3 cats-bench_3
           configs-ignore: test scala-tool scala-doc-tool test-internal
 
   validate-steward:
