@@ -237,6 +237,9 @@ lazy val alleycatsLaws = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .jvmSettings(commonJvmSettings)
   .nativeSettings(commonNativeSettings)
 
+// Optional accent color override for Cats Scaladoc (see issue #1835)
+lazy val catsScaladocExternalCss = settingKey[Option[File]]("Optional custom CSS for Cats Scaladoc")
+
 lazy val unidocs = project
   .enablePlugins(TypelevelUnidocPlugin)
   .settings(
@@ -252,7 +255,30 @@ lazy val unidocs = project
                                                              alleycatsLaws.jvm,
                                                              testkit.jvm
     ),
-    ScalaUnidoc / unidoc / scalacOptions ++= Seq("-groups", "-diagrams")
+    ScalaUnidoc / unidoc / scalacOptions ++= Seq("-groups", "-diagrams"),
+
+    catsScaladocExternalCss := {
+      val css = (ThisBuild / baseDirectory).value / "project" / "scaladoc-style.css"
+      if (css.exists()) Some(css) else None
+    },
+
+    ScalaUnidoc / unidoc := {
+      val docDir = (ScalaUnidoc / unidoc).value
+      
+      catsScaladocExternalCss.value.foreach { cssFile =>
+        val templateCss = docDir / "lib" / "template.css"
+        if (templateCss.exists()) {
+          val currentContent = IO.read(templateCss)
+          // Idempotency check using the header comment from our CSS file
+          if (!currentContent.contains("Optional accent color override")) {
+            val customCss = IO.read(cssFile)
+            IO.append(templateCss, s"\n$customCss")
+          }
+        }
+      }
+      
+      docDir
+    }
   )
 
 // bench is currently JVM-only
