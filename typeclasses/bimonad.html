@@ -263,7 +263,7 @@
 </span><span>    </span><span class="keyword">override</span><span> </span><span class="keyword">def</span><span> </span><span class="declaration-name">tailRecM</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span>)(</span><span class="identifier">fn</span><span>: </span><span class="type-name">A</span><span> =&gt; </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">Either</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>]]): </span><span class="type-name">NonEmptyList</span><span>[</span><span class="type-name">B</span><span>] =
       ???
   }
-</span><span class="comment">// nelBimonad: Bimonad[NonEmptyList] = repl.MdocSession$MdocApp$$anon$1@24178da4</span></code></pre>
+</span><span class="comment">// nelBimonad: Bimonad[NonEmptyList] = repl.MdocSession$MdocApp$$anon$1@4310dfd3</span></code></pre>
         <p>Note the equivalence:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">nelBimonad</span><span>.</span><span class="identifier">pure</span><span>(</span><span class="boolean-literal">true</span><span>).</span><span class="identifier">extract</span><span> === </span><span class="type-name">NonEmptyList</span><span>.</span><span class="identifier">one</span><span>(</span><span class="boolean-literal">true</span><span>).</span><span class="identifier">head</span><span>
 </span><span class="comment">// res0: Boolean = true</span></code></pre>
