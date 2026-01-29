@@ -130,7 +130,7 @@ class ParallelSuite
     )(f: A => G[C], g: B => G[D])(implicit G: Applicative[G]): G[ListTuple2[C, D]] = {
       def loop(abs: ListTuple2[A, B]): Eval[G[ListTuple2[C, D]]] =
         abs.value match {
-          case Nil => Now(G.pure(ListTuple2(List.empty)))
+          case Nil         => Now(G.pure(ListTuple2(List.empty)))
           case (a, b) :: t =>
             G.map2Eval(G.product(f(a), g(b)), Eval.defer(loop(ListTuple2(t))))((cur, acc) =>
               ListTuple2(cur :: acc.value)

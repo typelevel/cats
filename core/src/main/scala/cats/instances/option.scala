@@ -77,6 +77,33 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
       override def map[A, B](fa: Option[A])(f: A => B): Option[B] =
         fa.map(f)
 
+      override def as[A, B](fa: Option[A], b: B): Option[B] =
+        if (fa.isDefined) Some(b) else None
+
+      override def tupleLeft[A, B](fa: Option[A], b: B): Option[(B, A)] =
+        fa match {
+          case Some(a) => Some((b, a))
+          case None    => None
+        }
+
+      override def tupleRight[A, B](fa: Option[A], b: B): Option[(A, B)] =
+        fa match {
+          case Some(a) => Some((a, b))
+          case None    => None
+        }
+
+      override def fproduct[A, B](fa: Option[A])(f: A => B): Option[(A, B)] =
+        fa match {
+          case Some(a) => Some((a, f(a)))
+          case None    => None
+        }
+
+      override def fproductLeft[A, B](fa: Option[A])(f: A => B): Option[(B, A)] =
+        fa match {
+          case Some(a) => Some((f(a), a))
+          case None    => None
+        }
+
       def flatMap[A, B](fa: Option[A])(f: A => Option[B]): Option[B] =
         fa.flatMap(f)
 
@@ -125,7 +152,7 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
 
       override def map2Eval[A, B, Z](fa: Option[A], fb: Eval[Option[B]])(f: (A, B) => Z): Eval[Option[Z]] =
         fa match {
-          case None => Now(None)
+          case None    => Now(None)
           case Some(a) =>
             fb.map {
               case Some(b) => Some(f(a, b))
@@ -242,6 +269,12 @@ trait OptionInstances extends cats.kernel.instances.OptionInstances {
           case (Some(a), None)    => Some(f(Ior.left(a)))
           case (None, Some(b))    => Some(f(Ior.right(b)))
           case (Some(a), Some(b)) => Some(f(Ior.both(a, b)))
+        }
+
+      override def unzip[A, B](fab: Option[(A, B)]): (Option[A], Option[B]) =
+        fab match {
+          case Some((a, b)) => (Some(a), Some(b))
+          case None         => (None, None)
         }
 
       override def unit: Option[Unit] = someUnit

@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.{Align, FlatMap, MonoidK, Semigroupal, Show, Traverse, TraverseFilter}
+import cats.{Align, FlatMap, Functor, MonoidK, Semigroupal, Show, Traverse, TraverseFilter}
 import cats.kernel.{CommutativeMonoid, Monoid}
 import cats.kernel.laws.discipline.{CommutativeMonoidTests, HashTests, MonoidTests}
 import cats.laws.discipline.{
@@ -70,6 +70,21 @@ class SortedMapSuite extends CatsSuite {
       assert(map.show.nonEmpty)
       assert(map.show.startsWith("SortedMap("))
       assert(map.show === (implicitly[Show[SortedMap[Int, String]]].show(map)))
+    }
+  }
+
+  test("functor default methods match map-based implementations") {
+    val F = Functor[SortedMap[Int, *]]
+    forAll { (fa: SortedMap[Int, Int], b: String, f: Int => Long) =>
+      assert(F.as(fa, b) === F.map(fa)(_ => b))
+      assert(F.tupleLeft(fa, b) === F.map(fa)(a => (b, a)))
+      assert(F.tupleRight(fa, b) === F.map(fa)(a => (a, b)))
+      assert(F.fproduct(fa)(f) === F.map(fa)(a => (a, f(a))))
+      assert(F.fproductLeft(fa)(f) === F.map(fa)(a => (f(a), a)))
+      assert(F.void(fa) === F.map(fa)(_ => ()))
+    }
+    forAll { (fab: SortedMap[Int, (Int, String)]) =>
+      assert(F.unzip(fab) === (F.map(fab)(_._1), F.map(fab)(_._2)))
     }
   }
 

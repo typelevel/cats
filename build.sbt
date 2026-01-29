@@ -1,12 +1,12 @@
 ThisBuild / tlBaseVersion := "2.13"
 
-val scalaCheckVersion = "1.18.1"
+val scalaCheckVersion = "1.19.0"
 
 val disciplineVersion = "1.7.0"
 
 val disciplineMunitVersion = "2.0.0"
 
-val munitVersion = "1.1.1"
+val munitVersion = "1.2.2"
 
 val PrimaryJava = JavaSpec.temurin("8")
 val LTSJava = JavaSpec.temurin("17")
@@ -14,9 +14,9 @@ val GraalVM = JavaSpec.graalvm("21")
 
 ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM)
 
-val Scala212 = "2.12.20"
-val Scala213 = "2.13.16"
-val Scala3 = "3.3.6"
+val Scala212 = "2.12.21"
+val Scala213 = "2.13.18"
+val Scala3 = "3.3.7"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := Scala213

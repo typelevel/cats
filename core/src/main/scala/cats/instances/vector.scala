@@ -95,7 +95,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
         @tailrec
         def loop(): Unit =
           state match {
-            case Nil => ()
+            case Nil                    => ()
             case h :: tail if h.isEmpty =>
               state = tail
               loop()
@@ -218,6 +218,9 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       override def algebra[A]: Monoid[Vector[A]] = kernel.instances.VectorMonoid[A]
 
+      override def unzip[A, B](fab: Vector[(A, B)]): (Vector[A], Vector[B]) =
+        fab.unzip
+
       def functor: Functor[Vector] = this
 
       def align[A, B](fa: Vector[A], fb: Vector[B]): Vector[A Ior B] = {
@@ -272,7 +275,7 @@ private[instances] trait VectorInstancesBinCompat0 {
     def traverseFilter[G[_], A, B](fa: Vector[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
       G match {
         case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(_.toVector)
-        case _ =>
+        case _                    =>
           G.map(Chain.traverseFilterViaChain(fa)(f))(_.toVector)
       }
 

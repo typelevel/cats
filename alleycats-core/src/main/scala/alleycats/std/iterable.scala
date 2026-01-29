@@ -97,7 +97,7 @@ trait IterableInstances {
 
   private def toImIndexedSeq[A](fa: Iterable[A]): ImIndexedSeq[A] = fa match {
     case iseq: ImIndexedSeq[A] => iseq
-    case _ =>
+    case _                     =>
       val as = collection.mutable.ArrayBuffer[A]()
       as ++= fa
       wrapMutableIndexedSeq(as)

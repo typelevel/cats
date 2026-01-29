@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.{Align, Eval, FlatMap, FunctorFilter, MonoidK, Semigroupal, Show, UnorderedTraverse}
+import cats.{Align, Eval, FlatMap, Functor, FunctorFilter, MonoidK, Semigroupal, Show, UnorderedTraverse}
 import cats.arrow.Compose
 import cats.kernel.{CommutativeMonoid, Monoid}
 import cats.kernel.instances.StaticMethods.wrapMutableMap
@@ -78,6 +78,21 @@ class MapSuite extends CatsSuite {
       assert(map.show.nonEmpty === true)
       assert(map.show.startsWith("Map(") === true)
       assert(map.show === (implicitly[Show[Map[Int, String]]].show(map)))
+    }
+  }
+
+  test("functor default methods match map-based implementations") {
+    val F = Functor[Map[Int, *]]
+    forAll { (fa: Map[Int, Int], b: String, f: Int => Long) =>
+      assert(F.as(fa, b) === F.map(fa)(_ => b))
+      assert(F.tupleLeft(fa, b) === F.map(fa)(a => (b, a)))
+      assert(F.tupleRight(fa, b) === F.map(fa)(a => (a, b)))
+      assert(F.fproduct(fa)(f) === F.map(fa)(a => (a, f(a))))
+      assert(F.fproductLeft(fa)(f) === F.map(fa)(a => (f(a), a)))
+      assert(F.void(fa) === F.map(fa)(_ => ()))
+    }
+    forAll { (fab: Map[Int, (Int, String)]) =>
+      assert(F.unzip(fab) === (F.map(fab)(_._1), F.map(fab)(_._2)))
     }
   }
 

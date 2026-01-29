@@ -22,7 +22,8 @@
 package cats
 package laws
 
-import cats.data.Nested
+import cats.data.{Const, Nested}
+import cats.kernel.CommutativeMonoid
 
 trait UnorderedTraverseLaws[F[_]] extends UnorderedFoldableLaws[F] {
   implicit def F: UnorderedTraverse[F]
@@ -71,6 +72,8 @@ trait UnorderedTraverseLaws[F[_]] extends UnorderedFoldableLaws[F] {
   def unorderedSequenceConsistent[A, G[_]: CommutativeApplicative](fga: F[G[A]]): IsEq[G[F[A]]] =
     F.unorderedTraverse(fga)(identity) <-> F.unorderedSequence(fga)
 
+  def unorderedTraverseConsistentUnorderedFoldMap[A, B: CommutativeMonoid](fa: F[A], fn: A => B): IsEq[B] =
+    F.unorderedTraverse(fa)(a => Const[B, B](fn(a))).getConst <-> F.unorderedFoldMap(fa)(fn)
 }
 
 object UnorderedTraverseLaws {

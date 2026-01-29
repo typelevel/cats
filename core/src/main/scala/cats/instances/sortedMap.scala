@@ -78,6 +78,19 @@ trait SortedMapInstances extends SortedMapInstances2 {
         fa.map { case (k, a) => (k, f(a)) }
       }
 
+      override def unzip[A, B](fab: SortedMap[K, (A, B)]): (SortedMap[K, A], SortedMap[K, B]) = {
+        implicit val ordering: Ordering[K] = fab.ordering
+        val leftBuilder = SortedMap.newBuilder[K, A](ordering)
+        val rightBuilder = SortedMap.newBuilder[K, B](ordering)
+        leftBuilder.sizeHint(fab.size)
+        rightBuilder.sizeHint(fab.size)
+        fab.foreach { case (k, (a, b)) =>
+          leftBuilder += k -> a
+          rightBuilder += k -> b
+        }
+        (leftBuilder.result(), rightBuilder.result())
+      }
+
       override def map2Eval[A, B, Z](
         fa: SortedMap[K, A],
         fb: Eval[SortedMap[K, B]]

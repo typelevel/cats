@@ -50,6 +50,27 @@ private[instances] trait Tuple2InstancesBinCompat0 {
 
   implicit val catsDataFunctorForPair: Functor[λ[P => (P, P)]] = new Functor[λ[P => (P, P)]] {
     override def map[A, B](fa: (A, A))(f: A => B): (B, B) = (f(fa._1), f(fa._2))
+
+    override def as[A, B](fa: (A, A), b: B): (B, B) = (b, b)
+
+    override def tupleLeft[A, B](fa: (A, A), b: B): ((B, A), (B, A)) =
+      ((b, fa._1), (b, fa._2))
+
+    override def tupleRight[A, B](fa: (A, A), b: B): ((A, B), (A, B)) =
+      ((fa._1, b), (fa._2, b))
+
+    override def fproduct[A, B](fa: (A, A))(f: A => B): ((A, B), (A, B)) =
+      ((fa._1, f(fa._1)), (fa._2, f(fa._2)))
+
+    override def fproductLeft[A, B](fa: (A, A))(f: A => B): ((B, A), (B, A)) =
+      ((f(fa._1), fa._1), (f(fa._2), fa._2))
+
+    override def unzip[A, B](fab: ((A, B), (A, B))): ((A, A), (B, B)) =
+      ((fab._1._1, fab._2._1), (fab._1._2, fab._2._2))
+
+    private val unit: (Unit, Unit) = ((), ())
+
+    override def void[A](fa: (A, A)): (Unit, Unit) = unit
   }
 }
 

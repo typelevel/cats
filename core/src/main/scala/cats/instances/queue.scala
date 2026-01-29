@@ -136,7 +136,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       override def traverseVoid[G[_], A, B](fa: Queue[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
         G match {
           case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa)(f)(x)
-          case _ =>
+          case _                    =>
             foldRight(fa, Eval.now(G.unit)) { (a, acc) =>
               G.map2Eval(f(a), acc) { (_, _) =>
                 ()
@@ -188,6 +188,9 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
       override def toList[A](fa: Queue[A]): List[A] = fa.toList
 
       override def toIterable[A](fa: Queue[A]): Iterable[A] = fa
+
+      override def unzip[A, B](fab: Queue[(A, B)]): (Queue[A], Queue[B]) =
+        fab.unzip
 
       override def reduceLeftOption[A](fa: Queue[A])(f: (A, A) => A): Option[A] =
         fa.reduceLeftOption(f)

@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.{Align, Alternative, CoflatMap, Eval, Monad, Semigroupal, Traverse, TraverseFilter}
+import cats.{Align, Alternative, CoflatMap, Eval, Functor, Monad, Semigroupal, Traverse, TraverseFilter}
 import cats.data.ZipSeq
 import cats.laws.discipline.{
   AlignTests,
@@ -73,6 +73,21 @@ class SeqSuite extends CatsSuite {
   test("show") {
     forAll { (seq: Seq[String]) =>
       assert(seq.show === (seq.toString))
+    }
+  }
+
+  test("functor default methods match map-based implementations") {
+    val F = Functor[Seq]
+    forAll { (fa: Seq[Int], b: String, f: Int => Long) =>
+      assert(F.as(fa, b) === F.map(fa)(_ => b))
+      assert(F.tupleLeft(fa, b) === F.map(fa)(a => (b, a)))
+      assert(F.tupleRight(fa, b) === F.map(fa)(a => (a, b)))
+      assert(F.fproduct(fa)(f) === F.map(fa)(a => (a, f(a))))
+      assert(F.fproductLeft(fa)(f) === F.map(fa)(a => (f(a), a)))
+      assert(F.void(fa) === F.map(fa)(_ => ()))
+    }
+    forAll { (fab: Seq[(Int, String)]) =>
+      assert(F.unzip(fab) === (F.map(fab)(_._1), F.map(fab)(_._2)))
     }
   }
 
