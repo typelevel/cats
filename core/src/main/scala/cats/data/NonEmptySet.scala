@@ -51,11 +51,11 @@ object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
     else throw new IllegalArgumentException("Cannot create NonEmptySet from empty set")
 
   def of[A](a: A, as: A*)(implicit A: Order[A]): NonEmptySet[A] =
-    create(SortedSet(a +: as: _*)(A.toOrdering))
+    create(SortedSet(a +: as: _*)(using A.toOrdering))
 
   def apply[A](head: A, tail: SortedSet[A])(implicit A: Order[A]): NonEmptySet[A] =
-    create(SortedSet(head)(A.toOrdering) ++ tail)
-  def one[A](a: A)(implicit A: Order[A]): NonEmptySet[A] = create(SortedSet(a)(A.toOrdering))
+    create(SortedSet(head)(using A.toOrdering) ++ tail)
+  def one[A](a: A)(implicit A: Order[A]): NonEmptySet[A] = create(SortedSet(a)(using A.toOrdering))
 
   implicit def catsNonEmptySetOps[A](value: NonEmptySet[A]): NonEmptySetOps[A] =
     new NonEmptySetOps(value)

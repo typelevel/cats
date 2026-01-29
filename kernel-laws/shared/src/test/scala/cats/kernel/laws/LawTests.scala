@@ -77,7 +77,7 @@ object KernelCheck {
 
   // Copied from cats-laws.
   implicit def arbitrarySortedMap[K: Arbitrary: Order, V: Arbitrary]: Arbitrary[SortedMap[K, V]] =
-    Arbitrary(arbitrary[Map[K, V]].map(s => SortedMap.empty[K, V](implicitly[Order[K]].toOrdering) ++ s))
+    Arbitrary(arbitrary[Map[K, V]].map(s => SortedMap.empty[K, V](using implicitly[Order[K]].toOrdering) ++ s))
 
   // Copied from cats-laws.
   implicit def cogenSortedMap[K: Order: Cogen, V: Cogen]: Cogen[SortedMap[K, V]] = {
@@ -88,7 +88,7 @@ object KernelCheck {
 
   // Copied from cats-laws.
   implicit def arbitrarySortedSet[A: Arbitrary: Order]: Arbitrary[SortedSet[A]] =
-    Arbitrary(arbitrary[Set[A]].map(s => SortedSet.empty[A](implicitly[Order[A]].toOrdering) ++ s))
+    Arbitrary(arbitrary[Set[A]].map(s => SortedSet.empty[A](using implicitly[Order[A]].toOrdering) ++ s))
 
   // Copied from cats-laws.
   implicit def cogenSortedSet[A: Order: Cogen]: Cogen[SortedSet[A]] = {
