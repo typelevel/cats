@@ -26,8 +26,55 @@ import cats.arrow.*
 
 /**
  * The dual category of some other category, `Arr`.
+ *
+ * In a normal category, `Arr` has a direction `A => B`.
+ * The dual category reverses the direction, making it `B => A`.
+ *
+ * The dual category can be useful when you want to reason about or define
+ * operations in terms of their duals without modifying the original category.
+ * In other words, the dual category provides a "reversed" view to the original category.
+ *
+ * Example:
+ * {{{
+ * import cats.arrow.Compose
+ * import cats.data.Op
+ * import cats.syntax.all.*
+ *
+ * val f: String => String = a => s"f($a)"
+ * val g: String => String = b => s"g($b)"
+ *
+ * // `>>>` is an alias for `andThen`
+ * (f >>> g)("a")
+ * // res0: String = g(f(a))
+ *
+ * // `Op` reverses the composition
+ * (Op(f) >>> Op(g)).run("a")
+ * // res1: String = f(g(a))
+ * }}}
  */
 final case class Op[Arr[_, _], A, B](run: Arr[B, A]) {
+
+  /**
+   * Compose two `Op` values. Note that composition order is reversed compared to `Arr`.
+   *
+   * Example:
+   * {{{
+   * import cats._
+   * import cats.data._
+   *
+   * val f: Int => String = _.toString
+   * val g: String => Int = _.length
+   *
+   * val opF = Op(f)
+   * val opG = Op(g)
+   *
+   * val composed = opF.compose(opG)
+   * // composed: cats.data.Op[Function1, Int, Int]
+   *
+   * composed.run(1234)
+   * // res0: Int = 4
+   * }}}
+   */
   def compose[Z](op: Op[Arr, Z, A])(implicit Arr: Compose[Arr]): Op[Arr, Z, B] =
     Op(Arr.compose(op.run, run))
 
