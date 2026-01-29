@@ -119,7 +119,7 @@ object GenTupleMonadInstances extends Template {
     |}
     -
     -private[instances] class $flatMapTupleClass${`[A0, A(N - 1)]`}(${`parameters A..(N-1)`("Semigroup")})
-    -    extends FlatMap[${`(A..N - 1, *)`}] {
+    -    extends FlatMap.AbstractFlatMap[${`(A..N - 1, *)`}] {
     -  override def ap[A, B](ff: ${`A0, A(N - 1)&`("A => B")})(fa: ${`A0, A(N - 1)&`("A")}) =
     -    ${`combine A..(N - 1)`("ff", "fa", s"ff._$arity(fa._$arity)")}
     -  override def product[A, B](fa: ${`A0, A(N - 1)&`("A")}, fb: ${`A0, A(N - 1)&`("B")}) =

@@ -31,7 +31,7 @@ import scala.annotation.tailrec
 trait TryInstances extends TryInstances1 {
 
   implicit def catsStdInstancesForTry: MonadThrow[Try] & CoflatMap[Try] & Traverse[Try] & Monad[Try] =
-    new TryCoflatMap with MonadThrow[Try] with Traverse[Try] with Monad[Try] {
+    new FlatMap.AbstractFoldableFlatMap[Try] with TryCoflatMap with MonadThrow[Try] with Traverse[Try] with Monad[Try] {
       def pure[A](x: A): Try[A] = Success(x)
 
       override def product[A, B](ta: Try[A], tb: Try[B]): Try[(A, B)] =
@@ -249,7 +249,7 @@ sealed private[instances] trait TryInstances2 {
     new TrySemigroup[A]
 }
 
-abstract private[cats] class TryCoflatMap extends CoflatMap[Try] {
+private[cats] trait TryCoflatMap extends CoflatMap[Try] {
   def map[A, B](ta: Try[A])(f: A => B): Try[B] = ta.map(f)
   def coflatMap[A, B](ta: Try[A])(f: Try[A] => B): Try[B] = Try(f(ta))
 }
