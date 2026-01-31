@@ -31,11 +31,18 @@ import cats.Contravariant
  */
 sealed abstract class Func[F[_], A, B] { self =>
   def run: A => F[B]
+
+  /** 
+    * scala> val f = Func.func((x: Int) => List(x.toString))
+    * val f: cats.data.Func[List,Int,String] = ...
+    * scala> val g = f.map((x: String) => if (x=="0") None else Some(x))
+    * val g: cats.data.Func[List,Int,Option[String]] = ...
+    */
   def map[C](f: B => C)(implicit FF: Functor[F]): Func[F, A, C] =
     Func.func(a => FF.map(self.run(a))(f))
 
   /**
-   * Modify the context `F` using transformation `f`.
+   * Modify the context `F` using (natural) transformation `f`.
    */
   def mapK[G[_]](f: F ~> G): Func[G, A, B] =
     Func.func(a => f(run(a)))
@@ -118,6 +125,10 @@ sealed private[data] trait FuncApplicative[F[_], C] extends Applicative[λ[α =>
 
 /**
  * An implementation of [[Func]] that's specialized to [[Applicative]].
+ * 
+ * As seen in [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
+ * the Applicative Functor "capture the essence of the ITERATOR pattern"
+ * allowing to traverse and compose Applicative Functors
  */
 sealed abstract class AppFunc[F[_], A, B] extends Func[F, A, B] { self =>
   def F: Applicative[F]
