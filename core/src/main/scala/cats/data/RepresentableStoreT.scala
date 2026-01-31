@@ -21,7 +21,7 @@
 
 package cats.data
 
-import cats.{Applicative, Comonad, Functor, Monoid, Representable}
+import cats.{Applicative, Apply, Comonad, Functor, Monoid, Representable}
 
 /*
  * The dual of `StateT`. Stores some state `A` indexed by
@@ -130,7 +130,7 @@ trait RepresentableStoreTInstances1 extends RepresentableStoreTInstances2 {
     F: Representable.Aux[F, S],
     S: Monoid[S]
   ): Applicative[RepresentableStoreT[W, F, S, *]] =
-    new Applicative[RepresentableStoreT[W, F, S, *]] {
+    new Apply.AbstractApply[RepresentableStoreT[W, F, S, *]] with Applicative[RepresentableStoreT[W, F, S, *]] {
 
       def pure[A](x: A): RepresentableStoreT[W, F, S, A] = RepresentableStoreT.pure[W, F, S, A](x)
 

@@ -698,7 +698,7 @@ sealed abstract private[data] class IRWSTInstances3 {
     }
 }
 
-sealed abstract private[data] class IRWSTFunctor[F[_], E, L, SA, SB]
+sealed private[data] trait IRWSTFunctor[F[_], E, L, SA, SB]
     extends Functor[IndexedReaderWriterStateT[F, E, L, SA, SB, *]] {
   implicit def F: Functor[F]
 
@@ -759,7 +759,8 @@ sealed abstract private[data] class IRWSTBifunctor[F[_], E, L, SA]
 }
 
 sealed abstract private[data] class RWSTMonad[F[_], E, L, S]
-    extends IRWSTFunctor[F, E, L, S, S]
+    extends FlatMap.AbstractFlatMap[ReaderWriterStateT[F, E, L, S, *]]
+    with IRWSTFunctor[F, E, L, S, S]
     with Monad[ReaderWriterStateT[F, E, L, S, *]] {
   implicit def F: Monad[F]
   implicit def L: Monoid[L]
@@ -790,8 +791,10 @@ sealed abstract private[data] class RWSTMonad[F[_], E, L, S]
 sealed abstract private[data] class IRWSTSemigroupK[F[_], E, L, SA, SB] extends IRWSTSemigroupK1[F, E, L, SA, SB]
 
 sealed abstract private[data] class RWSTAlternative[F[_], E, L, S]
-    extends IRWSTFunctor[F, E, L, S, S]
-    with RWSTAlternative1[F, E, L, S]
+    extends RWSTAlternative1[F, E, L, S]
+    with IRWSTFunctor[F, E, L, S, S] {
+  def F: Monad[F]
+}
 
 sealed abstract private[data] class RWSTMonadError[F[_], E, L, S, R]
     extends RWSTMonad[F, E, L, S]
@@ -822,7 +825,8 @@ private trait IRWSTSemigroupK1[F[_], E, L, SA, SB] extends SemigroupK[IndexedRea
 }
 
 private trait RWSTAlternative1[F[_], E, L, S]
-    extends IRWSTSemigroupK1[F, E, L, S, S]
+    extends Apply.AbstractApply[ReaderWriterStateT[F, E, L, S, *]]
+    with IRWSTSemigroupK1[F, E, L, S, S]
     with Alternative[ReaderWriterStateT[F, E, L, S, *]] {
 
   implicit def F: Monad[F]

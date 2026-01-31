@@ -78,7 +78,7 @@ trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   }
 
   def foldableLazyListWithDefaultImpl: Foldable[LazyList] =
-    new Foldable[LazyList] {
+    new Foldable.AbstractFoldable[LazyList] {
       def foldLeft[A, B](fa: LazyList[A], b: B)(f: (B, A) => B): B =
         Foldable[LazyList].foldLeft(fa, b)(f)
 

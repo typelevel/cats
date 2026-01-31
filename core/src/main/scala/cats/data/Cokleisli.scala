@@ -132,7 +132,9 @@ sealed abstract private[data] class CokleisliInstances1 {
     }
 }
 
-private[data] class CokleisliMonad[F[_], A] extends Monad[Cokleisli[F, A, *]] {
+private[data] class CokleisliMonad[F[_], A]
+    extends FlatMap.AbstractFlatMap[Cokleisli[F, A, *]]
+    with Monad[Cokleisli[F, A, *]] {
 
   def pure[B](x: B): Cokleisli[F, A, B] =
     Cokleisli.pure(x)

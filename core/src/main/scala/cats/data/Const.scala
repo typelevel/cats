@@ -244,7 +244,7 @@ sealed abstract private[data] class ConstInstances3 extends ConstInstances4 {
 sealed abstract private[data] class ConstInstances4
 
 sealed private[data] trait ConstFunctor[C] extends Functor[Const[C, *]] {
-  final override def map[A, B](fa: Const[C, A])(f: A => B): Const[C, B] =
+  override def map[A, B](fa: Const[C, A])(f: A => B): Const[C, B] =
     fa.retag[B]
 }
 
@@ -253,7 +253,7 @@ sealed private[data] trait ConstContravariant[C] extends Contravariant[Const[C, 
     fa.retag[B]
 }
 
-sealed private[data] trait ConstApply[C] extends ConstFunctor[C] with Apply[Const[C, *]] {
+sealed private[data] trait ConstApply[C] extends Apply.AbstractApply[Const[C, *]] with ConstFunctor[C] {
 
   implicit def C0: Semigroup[C]
 
@@ -264,10 +264,13 @@ sealed private[data] trait ConstApply[C] extends ConstFunctor[C] with Apply[Cons
     fa.retag[(A, B)].combine(fb.retag[(A, B)])
 }
 
-sealed private[data] trait ConstApplicative[C] extends Applicative[Const[C, *]] with ConstApply[C] {
+sealed private[data] trait ConstApplicative[C] extends ConstApply[C] with Applicative[Const[C, *]] {
 
   implicit def C0: Monoid[C]
 
   def pure[A](x: A): Const[C, A] =
     Const.empty
+
+  final override def map[A, B](fa: Const[C, A])(f: A => B): Const[C, B] =
+    super[ConstApply].map(fa)(f)
 }

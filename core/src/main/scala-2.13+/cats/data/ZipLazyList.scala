@@ -29,7 +29,7 @@ object ZipLazyList {
   def apply[A](value: LazyList[A]): ZipLazyList[A] = new ZipLazyList(value)
 
   implicit val catsDataAlternativeForZipLazyList: Alternative[ZipLazyList] & CommutativeApplicative[ZipLazyList] =
-    new Alternative[ZipLazyList] with CommutativeApplicative[ZipLazyList] {
+    new Apply.AbstractApply[ZipLazyList] with Alternative[ZipLazyList] with CommutativeApplicative[ZipLazyList] {
       def pure[A](x: A): ZipLazyList[A] = new ZipLazyList(LazyList.continually(x))
 
       override def map[A, B](fa: ZipLazyList[A])(f: (A) => B): ZipLazyList[B] =

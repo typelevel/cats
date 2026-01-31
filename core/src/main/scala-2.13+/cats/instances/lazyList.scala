@@ -35,7 +35,8 @@ trait LazyListInstances extends cats.kernel.instances.LazyListInstances {
 
   implicit val catsStdInstancesForLazyList
     : Traverse[LazyList] & Alternative[LazyList] & Monad[LazyList] & CoflatMap[LazyList] & Align[LazyList] =
-    new Traverse[LazyList]
+    new FlatMap.AbstractFoldableFlatMap[LazyList]
+      with Traverse[LazyList]
       with Alternative[LazyList]
       with Monad[LazyList]
       with CoflatMap[LazyList]

@@ -666,9 +666,11 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
       override def reduce[A](fa: NonEmptyChain[A])(implicit A: Semigroup[A]): A =
         fa.reduce
 
-      def reduceLeftTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
+      override def reduceLeftTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
-      def reduceRightTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
+      override def reduceRightTo[A, B](
+        fa: NonEmptyChain[A]
+      )(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
         Eval.defer(fa.reduceRightTo(a => Eval.later(f(a))) { (a, b) =>
           Eval.defer(g(a, b))
         })

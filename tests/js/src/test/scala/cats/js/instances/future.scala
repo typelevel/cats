@@ -41,8 +41,9 @@ object Await {
 }
 
 sealed private[instances] trait FutureInstances0 extends FutureInstances1 {
-  def futureComonad(atMost: FiniteDuration)(implicit ec: E): Comonad[Future] =
+  def futureComonad(atMost: FiniteDuration)(implicit ctx: E): Comonad[Future] =
     new FutureCoflatMap with Comonad[Future] {
+      override def ec: E = ctx
       def extract[A](x: Future[A]): A =
         Await.result(x, atMost)
     }

@@ -35,7 +35,13 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
 
   implicit val catsStdInstancesForList
     : Traverse[List] & Alternative[List] & Monad[List] & CoflatMap[List] & Align[List] =
-    new Traverse[List] with Alternative[List] with Monad[List] with CoflatMap[List] with Align[List] {
+    new FlatMap.AbstractFoldableFlatMap[List]
+      with Traverse[List]
+      with Alternative[List]
+      with Monad[List]
+      with CoflatMap[List]
+      with Align[List] {
+
       def empty[A]: List[A] = Nil
 
       def combineK[A](x: List[A], y: List[A]): List[A] = x ::: y

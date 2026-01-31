@@ -27,6 +27,7 @@ import cats.kernel.{CommutativeMonoid, CommutativeSemigroup}
 import scala.annotation.tailrec
 
 trait TupleInstances extends Tuple2Instances with cats.kernel.instances.TupleInstances
+abstract private[instances] class AbstractTupleInstances extends TupleInstances
 
 private[instances] trait Tuple2InstancesBinCompat0 {
 
@@ -97,7 +98,7 @@ sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
 
   @deprecated("Use catsStdInstancesForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
   def catsStdInstancesForTuple2[X]: Traverse[(X, *)] & Comonad[(X, *)] & Reducible[(X, *)] =
-    new Traverse[(X, *)] with Comonad[(X, *)] with Reducible[(X, *)] {
+    new Foldable.AbstractFoldable[(X, *)] with Traverse[(X, *)] with Comonad[(X, *)] with Reducible[(X, *)] {
       def traverse[G[_], A, B](fa: (X, A))(f: A => G[B])(implicit G: Applicative[G]): G[(X, B)] =
         G.map(f(fa._2))((fa._1, _))
 
@@ -186,7 +187,7 @@ sealed private[instances] trait Tuple2Instances4 {
     new FlatMapTuple2[X](SX)
 }
 
-private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap[(X, *)] {
+private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap.AbstractFlatMap[(X, *)] {
   override def ap[A, B](ff: (X, A => B))(fa: (X, A)): (X, B) = {
     val x = s.combine(ff._1, fa._1)
     val b = ff._2(fa._2)

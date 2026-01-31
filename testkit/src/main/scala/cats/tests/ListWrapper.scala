@@ -67,7 +67,7 @@ object ListWrapper {
   val traverse: Traverse[ListWrapper] = {
     val F = Traverse[List]
 
-    new Traverse[ListWrapper] {
+    new Foldable.AbstractFoldable[ListWrapper] with Traverse[ListWrapper] {
       def foldLeft[A, B](fa: ListWrapper[A], b: B)(f: (B, A) => B): B =
         F.foldLeft(fa.list, b)(f)
       def foldRight[A, B](fa: ListWrapper[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
@@ -124,7 +124,7 @@ object ListWrapper {
   val alternative: Alternative[ListWrapper] = {
     val M = Alternative[List]
 
-    new Alternative[ListWrapper] {
+    new Apply.AbstractApply[ListWrapper] with Alternative[ListWrapper] {
       def pure[A](x: A): ListWrapper[A] = ListWrapper(M.pure(x))
 
       def ap[A, B](f: ListWrapper[A => B])(fa: ListWrapper[A]): ListWrapper[B] =
@@ -139,7 +139,7 @@ object ListWrapper {
 
   def nonEmptyAlternative: NonEmptyAlternative[ListWrapper] = alternative
 
-  val monad: Monad[ListWrapper] = new Monad[ListWrapper] {
+  val monad: Monad[ListWrapper] = new FlatMap.AbstractFlatMap[ListWrapper] with Monad[ListWrapper] {
     val M = Monad[List]
     def pure[A](x: A): ListWrapper[A] = ListWrapper(x :: Nil)
 

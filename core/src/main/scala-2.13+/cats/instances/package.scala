@@ -81,7 +81,7 @@ package object instances {
   object string extends StringInstances
   object tailRec extends TailRecInstances
   object try_ extends TryInstances
-  object tuple extends TupleInstances with Tuple2InstancesBinCompat0
+  object tuple extends AbstractTupleInstances with Tuple2InstancesBinCompat0
   object unit extends UnitInstances
   object uuid extends UUIDInstances
   object vector extends VectorInstances with VectorInstancesBinCompat0
