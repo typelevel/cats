@@ -32,6 +32,7 @@ import cats.data.*
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import org.scalacheck.Arbitrary.{arbitrary => getArbitrary}
 
+
 /**
  * Arbitrary instances for cats.data
  */
@@ -42,6 +43,8 @@ object arbitrary extends ArbitraryInstances0 with ScalaVersionSpecific.Arbitrary
   // remove this once a newer version is available.
   implicit val catsLawsCogenForThrowable: Cogen[Throwable] =
     Cogen[String].contramap(_.toString)
+
+
 
   // this instance is not available in ScalaCheck 1.13.2.
   // remove this once a newer version is available.
