@@ -57,13 +57,13 @@ object NonEmptyMapImpl extends NonEmptyMapInstances with Newtype2 {
     fromMapUnsafe(m)
 
   def apply[K, A](head: (K, A), tail: SortedMap[K, A])(implicit K: Order[K]): NonEmptyMap[K, A] =
-    create(SortedMap(head)(K.toOrdering) ++ tail)
+    create(SortedMap(head)(using K.toOrdering) ++ tail)
 
   def of[K, A](a: (K, A), as: (K, A)*)(implicit K: Order[K]): NonEmptyMap[K, A] =
-    create(SortedMap(as: _*)(K.toOrdering) + a)
+    create(SortedMap(as: _*)(using K.toOrdering) + a)
 
   def one[K, A](k: K, a: A)(implicit K: Order[K]): NonEmptyMap[K, A] =
-    create(SortedMap((k, a))(K.toOrdering))
+    create(SortedMap((k, a))(using K.toOrdering))
 
   implicit def catsNonEmptyMapOps[K, A](value: Type[K, A]): NonEmptyMapOps[K, A] =
     new NonEmptyMapOps(value)
