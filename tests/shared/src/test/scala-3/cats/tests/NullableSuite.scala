@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Typelevel
+ * Copyright (c) 2015 Typelevel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -205,13 +205,15 @@ class NullableSuite extends CatsSuite {
     val toLong: Int => Long = _.toLong + 1L
     val sumLong: (Long, Int) => Long = (acc, i) => acc + i.toLong
     val pfEven: PartialFunction[Int, Int] = { case i if i % 2 == 0 => i + 10 }
-    val firstSome: Int => Option[Int] = i => if (i % 2 == 0) Some(i + 1) else None
-    val traverseVoidF: Int => Option[Int] = i => if (i % 2 == 0) Some(i) else None
+    val firstSome: Int => Option[Int] = i => if i % 2 == 0 then Some(i + 1) else None
+    val traverseVoidF: Int => Option[Int] = i => if i % 2 == 0 then Some(i) else None
 
     forAll { (fa: Nullable[Int], idx: Long, target: Int, pred: Int => Boolean) =>
       assert(optimized.foldLeft(fa, 1)(_ + _) === defaults.foldLeft(fa, 1)(_ + _))
-      assert(optimized.foldRight(fa, Eval.now(1))((a, eb) => eb.map(_ + a)).value ===
-        defaults.foldRight(fa, Eval.now(1))((a, eb) => eb.map(_ + a)).value)
+      assert(
+        optimized.foldRight(fa, Eval.now(1))((a, eb) => eb.map(_ + a)).value ===
+          defaults.foldRight(fa, Eval.now(1))((a, eb) => eb.map(_ + a)).value
+      )
       assert(optimized.fold(fa) === defaults.fold(fa))
       assert(optimized.combineAllOption(fa) === defaults.combineAllOption(fa))
       assert(optimized.toIterable(fa).toList === defaults.toIterable(fa).toList)
@@ -251,11 +253,11 @@ class NullableSuite extends CatsSuite {
     val defaults = defaultOnlyTraverse
 
     forAll { (fa: Nullable[Int], fga: Nullable[Option[Int]], init: Long, replacement: Int, idx: Long) =>
-      val tapF: Int => Option[String] = i => if (i % 2 == 0) Some(i.toString) else None
+      val tapF: Int => Option[String] = i => if i % 2 == 0 then Some(i.toString) else None
       val accumulateF: (Long, Int) => (Long, String) = (s, i) => (s + i.toLong, s"$s:$i")
-      val indexTraverseF: (Int, Int) => Option[String] = (i, n) => if ((i + n) % 2 == 0) Some(s"$i-$n") else None
-      val longIndexTraverseF: (Int, Long) => Option[String] = (i, n) =>
-        if ((i.toLong + n) % 2L == 0L) Some(s"$i-$n") else None
+      val indexTraverseF: (Int, Int) => Option[String] = (i, n) => if (i + n) % 2 == 0 then Some(s"$i-$n") else None
+      val longIndexTraverseF: (Int, Long) => Option[String] =
+        (i, n) => if (i.toLong + n) % 2L == 0L then Some(s"$i-$n") else None
       val indexMapF: (Int, Int) => String = (i, n) => s"$i@$n"
       val longIndexMapF: (Int, Long) => String = (i, n) => s"$i@$n"
 
@@ -266,7 +268,11 @@ class NullableSuite extends CatsSuite {
       assert(optimized.mapWithIndex(fa)(indexMapF) === defaults.mapWithIndex(fa)(indexMapF))
       assert(optimized.traverseWithIndexM(fa)(indexTraverseF) === defaults.traverseWithIndexM(fa)(indexTraverseF))
       assert(optimized.zipWithIndex(fa) === defaults.zipWithIndex(fa))
-      assert(optimized.traverseWithLongIndexM(fa)(longIndexTraverseF) === defaults.traverseWithLongIndexM(fa)(longIndexTraverseF))
+      assert(
+        optimized.traverseWithLongIndexM(fa)(longIndexTraverseF) === defaults.traverseWithLongIndexM(fa)(
+          longIndexTraverseF
+        )
+      )
       assert(optimized.mapWithLongIndex(fa)(longIndexMapF) === defaults.mapWithLongIndex(fa)(longIndexMapF))
       assert(optimized.zipWithLongIndex(fa) === defaults.zipWithLongIndex(fa))
       assert(optimized.updated_(fa, idx, replacement) === defaults.updated_(fa, idx, replacement))
