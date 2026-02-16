@@ -64,6 +64,12 @@ object Nullable extends NullableInstances {
     }
   }
 
+  extension [A](inline nested: Nullable[Nullable[A]]) {
+    inline def flatten: Nullable[A] = {
+      nested
+    }
+  }
+
   inline def apply[A](inline a: A | Null): Nullable[A] = {
     a
   }
@@ -87,6 +93,15 @@ object Nullable extends NullableInstances {
       None
     } else {
       Some(value.asInstanceOf[A])
+    }
+  }
+
+  private[data] inline def nonMacroToNullableOption[A](n: Nullable[A]): Option[Nullable[A]] = {
+    val value: A | Null = n
+    if value == null then {
+      None
+    } else {
+      Some(n)
     }
   }
 
@@ -169,7 +184,7 @@ object Nullable extends NullableInstances {
     def show(nullable: Nullable[A]): String = {
       val value: A | Null = nullable
       if value == null then {
-        java.lang.String.valueOf(null)
+        java.lang.String.valueOf(null: AnyRef)
       } else {
         A.show(value.asInstanceOf[A])
       }
@@ -648,17 +663,17 @@ sealed abstract private[data] class NullableInstances extends NullableInstances0
 
     override def pmin(na: Nullable[A], nb: Nullable[A]): Option[Nullable[A]] = {
       if compare(na, nb) <= 0 then {
-        Nullable.nonMacroToOption(na).asInstanceOf[Option[Nullable[A]]]
+        Nullable.nonMacroToNullableOption(na)
       } else {
-        Nullable.nonMacroToOption(nb).asInstanceOf[Option[Nullable[A]]]
+        Nullable.nonMacroToNullableOption(nb)
       }
     }
 
     override def pmax(na: Nullable[A], nb: Nullable[A]): Option[Nullable[A]] = {
       if compare(na, nb) >= 0 then {
-        Nullable.nonMacroToOption(na).asInstanceOf[Option[Nullable[A]]]
+        Nullable.nonMacroToNullableOption(na)
       } else {
-        Nullable.nonMacroToOption(nb).asInstanceOf[Option[Nullable[A]]]
+        Nullable.nonMacroToNullableOption(nb)
       }
     }
   }
@@ -676,9 +691,9 @@ private[data] trait NullableInstances0 extends NullableInstances1 {
       if java.lang.Double.isNaN(c) then {
         None
       } else if c <= 0.0 then {
-        Nullable.nonMacroToOption(na).asInstanceOf[Option[Nullable[A]]]
+        Nullable.nonMacroToNullableOption(na)
       } else {
-        Nullable.nonMacroToOption(nb).asInstanceOf[Option[Nullable[A]]]
+        Nullable.nonMacroToNullableOption(nb)
       }
     }
 
@@ -688,9 +703,9 @@ private[data] trait NullableInstances0 extends NullableInstances1 {
       if java.lang.Double.isNaN(c) then {
         None
       } else if c >= 0.0 then {
-        Nullable.nonMacroToOption(na).asInstanceOf[Option[Nullable[A]]]
+        Nullable.nonMacroToNullableOption(na)
       } else {
-        Nullable.nonMacroToOption(nb).asInstanceOf[Option[Nullable[A]]]
+        Nullable.nonMacroToNullableOption(nb)
       }
     }
   }

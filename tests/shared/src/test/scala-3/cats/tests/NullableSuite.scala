@@ -114,6 +114,24 @@ class NullableSuite extends CatsSuite {
     }
   }
 
+  test("flatten is consistent with Nullable identity and Option view") {
+    forAll { (nullable: Nullable[Int]) =>
+      val nested: Nullable[Nullable[Int]] = Nullable(nullable)
+      assert(nested.flatten === nullable)
+      assert(nested.flatten.toOption === nullable.toOption)
+    }
+  }
+
+  test("flatten collapses nested empty and nested non-empty values") {
+    val nestedEmpty: Nullable[Nullable[Int]] = Nullable(Nullable.empty[Int])
+    assert(nestedEmpty.flatten === Nullable.empty[Int])
+
+    forAll { (x: Int) =>
+      val nestedNonEmpty: Nullable[Nullable[Int]] = Nullable(Nullable(x))
+      assert(nestedNonEmpty.flatten === Nullable(x))
+    }
+  }
+
   test("option-like Applicative is not lawful for nested Nullable") {
     val candidate = new Applicative[Nullable] {
       def pure[A](x: A): Nullable[A] = Nullable(x)
