@@ -21,7 +21,7 @@
 
 package cats.data
 
-import cats.{Applicative, Eq, Eval, Hash, Monad, Monoid, Order, PartialOrder, Semigroup, Show, Traverse}
+import cats.{Eq, Eval, Foldable, Hash, Monoid, Order, PartialOrder, Semigroup, Show}
 import scala.language.strictEquality
 import scala.quoted.*
 
@@ -47,7 +47,24 @@ object Nullable extends NullableInstances {
       !isNull
     }
 
-    inline def map[B](inline f: A => B): Nullable[B] = {
+    /**
+     * Transforms the non-null value.
+     *
+     * This is not a lawful `Functor` map. Because `Nullable[Nullable[A]]` collapses to
+     * `Nullable[A]`, composition can break:
+     *
+     * {{{
+     * val n: Nullable[Nullable[Int]] = Nullable(Nullable(1))
+     * val f: Int => String = _ => null
+     * val g: String => Int = _ => 42
+     *
+     * val lhs = n.transform(_.transform(f)).transform(_.transform(g))
+     * val rhs = n.transform(_.transform(f.andThen(g)))
+     *
+     * // lhs is null, rhs is 42
+     * }}}
+     */
+    inline def transform[B](inline f: A => B): Nullable[B] = {
       fold(null: Null)(f)
     }
 
@@ -192,100 +209,11 @@ object Nullable extends NullableInstances {
   }
 
   /*
-   * These methods intentionally use direct null checks or `nonMacroToOption` instead of `fa.fold(...)`.
+   * These methods intentionally use direct null checks instead of `fa.fold(...)`.
    * `fold` is implemented as an inline macro in this same source file, and Scala 3
    * rejects calls from non-inline methods to a macro defined in the same file.
-   * (`Traverse` methods cannot be inline overrides here.)
    */
-  given catsDataTraverseForNullable: Traverse[Nullable] with {
-    private[this] val nullableUnit: Nullable[Unit] = ()
-    private[this] val nullPair: (Null, Null) = (null, null)
-
-    override def map[A, B](fa: Nullable[A])(f: A => B): Nullable[B] = {
-      val value: A | Null = fa
-      if value == null then {
-        Nullable.empty
-      } else {
-        f(value.asInstanceOf[A])
-      }
-    }
-
-    override def as[A, B](fa: Nullable[A], b: B): Nullable[B] = {
-      val value: A | Null = fa
-      if value == null then {
-        Nullable.empty
-      } else {
-        b
-      }
-    }
-
-    override def void[A](fa: Nullable[A]): Nullable[Unit] = {
-      val value: A | Null = fa
-      if value == null then {
-        Nullable.empty
-      } else {
-        nullableUnit
-      }
-    }
-
-    override def tupleLeft[A, B](fa: Nullable[A], b: B): Nullable[(B, A)] = {
-      val value: A | Null = fa
-      if value == null then {
-        Nullable.empty
-      } else {
-        (b, value.asInstanceOf[A])
-      }
-    }
-
-    override def tupleRight[A, B](fa: Nullable[A], b: B): Nullable[(A, B)] = {
-      val value: A | Null = fa
-      if value == null then {
-        Nullable.empty
-      } else {
-        (value.asInstanceOf[A], b)
-      }
-    }
-
-    override def fproduct[A, B](fa: Nullable[A])(f: A => B): Nullable[(A, B)] = {
-      val value: A | Null = fa
-      if value == null then {
-        Nullable.empty
-      } else {
-        val a = value.asInstanceOf[A]
-        (a, f(a))
-      }
-    }
-
-    override def fproductLeft[A, B](fa: Nullable[A])(f: A => B): Nullable[(B, A)] = {
-      val value: A | Null = fa
-      if value == null then {
-        Nullable.empty
-      } else {
-        val a = value.asInstanceOf[A]
-        (f(a), a)
-      }
-    }
-
-    override def ifF[A](fb: Nullable[Boolean])(ifTrue: => A, ifFalse: => A): Nullable[A] = {
-      val value: Boolean | Null = fb
-      if value == null then {
-        Nullable.empty
-      } else if value.asInstanceOf[Boolean] then {
-        ifTrue
-      } else {
-        ifFalse
-      }
-    }
-
-    override def unzip[A, B](fab: Nullable[(A, B)]): (Nullable[A], Nullable[B]) = {
-      val value: (A, B) | Null = fab
-      if value == null then {
-        nullPair
-      } else {
-        value.asInstanceOf[(A, B)]
-      }
-    }
-
+  given catsDataFoldableForNullable: Foldable[Nullable] with {
     def foldLeft[A, B](fa: Nullable[A], b: B)(f: (B, A) => B): B = {
       val value: A | Null = fa
       if value == null then {
@@ -315,313 +243,6 @@ object Nullable extends NullableInstances {
 
     override def combineAllOption[A](fa: Nullable[A])(using Semigroup[A]): Option[A] = {
       nonMacroToOption(fa)
-    }
-
-    override def toIterable[A](fa: Nullable[A]): Iterable[A] = {
-      val value: A | Null = fa
-      if value == null then {
-        Iterable.empty
-      } else {
-        Iterable.single(value.asInstanceOf[A])
-      }
-    }
-
-    override def foldMap[A, B](fa: Nullable[A])(f: A => B)(using B: Monoid[B]): B = {
-      val value: A | Null = fa
-      if value == null then {
-        B.empty
-      } else {
-        f(value.asInstanceOf[A])
-      }
-    }
-
-    override def reduceLeftToOption[A, B](fa: Nullable[A])(f: A => B)(g: (B, A) => B): Option[B] = {
-      nonMacroToOption(fa).map(f)
-    }
-
-    override def reduceRightToOption[A, B](fa: Nullable[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[Option[B]] = {
-      Eval.now(nonMacroToOption(fa).map(f))
-    }
-
-    override def reduceLeftOption[A](fa: Nullable[A])(f: (A, A) => A): Option[A] = {
-      nonMacroToOption(fa)
-    }
-
-    override def reduceRightOption[A](fa: Nullable[A])(f: (A, Eval[A]) => Eval[A]): Eval[Option[A]] = {
-      Eval.now(nonMacroToOption(fa))
-    }
-
-    override def minimumOption[A](fa: Nullable[A])(using Order[A]): Option[A] = {
-      nonMacroToOption(fa)
-    }
-
-    override def maximumOption[A](fa: Nullable[A])(using Order[A]): Option[A] = {
-      nonMacroToOption(fa)
-    }
-
-    override def get[A](fa: Nullable[A])(idx: Long): Option[A] = {
-      if idx != 0L then {
-        None
-      } else {
-        nonMacroToOption(fa)
-      }
-    }
-
-    override def contains_[A](fa: Nullable[A], v: A)(using A: Eq[A]): Boolean = {
-      val value: A | Null = fa
-      if value == null then {
-        false
-      } else {
-        A.eqv(value.asInstanceOf[A], v)
-      }
-    }
-
-    override def size[A](fa: Nullable[A]): Long = {
-      val value: A | Null = fa
-      if value == null then {
-        0L
-      } else {
-        1L
-      }
-    }
-
-    override def find[A](fa: Nullable[A])(f: A => Boolean): Option[A] = {
-      val value: A | Null = fa
-      if value == null then {
-        None
-      } else {
-        val a = value.asInstanceOf[A]
-        if f(a) then {
-          Some(a)
-        } else {
-          None
-        }
-      }
-    }
-
-    override def exists[A](fa: Nullable[A])(p: A => Boolean): Boolean = {
-      val value: A | Null = fa
-      if value == null then {
-        false
-      } else {
-        p(value.asInstanceOf[A])
-      }
-    }
-
-    override def forall[A](fa: Nullable[A])(p: A => Boolean): Boolean = {
-      val value: A | Null = fa
-      if value == null then {
-        true
-      } else {
-        p(value.asInstanceOf[A])
-      }
-    }
-
-    override def toList[A](fa: Nullable[A]): List[A] = {
-      val value: A | Null = fa
-      if value == null then {
-        Nil
-      } else {
-        value.asInstanceOf[A] :: Nil
-      }
-    }
-
-    override def filter_[A](fa: Nullable[A])(p: A => Boolean): List[A] = {
-      val value: A | Null = fa
-      if value == null then {
-        Nil
-      } else {
-        val a = value.asInstanceOf[A]
-        if p(a) then {
-          a :: Nil
-        } else {
-          Nil
-        }
-      }
-    }
-
-    override def takeWhile_[A](fa: Nullable[A])(p: A => Boolean): List[A] = {
-      val value: A | Null = fa
-      if value == null then {
-        Nil
-      } else {
-        val a = value.asInstanceOf[A]
-        if p(a) then {
-          a :: Nil
-        } else {
-          Nil
-        }
-      }
-    }
-
-    override def dropWhile_[A](fa: Nullable[A])(p: A => Boolean): List[A] = {
-      val value: A | Null = fa
-      if value == null then {
-        Nil
-      } else {
-        val a = value.asInstanceOf[A]
-        if p(a) then {
-          Nil
-        } else {
-          a :: Nil
-        }
-      }
-    }
-
-    override def isEmpty[A](fa: Nullable[A]): Boolean = {
-      val value: A | Null = fa
-      value == null
-    }
-
-    override def nonEmpty[A](fa: Nullable[A]): Boolean = {
-      !isEmpty(fa)
-    }
-
-    override def collectFirst[A, B](fa: Nullable[A])(pf: PartialFunction[A, B]): Option[B] = {
-      val value: A | Null = fa
-      if value == null then {
-        None
-      } else {
-        val a = value.asInstanceOf[A]
-        if pf.isDefinedAt(a) then {
-          Some(pf(a))
-        } else {
-          None
-        }
-      }
-    }
-
-    override def collectFirstSome[A, B](fa: Nullable[A])(f: A => Option[B]): Option[B] = {
-      val value: A | Null = fa
-      if value == null then {
-        None
-      } else {
-        f(value.asInstanceOf[A])
-      }
-    }
-
-    override def traverseVoid[G[_], A, B](fa: Nullable[A])(f: A => G[B])(using G: Applicative[G]): G[Unit] = {
-      val value: A | Null = fa
-      if value == null then {
-        G.unit
-      } else {
-        G.void(f(value.asInstanceOf[A]))
-      }
-    }
-
-    def traverse[G[_], A, B](fa: Nullable[A])(f: A => G[B])(using G: Applicative[G]): G[Nullable[B]] = {
-      val value: A | Null = fa
-      if value == null then {
-        G.pure(Nullable.empty[B])
-      } else {
-        val gb: G[B] = f(value.asInstanceOf[A])
-        // We can treat `Nullable[B]` as `B | Null`; `widen` is typically a no-op
-        // for lawful/correctly implemented Functors.
-        val gNullable: G[Nullable[B]] = G.widen[B, B | Null](gb)
-        gNullable
-      }
-    }
-
-    override def traverseTap[G[_], A, B](fa: Nullable[A])(f: A => G[B])(using G: Applicative[G]): G[Nullable[A]] = {
-      val value: A | Null = fa
-      if value == null then {
-        G.pure(Nullable.empty[A])
-      } else {
-        val a = value.asInstanceOf[A]
-        G.as(f(a), a)
-      }
-    }
-
-    override def sequence[G[_], A](fga: Nullable[G[A]])(using G: Applicative[G]): G[Nullable[A]] = {
-      val value: G[A] | Null = fga
-      if value == null then {
-        G.pure(Nullable.empty[A])
-      } else {
-        G.widen[A, A | Null](value.asInstanceOf[G[A]])
-      }
-    }
-
-    override def mapAccumulate[S, A, B](init: S, fa: Nullable[A])(f: (S, A) => (S, B)): (S, Nullable[B]) = {
-      val value: A | Null = fa
-      if value == null then {
-        (init, Nullable.empty[B])
-      } else {
-        val (next, b) = f(init, value.asInstanceOf[A])
-        (next, b)
-      }
-    }
-
-    override def mapWithIndex[A, B](fa: Nullable[A])(f: (A, Int) => B): Nullable[B] = {
-      val value: A | Null = fa
-      if value == null then {
-        Nullable.empty
-      } else {
-        f(value.asInstanceOf[A], 0)
-      }
-    }
-
-    override def traverseWithIndexM[G[_], A, B](
-      fa: Nullable[A]
-    )(f: (A, Int) => G[B])(using G: Monad[G]): G[Nullable[B]] = {
-      val value: A | Null = fa
-      if value == null then {
-        G.pure(Nullable.empty[B])
-      } else {
-        G.widen[B, B | Null](f(value.asInstanceOf[A], 0))
-      }
-    }
-
-    override def zipWithIndex[A](fa: Nullable[A]): Nullable[(A, Int)] = {
-      val value: A | Null = fa
-      if value == null then {
-        Nullable.empty
-      } else {
-        (value.asInstanceOf[A], 0)
-      }
-    }
-
-    override def traverseWithLongIndexM[G[_], A, B](
-      fa: Nullable[A]
-    )(f: (A, Long) => G[B])(using G: Monad[G]): G[Nullable[B]] = {
-      val value: A | Null = fa
-      if value == null then {
-        G.pure(Nullable.empty[B])
-      } else {
-        G.widen[B, B | Null](f(value.asInstanceOf[A], 0L))
-      }
-    }
-
-    override def mapWithLongIndex[A, B](fa: Nullable[A])(f: (A, Long) => B): Nullable[B] = {
-      val value: A | Null = fa
-      if value == null then {
-        Nullable.empty
-      } else {
-        f(value.asInstanceOf[A], 0L)
-      }
-    }
-
-    override def zipWithLongIndex[A](fa: Nullable[A]): Nullable[(A, Long)] = {
-      val value: A | Null = fa
-      if value == null then {
-        Nullable.empty
-      } else {
-        (value.asInstanceOf[A], 0L)
-      }
-    }
-
-    override def updated_[A, B >: A](fa: Nullable[A], idx: Long, b: B): Option[Nullable[B]] = {
-      if idx < 0L then {
-        None
-      } else {
-        val value: A | Null = fa
-        if value == null then {
-          None
-        } else if idx == 0L then {
-          Some(b: Nullable[B])
-        } else {
-          None
-        }
-      }
     }
   }
 
