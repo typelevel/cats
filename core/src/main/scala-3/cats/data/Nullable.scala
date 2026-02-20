@@ -28,6 +28,31 @@ import scala.quoted.*
 opaque type Nullable[+A] = A | Null
 
 object Nullable extends NullableInstances {
+  type Flattened[A] = A match {
+    case Nullable[x] => Nullable[x]
+    case _           => Nullable[A]
+  }
+
+  private[data] sealed trait Flattening[A, B] {
+    def apply(value: Nullable[A]): B
+  }
+
+  private[data] object Flattening extends Flattening0 {
+    given [A, B](using next: Flattening[A, B]): Flattening[Nullable[A], B] with {
+      def apply(value: Nullable[Nullable[A]]): B = {
+        next(value.asInstanceOf[Nullable[A]])
+      }
+    }
+  }
+
+  private[data] trait Flattening0 {
+    given [A]: Flattening[A, Nullable[A]] with {
+      def apply(value: Nullable[A]): Nullable[A] = {
+        value
+      }
+    }
+  }
+
   // If we enable explicit nulls, strict equality needs this `CanEqual` for `== null` checks.
   // We keep it `private[data]` (not `private`) because explicit nulls are not enabled right now,
   // and a `private given` would otherwise trigger an unused-private-member warning.
@@ -79,11 +104,9 @@ object Nullable extends NullableInstances {
     inline def iterator: Iterator[A] = {
       fold(Iterator.empty)(Iterator.single(_))
     }
-  }
 
-  extension [A](inline nested: Nullable[Nullable[A]]) {
-    inline def flatten: Nullable[A] = {
-      nested
+    inline def flatten[B](using flattening: Flattening[A, B]): B = {
+      flattening(nullable)
     }
   }
 

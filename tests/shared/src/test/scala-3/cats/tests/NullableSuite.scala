@@ -135,6 +135,17 @@ class NullableSuite extends CatsSuite {
     }
   }
 
+  test("flatten removes any number of nested Nullable wrappers down to one layer") {
+    val tripleEmpty: Nullable[Nullable[Nullable[Int]]] = Nullable(Nullable(Nullable.empty[Int]))
+    val tripleNonEmpty: Nullable[Nullable[Nullable[Int]]] = Nullable(Nullable(Nullable(1)))
+
+    val flattenedEmpty: Nullable[Int] = tripleEmpty.flatten
+    val flattenedNonEmpty: Nullable[Int] = tripleNonEmpty.flatten
+
+    assert(flattenedEmpty === Nullable.empty[Int])
+    assert(flattenedNonEmpty === Nullable(1))
+  }
+
   test("minimal Functor[Nullable] fails composition when composed with itself") {
     val candidate = new Functor[Nullable] {
       def map[A, B](fa: Nullable[A])(f: A => B): Nullable[B] =
