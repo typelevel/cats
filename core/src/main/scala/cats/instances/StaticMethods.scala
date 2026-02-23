@@ -27,7 +27,13 @@ import scala.collection.mutable.Builder
 
 private[cats] object StaticMethods {
 
-  def appendAll[F <: Iterable[A], A](it: Iterator[F], bldr: Builder[A, F]): bldr.type = {
+  def appendAll[F <: IterableOnce[A], A](it: Iterator[F], bldr: Builder[A, F]): bldr.type = {
+    while (it.hasNext) {
+      bldr ++= it.next()
+    }
+    bldr
+  }
+  def appendAllMixed[F <: IterableOnce[A], A, Z[_]](it: Iterator[F], bldr: Builder[A, Z[A]]): bldr.type = {
     while (it.hasNext) {
       bldr ++= it.next()
     }
