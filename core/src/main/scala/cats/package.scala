@@ -97,7 +97,12 @@ package object cats {
   type Endo[A] = A => A
 
   val catsInstancesForId: Bimonad[Id] & CommutativeMonad[Id] & NonEmptyTraverse[Id] & Distributive[Id] =
-    new Bimonad[Id] with CommutativeMonad[Id] with NonEmptyTraverse[Id] with Distributive[Id] {
+    new FlatMap.AbstractFoldableFlatMap[Id]
+      with Bimonad[Id]
+      with CommutativeMonad[Id]
+      with NonEmptyTraverse[Id]
+      with Distributive[Id] {
+
       def pure[A](a: A): A = a
       def extract[A](a: A): A = a
       def flatMap[A, B](a: A)(f: A => B): B = f(a)

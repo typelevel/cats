@@ -249,6 +249,7 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
 }
 
 object Apply {
+  abstract private[cats] class AbstractApply[F[_]] extends Apply[F]
 
   /**
    * This semigroup uses a product operation to combine `F`s.
