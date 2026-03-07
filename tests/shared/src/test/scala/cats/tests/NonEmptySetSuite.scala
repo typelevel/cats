@@ -261,7 +261,7 @@ class NonEmptySetSuite extends CatsSuite {
 
   test("NonEmptySet.of is consistent with removal") {
     forAll { (is: SortedSet[Int], i: Int) =>
-      assert(NonEmptySet.of(i, is.toList: _*) - i === (is - i))
+      assert(NonEmptySet.of(i, is.toList*) - i === (is - i))
     }
   }
 

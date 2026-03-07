@@ -611,8 +611,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
   final def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyChain[A] = create(toChain.sortBy(f))
   final def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyChain[AA] = create(toChain.sorted[AA])
   final def toNem[T, V](implicit ev: A <:< (T, V), order: Order[T]): NonEmptyMap[T, V] =
-    NonEmptyMap.fromMapUnsafe(SortedMap(toChain.toVector.map(ev): _*)(using order.toOrdering))
-  final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] = NonEmptySet.of(head, tail.toVector: _*)
+    NonEmptyMap.fromMapUnsafe(SortedMap(toChain.toVector.map(ev)*)(using order.toOrdering))
+  final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] = NonEmptySet.of(head, tail.toVector*)
   final def zipWithIndex: NonEmptyChain[(A, Int)] = create(toChain.zipWithIndex)
 
   final def show[AA >: A](implicit AA: Show[AA]): String = s"NonEmpty${Show[Chain[AA]].show(toChain)}"

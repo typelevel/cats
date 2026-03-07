@@ -37,11 +37,11 @@ trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   test("Foldable[LazyList].slidingN stack safety")(checkSlidingNStackSafety(_.to(LazyList)))
 
   test("Foldable[NonEmptyLazyList] monadic folds stack safety")(
-    checkMonadicFoldsStackSafety(xs => NonEmptyLazyList(xs.head, xs.tail: _*))
+    checkMonadicFoldsStackSafety(xs => NonEmptyLazyList(xs.head, xs.tail*))
   )
 
   test("Foldable[NonEmptyLazyList].slidingN stack safety")(
-    checkSlidingNStackSafety(xs => NonEmptyLazyList(xs.head, xs.tail: _*))
+    checkSlidingNStackSafety(xs => NonEmptyLazyList(xs.head, xs.tail*))
   )
 
   private def bombLazyList[A]: A = sys.error("boom")
@@ -69,7 +69,7 @@ trait ScalaVersionSpecificFoldableSuite { self: FoldableSuiteAdditional =>
   }
 
   test("Foldable[LazyList]  trampolining") {
-    val large = LazyList((1 to 10000): _*)
+    val large = LazyList((1 to 10000)*)
     assert(contains(large, 10000).value)
   }
 

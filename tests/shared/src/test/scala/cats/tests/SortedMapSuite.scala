@@ -102,7 +102,7 @@ class SortedMapSuite extends CatsSuite {
   checkAll("MonoidK[SortedMap[String, *]]", SerializableTests.serializable(MonoidK[SortedMap[String, *]]))
 
   test("traverse is stack-safe") {
-    val items = SortedMap((0 until 100000).map { i => (i.toString, i) }: _*)
+    val items = SortedMap((0 until 100000).map { i => (i.toString, i) }*)
     val sumAll = Traverse[SortedMap[String, *]]
       .traverse(items) { i => () => i }
       .apply()

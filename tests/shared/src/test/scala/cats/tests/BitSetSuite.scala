@@ -30,7 +30,7 @@ import org.scalacheck.Prop.*
 
 class BitSetSuite extends CatsSuite {
   implicit val arbitraryBitSet: Arbitrary[BitSet] =
-    Arbitrary(arbitrary[List[Short]].map(ns => BitSet(ns.map(_ & 0xffff): _*)))
+    Arbitrary(arbitrary[List[Short]].map(ns => BitSet(ns.map(_ & 0xffff)*)))
 
   test("show BitSet") {
     assert(BitSet(1, 1, 2, 3).show === "BitSet(1, 2, 3)")

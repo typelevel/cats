@@ -66,7 +66,7 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     new nonZeroLaws.GroupProperties(
       name = props.name,
       parents = parents,
-      props = props.props: _*
+      props = props.props*
     )
 
   implicit def Arb: Arbitrary[A]
@@ -398,7 +398,7 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
 
   object RingProperties {
     def fromParent(name: String, parent: RingProperties, props: (String, Prop)*) =
-      new RingProperties(name, parent.al, parent.ml, Seq(parent), props: _*)
+      new RingProperties(name, parent.al, parent.ml, Seq(parent), props*)
   }
 
   class RingProperties(
