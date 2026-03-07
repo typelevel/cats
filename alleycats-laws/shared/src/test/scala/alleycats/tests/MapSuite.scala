@@ -34,7 +34,7 @@ class MapSuite extends AlleycatsSuite {
   checkAll("Map[Int, *]", ShortCircuitingTests[Map[Int, *]].traverseFilter[Int])
 
   test("traverse is stack-safe") {
-    val items = Map((0 until 100000).map { i => (i.toString, i) }: _*)
+    val items = Map((0 until 100000).map { i => (i.toString, i) }*)
     val sumAll = Traverse[Map[String, *]]
       .traverse(items) { i => () => i }
       .apply()

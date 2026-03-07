@@ -141,7 +141,7 @@ class LawTests extends munit.DisciplineSuite {
 
   {
     implicit val arbBitSet: Arbitrary[BitSet] =
-      Arbitrary(arbitrary[List[Byte]].map(s => BitSet(s.map(_ & 0xff): _*)))
+      Arbitrary(arbitrary[List[Byte]].map(s => BitSet(s.map(_ & 0xff)*)))
     checkAll("BitSet", LogicLaws[BitSet].generalizedBool)
   }
 

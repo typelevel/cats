@@ -121,7 +121,7 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
   test("Creating NonEmptyList + toList is identity") {
     forAll { (i: Int, tail: List[Int]) =>
       val list = i :: tail
-      val nonEmptyList = NonEmptyList.of(i, tail: _*)
+      val nonEmptyList = NonEmptyList.of(i, tail*)
       assert(list === (nonEmptyList.toList))
     }
   }
@@ -329,7 +329,7 @@ class NonEmptyListSuite extends NonEmptyCollectionSuite[List, NonEmptyList, NonE
   test("NonEmptyList#take is consistent with List#take") {
     forAll { (n: Int, head: Int, tail: List[Int]) =>
       val list = head :: tail
-      val nonEmptyList = NonEmptyList.of(head, tail: _*)
+      val nonEmptyList = NonEmptyList.of(head, tail*)
       assert(nonEmptyList.take(n) === list.take(n))
     }
   }
@@ -467,5 +467,5 @@ class ReducibleNonEmptyListSuite extends ReducibleSuite[NonEmptyList]("NonEmptyL
     NonEmptyList(start, tailStart.to(endInclusive).toList)
   }
 
-  def fromValues[A](el: A, els: A*): NonEmptyList[A] = NonEmptyList(el, List(els: _*))
+  def fromValues[A](el: A, els: A*): NonEmptyList[A] = NonEmptyList(el, List(els*))
 }

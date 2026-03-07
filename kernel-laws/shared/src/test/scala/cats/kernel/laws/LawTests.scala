@@ -43,7 +43,7 @@ import org.scalacheck.Test.Parameters
 object KernelCheck {
 
   implicit val arbitraryBitSet: Arbitrary[BitSet] =
-    Arbitrary(arbitrary[List[Short]].map(ns => BitSet(ns.map(_ & 0xffff): _*)))
+    Arbitrary(arbitrary[List[Short]].map(ns => BitSet(ns.map(_ & 0xffff)*)))
 
   implicit val arbitrarySymbol: Arbitrary[Symbol] =
     Arbitrary(arbitrary[String].map(s => Symbol(s)))

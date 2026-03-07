@@ -76,7 +76,7 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
   }
 
   final case class ShowInterpolator(_sc: StringContext) extends AnyVal {
-    def show(args: Shown*): String = _sc.s(args: _*)
+    def show(args: Shown*): String = _sc.s(args*)
   }
 
   implicit val catsContravariantForShow: Contravariant[Show] = new Contravariant[Show] {
