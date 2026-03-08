@@ -283,7 +283,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * {{{
    * scala> import cats.data.NonEmptyList
    * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
-   * scala> nel.exists(_ => false)
+   * scala> nel.exists(i => i > 100)
    * res0: scala.Boolean = false
    * scala> nel.exists(i => i > 2)
    * res1: scala.Boolean = true
