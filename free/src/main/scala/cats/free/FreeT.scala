@@ -54,8 +54,7 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
     }
 
   /**
-   * Modify the context `M` using the transformation `mn`, flattening the free
-   * suspensions into the outer.
+   * Modify the context `M` using the transformation `mn`, flattening the free suspensions into the outer.
    */
   def flatMapK[N[_]](mn: M ~> FreeT[S, N, *])(implicit S: Functor[S], N: Monad[N]): FreeT[S, N, A] = {
     def loop(ftft: FreeT[S, FreeT[S, N, *], A]): FreeT[S, N, A] =
@@ -73,8 +72,7 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
     FlatMapped(this, f)
 
   /**
-   * Changes the underlying `Monad` for this `FreeT`, ie.
-   * turning this `FreeT[S, M, A]` into a `FreeT[S, N, A]`.
+   * Changes the underlying `Monad` for this `FreeT`, ie. turning this `FreeT[S, M, A]` into a `FreeT[S, N, A]`.
    */
   def hoist[N[_]](mn: FunctionK[M, N]): FreeT[S, N, A] =
     mapK(mn)
@@ -94,8 +92,8 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
     }
 
   /**
-   * Runs to completion, mapping the suspension with the given transformation
-   * at each step and accumulating into the monad `M`.
+   * Runs to completion, mapping the suspension with the given transformation at each step and accumulating into the
+   * monad `M`.
    */
   def foldMap(f: FunctionK[S, M])(implicit M: Monad[M]): M[A] = {
     def go(ft: FreeT[S, M, A]): M[Either[FreeT[S, M, A], A]] =
@@ -153,9 +151,8 @@ sealed abstract class FreeT[S[_], M[_], A] extends Product with Serializable {
   }
 
   /**
-   * Finds the first `M` instance, `m`, and maps it to contain the rest
-   * of the computation. Since only `map` is used on `m`, its structure
-   * is preserved.
+   * Finds the first `M` instance, `m`, and maps it to contain the rest of the computation. Since only `map` is used on
+   * `m`, its structure is preserved.
    */
   @tailrec
   final private[cats] def toM(implicit M: Applicative[M]): M[FreeT[S, M, A]] =
@@ -247,18 +244,19 @@ object FreeT extends FreeTInstances {
     new FunctionK[FreeT[S, M, *], M] { def apply[A](f: FreeT[S, M, A]): M[A] = f.foldMap(fk) }
 
   /**
-   * This method is used to defer the application of an InjectK[F, G]
-   * instance. The actual work happens in
+   * This method is used to defer the application of an InjectK[F, G] instance. The actual work happens in
    * `FreeTLiftInjectKPartiallyApplied#apply`.
    *
-   * This method exists to allow the `M` and `G` parameters to be
-   * bound independently of the `F` and `A` parameters below.
+   * This method exists to allow the `M` and `G` parameters to be bound independently of the `F` and `A` parameters
+   * below.
    */
   def liftInject[M[_], G[_]]: FreeTLiftInjectKPartiallyApplied[M, G] =
     new FreeTLiftInjectKPartiallyApplied
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[free] class FreeTLiftInjectKPartiallyApplied[M[_], G[_]](private val dummy: Boolean = true)
       extends AnyVal {

@@ -22,17 +22,15 @@
 package cats
 
 /**
- * FlatMap type class gives us flatMap, which allows us to have a value
- * in a context (F[A]) and then feed that into a function that takes
- * a normal value and returns a value in a context (A => F[B]).
+ * FlatMap type class gives us flatMap, which allows us to have a value in a context (F[A]) and then feed that into a
+ * function that takes a normal value and returns a value in a context (A => F[B]).
  *
- * One motivation for separating this out from Monad is that there are
- * situations where we can implement flatMap but not pure.  For example,
- * we can implement map or flatMap that transforms the values of Map[K, *],
- * but we can't implement pure (because we wouldn't know what key to use
- * when instantiating the new Map).
+ * One motivation for separating this out from Monad is that there are situations where we can implement flatMap but not
+ * pure. For example, we can implement map or flatMap that transforms the values of Map[K, *], but we can't implement
+ * pure (because we wouldn't know what key to use when instantiating the new Map).
  *
- * @see See [[https://github.com/typelevel/cats/issues/3]] for some discussion.
+ * @see
+ *   See [[https://github.com/typelevel/cats/issues/3]] for some discussion.
  *
  * Must obey the laws defined in cats.laws.FlatMapLaws.
  */
@@ -59,9 +57,9 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
     flatMap(ffa)(fa => fa)
 
   /**
-   * Sequentially compose two actions, discarding any value produced by the first. This variant of
-   * [[productR]] also lets you define the evaluation strategy of the second action. For instance
-   * you can evaluate it only ''after'' the first action has finished:
+   * Sequentially compose two actions, discarding any value produced by the first. This variant of [[productR]] also
+   * lets you define the evaluation strategy of the second action. For instance you can evaluate it only ''after'' the
+   * first action has finished:
    *
    * {{{
    * scala> import cats.Eval
@@ -78,9 +76,9 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
   private[cats] def followedByEval[A, B](fa: F[A])(fb: Eval[F[B]]): F[B] = productREval(fa)(fb)
 
   /**
-   * Sequentially compose two actions, discarding any value produced by the second. This variant of
-   * [[productL]] also lets you define the evaluation strategy of the second action. For instance
-   * you can evaluate it only ''after'' the first action has finished:
+   * Sequentially compose two actions, discarding any value produced by the second. This variant of [[productL]] also
+   * lets you define the evaluation strategy of the second action. For instance you can evaluate it only ''after'' the
+   * first action has finished:
    *
    * {{{
    * scala> import cats.Eval
@@ -145,8 +143,7 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
   /**
    * Keeps calling `f` until a `scala.util.Right[B]` is returned.
    *
-   * Based on Phil Freeman's
-   * [[http://functorial.com/stack-safety-for-free/index.pdf Stack Safety for Free]].
+   * Based on Phil Freeman's [[http://functorial.com/stack-safety-for-free/index.pdf Stack Safety for Free]].
    *
    * Implementations of this method should use constant stack space relative to `f`.
    */
@@ -173,16 +170,14 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
     flatMap(fa)(a => as(f(a), a))
 
   /**
-   * Like an infinite loop of >> calls. This is most useful effect loops
-   * that you want to run forever in for instance a server.
+   * Like an infinite loop of >> calls. This is most useful effect loops that you want to run forever in for instance a
+   * server.
    *
    * This will be an infinite loop, or it will return an F[Nothing].
    *
-   * Be careful using this.
-   * For instance, a List of length k will produce a list of length k^n at iteration
-   * n. This means if k = 0, we return an empty list, if k = 1, we loop forever
-   * allocating single element lists, but if we have a k > 1, we will allocate
-   * exponentially increasing memory and very quickly OOM.
+   * Be careful using this. For instance, a List of length k will produce a list of length k^n at iteration
+   *   n. This means if k = 0, we return an empty list, if k = 1, we loop forever allocating single element lists, but
+   *      if we have a k > 1, we will allocate exponentially increasing memory and very quickly OOM.
    */
 
   def foreverM[A, B](fa: F[A]): F[B] = {
@@ -193,9 +188,8 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
   }
 
   /**
-   * iterateForeverM is almost exclusively useful for effect types. For instance,
-   * A may be some state, we may take the current state, run some effect to get
-   * a new state and repeat.
+   * iterateForeverM is almost exclusively useful for effect types. For instance, A may be some state, we may take the
+   * current state, run some effect to get a new state and repeat.
    */
 
   def iterateForeverM[A, B](a: A)(f: A => F[A]): F[B] =
@@ -204,9 +198,8 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
     })
 
   /**
-   * This repeats an F until we get defined values. This can be useful
-   * for polling type operations on State (or RNG) Monads, or in effect
-   * monads.
+   * This repeats an F until we get defined values. This can be useful for polling type operations on State (or RNG)
+   * Monads, or in effect monads.
    */
 
   def untilDefinedM[A](foa: F[Option[A]]): F[A] = {

@@ -27,11 +27,11 @@ import cats.kernel.compat.scalaVersionSpecific.*
 import scala.collection.immutable.{IntMap, TreeSet}
 
 /**
- * `TraverseFilter`, also known as `Witherable`, represents list-like structures
- * that can essentially have a `traverse` and a `filter` applied as a single
- * combined operation (`traverseFilter`).
+ * `TraverseFilter`, also known as `Witherable`, represents list-like structures that can essentially have a `traverse`
+ * and a `filter` applied as a single combined operation (`traverseFilter`).
  *
- * Based on Haskell's [[https://hackage.haskell.org/package/witherable-0.1.3.3/docs/Data-Witherable.html Data.Witherable]]
+ * Based on Haskell's
+ * [[https://hackage.haskell.org/package/witherable-0.1.3.3/docs/Data-Witherable.html Data.Witherable]]
  */
 
 trait TraverseFilter[F[_]] extends FunctorFilter[F] {
@@ -40,9 +40,8 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
   final override def functor: Functor[F] = traverse
 
   /**
-   * A combined [[traverse]] and [[filter]]. Filtering is handled via `Option`
-   * instead of `Boolean` such that the output type `B` can be different than
-   * the input type `A`.
+   * A combined [[traverse]] and [[filter]]. Filtering is handled via `Option` instead of `Boolean` such that the output
+   * type `B` can be different than the input type `A`.
    *
    * Example:
    * {{{
@@ -59,7 +58,7 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
 
   /**
    * A combined [[traverse]] and [[collect]].
-   *
+   * {{{
    * scala> import cats.syntax.all._
    * scala> val m: Map[Int, String] = Map(1 -> "one", 2 -> "two")
    * scala> val l: List[Int] = List(1, 2, 3, 4)
@@ -67,6 +66,7 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
    * scala> val result: Eval[List[Option[String]]] = l.traverseCollect(asString)
    * scala> result.value
    * res0: List[Option[String]] = List(Some(two), None)
+   * }}}
    */
   def traverseCollect[G[_], A, B](fa: F[A])(f: PartialFunction[A, G[B]])(implicit G: Applicative[G]): G[F[B]] = {
     val optF = f.lift
@@ -88,8 +88,10 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
   /**
    * Filter values inside a `G` context.
    *
-   * This is a generalized version of Haskell's [[http://hackage.haskell.org/package/base-4.9.0.0/docs/Control-Monad.html#v:filterM filterM]].
-   * [[http://stackoverflow.com/questions/28872396/haskells-filterm-with-filterm-x-true-false-1-2-3 This StackOverflow question]] about `filterM` may be helpful in understanding how it behaves.
+   * This is a generalized version of Haskell's
+   * [[http://hackage.haskell.org/package/base-4.9.0.0/docs/Control-Monad.html#v:filterM filterM]].
+   * [[http://stackoverflow.com/questions/28872396/haskells-filterm-with-filterm-x-true-false-1-2-3 This StackOverflow question]]
+   * about `filterM` may be helpful in understanding how it behaves.
    *
    * Example:
    * {{{
@@ -108,7 +110,8 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
     traverseFilter(fa)(a => G.map(f(a))(if (_) Some(a) else None))
 
   /**
-   * Like [[traverseFilter]], but uses `Either` instead of `Option` and allows for an action to be run on each filtered value.
+   * Like [[traverseFilter]], but uses `Either` instead of `Option` and allows for an action to be run on each filtered
+   * value.
    */
   def traverseEither[G[_], A, B, E](
     fa: F[A]
@@ -138,8 +141,8 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
   }
 
   /**
-   * Removes duplicate elements from a list, keeping only the first occurrence.
-   * This is usually faster than ordDistinct, especially for things that have a slow comparison (like String).
+   * Removes duplicate elements from a list, keeping only the first occurrence. This is usually faster than ordDistinct,
+   * especially for things that have a slow comparison (like String).
    */
   def hashDistinct[A](fa: F[A])(implicit H: Hash[A]): F[A] =
     traverseFilter(fa) { a =>

@@ -26,10 +26,8 @@ import ring.BoolRng
 import scala.{specialized => sp}
 
 /**
- * Generalized Boolean algebra, that is, a Boolean algebra without
- * the top element. Generalized Boolean algebras do not (in general)
- * have (absolute) complements, but they have ''relative complements''
- * (see [[GenBool.without]]).
+ * Generalized Boolean algebra, that is, a Boolean algebra without the top element. Generalized Boolean algebras do not
+ * (in general) have (absolute) complements, but they have ''relative complements'' (see [[GenBool.without]]).
  */
 trait GenBool[@sp(Int, Long) A] extends Any with DistributiveLattice[A] with BoundedJoinSemilattice[A] { self =>
   def and(a: A, b: A): A
@@ -39,21 +37,19 @@ trait GenBool[@sp(Int, Long) A] extends Any with DistributiveLattice[A] with Bou
   override def join(a: A, b: A): A = or(a, b)
 
   /**
-   * The operation of ''relative complement'', symbolically often denoted
-   * `a\b` (the symbol for set-theoretic difference, which is the
-   * meaning of relative complement in the lattice of sets).
+   * The operation of ''relative complement'', symbolically often denoted `a\b` (the symbol for set-theoretic
+   * difference, which is the meaning of relative complement in the lattice of sets).
    */
   def without(a: A, b: A): A
 
   /**
-   * Logical exclusive or, set-theoretic symmetric difference.
-   * Defined as `a\b ∨ b\a`.
+   * Logical exclusive or, set-theoretic symmetric difference. Defined as `a\b ∨ b\a`.
    */
   def xor(a: A, b: A): A = or(without(a, b), without(b, a))
 
   /**
-   * Every generalized Boolean algebra is also a `BoolRng`, with
-   * multiplication defined as `and` and addition defined as `xor`.
+   * Every generalized Boolean algebra is also a `BoolRng`, with multiplication defined as `and` and addition defined as
+   * `xor`.
    */
   @deprecated("See typelevel/algebra#108 for discussion", since = "2.7.0")
   def asBoolRing: BoolRng[A] = new BoolRngFromGenBool(self)
@@ -61,15 +57,16 @@ trait GenBool[@sp(Int, Long) A] extends Any with DistributiveLattice[A] with Bou
 
 /**
  * Every Boolean rng gives rise to a Boolean algebra without top:
- *  - 0 is preserved;
- *  - ring multiplication (`times`) corresponds to `and`;
- *  - ring addition (`plus`) corresponds to `xor`;
- *  - `a or b` is then defined as `a xor b xor (a and b)`;
- *  - relative complement `a\b` is defined as `a xor (a and b)`.
+ *   - 0 is preserved;
+ *   - ring multiplication (`times`) corresponds to `and`;
+ *   - ring addition (`plus`) corresponds to `xor`;
+ *   - `a or b` is then defined as `a xor b xor (a and b)`;
+ *   - relative complement `a\b` is defined as `a xor (a and b)`.
  *
  * `BoolRng.asBool.asBoolRing` gives back the original `BoolRng`.
  *
- * @see [[algebra.lattice.GenBool.asBoolRing]]
+ * @see
+ *   [[algebra.lattice.GenBool.asBoolRing]]
  */
 class GenBoolFromBoolRng[A](orig: BoolRng[A]) extends GenBool[A] {
   def zero: A = orig.zero

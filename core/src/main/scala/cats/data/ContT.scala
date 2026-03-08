@@ -23,11 +23,9 @@ package cats
 package data
 
 /**
- * This is a continuation transformer based on the ContT in
- * the Haskell package Control.Monad.Cont
+ * This is a continuation transformer based on the ContT in the Haskell package Control.Monad.Cont
  *
- * This is reasonably straight-forward except that to make
- * a tailRecM implementation we leverage the Defer type class to
+ * This is reasonably straight-forward except that to make a tailRecM implementation we leverage the Defer type class to
  * obtain stack-safety.
  */
 sealed abstract class ContT[M[_], A, +B] extends Serializable {
@@ -159,8 +157,7 @@ object ContT {
   /**
    * Similar to [[pure]] but evaluation of the argument is deferred.
    *
-   * This is useful for building a computation which calls its continuation as the final step.
-   * Instead of writing:
+   * This is useful for building a computation which calls its continuation as the final step. Instead of writing:
    *
    * {{{
    *   ContT.apply { cb =>

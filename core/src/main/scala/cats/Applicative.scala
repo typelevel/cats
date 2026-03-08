@@ -31,8 +31,10 @@ import scala.annotation.tailrec
  *
  * Allows application of a function in an Applicative context to a value in an Applicative context
  *
- * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
- * Also: [[http://staff.city.ac.uk/~ross/papers/Applicative.pdf Applicative programming with effects]]
+ * @see
+ *   [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
+ * @see
+ *   [[http://staff.city.ac.uk/~ross/papers/Applicative.pdf Applicative programming with effects]]
  *
  * Must obey the laws defined in cats.laws.ApplicativeLaws.
  */
@@ -54,8 +56,7 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
   /**
    * Returns an `F[Unit]` value, equivalent with `pure(())`.
    *
-   * A useful shorthand, also allowing implementations to optimize the
-   * returned reference (e.g. it can be a `val`).
+   * A useful shorthand, also allowing implementations to optimize the returned reference (e.g. it can be a `val`).
    *
    * Example:
    * {{{
@@ -145,8 +146,7 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
     }
 
   /**
-   * Compose an `Applicative[F]` and an `Applicative[G]` into an
-   * `Applicative[λ[α => F[G[α]]]]`.
+   * Compose an `Applicative[F]` and an `Applicative[G]` into an `Applicative[λ[α => F[G[α]]]]`.
    *
    * Example:
    * {{{
@@ -168,8 +168,7 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
     }
 
   /**
-   * Compose an `Applicative[F]` and a `ContravariantMonoidal[G]` into a
-   * `ContravariantMonoidal[λ[α => F[G[α]]]]`.
+   * Compose an `Applicative[F]` and a `ContravariantMonoidal[G]` into a `ContravariantMonoidal[λ[α => F[G[α]]]]`.
    *
    * Example:
    * {{{
@@ -216,8 +215,7 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
     }
 
   /**
-   * Returns the given argument (mapped to Unit) if `cond` is `false`,
-   * otherwise, unit lifted into F.
+   * Returns the given argument (mapped to Unit) if `cond` is `false`, otherwise, unit lifted into F.
    *
    * Example:
    * {{{
@@ -240,8 +238,7 @@ trait Applicative[F[_]] extends Apply[F] with InvariantMonoidal[F] { self =>
     if (cond) unit else void(f)
 
   /**
-   * Returns the given argument (mapped to Unit) if `cond` is `true`, otherwise,
-   * unit lifted into F.
+   * Returns the given argument (mapped to Unit) if `cond` is `true`, otherwise, unit lifted into F.
    *
    * Example:
    * {{{
@@ -270,8 +267,7 @@ object Applicative {
     new ApplicativeMonoid[F, A](f, monoid)
 
   /**
-   * Creates an applicative functor for `F`, holding domain fixed and combining
-   * over the codomain.
+   * Creates an applicative functor for `F`, holding domain fixed and combining over the codomain.
    *
    * Example:
    * {{{
@@ -288,8 +284,7 @@ object Applicative {
     new ArrowApplicative[F, A](F)
 
   /**
-   * Creates a CoflatMap for an Applicative `F`.
-   * Cannot be implicit in 1.0 for Binary Compatibility Reasons
+   * Creates a CoflatMap for an Applicative `F`. Cannot be implicit in 1.0 for Binary Compatibility Reasons
    *
    * Example:
    * {{{

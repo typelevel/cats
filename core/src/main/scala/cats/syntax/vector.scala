@@ -52,8 +52,7 @@ final class VectorOps[A](private val va: Vector[A]) extends AnyVal {
   def toNev: Option[NonEmptyVector[A]] = NonEmptyVector.fromVector(va)
 
   /**
-   * Groups elements inside this `Vector` according to the `Order` of the keys
-   * produced by the given mapping function.
+   * Groups elements inside this `Vector` according to the `Order` of the keys produced by the given mapping function.
    *
    * {{{
    * scala> import cats.data.NonEmptyVector
@@ -74,8 +73,8 @@ final class VectorOps[A](private val va: Vector[A]) extends AnyVal {
   }
 
   /**
-   * Groups elements inside this `Vector` according to the `Order` of the keys
-   * produced by the given mapping monadic function.
+   * Groups elements inside this `Vector` according to the `Order` of the keys produced by the given mapping monadic
+   * function.
    *
    * {{{
    * scala> import cats.data.NonEmptyVector
@@ -105,8 +104,7 @@ final class VectorOps[A](private val va: Vector[A]) extends AnyVal {
   }
 
   /**
-   * Produces a `NonEmptyVector` containing cumulative results of applying the
-   * operator going left to right.
+   * Produces a `NonEmptyVector` containing cumulative results of applying the operator going left to right.
    *
    * Example:
    * {{{
@@ -126,8 +124,7 @@ final class VectorOps[A](private val va: Vector[A]) extends AnyVal {
     NonEmptyVector.fromVectorUnsafe(va.scanLeft(b)(f))
 
   /**
-   * Produces a `NonEmptyVector` containing cumulative results of applying the
-   * operator going right to left.
+   * Produces a `NonEmptyVector` containing cumulative results of applying the operator going right to left.
    *
    * Example:
    * {{{

@@ -24,14 +24,11 @@ package cats
 import scala.util.control.TailCalls.TailRec
 
 /**
- * Defer is a type class that shows the ability to defer creation
- * inside of the type constructor F[_].
+ * Defer is a type class that shows the ability to defer creation inside of the type constructor F[_].
  *
- * This comes up with F[_] types that are implemented with a trampoline
- * or are based on function application.
+ * This comes up with F[_] types that are implemented with a trampoline or are based on function application.
  *
- * The law is that defer(fa) is equivalent to fa, but not evaluated immediately,
- * so
+ * The law is that defer(fa) is equivalent to fa, but not evaluated immediately, so
  * {{{
  * scala> import cats._
  * scala> import cats.syntax.all._
@@ -53,20 +50,16 @@ trait Defer[F[_]] extends Serializable {
   def defer[A](fa: => F[A]): F[A]
 
   /**
-   * Defer instances, like functions, parsers, generators, IO, etc...
-   * often are used in recursive settings where this function is useful
+   * Defer instances, like functions, parsers, generators, IO, etc... often are used in recursive settings where this
+   * function is useful
    *
    * fix(fn) == fn(fix(fn))
    *
    * example:
    *
-   * val parser: P[Int] =
-   *   Defer[P].fix[Int] { rec =>
-   *     CharsIn("0123456789") | P("(") ~ rec ~ P(")")
-   *   }
+   * val parser: P[Int] = Defer[P].fix[Int] { rec => CharsIn("0123456789") | P("(") ~ rec ~ P(")") }
    *
-   * Note, fn may not yield a terminating value in which case both
-   * of the above F[A] run forever.
+   * Note, fn may not yield a terminating value in which case both of the above F[A] run forever.
    */
   def fix[A](fn: F[A] => F[A]): F[A] = {
     lazy val res: F[A] = fn(defer(res))
@@ -74,20 +67,21 @@ trait Defer[F[_]] extends Serializable {
   }
 
   /**
-   * Useful when you want a recursive function that returns F where
-   * F[_]: Defer. Examples include IO, Eval, or transformers such
-   * as EitherT or OptionT.
-   * 
+   * Useful when you want a recursive function that returns F where F[_]: Defer. Examples include IO, Eval, or
+   * transformers such as EitherT or OptionT.
+   *
    * example:
    *
+   * {{{
    * val sumTo: Int => Eval[Int] =
    *   Defer[Eval].recursiveFn[Int, Int] { recur =>
-   *     
+   *
    *     { i =>
    *       if (i > 0) recur(i - 1).map(_ + i)
    *       else Eval.now(0)
    *     }
    *   }
+   * }}}
    */
   def recursiveFn[A, B](fn: (A => F[B]) => (A => F[B])): A => F[B] =
     new Function1[A, F[B]] { self =>
