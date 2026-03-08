@@ -23,11 +23,9 @@ package cats
 package free
 
 /**
- * The cofree functor for `F`. The Yoneda lemma says that
- * `Yoneda[F,A]` is isomorphic to `F[A]` for any functor `F`.
- * The function from `Yoneda[F, A]` to `F[A]` exists even when
- * we have forgotten that `F` is a functor.
- * Can be seen as a partially applied `map` for the functor `F`.
+ * The cofree functor for `F`. The Yoneda lemma says that `Yoneda[F,A]` is isomorphic to `F[A]` for any functor `F`. The
+ * function from `Yoneda[F, A]` to `F[A]` exists even when we have forgotten that `F` is a functor. Can be seen as a
+ * partially applied `map` for the functor `F`.
  */
 abstract class Yoneda[F[_], A] extends Serializable { self =>
   def apply[B](f: A => B): F[B]

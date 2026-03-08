@@ -25,8 +25,8 @@ import cats.data.Ior
 import scala.collection.immutable.{Seq, SortedMap}
 
 /**
- * `Align` supports zipping together structures with different shapes,
- * holding the results from either or both structures in an `Ior`.
+ * `Align` supports zipping together structures with different shapes, holding the results from either or both
+ * structures in an `Ior`.
  *
  * Must obey the laws in cats.laws.AlignLaws
  */

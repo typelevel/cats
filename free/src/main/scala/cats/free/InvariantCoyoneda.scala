@@ -25,9 +25,9 @@ package free
 import cats.data.AndThen
 
 /**
- * The free invariant functor on `F`. This is isomorphic to `F` as long as `F` itself is a
- * invariant functor. The function from `F[A]` to `InvariantCoyoneda[F,A]` exists even when
- * `F` is not an invariant functor. Implemented using a List of functions for stack-safety.
+ * The free invariant functor on `F`. This is isomorphic to `F` as long as `F` itself is a invariant functor. The
+ * function from `F[A]` to `InvariantCoyoneda[F,A]` exists even when `F` is not an invariant functor. Implemented using
+ * a List of functions for stack-safety.
  */
 sealed abstract class InvariantCoyoneda[F[_], A] extends Serializable { self =>
   import InvariantCoyoneda.Aux
@@ -80,8 +80,7 @@ sealed abstract class InvariantCoyoneda[F[_], A] extends Serializable { self =>
 object InvariantCoyoneda {
 
   /**
-   * Lift the `Pivot` type member to a parameter. It is usually more convenient to use `Aux` than
-   * a refinment type.
+   * Lift the `Pivot` type member to a parameter. It is usually more convenient to use `Aux` than a refinment type.
    */
   type Aux[F[_], A, B] = InvariantCoyoneda[F, A] { type Pivot = B }
 

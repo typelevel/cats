@@ -23,8 +23,8 @@ package cats
 package data
 
 /**
- * `OptionT[F[_], A]` is a light wrapper on an `F[Option[A]]` with some
- * convenient methods for working with this nested structure.
+ * `OptionT[F[_], A]` is a light wrapper on an `F[Option[A]]` with some convenient methods for working with this nested
+ * structure.
  *
  * It may also be said that `OptionT` is a monad transformer for `Option`.
  *
@@ -51,16 +51,14 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     F.flatMap(value)(_.fold(default)(f))
 
   /**
-   * Transform this `OptionT[F, A]` into a `F[Unit]`.
-   * This is identical to `foldF(F.unit)(f)`.
+   * Transform this `OptionT[F, A]` into a `F[Unit]`. This is identical to `foldF(F.unit)(f)`.
    */
   def foreachF(f: A => F[Unit])(implicit F: Monad[F]): F[Unit] =
     foldF(F.unit)(f)
 
   /**
-   * Catamorphism on the Option. This is identical to [[fold]], but it only has
-   * one parameter list, which can result in better type inference in some
-   * contexts.
+   * Catamorphism on the Option. This is identical to [[fold]], but it only has one parameter list, which can result in
+   * better type inference in some contexts.
    *
    * Example:
    * {{{
@@ -75,9 +73,8 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     fold(default)(f)
 
   /**
-   * Effectful catamorphism on the Option. This is identical to [[foldF]], but it only has
-   * one parameter list, which can result in better type inference in some
-   * contexts.
+   * Effectful catamorphism on the Option. This is identical to [[foldF]], but it only has one parameter list, which can
+   * result in better type inference in some contexts.
    *
    * Example:
    * {{{
@@ -138,12 +135,12 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   /**
    * Modify the context `F` using transformation `f`.
-   * 
+   *
    * Example:
    * {{{
    *  scala> import cats.~>
    *  scala> import cats.data.OptionT
-   * 
+   *
    *  scala> val optionToList: Option ~> List = new ~>[Option, List] { override def apply[A](o: Option[A]): List[A] = o.toList }
    *  scala> val optionT: OptionT[Option, Int] = OptionT.some(42)
    *  scala> optionT.mapK[List](optionToList)
@@ -259,9 +256,9 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     transform(_.flatMap(f))
 
   /**
-   * Perform an effect if the value inside the is a `None`, leaving the value untouched. Equivalent to [[orElseF]]
-   * with an effect returning `None` as argument.
-   * 
+   * Perform an effect if the value inside the is a `None`, leaving the value untouched. Equivalent to [[orElseF]] with
+   * an effect returning `None` as argument.
+   *
    * Example:
    * {{{
    *  scala> import cats.data.OptionT
@@ -303,9 +300,9 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   /**
    * Like [[getOrElseF]] but accept an error `E` and raise it when the inner `Option` is `None`
-   * 
+   *
    * Equivalent to `getOrElseF(F.raiseError(e)))`
-   * 
+   *
    * {{{
    * scala> import cats.data.OptionT
    * scala> import scala.util.{Success, Try}
@@ -380,8 +377,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
     })
 
   /**
-   * It is used for desugaring 'for comprehensions'. OptionT wouldn't work in 'for-comprehensions' without
-   * this method.
+   * It is used for desugaring 'for comprehensions'. OptionT wouldn't work in 'for-comprehensions' without this method.
    * Example:
    * {{{
    *  scala> import cats.data.OptionT
@@ -656,9 +652,9 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
   /**
    * Transform this `OptionT[F, A]` into a `[[Nested]][F, Option, A]`.
    *
-   * An example where `toNested` can be used, is to get the `Apply.ap` function with the
-   * behavior from the composed `Apply` instances from `F` and `Option`, which is
-   * inconsistent with the behavior of the `ap` from `Monad` of `OptionT`.
+   * An example where `toNested` can be used, is to get the `Apply.ap` function with the behavior from the composed
+   * `Apply` instances from `F` and `Option`, which is inconsistent with the behavior of the `ap` from `Monad` of
+   * `OptionT`.
    *
    * {{{
    * scala> import cats.data.OptionT
@@ -678,7 +674,9 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
 object OptionT extends OptionTInstances {
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[data] class PurePartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](value: A)(implicit F: Applicative[F]): OptionT[F, A] =
@@ -720,7 +718,9 @@ object OptionT extends OptionTInstances {
   def fromOption[F[_]]: FromOptionPartiallyApplied[F] = new FromOptionPartiallyApplied
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[data] class FromOptionPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](value: Option[A])(implicit F: Applicative[F]): OptionT[F, A] =
@@ -746,22 +746,22 @@ object OptionT extends OptionTInstances {
     new (F ~> OptionT[F, *]) { def apply[A](a: F[A]): OptionT[F, A] = OptionT.liftF(a) }
 
   /**
-   * Creates a non-empty `OptionT[F, A]` from an `A` value if the given condition is `true`.
-   * Otherwise, `none[F, A]` is returned. Analogous to `Option.when`.
+   * Creates a non-empty `OptionT[F, A]` from an `A` value if the given condition is `true`. Otherwise, `none[F, A]` is
+   * returned. Analogous to `Option.when`.
    */
   def when[F[_], A](cond: Boolean)(a: => A)(implicit F: Applicative[F]): OptionT[F, A] =
     if (cond) OptionT.some[F](a) else OptionT.none[F, A]
 
   /**
-   * Creates a non-empty `OptionT[F, A]` from an `F[A]` value if the given condition is `true`.
-   * Otherwise, `none[F, A]` is returned. Analogous to `Option.when`.
+   * Creates a non-empty `OptionT[F, A]` from an `F[A]` value if the given condition is `true`. Otherwise, `none[F, A]`
+   * is returned. Analogous to `Option.when`.
    */
   def whenF[F[_], A](cond: Boolean)(fa: => F[A])(implicit F: Applicative[F]): OptionT[F, A] =
     if (cond) OptionT.liftF(fa) else OptionT.none[F, A]
 
   /**
-   * Creates a non-empty `OptionT[F, A]` from an `F[A]` value if the given F-condition is considered `true`.
-   * Otherwise, `none[F, A]` is returned. Analogous to `Option.when` but for effectful conditions.
+   * Creates a non-empty `OptionT[F, A]` from an `F[A]` value if the given F-condition is considered `true`. Otherwise,
+   * `none[F, A]` is returned. Analogous to `Option.when` but for effectful conditions.
    */
   def whenM[F[_], A](cond: F[Boolean])(fa: => F[A])(implicit F: Monad[F]): OptionT[F, A] = OptionT(
     F.ifM(cond)(ifTrue = F.map(fa)(Some(_)), ifFalse = F.pure(None))
@@ -774,22 +774,22 @@ object OptionT extends OptionTInstances {
     new (F ~> OptionT[F, *]) { def apply[A](a: F[A]): OptionT[F, A] = OptionT.whenF(cond)(a) }
 
   /**
-   * Creates a non-empty `OptionT[F, A]` from an `A` if the given condition is `false`.
-   * Otherwise, `none[F, A]` is returned. Analogous to `Option.unless`.
+   * Creates a non-empty `OptionT[F, A]` from an `A` if the given condition is `false`. Otherwise, `none[F, A]` is
+   * returned. Analogous to `Option.unless`.
    */
   def unless[F[_], A](cond: Boolean)(a: => A)(implicit F: Applicative[F]): OptionT[F, A] =
     OptionT.when(!cond)(a)
 
   /**
-   * Creates an non-empty `OptionT[F, A]` from an `F[A]` if the given condition is `false`.
-   * Otherwise, `none[F, A]` is returned. Analogous to `Option.unless`.
+   * Creates an non-empty `OptionT[F, A]` from an `F[A]` if the given condition is `false`. Otherwise, `none[F, A]` is
+   * returned. Analogous to `Option.unless`.
    */
   def unlessF[F[_], A](cond: Boolean)(fa: => F[A])(implicit F: Applicative[F]): OptionT[F, A] =
     OptionT.whenF(!cond)(fa)
 
   /**
-   * Creates a non-empty `OptionT[F, A]` from an `F[A]` value if the given F-condition is considered `false`.
-   * Otherwise, `none[F, A]` is returned. Analogous to `Option.unless` but for effectful conditions.
+   * Creates a non-empty `OptionT[F, A]` from an `F[A]` value if the given F-condition is considered `false`. Otherwise,
+   * `none[F, A]` is returned. Analogous to `Option.unless` but for effectful conditions.
    */
   def unlessM[F[_], A](cond: F[Boolean])(fa: => F[A])(implicit F: Monad[F]): OptionT[F, A] = OptionT(
     F.ifM(cond)(ifTrue = F.pure(None), ifFalse = F.map(fa)(Some(_)))

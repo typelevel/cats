@@ -24,8 +24,8 @@ package cats.data
 import cats.{Comonad, Functor, Representable}
 
 /**
- * A generalization of `StoreT`, where the underlying functor `F` has a `Representable` instance.
- * `Store` is the dual of `State`
+ * A generalization of `StoreT`, where the underlying functor `F` has a `Representable` instance. `Store` is the dual of
+ * `State`
  */
 final case class RepresentableStore[F[_], S, A](fa: F[A], index: S)(implicit R: Representable.Aux[F, S]) {
 
@@ -35,8 +35,7 @@ final case class RepresentableStore[F[_], S, A](fa: F[A], index: S)(implicit R: 
   def peek(s: S): A = R.index(fa)(s)
 
   /**
-   * Peek at what the focus would be if the current focus where transformed
-   * with the given function.
+   * Peek at what the focus would be if the current focus where transformed with the given function.
    */
   def peeks(f: S => S): A = peek(f(index))
 
@@ -56,15 +55,14 @@ final case class RepresentableStore[F[_], S, A](fa: F[A], index: S)(implicit R: 
   lazy val extract: A = peek(index)
 
   /**
-   * `coflatten` is the dual of `flatten` on `FlatMap`. Whereas flatten removes
-   * a layer of `F`, coflatten adds a layer of `F`
+   * `coflatten` is the dual of `flatten` on `FlatMap`. Whereas flatten removes a layer of `F`, coflatten adds a layer
+   * of `F`
    */
   lazy val coflatten: RepresentableStore[F, S, RepresentableStore[F, S, A]] =
     RepresentableStore(R.tabulate(idx => RepresentableStore(fa, idx)), index)
 
   /**
-   * `coflatMap` is the dual of `flatMap` on `FlatMap`. It applies
-   * a value in a context to a function that takes a value
+   * `coflatMap` is the dual of `flatMap` on `FlatMap`. It applies a value in a context to a function that takes a value
    * in a context and returns a normal value.
    */
   def coflatMap[B](f: RepresentableStore[F, S, A] => B): RepresentableStore[F, S, B] =

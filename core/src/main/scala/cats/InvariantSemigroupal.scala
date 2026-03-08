@@ -22,8 +22,8 @@
 package cats
 
 /**
- * [[InvariantSemigroupal]] is nothing more than something both invariant
- * and Semigroupal. It comes up enough to be useful, and composes well
+ * [[InvariantSemigroupal]] is nothing more than something both invariant and Semigroupal. It comes up enough to be
+ * useful, and composes well
  */
 trait InvariantSemigroupal[F[_]] extends Semigroupal[F] with Invariant[F] { self =>
 

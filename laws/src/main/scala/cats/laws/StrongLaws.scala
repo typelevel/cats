@@ -29,8 +29,10 @@ import cats.syntax.strong.*
 /**
  * Laws that must be obeyed by any `cats.functor.Strong`.
  *
- * See: [[https://arxiv.org/abs/1406.4823 E. Rivas, M. Jaskelioff Notions of Computation as Monoids, Chapter 7]]
- * See: [[http://hackage.haskell.org/package/profunctors/docs/Data-Profunctor-Strong.html Haskell Data.Profunctor.Strong]]
+ * @see
+ *   [[https://arxiv.org/abs/1406.4823 E. Rivas, M. Jaskelioff Notions of Computation as Monoids, Chapter 7]]
+ * @see
+ *   [[http://hackage.haskell.org/package/profunctors/docs/Data-Profunctor-Strong.html Haskell Data.Profunctor.Strong]]
  */
 trait StrongLaws[F[_, _]] extends ProfunctorLaws[F] {
   implicit override def F: Strong[F]
@@ -81,16 +83,16 @@ trait StrongLaws[F[_, _]] extends ProfunctorLaws[F] {
 
   /**
    * first' . first' == dimap assoc unassoc . first' where
-   *   assoc ((a,b),c) = (a,(b,c))
-   *   unassoc (a,(b,c)) = ((a,b),c)
+   *   - assoc ((a,b),c) = (a,(b,c))
+   *   - unassoc (a,(b,c)) = ((a,b),c)
    */
   def firstFirstIsDimap[A, B, C, D](fab: F[A, B]): IsEq[F[((A, C), D), ((B, C), D)]] =
     fab.first[C].first[D] <-> fab.first[(C, D)].dimap[((A, C), D), ((B, C), D)](assoc)(unassoc)
 
   /**
    * second' . second' == dimap unassoc assoc . second' where
-   *   assoc ((a,b),c) = (a,(b,c))
-   *   unassoc (a,(b,c)) = ((a,b),c)
+   *   - assoc ((a,b),c) = (a,(b,c))
+   *   - unassoc (a,(b,c)) = ((a,b),c)
    */
   def secondSecondIsDimap[A, B, C, D](fab: F[A, B]): IsEq[F[(D, (C, A)), (D, (C, B))]] =
     fab.second[C].second[D] <-> fab.second[(D, C)].dimap[(D, (C, A)), (D, (C, B))](unassoc)(assoc)

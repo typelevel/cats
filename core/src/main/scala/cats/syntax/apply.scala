@@ -50,7 +50,8 @@ private[syntax] trait ApplySyntaxBinCompat0 {
 final class ApplyFABOps[F[_], A, B](private val fab: F[A => B]) extends AnyVal {
 
   /**
-   * @see [[Apply.ap]].
+   * @see
+   *   [[Apply.ap]].
    *
    * Example:
    * {{{
@@ -85,7 +86,8 @@ final class ApplyFABOps[F[_], A, B](private val fab: F[A => B]) extends AnyVal {
 final class ApplyFABCOps[F[_], A, B, C](private val ff: F[(A, B) => C]) extends AnyVal {
 
   /**
-   * @see [[Apply.ap2]].
+   * @see
+   *   [[Apply.ap2]].
    *
    * Example:
    * {{{
@@ -109,7 +111,6 @@ final class ApplyFABCOps[F[_], A, B, C](private val ff: F[(A, B) => C]) extends 
    * scala> noneF.ap2(noneInt, noneInt)
    * res3: Option[Long] = None
    * }}}
-   *
    */
   def ap2(fa: F[A], fb: F[B])(implicit F: Apply[F]): F[C] = F.ap2(ff)(fa, fb)
 }
@@ -137,7 +138,8 @@ final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
     F.productL(fa)(fb)
 
   /**
-   * @see [[Apply.productR]].
+   * @see
+   *   [[Apply.productR]].
    *
    * Example:
    * {{{
@@ -168,7 +170,8 @@ final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def productR[B](fb: F[B])(implicit F: Apply[F]): F[B] = F.productR(fa)(fb)
 
   /**
-   * @see [[Apply.productL]].
+   * @see
+   *   [[Apply.productL]].
    *
    * Example:
    * {{{
@@ -209,7 +212,8 @@ final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def <*[B](fb: F[B])(implicit F: Apply[F]): F[A] = F.<*(fa)(fb)
 
   /**
-   * @see [[Apply.map2]].
+   * @see
+   *   [[Apply.map2]].
    *
    * Example:
    * {{{
@@ -237,7 +241,8 @@ final class ApplyOps[F[_], A](private val fa: F[A]) extends AnyVal {
     F.map2(fa, fb)(f)
 
   /**
-   * @see [[Apply.map2Eval]].
+   * @see
+   *   [[Apply.map2Eval]].
    *
    * Example:
    * {{{

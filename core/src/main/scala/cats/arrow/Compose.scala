@@ -26,6 +26,7 @@ package arrow
  * Must obey the laws defined in cats.laws.ComposeLaws.
  *
  * Here's how you can use `>>>` and `<<<`
+ *
  * Example:
  * {{{
  * scala> import cats.syntax.all._

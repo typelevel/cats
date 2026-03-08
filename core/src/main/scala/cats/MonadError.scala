@@ -61,12 +61,10 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
     flatMap(fa)(_.fold(raiseError, pure))
 
   /**
-   * Returns a new value that transforms the result of the source,
-   * given the `recover` or `bind` functions, which get executed depending
-   * on whether the result is successful or if it ends in error.
+   * Returns a new value that transforms the result of the source, given the `recover` or `bind` functions, which get
+   * executed depending on whether the result is successful or if it ends in error.
    *
-   * This is an optimization on usage of [[attempt]] and [[flatMap]],
-   * this equivalence being available:
+   * This is an optimization on usage of [[attempt]] and [[flatMap]], this equivalence being available:
    *
    * {{{
    *   fa.redeemWith(fe, fs) <-> fa.attempt.flatMap(_.fold(fe, fs))
@@ -84,23 +82,24 @@ trait MonadError[F[_], E] extends ApplicativeError[F, E] with Monad[F] {
    *   fa.redeemWith(F.raiseError, fs) <-> fa.flatMap(fs)
    * }}}
    *
-   * Implementations are free to override it in order to optimize
-   * error recovery.
+   * Implementations are free to override it in order to optimize error recovery.
    *
-   * @see [[redeem]], [[attempt]] and [[handleErrorWith]]
+   * @see
+   *   [[redeem]], [[attempt]] and [[handleErrorWith]]
    *
-   * @param fa is the source whose result is going to get transformed
-   * @param recover is the function that gets called to recover the source
-   *        in case of error
-   * @param bind is the function that gets to transform the source
-   *        in case of success
+   * @param fa
+   *   is the source whose result is going to get transformed
+   * @param recover
+   *   is the function that gets called to recover the source in case of error
+   * @param bind
+   *   is the function that gets to transform the source in case of success
    */
   def redeemWith[A, B](fa: F[A])(recover: E => F[B], bind: A => F[B]): F[B] =
     flatMap(attempt(fa))(_.fold(recover, bind))
 
   /**
-   * Reifies the value or error of the source and performs an effect on the result,
-   * then recovers the original value or error back into `F`.
+   * Reifies the value or error of the source and performs an effect on the result, then recovers the original value or
+   * error back into `F`.
    *
    * Note that if the effect returned by `f` fails, the resulting effect will fail too.
    *

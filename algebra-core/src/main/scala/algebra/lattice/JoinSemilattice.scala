@@ -25,9 +25,8 @@ package lattice
 import scala.{specialized => sp}
 
 /**
- * A join-semilattice (or upper semilattice) is a semilattice whose
- * operation is called "join", and which can be thought of as a least
- * upper bound.
+ * A join-semilattice (or upper semilattice) is a semilattice whose operation is called "join", and which can be thought
+ * of as a least upper bound.
  */
 trait JoinSemilattice[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
   def join(lhs: A, rhs: A): A

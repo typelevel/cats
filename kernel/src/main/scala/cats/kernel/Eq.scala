@@ -30,9 +30,8 @@ import scala.util.{Failure, Success, Try}
 import scala.{specialized => sp}
 
 /**
- * A type class used to determine equality between 2 instances of the same
- * type. Any 2 instances `x` and `y` are equal if `eqv(x, y)` is `true`.
- * Moreover, `eqv` should form an equivalence relation.
+ * A type class used to determine equality between 2 instances of the same type. Any 2 instances `x` and `y` are equal
+ * if `eqv(x, y)` is `true`. Moreover, `eqv` should form an equivalence relation.
  */
 trait Eq[@sp A] extends Any with Serializable { self =>
 
@@ -59,8 +58,7 @@ abstract class EqFunctions[E[T] <: Eq[T]] {
 trait EqToEquivConversion {
 
   /**
-   * Implicitly derive a `scala.math.Equiv[A]` from a `Eq[A]`
-   * instance.
+   * Implicitly derive a `scala.math.Equiv[A]` from a `Eq[A]` instance.
    */
   implicit def catsKernelEquivForEq[A](implicit ev: Eq[A]): Equiv[A] =
     ev.eqv(_, _)
@@ -80,22 +78,19 @@ object Eq
   @inline final def apply[A](implicit ev: Eq[A]): Eq[A] = ev
 
   /**
-   * Convert an implicit `Eq[B]` to an `Eq[A]` using the given
-   * function `f`.
+   * Convert an implicit `Eq[B]` to an `Eq[A]` using the given function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: Eq[B]): Eq[A] =
     (x, y) => ev.eqv(f(x), f(y))
 
   /**
-   * Return an Eq that gives the result of the and of eq1 and eq2
-   * note this is idempotent
+   * Return an Eq that gives the result of the and of eq1 and eq2 note this is idempotent
    */
   def and[@sp A](eq1: Eq[A], eq2: Eq[A]): Eq[A] =
     (x, y) => eq1.eqv(x, y) && eq2.eqv(x, y)
 
   /**
-   * Return an Eq that gives the result of the or of this and that
-   * Note this is idempotent
+   * Return an Eq that gives the result of the or of this and that Note this is idempotent
    */
   def or[@sp A](eq1: Eq[A], eq2: Eq[A]): Eq[A] =
     (x, y) => eq1.eqv(x, y) || eq2.eqv(x, y)
@@ -108,8 +103,7 @@ object Eq
   /**
    * An `Eq[A]` that delegates to universal equality (`==`).
    *
-   * This can be useful for case classes, which have reasonable `equals`
-   * implementations
+   * This can be useful for case classes, which have reasonable `equals` implementations
    */
   def fromUniversalEquals[A]: Eq[A] = _ == _
 
@@ -119,8 +113,7 @@ object Eq
   def allEqual[A]: Eq[A] = (_, _) => true
 
   /**
-   * This is a monoid that creates an Eq that
-   * checks that all equality checks pass
+   * This is a monoid that creates an Eq that checks that all equality checks pass
    */
   def allEqualBoundedSemilattice[A]: BoundedSemilattice[Eq[A]] =
     new BoundedSemilattice[Eq[A]] {
@@ -135,8 +128,7 @@ object Eq
     }
 
   /**
-   * This is a monoid that creates an Eq that
-   * checks that at least one equality check passes
+   * This is a monoid that creates an Eq that checks that at least one equality check passes
    */
   def anyEqualSemilattice[A]: Semilattice[Eq[A]] =
     new Semilattice[Eq[A]] {
@@ -202,9 +194,8 @@ object Eq
     cats.kernel.instances.function.catsKernelOrderForFunction0[A]
 
   /**
-   * you may wish to do equality by making `implicit val eqT: Eq[Throwable] = Eq.allEqual`
-   * doing a fine grained equality on Throwable can make the code very execution
-   * order dependent
+   * you may wish to do equality by making `implicit val eqT: Eq[Throwable] = Eq.allEqual` doing a fine grained equality
+   * on Throwable can make the code very execution order dependent
    */
   implicit def catsStdEqForTry[A](implicit A: Eq[A], T: Eq[Throwable]): Eq[Try[A]] = {
     case (Success(a), Success(b)) => A.eqv(a, b)

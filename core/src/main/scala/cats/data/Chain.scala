@@ -70,9 +70,8 @@ import Chain.{
 }
 
 /**
- * Trivial catenable sequence. Supports O(1) append, and (amortized)
- * O(1) `uncons`, such that walking the sequence via N successive `uncons`
- * steps takes O(N).
+ * Trivial catenable sequence. Supports O(1) append, and (amortized) O(1) `uncons`, such that walking the sequence via N
+ * successive `uncons` steps takes O(N).
  */
 sealed abstract class Chain[+A] extends ChainCompat[A] {
 
@@ -243,8 +242,10 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
 
   /**
    * Takes longest prefix of elements that satisfy a predicate.
-   * @param p The predicate used to test elements.
-   * @return the longest prefix of this chain whose elements all satisfy the predicate p.
+   * @param p
+   *   The predicate used to test elements.
+   * @return
+   *   the longest prefix of this chain whose elements all satisfy the predicate p.
    */
   final def takeWhile(p: A => Boolean): Chain[A] = {
     var result = Chain.empty[A]
@@ -352,8 +353,10 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
   /**
    * Drops longest prefix of elements that satisfy a predicate.
    *
-   * @param p The predicate used to test elements.
-   * @return the longest suffix of this sequence whose first element does not satisfy the predicate p.
+   * @param p
+   *   The predicate used to test elements.
+   * @return
+   *   the longest suffix of this sequence whose first element does not satisfy the predicate p.
    */
   final def dropWhile(p: A => Boolean): Chain[A] = {
     @tailrec
@@ -489,8 +492,8 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
     }
 
   /**
-   * Finds the first element of this `Chain` for which the given partial
-   * function is defined, and applies the partial function to it.
+   * Finds the first element of this `Chain` for which the given partial function is defined, and applies the partial
+   * function to it.
    */
   final def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = {
     var result: Option[B] = None
@@ -506,8 +509,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
   }
 
   /**
-   * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
-   * instead of `PartialFunction`s.
+   * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]` instead of `PartialFunction`s.
    */
   final def collectFirstSome[B](f: A => Option[B]): Option[B] = {
     var result: Option[B] = None
@@ -608,8 +610,7 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
     }
 
   /**
-   * Groups elements inside this `Chain` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * Groups elements inside this `Chain` according to the `Order` of the keys produced by the given mapping function.
    *
    * {{{
    * scala> import scala.collection.immutable.SortedMap
@@ -626,10 +627,8 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
     groupMap(key = f)(identity)
 
   /**
-   * Groups elements inside this `Chain` according to the `Order`
-   * of the keys produced by the given key function.
-   * And each element in a group is transformed into a value of type B
-   * using the mapping function.
+   * Groups elements inside this `Chain` according to the `Order` of the keys produced by the given key function. And
+   * each element in a group is transformed into a value of type B using the mapping function.
    *
    * {{{
    * scala> import scala.collection.immutable.SortedMap
@@ -659,12 +658,9 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
   }
 
   /**
-   * Groups elements inside this `Chain` according to the `Order`
-   * of the keys produced by the given key function.
-   * Then each element in a group is transformed into a value of type B
-   * using the mapping function.
-   * And finally they are all reduced into a single value
-   * using their `Semigroup`
+   * Groups elements inside this `Chain` according to the `Order` of the keys produced by the given key function. Then
+   * each element in a group is transformed into a value of type B using the mapping function. And finally they are all
+   * reduced into a single value using their `Semigroup`
    *
    * {{{
    * scala> import scala.collection.immutable.SortedMap
@@ -681,12 +677,9 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
     groupMapReduceWith(key)(f)(S.combine)
 
   /**
-   * Groups elements inside this `Chain` according to the `Order`
-   * of the keys produced by the given key function.
-   * Then each element in a group is transformed into a value of type B
-   * using the mapping function.
-   * And finally they are all reduced into a single value
-   * using the provided combine function.
+   * Groups elements inside this `Chain` according to the `Order` of the keys produced by the given key function. Then
+   * each element in a group is transformed into a value of type B using the mapping function. And finally they are all
+   * reduced into a single value using the provided combine function.
    *
    * {{{
    * scala> import scala.collection.immutable.SortedMap
@@ -754,9 +747,8 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
   }
 
   /**
-   * Yields to Some(a, Chain[A]) with `a` removed where `f` holds for the first time,
-   * otherwise yields None, if `a` was not found
-   * Traverses only until `a` is found.
+   * Yields to Some(a, Chain[A]) with `a` removed where `f` holds for the first time, otherwise yields None, if `a` was
+   * not found Traverses only until `a` is found.
    */
   final def deleteFirst(f: A => Boolean): Option[(A, Chain[A])] = {
     @tailrec
@@ -873,16 +865,16 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
   /**
    * Compares the length of this chain to a test value.
    *
-   * The method does not call `length` directly; its running time
-   * is `O(length min len)` instead of `O(length)`.
+   * The method does not call `length` directly; its running time is `O(length min len)` instead of `O(length)`.
    *
-   * @param  len the test value that gets compared with the length.
-   * @return a negative value if `this.length < len`,
-   *         zero if `this.length == len` or
-   *         a positive value if `this.length > len`.
-   * @note   an adapted version of
-             [[https://github.com/scala/scala/blob/v2.13.8/src/library/scala/collection/Iterable.scala#L272-L288 Iterable#sizeCompare]]
-             from Scala Library v2.13.10 is used in a part of the implementation.
+   * @param len
+   *   the test value that gets compared with the length.
+   * @return
+   *   a negative value if `this.length < len`, zero if `this.length == len` or a positive value if `this.length > len`.
+   * @note
+   *   an adapted version of
+   *   [[https://github.com/scala/scala/blob/v2.13.8/src/library/scala/collection/Iterable.scala#L272-L288 Iterable#sizeCompare]]
+   *   from Scala Library v2.13.10 is used in a part of the implementation.
    *
    * {{{
    * scala> import cats.data.Chain
@@ -959,10 +951,8 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
   /**
    * Typesafe equality operator.
    *
-   * This method is similar to == except that it only allows two
-   * Chain[A] values to be compared to each other, and uses
-   * equality provided by Eq[_] instances, rather than using the
-   * universal equality provided by .equals.
+   * This method is similar to == except that it only allows two Chain[A] values to be compared to each other, and uses
+   * equality provided by Eq[_] instances, rather than using the universal equality provided by .equals.
    */
   def ===[AA >: A](that: Chain[AA])(implicit A: Eq[AA]): Boolean =
     (this eq that) || {

@@ -40,8 +40,7 @@ trait DurationBounded extends LowerBounded[Duration] with UpperBounded[Duration]
 /**
  * This ordering is valid for all defined durations.
  *
- * The value Duration.Undefined breaks our laws, because undefined
- * values are not equal to themselves.
+ * The value Duration.Undefined breaks our laws, because undefined values are not equal to themselves.
  */
 class DurationOrder extends Order[Duration] with Hash[Duration] with DurationBounded { self =>
   def hash(x: Duration): Int = x.hashCode()
