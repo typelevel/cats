@@ -27,9 +27,8 @@ import cats.arrow.{ArrowChoice, CommutativeArrow}
 import scala.annotation.tailrec
 
 /**
- * A function type of a single input that can do function composition
- * (via `andThen` and `compose`) in constant stack space with amortized
- * linear time application (in the number of constituent functions).
+ * A function type of a single input that can do function composition (via `andThen` and `compose`) in constant stack
+ * space with amortized linear time application (in the number of constituent functions).
  *
  * Example:
  *
@@ -41,17 +40,14 @@ import scala.annotation.tailrec
  *   f(0)
  * }}}
  *
- * This can be used to build stack safe data structures that make
- * use of lambdas. The perfect candidates for usage with `AndThen`
- * are the data structures using a signature like this (where
- * `F[_]` is a monadic type):
+ * This can be used to build stack safe data structures that make use of lambdas. The perfect candidates for usage with
+ * `AndThen` are the data structures using a signature like this (where `F[_]` is a monadic type):
  *
  * {{{
  *   A => F[B]
  * }}}
  *
- * As an example, if we described this data structure, the naive
- * solution for that `map` is stack unsafe:
+ * As an example, if we described this data structure, the naive solution for that `map` is stack unsafe:
  *
  * {{{
  *   case class Resource[F[_], A, B](
@@ -69,8 +65,7 @@ import scala.annotation.tailrec
  *   }
  * }}}
  *
- * To describe a `flatMap` operation for this data type, `AndThen`
- * can save the day:
+ * To describe a `flatMap` operation for this data type, `AndThen` can save the day:
  *
  * {{{
  *   def flatMap[C](f: B => C)(implicit F: Functor[F]): Resource[F, A, C] = {
@@ -169,21 +164,19 @@ object AndThen extends AndThenInstances0 {
   final private case class Concat[-A, E, +B](left: AndThen[A, E], right: AndThen[E, B]) extends AndThen[A, B]
 
   /**
-   * Establishes the maximum stack depth when fusing `andThen` or
-   * `compose` calls.
+   * Establishes the maximum stack depth when fusing `andThen` or `compose` calls.
    *
    * The default is `128`.
    *
-   * This value was reached by taking into account the default stack
-   * size as set on 32 bits or 64 bits, Linux or Windows systems,
-   * being enough to notice performance gains, but not big enough
-   * to be in danger of triggering a stack-overflow error.
+   * This value was reached by taking into account the default stack size as set on 32 bits or 64 bits, Linux or Windows
+   * systems, being enough to notice performance gains, but not big enough to be in danger of triggering a
+   * stack-overflow error.
    */
   final private val fusionMaxStackDepth = 128
 
   /**
-   * If you are going to call this function many times, right associating it
-   * once can be a significant performance improvement for VERY long chains.
+   * If you are going to call this function many times, right associating it once can be a significant performance
+   * improvement for VERY long chains.
    */
   def toRightAssociated[A, B](fn: AndThen[A, B]): AndThen[A, B] = {
     @tailrec
@@ -224,8 +217,7 @@ object AndThen extends AndThenInstances0 {
   }
 
   /**
-   * true if this fn is already right associated, which is the faster
-   * for calling
+   * true if this fn is already right associated, which is the faster for calling
    */
   @tailrec
   final def isRightAssociated[A, B](fn: AndThen[A, B]): Boolean =
@@ -306,9 +298,8 @@ abstract private[data] class AndThenInstances0 extends AndThenInstances1 {
     }
 
   /**
-   * [[cats.arrow.ArrowChoice ArrowChoice]] and
-   * [[cats.arrow.CommutativeArrow CommutativeArrow]] instances
-   * for [[AndThen]].
+   * [[cats.arrow.ArrowChoice ArrowChoice]] and [[cats.arrow.CommutativeArrow CommutativeArrow]] instances for
+   * [[AndThen]].
    */
   implicit val catsDataArrowForAndThen: ArrowChoice[AndThen] & CommutativeArrow[AndThen] =
     new ArrowChoice[AndThen] with CommutativeArrow[AndThen] {

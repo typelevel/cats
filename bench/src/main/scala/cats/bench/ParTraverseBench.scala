@@ -32,11 +32,12 @@ import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
  *
  * bench/jmh:run -i 10 -wi 10 -f 5 -t 1 cats.bench.ParTraverseBench
  *
- * Benchmark                                       Mode  Cnt         Score        Error  Units
- * ParTraverseBench.eitherParBitraversePointfree  thrpt   50  20201469.796 ± 143402.778  ops/s
- * ParTraverseBench.eitherParBitraversePointfull  thrpt   50  24742265.071 ± 133253.733  ops/s
- * ParTraverseBench.eitherParTraversePointfree    thrpt   50   1150877.660 ±  10162.432  ops/s
- * ParTraverseBench.eitherParTraversePointfull    thrpt   50   1221809.128 ±   9997.474  ops/s
+ * | Benchmark                                     | Mode  | Cnt | Score        | Error        | Units |
+ * |:----------------------------------------------|:------|:----|:-------------|:-------------|:------|
+ * | ParTraverseBench.eitherParBitraversePointfree | thrpt | 50  | 20201469.796 | ± 143402.778 | ops/s |
+ * | ParTraverseBench.eitherParBitraversePointfull | thrpt | 50  | 24742265.071 | ± 133253.733 | ops/s |
+ * | ParTraverseBench.eitherParTraversePointfree   | thrpt | 50  | 1150877.660  | ±  10162.432 | ops/s |
+ * | ParTraverseBench.eitherParTraversePointfull   | thrpt | 50  | 1221809.128  | ±   9997.474 | ops/s |
  */
 @State(Scope.Benchmark)
 class ParTraverseBench {

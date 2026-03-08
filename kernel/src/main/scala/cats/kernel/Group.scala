@@ -59,8 +59,8 @@ trait Group[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] {
   def remove(a: A, b: A): A = combine(a, inverse(b))
 
   /**
-   * Return `a` appended to itself `n` times. If `n` is negative, then
-   * this returns `inverse(a)` appended to itself `n` times.
+   * Return `a` appended to itself `n` times. If `n` is negative, then this returns `inverse(a)` appended to itself `n`
+   * times.
    */
   override def combineN(a: A, n: Int): A =
     // This method is a bit tricky. Normally, to sum x a negative

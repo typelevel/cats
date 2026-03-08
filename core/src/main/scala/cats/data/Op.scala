@@ -27,12 +27,11 @@ import cats.arrow.*
 /**
  * The dual category of some other category, `Arr`.
  *
- * In a normal category, `Arr` has a direction `A => B`.
- * The dual category reverses the direction, making it `B => A`.
+ * In a normal category, `Arr` has a direction `A => B`. The dual category reverses the direction, making it `B => A`.
  *
- * The dual category can be useful when you want to reason about or define
- * operations in terms of their duals without modifying the original category.
- * In other words, the dual category provides a "reversed" view to the original category.
+ * The dual category can be useful when you want to reason about or define operations in terms of their duals without
+ * modifying the original category. In other words, the dual category provides a "reversed" view to the original
+ * category.
  *
  * Example:
  * {{{
