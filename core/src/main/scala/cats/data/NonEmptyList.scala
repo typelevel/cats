@@ -280,12 +280,28 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
   /**
    * Check whether at least one element satisfies the predicate
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.exists(i => i > 100)
+   * res0: scala.Boolean = false
+   * scala> nel.exists(i => i > 2)
+   * res1: scala.Boolean = true
+   * }}}
    */
   def exists(p: A => Boolean): Boolean =
     p(head) || tail.exists(p)
 
   /**
    * Check whether all elements satisfy the predicate
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.forall(_ > 0)
+   * res0: scala.Boolean = true
+   * scala> nel.forall(i => i > 2)
+   * res1: scala.Boolean = false
+   * }}}
    */
   def forall(p: A => Boolean): Boolean =
     p(head) && tail.forall(p)
