@@ -16,10 +16,8 @@ object GenTupleMonadInstances extends Template {
     val `b:A..(n - 1):(N - 1)` = (for ((v, t) <- `b..(n - 1)`.zip(`A..(N - 1)`)) yield s"$v: $t").mkString(", ")
 
     /**
-     * This special case for N = 2 is needed because
-     * of the deprecated versions in TupleInstances.
-     * It will be removed once the deprecated ones are
-     * deleted.
+     * This special case for `N = 2` is needed because of the deprecated versions in `TupleInstances`. It will be
+     * removed once the deprecated ones are deleted.
      */
     val flatMapTupleClass = if (arity == 2) "FlatMapNTuple2" else s"FlatMapTuple$arity"
 

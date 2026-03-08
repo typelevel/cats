@@ -6,8 +6,10 @@ import sbt.*
  * Copied, with some modifications, from
  * [[https://github.com/milessabin/shapeless/blob/master/project/Boilerplate.scala Shapeless]].
  *
- * @author Miles Sabin
- * @author Kevin Wright
+ * @author
+ *   Miles Sabin
+ * @author
+ *   Kevin Wright
  */
 object AlgebraBoilerplate {
   import scala.StringContext.*
@@ -49,17 +51,15 @@ object AlgebraBoilerplate {
   }
 
   /**
-   * Blocks in the templates below use a custom interpolator, combined with post-processing to
-   * produce the body.
+   * Blocks in the templates below use a custom interpolator, combined with post-processing to produce the body.
    *
-   * - The contents of the `header` val is output first
-   * - Then the first block of lines beginning with '|'
-   * - Then the block of lines beginning with '-' is replicated once for each arity,
-   *   with the `templateVals` already pre-populated with relevant relevant vals for that arity
-   * - Then the last block of lines prefixed with '|'
+   *   - The contents of the `header` val is output first
+   *   - Then the first block of lines beginning with '|'
+   *   - Then the block of lines beginning with '-' is replicated once for each arity, with the `templateVals` already
+   *     pre-populated with relevant relevant vals for that arity
+   *   - Then the last block of lines prefixed with '|'
    *
-   * The block otherwise behaves as a standard interpolated string with regards to variable
-   * substitution.
+   * The block otherwise behaves as a standard interpolated string with regards to variable substitution.
    */
   trait Template {
     def filename(root: File): File

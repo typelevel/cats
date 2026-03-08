@@ -52,8 +52,8 @@ final class SetOps[A](private val se: SortedSet[A]) extends AnyVal {
   def toNes: Option[NonEmptySet[A]] = NonEmptySet.fromSet(se)
 
   /**
-   * Groups elements inside this `SortedSet` according to the `Order` of the keys
-   * produced by the given mapping function.
+   * Groups elements inside this `SortedSet` according to the `Order` of the keys produced by the given mapping
+   * function.
    *
    * {{{
    * scala> import cats.data.NonEmptySet
