@@ -39,8 +39,7 @@ private[syntax] trait ReducibleSyntaxBinCompat0 {
 final class ReducibleOps0[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
-   * Apply `f` to each element of `fa` and combine them using the
-   * given `SemigroupK[G]`.
+   * Apply `f` to each element of `fa` and combine them using the given `SemigroupK[G]`.
    *
    * {{{
    * scala> import cats._, cats.data._, cats.implicits._

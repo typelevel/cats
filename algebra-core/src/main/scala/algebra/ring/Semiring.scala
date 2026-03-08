@@ -27,15 +27,13 @@ import scala.{specialized => sp}
 /**
  * Semiring consists of:
  *
- *  - a commutative monoid for addition (+)
- *  - a semigroup for multiplication (*)
+ *   - a commutative monoid for addition (+)
+ *   - a semigroup for multiplication (*)
  *
- * Alternately, a Semiring can be thought of as a ring without a
- * multiplicative identity or an additive inverse.
+ * Alternately, a Semiring can be thought of as a ring without a multiplicative identity or an additive inverse.
  *
- * A Semiring with an additive inverse (-) is a Rng.
- * A Semiring with a multiplicative identity (1) is a Rig.
- * A Semiring with both of those is a Ring.
+ * A Semiring with an additive inverse (-) is a Rng. A Semiring with a multiplicative identity (1) is a Rig. A Semiring
+ * with both of those is a Ring.
  */
 trait Semiring[@sp(Int, Long, Float, Double) A]
     extends Any
