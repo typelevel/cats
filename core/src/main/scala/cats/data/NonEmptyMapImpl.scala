@@ -261,6 +261,18 @@ sealed class NonEmptyMapOps[K, A](private[data] val value: NonEmptyMap[K, A]) {
     loop(head, tail).value
   }
 
+  def nonEmptyTraverse[G[_], L, B](
+    f: (K, A) => G[(L, B)]
+  )(implicit G: Apply[G], ordL: Order[L]): G[NonEmptyMap[L, B]] = {
+    def loop(h: (K, A), t: SortedMap[K, A]): Eval[G[NonEmptyMap[L, B]]] =
+      if (t.isEmpty)
+        Eval.now(G.map(f.tupled(h))(b => NonEmptyMap(b, SortedMap.empty[L, B](ordL.toOrdering))))
+      else
+        G.map2Eval(f.tupled(h), Eval.defer(loop(t.head, t.tail)))((lb, acc) => NonEmptyMap(lb, acc.toSortedMap))
+
+    loop(head, tail).value
+  }
+
   /**
    * Typesafe stringification method.
    *
