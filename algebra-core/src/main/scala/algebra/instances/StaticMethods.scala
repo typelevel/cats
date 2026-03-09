@@ -28,8 +28,7 @@ object StaticMethods {
   /**
    * Exponentiation function, e.g. x^y
    *
-   * If base^ex doesn't fit in a Long, the result will overflow (unlike
-   * Math.pow which will return +/- Infinity).
+   * If base^ex doesn't fit in a Long, the result will overflow (unlike Math.pow which will return +/- Infinity).
    */
   final def pow(base: Long, exponent: Long): Long = {
     @tailrec def loop(t: Long, b: Long, e: Long): Long =

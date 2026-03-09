@@ -23,10 +23,10 @@ package cats
 package free
 
 /**
- * A free comonad for some branching functor `S`. Branching is done lazily using [[Eval]].
- * A tree with data at the branches, as opposed to [[Free]] which is a tree with data at the leaves.
- * Not an instruction set functor made into a program monad as in [[Free]], but an instruction set's outputs as a
- * functor made into a tree of the possible worlds reachable using the instruction set.
+ * A free comonad for some branching functor `S`. Branching is done lazily using [[Eval]]. A tree with data at the
+ * branches, as opposed to [[Free]] which is a tree with data at the leaves. Not an instruction set functor made into a
+ * program monad as in [[Free]], but an instruction set's outputs as a functor made into a tree of the possible worlds
+ * reachable using the instruction set.
  *
  * This Scala implementation of `Cofree` and its usages are derived from
  * [[https://github.com/scalaz/scalaz/blob/series/7.3.x/core/src/main/scala/scalaz/Cofree.scala Scalaz's Cofree]],

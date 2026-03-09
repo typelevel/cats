@@ -104,8 +104,7 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
     as.reduceOption(combine)
 
   /**
-   * return a semigroup that reverses the order
-   * so combine(a, b) == reverse.combine(b, a)
+   * return a semigroup that reverses the order so combine(a, b) == reverse.combine(b, a)
    */
   def reverse: Semigroup[A] =
     new Semigroup[A] {
@@ -116,8 +115,8 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
     }
 
   /**
-   * Between each pair of elements insert middle
-   * This name matches the term used in Foldable and Reducible and a similar Haskell function.
+   * Between each pair of elements insert middle This name matches the term used in Foldable and Reducible and a similar
+   * Haskell function.
    */
   def intercalate(middle: A): Semigroup[A] =
     (a, b) => self.combine(a, self.combine(middle, b))
@@ -282,12 +281,13 @@ private[kernel] trait MonoidInstances extends BandInstances {
 
   /**
    * @deprecated
-   *   Any non-pure use of [[scala.concurrent.Future Future]] with Cats is error prone
-   *   (particularly the semantics of [[cats.Traverse#traverse traverse]] with regard to execution order are unspecified).
-   *   We recommend using [[https://typelevel.org/cats-effect/ Cats Effect `IO`]] as a replacement for ''every'' use case of [[scala.concurrent.Future Future]].
-   *   However, at this time there are no plans to remove these instances from Cats.
+   *   Any non-pure use of [[scala.concurrent.Future Future]] with Cats is error prone (particularly the semantics of
+   *   [[cats.Traverse#traverse traverse]] with regard to execution order are unspecified). We recommend using
+   *   [[https://typelevel.org/cats-effect/ Cats Effect `IO`]] as a replacement for ''every'' use case of
+   *   [[scala.concurrent.Future Future]]. However, at this time there are no plans to remove these instances from Cats.
    *
-   * @see [[https://github.com/typelevel/cats/issues/4176 Changes in Future traverse behavior between 2.6 and 2.7]]
+   * @see
+   *   [[https://github.com/typelevel/cats/issues/4176 Changes in Future traverse behavior between 2.6 and 2.7]]
    */
   implicit def catsKernelMonoidForFuture[A](implicit A: Monoid[A], ec: ExecutionContext): Monoid[Future[A]] =
     new FutureMonoid[A](A, ec)
@@ -324,11 +324,13 @@ private[kernel] trait SemigroupInstances {
 
   /**
    * @deprecated
-   *   Any non-pure use of [[scala.concurrent.Future Future]] with Cats is error prone
-   *   (particularly the semantics of [[cats.Traverse#traverse traverse]] with regard to execution order are unspecified).
-   *   We recommend using [[https://typelevel.org/cats-effect/ Cats Effect `IO`]] as a replacement for ''every'' use case of [[scala.concurrent.Future Future]].
+   *   Any non-pure use of [[scala.concurrent.Future Future]] with Cats is error prone (particularly the semantics of
+   *   [[cats.Traverse#traverse traverse]] with regard to execution order are unspecified). We recommend using
+   *   [[https://typelevel.org/cats-effect/ Cats Effect `IO`]] as a replacement for ''every'' use case of
+   *   [[scala.concurrent.Future Future]].
    *
-   * @see [[https://github.com/typelevel/cats/issues/4176 Changes in Future traverse behavior between 2.6 and 2.7]]
+   * @see
+   *   [[https://github.com/typelevel/cats/issues/4176 Changes in Future traverse behavior between 2.6 and 2.7]]
    */
   implicit def catsKernelSemigroupForFuture[A](implicit A: Semigroup[A], ec: ExecutionContext): Semigroup[Future[A]] =
     new FutureSemigroup[A](A, ec)

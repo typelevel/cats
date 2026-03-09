@@ -22,19 +22,19 @@
 package cats
 
 /**
- * Inject is a type class providing an injection from type `A` into
- * type `B`. An injection is a function `inj` which does not destroy
- * any information: for every `b: B` there is at most one `a: A` such
- * that `inj(a) = b`.
+ * Inject is a type class providing an injection from type `A` into type `B`. An injection is a function `inj` which
+ * does not destroy any information: for every `b: B` there is at most one `a: A` such that `inj(a) = b`.
  *
- * Because of this all injections admit partial inverses `prj` which
- * pair a value `b: B` back with a single value `a: A`.
+ * Because of this all injections admit partial inverses `prj` which pair a value `b: B` back with a single value
+ * `a: A`.
  *
  * @since 1.0
- * @note Prior to cats 1.0, Inject handled injection for type
- * constructors. For injection of type constructors, use [[InjectK]].
+ * @note
+ *   Prior to cats 1.0, Inject handled injection for type constructors. For injection of type constructors, use
+ *   [[InjectK]].
  *
- * @see [[InjectK]] for injection for [[cats.data.EitherK]]
+ * @see
+ *   [[InjectK]] for injection for [[cats.data.EitherK]]
  */
 abstract class Inject[A, B] {
   def inj: A => B

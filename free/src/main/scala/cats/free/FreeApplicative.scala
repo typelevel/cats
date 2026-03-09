@@ -28,8 +28,7 @@ import cats.data.Const
 import scala.annotation.tailrec
 
 /**
- * Applicative Functor for Free,
- * implementation inspired by https://github.com/safareli/free/pull/31/
+ * Applicative Functor for Free, implementation inspired by https://github.com/safareli/free/pull/31/
  */
 sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable {
   self =>
@@ -61,8 +60,7 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
     }
 
   /**
-   * Interprets/Runs the sequence of operations using the semantics of `Applicative` G[_].
-   * Tail recursive.
+   * Interprets/Runs the sequence of operations using the semantics of `Applicative` G[_]. Tail recursive.
    */
   final def foldMap[G[_]](f: F ~> G)(implicit G: Applicative[G]): G[A] = {
     import FreeApplicative.*
@@ -148,15 +146,13 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
   }
 
   /**
-   * Interpret/run the operations using the semantics of `Applicative[F]`.
-   * Stack-safe.
+   * Interpret/run the operations using the semantics of `Applicative[F]`. Stack-safe.
    */
   final def fold(implicit F: Applicative[F]): F[A] =
     foldMap(FunctionK.id[F])
 
   /**
-   * Interpret this algebra into another algebra.
-   * Stack-safe.
+   * Interpret this algebra into another algebra. Stack-safe.
    */
   final def compile[G[_]](f: F ~> G): FA[G, A] =
     foldMap[FA[G, *]] {
@@ -164,8 +160,7 @@ sealed abstract class FreeApplicative[F[_], A] extends Product with Serializable
     }
 
   /**
-   * Interpret this algebra into a FreeApplicative over another algebra.
-   * Stack-safe.
+   * Interpret this algebra into a FreeApplicative over another algebra. Stack-safe.
    */
   def flatCompile[G[_]](f: F ~> FA[G, *]): FA[G, A] =
     foldMap(f)
@@ -201,9 +196,8 @@ object FreeApplicative {
     }
 
   /**
-   * Represents a curried function `F[A => B => C => ...]`
-   * that has been constructed with chained `ap` calls.
-   * Fn#argc denotes the amount of curried params remaining.
+   * Represents a curried function `F[A => B => C => ...]` that has been constructed with chained `ap` calls. Fn#argc
+   * denotes the amount of curried params remaining.
    */
   final private case class Fn[G[_], A, B](gab: G[A => B], argc: Int)
 
