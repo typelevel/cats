@@ -45,7 +45,7 @@ object ZipStream {
     }
 
   // Deprecated Alternative instance - kept for binary compatibility but is unlawful
-  // See https://github.com/typelevel/cats/issues/4840
+
   @deprecated(
     "Alternative[ZipStream] violates right distributivity and is unlawful - use CommutativeApplicative instead",
     "2.14.0"

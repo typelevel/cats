@@ -43,7 +43,7 @@ object ZipLazyList {
     }
 
   // Deprecated Alternative instance - kept for binary compatibility but is unlawful
-  // See https://github.com/typelevel/cats/issues/4840
+
   @deprecated(
     "Alternative[ZipLazyList] violates right distributivity and is unlawful - use CommutativeApplicative instead",
     "2.14.0"

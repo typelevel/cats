@@ -73,7 +73,8 @@ class LazyListSuite extends CatsSuite {
   {
     import cats.{Applicative}
     import cats.data.ZipLazyList
-    implicit val zipLazyListApplicative: Applicative[ZipLazyList] = ZipLazyList.catsDataCommutativeApplicativeForZipLazyList
+    implicit val zipLazyListApplicative: Applicative[ZipLazyList] =
+      ZipLazyList.catsDataCommutativeApplicativeForZipLazyList
     checkAll("ZipLazyList[Int]", CommutativeApplyTests[ZipLazyList].apply[Int, Int, Int])
   }
 
