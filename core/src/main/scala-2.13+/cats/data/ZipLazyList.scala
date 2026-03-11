@@ -28,8 +28,8 @@ object ZipLazyList {
 
   def apply[A](value: LazyList[A]): ZipLazyList[A] = new ZipLazyList(value)
 
-  implicit val catsDataAlternativeForZipLazyList: Alternative[ZipLazyList] & CommutativeApplicative[ZipLazyList] =
-    new Apply.AbstractApply[ZipLazyList] with Alternative[ZipLazyList] with CommutativeApplicative[ZipLazyList] {
+  implicit val catsDataCommutativeApplicativeForZipLazyList: CommutativeApplicative[ZipLazyList] =
+    new Apply.AbstractApply[ZipLazyList] with CommutativeApplicative[ZipLazyList] {
       def pure[A](x: A): ZipLazyList[A] = new ZipLazyList(LazyList.continually(x))
 
       override def map[A, B](fa: ZipLazyList[A])(f: (A) => B): ZipLazyList[B] =
@@ -40,6 +40,26 @@ object ZipLazyList {
 
       override def product[A, B](fa: ZipLazyList[A], fb: ZipLazyList[B]): ZipLazyList[(A, B)] =
         ZipLazyList(fa.value.zip(fb.value))
+    }
+
+  // Deprecated Alternative instance - kept for binary compatibility but is unlawful
+  // See https://github.com/typelevel/cats/issues/4840
+  @deprecated(
+    "Alternative[ZipLazyList] violates right distributivity and is unlawful - use CommutativeApplicative instead",
+    "2.14.0"
+  )
+  implicit val catsDataAlternativeForZipLazyList: Alternative[ZipLazyList] =
+    new Apply.AbstractApply[ZipLazyList] with Alternative[ZipLazyList] {
+      def pure[A](x: A): ZipLazyList[A] = catsDataCommutativeApplicativeForZipLazyList.pure(x)
+
+      override def map[A, B](fa: ZipLazyList[A])(f: (A) => B): ZipLazyList[B] =
+        catsDataCommutativeApplicativeForZipLazyList.map(fa)(f)
+
+      def ap[A, B](ff: ZipLazyList[A => B])(fa: ZipLazyList[A]): ZipLazyList[B] =
+        catsDataCommutativeApplicativeForZipLazyList.ap(ff)(fa)
+
+      override def product[A, B](fa: ZipLazyList[A], fb: ZipLazyList[B]): ZipLazyList[(A, B)] =
+        catsDataCommutativeApplicativeForZipLazyList.product(fa, fb)
 
       def empty[A]: ZipLazyList[A] = ZipLazyList(LazyList.empty[A])
 

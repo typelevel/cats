@@ -55,7 +55,13 @@ class StreamSuite extends CatsSuite {
   checkAll("Stream[Int]", ShortCircuitingTests[Stream].traverseFilter[Int])
 
   // Can't test applicative laws as they don't terminate
-  checkAll("ZipStream[Int]", CommutativeApplyTests[ZipStream].apply[Int, Int, Int])
+  // ZipStream Alternative is deprecated and unlawful - only testing with explicit Applicative
+  {
+    import cats.{Applicative}
+    import cats.data.ZipStream
+    implicit val zipStreamApplicative: Applicative[ZipStream] = ZipStream.catsDataCommutativeApplicativeForZipStream
+    checkAll("ZipStream[Int]", CommutativeApplyTests[ZipStream].apply[Int, Int, Int])
+  }
 
   test("show") {
     assert(Stream(1, 2, 3).show === s"Stream(1, ?)")

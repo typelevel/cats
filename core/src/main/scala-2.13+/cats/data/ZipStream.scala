@@ -30,8 +30,8 @@ object ZipStream {
 
   def apply[A](value: Stream[A]): ZipStream[A] = new ZipStream(value)
 
-  implicit val catsDataAlternativeForZipStream: Alternative[ZipStream] & CommutativeApplicative[ZipStream] =
-    new Apply.AbstractApply[ZipStream] with Alternative[ZipStream] with CommutativeApplicative[ZipStream] {
+  implicit val catsDataCommutativeApplicativeForZipStream: CommutativeApplicative[ZipStream] =
+    new Apply.AbstractApply[ZipStream] with CommutativeApplicative[ZipStream] {
       def pure[A](x: A): ZipStream[A] = new ZipStream(Stream.continually(x))
 
       override def map[A, B](fa: ZipStream[A])(f: (A) => B): ZipStream[B] =
@@ -42,6 +42,26 @@ object ZipStream {
 
       override def product[A, B](fa: ZipStream[A], fb: ZipStream[B]): ZipStream[(A, B)] =
         ZipStream(fa.value.zip(fb.value))
+    }
+
+  // Deprecated Alternative instance - kept for binary compatibility but is unlawful
+  // See https://github.com/typelevel/cats/issues/4840
+  @deprecated(
+    "Alternative[ZipStream] violates right distributivity and is unlawful - use CommutativeApplicative instead",
+    "2.14.0"
+  )
+  implicit val catsDataAlternativeForZipStream: Alternative[ZipStream] =
+    new Apply.AbstractApply[ZipStream] with Alternative[ZipStream] {
+      def pure[A](x: A): ZipStream[A] = catsDataCommutativeApplicativeForZipStream.pure(x)
+
+      override def map[A, B](fa: ZipStream[A])(f: (A) => B): ZipStream[B] =
+        catsDataCommutativeApplicativeForZipStream.map(fa)(f)
+
+      def ap[A, B](ff: ZipStream[A => B])(fa: ZipStream[A]): ZipStream[B] =
+        catsDataCommutativeApplicativeForZipStream.ap(ff)(fa)
+
+      override def product[A, B](fa: ZipStream[A], fb: ZipStream[B]): ZipStream[(A, B)] =
+        catsDataCommutativeApplicativeForZipStream.product(fa, fb)
 
       def empty[A]: ZipStream[A] = ZipStream(Stream.empty[A])
 

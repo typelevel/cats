@@ -69,7 +69,13 @@ class LazyListSuite extends CatsSuite {
   checkAll("LazyList[Int]", ShortCircuitingTests[LazyList].traverseFilter[Int])
 
   // Can't test applicative laws as they don't terminate
-  checkAll("ZipLazyList[Int]", CommutativeApplyTests[ZipLazyList].apply[Int, Int, Int])
+  // ZipLazyList Alternative is deprecated and unlawful - only testing with explicit Applicative
+  {
+    import cats.{Applicative}
+    import cats.data.ZipLazyList
+    implicit val zipLazyListApplicative: Applicative[ZipLazyList] = ZipLazyList.catsDataCommutativeApplicativeForZipLazyList
+    checkAll("ZipLazyList[Int]", CommutativeApplyTests[ZipLazyList].apply[Int, Int, Int])
+  }
 
   test("show") {
     assert(LazyList(1, 2, 3).show === s"LazyList(1, ?)")
