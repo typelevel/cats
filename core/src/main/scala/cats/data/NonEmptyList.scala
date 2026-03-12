@@ -104,6 +104,13 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
   /**
    * Applies f to all the elements of the structure
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.map(_*10)
+   * res0: cats.data.NonEmptyList[Int] = NonEmptyList(10,20,30,40,50)
+   * }}}
    */
   def map[B](f: A => B): NonEmptyList[B] =
     NonEmptyList(f(head), tail.map(f))
@@ -263,6 +270,15 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
   /**
    * Find the first element matching the partial function, if one exists
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(2, 4, 6, 8, 10)
+   * scala> nel.collectFirst { case v if v > 5 => v }
+   * res0:  Option[Int] = Some(6)
+   * scala> nel.collectFirst { case v if v % 2 == 1 => "even" }
+   * res1:  Option[String] = None
+   * }}}
    */
   def collectFirst[B](pf: PartialFunction[A, B]): Option[B] =
     if (pf.isDefinedAt(head)) {
