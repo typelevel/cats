@@ -109,7 +109,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * scala> import cats.data.NonEmptyList
    * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
    * scala> nel.map(_ * 10)
-   * res0: cats.data.NonEmptyList[Int] = NonEmptyList(10,20,30,40,50)
+   * res0: cats.data.NonEmptyList[Int] = NonEmptyList(10, 20, 30, 40, 50)
    * }}}
    */
   def map[B](f: A => B): NonEmptyList[B] =
