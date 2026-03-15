@@ -276,7 +276,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * scala> val nel = NonEmptyList.of(2, 4, 6, 8, 10)
    * scala> nel.collectFirst { case v if v > 5 => v }
    * res0:  Option[Int] = Some(6)
-   * scala> nel.collectFirst { case v if v % 2 == 1 => "even" }
+   * scala> nel.collectFirst { case v if v % 2 == 1 => "odd" }
    * res1:  Option[String] = None
    * }}}
    */
