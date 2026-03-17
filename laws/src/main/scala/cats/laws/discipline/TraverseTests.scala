@@ -82,7 +82,8 @@ trait TraverseTests[F[_]] extends FunctorTests[F] with FoldableTests[F] with Uno
         "traverse ref zipWithLongIndex" -> forAll(laws.zipWithLongIndexRef[A, C] _),
         "traverse ref mapWithLongIndex" -> forAll(laws.mapWithLongIndexRef[A, C] _),
         "traverse ref traverseWithLongIndexM" -> forAll(laws.traverseWithLongIndexMRef[Option, A, C] _),
-        "traverse ref updated" -> forAll(laws.updatedRef[A, A](_, _, _))
+        "traverse ref updated" -> forAll(laws.updatedRef[A, A](_, _, _)),
+        "traverse consistent with foldMap" -> forAll(laws.traverseConsistentFoldMap[A, M](_, _))
       )
   }
 }

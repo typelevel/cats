@@ -147,7 +147,7 @@ class AndThenSuite extends CatsSuite with ScalaCheckSuite {
       .choose(128, 1 << 13)
       .flatMap { size =>
         Gen.listOfN(size, gfn).map {
-          case Nil => AndThen(identity[A])
+          case Nil       => AndThen(identity[A])
           case h :: tail =>
             tail.foldRight(AndThen(h)) { (fn, at) => AndThen(fn).andThen(at) }
         }
@@ -162,7 +162,7 @@ class AndThenSuite extends CatsSuite with ScalaCheckSuite {
       .choose(1024, 1 << 13)
       .flatMap { size =>
         Gen.listOfN(size, gfn).map {
-          case Nil => AndThen(identity[A])
+          case Nil       => AndThen(identity[A])
           case h :: tail =>
             tail.foldLeft(AndThen(h)) { (at, fn) => at.andThen(fn) }
         }

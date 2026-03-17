@@ -279,7 +279,7 @@ class NonEmptyVectorSuite extends NonEmptyCollectionSuite[Vector, NonEmptyVector
 
   test("NonEmptyVector#of on varargs is consistent with NonEmptyVector#apply on Vector") {
     forAll { (head: Int, tail: Vector[Int]) =>
-      assert(NonEmptyVector.of(head, tail: _*) === (NonEmptyVector(head, tail)))
+      assert(NonEmptyVector.of(head, tail*) === (NonEmptyVector(head, tail)))
     }
   }
 
@@ -463,5 +463,5 @@ class ReducibleNonEmptyVectorSuite extends ReducibleSuite[NonEmptyVector]("NonEm
     NonEmptyVector(start, tailStart.to(endInclusive).toVector)
   }
 
-  def fromValues[A](el: A, els: A*): NonEmptyVector[A] = NonEmptyVector(el, Vector(els: _*))
+  def fromValues[A](el: A, els: A*): NonEmptyVector[A] = NonEmptyVector(el, Vector(els*))
 }

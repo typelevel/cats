@@ -90,7 +90,7 @@ class NonEmptyStreamSuite extends CatsSuite {
   test("Creating OneAnd + unwrap is identity") {
     forAll { (i: Int, tail: Stream[Int]) =>
       val stream = i #:: tail
-      val oneAnd = NonEmptyStream(i, tail: _*)
+      val oneAnd = NonEmptyStream(i, tail*)
       assert(stream === (oneAnd.unwrap))
     }
   }
@@ -201,5 +201,5 @@ class ReducibleNonEmptyStreamSuite extends ReducibleSuite[NonEmptyStream]("NonEm
     NonEmptyStream(start, tailStart.to(endInclusive).toStream)
   }
 
-  def fromValues[A](el: A, els: A*): NonEmptyStream[A] = NonEmptyStream(el, els: _*)
+  def fromValues[A](el: A, els: A*): NonEmptyStream[A] = NonEmptyStream(el, els*)
 }

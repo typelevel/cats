@@ -271,7 +271,7 @@ class EvalSuite extends CatsSuite {
         d.eval.value
         assert(true)
       } catch {
-        case (e: StackOverflowError) =>
+        case e: StackOverflowError =>
           fail(s"stack overflowed with eval-depth ${DeepEval.MaxDepth}")
       }
     }

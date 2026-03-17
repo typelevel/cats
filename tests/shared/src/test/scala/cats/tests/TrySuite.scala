@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.{CoflatMap, Eval, Later, Monad, MonadThrow, Semigroupal, Traverse}
+import cats.{CoflatMap, Eval, Functor, Later, Monad, MonadThrow, Semigroupal, Traverse}
 import cats.kernel.{Eq, Monoid, Semigroup}
 import cats.kernel.laws.discipline.{MonoidTests, SemigroupTests}
 import cats.laws.{ApplicativeLaws, CoflatMapLaws, FlatMapLaws, MonadLaws}
@@ -106,6 +106,21 @@ class TrySuite extends CatsSuite {
   test("fromTry works") {
     forAll { (t: Try[Int]) =>
       assert((MonadThrow[Try].fromTry(t)) === t)
+    }
+  }
+
+  test("functor default methods match map-based implementations") {
+    val F = Functor[Try]
+    forAll { (fa: Try[Int], b: String, f: Int => Long) =>
+      assert(F.as(fa, b) === F.map(fa)(_ => b))
+      assert(F.tupleLeft(fa, b) === F.map(fa)(a => (b, a)))
+      assert(F.tupleRight(fa, b) === F.map(fa)(a => (a, b)))
+      assert(F.fproduct(fa)(f) === F.map(fa)(a => (a, f(a))))
+      assert(F.fproductLeft(fa)(f) === F.map(fa)(a => (f(a), a)))
+      assert(F.void(fa) === F.map(fa)(_ => ()))
+    }
+    forAll { (fab: Try[(Int, String)]) =>
+      assert(F.unzip(fab) === (F.map(fab)(_._1), F.map(fab)(_._2)))
     }
   }
 

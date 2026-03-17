@@ -434,9 +434,9 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
    * {{{
    * scala> import cats.data.NonEmptyChain
    * scala> import cats.syntax.all._
-   * scala> val nel = NonEmptyChain.of(12, -2, 3, -5)
+   * scala> val nec = NonEmptyChain.of(12, -2, 3, -5)
    * scala> val expectedResult = List(NonEmptyChain.of(12, -2), NonEmptyChain.of(3, -5))
-   * scala> val result = nel.grouped(2)
+   * scala> val result = nec.grouped(2)
    * scala> result.toList === expectedResult
    * res0: Boolean = true
    * }}}
@@ -611,8 +611,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
   final def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyChain[A] = create(toChain.sortBy(f))
   final def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyChain[AA] = create(toChain.sorted[AA])
   final def toNem[T, V](implicit ev: A <:< (T, V), order: Order[T]): NonEmptyMap[T, V] =
-    NonEmptyMap.fromMapUnsafe(SortedMap(toChain.toVector.map(ev): _*)(order.toOrdering))
-  final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] = NonEmptySet.of(head, tail.toVector: _*)
+    NonEmptyMap.fromMapUnsafe(SortedMap(toChain.toVector.map(ev)*)(using order.toOrdering))
+  final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] = NonEmptySet.of(head, tail.toVector*)
   final def zipWithIndex: NonEmptyChain[(A, Int)] = create(toChain.zipWithIndex)
 
   final def show[AA >: A](implicit AA: Show[AA]): String = s"NonEmpty${Show[Chain[AA]].show(toChain)}"
@@ -666,9 +666,11 @@ sealed abstract private[data] class NonEmptyChainInstances extends NonEmptyChain
       override def reduce[A](fa: NonEmptyChain[A])(implicit A: Semigroup[A]): A =
         fa.reduce
 
-      def reduceLeftTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
+      override def reduceLeftTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
 
-      def reduceRightTo[A, B](fa: NonEmptyChain[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
+      override def reduceRightTo[A, B](
+        fa: NonEmptyChain[A]
+      )(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
         Eval.defer(fa.reduceRightTo(a => Eval.later(f(a))) { (a, b) =>
           Eval.defer(g(a, b))
         })

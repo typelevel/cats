@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.{Align, Alternative, CoflatMap, Eval, Monad, Semigroupal, Traverse, TraverseFilter}
+import cats.{Align, Alternative, CoflatMap, Eval, Functor, Monad, Semigroupal, Traverse, TraverseFilter}
 import cats.data.{NonEmptyList, ZipList}
 import cats.laws.discipline.{
   AlignTests,
@@ -79,6 +79,21 @@ class ListSuite extends CatsSuite {
 
   test("toNel on empty list returns None") {
     assert(List.empty[Int].toNel === None)
+  }
+
+  test("functor default methods match map-based implementations") {
+    val F = Functor[List]
+    forAll { (fa: List[Int], b: String, f: Int => Long) =>
+      assert(F.as(fa, b) === F.map(fa)(_ => b))
+      assert(F.tupleLeft(fa, b) === F.map(fa)(a => (b, a)))
+      assert(F.tupleRight(fa, b) === F.map(fa)(a => (a, b)))
+      assert(F.fproduct(fa)(f) === F.map(fa)(a => (a, f(a))))
+      assert(F.fproductLeft(fa)(f) === F.map(fa)(a => (f(a), a)))
+      assert(F.void(fa) === F.map(fa)(_ => ()))
+    }
+    forAll { (fab: List[(Int, String)]) =>
+      assert(F.unzip(fab) === (F.map(fab)(_._1), F.map(fab)(_._2)))
+    }
   }
 
   test("groupByNel should be consistent with groupBy")(

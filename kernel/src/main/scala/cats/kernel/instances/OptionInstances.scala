@@ -83,7 +83,7 @@ class OptionHash[A](implicit A: Hash[A]) extends OptionEq[A]()(A) with Hash[Opti
 class OptionEq[A](implicit A: Eq[A]) extends Eq[Option[A]] {
   def eqv(x: Option[A], y: Option[A]): Boolean =
     x match {
-      case None => y.isEmpty
+      case None    => y.isEmpty
       case Some(a) =>
         y match {
           case None    => false
@@ -96,7 +96,7 @@ class OptionMonoid[A](implicit A: Semigroup[A]) extends Monoid[Option[A]] {
   def empty: Option[A] = None
   def combine(x: Option[A], y: Option[A]): Option[A] =
     x match {
-      case None => y
+      case None    => y
       case Some(a) =>
         y match {
           case None    => x

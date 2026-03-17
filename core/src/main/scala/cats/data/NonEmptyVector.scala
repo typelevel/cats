@@ -332,9 +332,9 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
    * {{{
    * scala> import cats.data.{NonEmptyMap, NonEmptyVector}
    * scala> import cats.syntax.all._
-   * scala> val nel = NonEmptyVector.of(12, -2, 3, -5)
+   * scala> val nev = NonEmptyVector.of(12, -2, 3, -5)
    * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptyVector.of(-2, -5), true -> NonEmptyVector.of(12, 3))
-   * scala> val result = nel.groupByNem(_ >= 0)
+   * scala> val result = nev.groupByNem(_ >= 0)
    * scala> result === expectedResult
    * res0: Boolean = true
    * }}}
@@ -348,9 +348,9 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
    * {{{
    * scala> import cats.data.NonEmptyVector
    * scala> import cats.syntax.all._
-   * scala> val nel = NonEmptyVector.of(12, -2, 3, -5)
+   * scala> val nev = NonEmptyVector.of(12, -2, 3, -5)
    * scala> val expectedResult = List(NonEmptyVector.of(12, -2), NonEmptyVector.of(3, -5))
-   * scala> val result = nel.grouped(2)
+   * scala> val result = nev.grouped(2)
    * scala> result.toList === expectedResult
    * res0: Boolean = true
    * }}}
@@ -373,7 +373,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
    * }}}
    */
   final def toNem[T, U](implicit ev: A <:< (T, U), order: Order[T]): NonEmptyMap[T, U] =
-    NonEmptyMap.fromMapUnsafe(SortedMap(toVector.map(ev): _*)(order.toOrdering))
+    NonEmptyMap.fromMapUnsafe(SortedMap(toVector.map(ev)*)(using order.toOrdering))
 
   /**
    * Creates new `NonEmptySet`, similarly to List#toSet from scala standard library.
@@ -386,7 +386,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
    * }}}
    */
   final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] =
-    NonEmptySet.of(head, tail: _*)
+    NonEmptySet.of(head, tail*)
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific
@@ -410,11 +410,15 @@ sealed abstract private[data] class NonEmptyVectorInstances extends NonEmptyVect
     : NonEmptyAlternative[NonEmptyVector] & Bimonad[NonEmptyVector] & NonEmptyTraverse[NonEmptyVector] & Align[
       NonEmptyVector
     ] =
-    new NonEmptyReducible[NonEmptyVector, Vector]
+    new FlatMap.AbstractFoldableFlatMap[NonEmptyVector]
+      with NonEmptyReducibleTrait[NonEmptyVector, Vector]
       with NonEmptyAlternative[NonEmptyVector]
       with Bimonad[NonEmptyVector]
       with NonEmptyTraverse[NonEmptyVector]
       with Align[NonEmptyVector] {
+
+      override def G: Foldable[Vector] =
+        cats.instances.vector.catsStdInstancesForVector
 
       def combineK[A](a: NonEmptyVector[A], b: NonEmptyVector[A]): NonEmptyVector[A] =
         a.concatNev(b)
@@ -625,7 +629,7 @@ object NonEmptyVector extends NonEmptyVectorInstances with Serializable {
       new ZipNonEmptyVector(nev)
 
     implicit val catsDataCommutativeApplyForZipNonEmptyVector: CommutativeApply[ZipNonEmptyVector] =
-      new CommutativeApply[ZipNonEmptyVector] {
+      new Apply.AbstractApply[ZipNonEmptyVector] with CommutativeApply[ZipNonEmptyVector] {
         def ap[A, B](ff: ZipNonEmptyVector[A => B])(fa: ZipNonEmptyVector[A]): ZipNonEmptyVector[B] =
           ZipNonEmptyVector(ff.value.zipWith(fa.value)(_.apply(_)))
 

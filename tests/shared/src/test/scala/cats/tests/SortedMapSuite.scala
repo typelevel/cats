@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.{Align, FlatMap, MonoidK, Semigroupal, Show, Traverse, TraverseFilter}
+import cats.{Align, FlatMap, Functor, MonoidK, Semigroupal, Show, Traverse, TraverseFilter}
 import cats.kernel.{CommutativeMonoid, Monoid}
 import cats.kernel.laws.discipline.{CommutativeMonoidTests, HashTests, MonoidTests}
 import cats.laws.discipline.{
@@ -73,6 +73,21 @@ class SortedMapSuite extends CatsSuite {
     }
   }
 
+  test("functor default methods match map-based implementations") {
+    val F = Functor[SortedMap[Int, *]]
+    forAll { (fa: SortedMap[Int, Int], b: String, f: Int => Long) =>
+      assert(F.as(fa, b) === F.map(fa)(_ => b))
+      assert(F.tupleLeft(fa, b) === F.map(fa)(a => (b, a)))
+      assert(F.tupleRight(fa, b) === F.map(fa)(a => (a, b)))
+      assert(F.fproduct(fa)(f) === F.map(fa)(a => (a, f(a))))
+      assert(F.fproductLeft(fa)(f) === F.map(fa)(a => (f(a), a)))
+      assert(F.void(fa) === F.map(fa)(_ => ()))
+    }
+    forAll { (fab: SortedMap[Int, (Int, String)]) =>
+      assert(F.unzip(fab) === (F.map(fab)(_._1), F.map(fab)(_._2)))
+    }
+  }
+
   checkAll("Hash[SortedMap[Int, String]]", HashTests[SortedMap[Int, String]].hash)
   checkAll("CommutativeMonoid[SortedMap[String, Int]]",
            CommutativeMonoidTests[SortedMap[String, Int]].commutativeMonoid
@@ -87,7 +102,7 @@ class SortedMapSuite extends CatsSuite {
   checkAll("MonoidK[SortedMap[String, *]]", SerializableTests.serializable(MonoidK[SortedMap[String, *]]))
 
   test("traverse is stack-safe") {
-    val items = SortedMap((0 until 100000).map { i => (i.toString, i) }: _*)
+    val items = SortedMap((0 until 100000).map { i => (i.toString, i) }*)
     val sumAll = Traverse[SortedMap[String, *]]
       .traverse(items) { i => () => i }
       .apply()

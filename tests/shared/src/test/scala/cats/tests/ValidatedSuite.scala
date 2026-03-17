@@ -27,6 +27,7 @@ import cats.{
   ApplicativeError,
   Bitraverse,
   CommutativeApplicative,
+  Functor,
   SemigroupK,
   Semigroupal,
   Show,
@@ -140,6 +141,21 @@ class ValidatedSuite extends CatsSuite {
   test("fromTry is invalid for failed try") {
     forAll { (t: Try[Int]) =>
       assert(t.isFailure === (Validated.fromTry(t).isInvalid))
+    }
+  }
+
+  test("functor default methods match map-based implementations") {
+    val F = Functor[Validated[String, *]]
+    forAll { (fa: Validated[String, Int], b: String, f: Int => Long) =>
+      assert(F.as(fa, b) === F.map(fa)(_ => b))
+      assert(F.tupleLeft(fa, b) === F.map(fa)(a => (b, a)))
+      assert(F.tupleRight(fa, b) === F.map(fa)(a => (a, b)))
+      assert(F.fproduct(fa)(f) === F.map(fa)(a => (a, f(a))))
+      assert(F.fproductLeft(fa)(f) === F.map(fa)(a => (f(a), a)))
+      assert(F.void(fa) === F.map(fa)(_ => ()))
+    }
+    forAll { (fab: Validated[String, (Int, String)]) =>
+      assert(F.unzip(fab) === (F.map(fab)(_._1), F.map(fab)(_._2)))
     }
   }
 

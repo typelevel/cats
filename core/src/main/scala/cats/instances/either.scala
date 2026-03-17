@@ -58,7 +58,11 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
 
   implicit def catsStdInstancesForEither[A]
     : MonadError[Either[A, *], A] & Traverse[Either[A, *]] & Align[Either[A, *]] =
-    new MonadError[Either[A, *], A] with Traverse[Either[A, *]] with Align[Either[A, *]] {
+    new FlatMap.AbstractFoldableFlatMap[Either[A, *]]
+      with MonadError[Either[A, *], A]
+      with Traverse[Either[A, *]]
+      with Align[Either[A, *]] {
+
       override def unit: Either[A, Unit] = Either.unit
 
       def pure[B](b: B): Either[A, B] = Right(b)
@@ -76,6 +80,36 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
 
       override def map[B, C](fa: Either[A, B])(f: B => C): Either[A, C] =
         fa.map(f)
+
+      override def as[B, C](fa: Either[A, B], c: C): Either[A, C] =
+        fa match {
+          case Right(_)       => Right(c)
+          case left @ Left(_) => left.rightCast[C]
+        }
+
+      override def tupleLeft[B, C](fa: Either[A, B], c: C): Either[A, (C, B)] =
+        fa match {
+          case Right(b)       => Right((c, b))
+          case left @ Left(_) => left.rightCast[(C, B)]
+        }
+
+      override def tupleRight[B, C](fa: Either[A, B], c: C): Either[A, (B, C)] =
+        fa match {
+          case Right(b)       => Right((b, c))
+          case left @ Left(_) => left.rightCast[(B, C)]
+        }
+
+      override def fproduct[B, C](fa: Either[A, B])(f: B => C): Either[A, (B, C)] =
+        fa match {
+          case Right(b)       => Right((b, f(b)))
+          case left @ Left(_) => left.rightCast[(B, C)]
+        }
+
+      override def fproductLeft[B, C](fa: Either[A, B])(f: B => C): Either[A, (C, B)] =
+        fa match {
+          case Right(b)       => Right((f(b), b))
+          case left @ Left(_) => left.rightCast[(C, B)]
+        }
 
       @tailrec
       def tailRecM[B, C](b: B)(f: B => Either[A, Either[B, C]]): Either[A, C] =
@@ -208,6 +242,12 @@ trait EitherInstances extends cats.kernel.instances.EitherInstances {
               case Right(c) => Right(f(Ior.right(c)))
               case Left(_)  => left.rightCast[D]
             }
+        }
+
+      override def unzip[B, C](fab: Either[A, (B, C)]): (Either[A, B], Either[A, C]) =
+        fab match {
+          case Right((b, c))  => (Right(b), Right(c))
+          case left @ Left(_) => (left.rightCast[B], left.rightCast[C])
         }
 
       override def void[B](e: Either[A, B]): Either[A, Unit] =

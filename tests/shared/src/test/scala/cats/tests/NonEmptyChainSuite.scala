@@ -229,7 +229,7 @@ class NonEmptyChainSuite extends NonEmptyCollectionSuite[Chain, NonEmptyChain, N
 
   test("of") {
     forAll { (head: Int, tail: Seq[Int]) =>
-      assert(NonEmptyChain.of(head, tail: _*).toList === (head :: tail.toList))
+      assert(NonEmptyChain.of(head, tail*).toList === (head :: tail.toList))
     }
   }
 }
@@ -238,7 +238,7 @@ class ReducibleNonEmptyChainSuite extends ReducibleSuite[NonEmptyChain]("NonEmpt
   def iterator[T](nel: NonEmptyChain[T]): Iterator[T] = nel.toChain.iterator
 
   def range(start: Long, endInclusive: Long): NonEmptyChain[Long] =
-    NonEmptyChain(start, (start + 1L).to(endInclusive): _*)
+    NonEmptyChain(start, (start + 1L).to(endInclusive)*)
 
-  def fromValues[A](el: A, els: A*): NonEmptyChain[A] = NonEmptyChain(el, els: _*)
+  def fromValues[A](el: A, els: A*): NonEmptyChain[A] = NonEmptyChain(el, els*)
 }

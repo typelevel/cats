@@ -235,7 +235,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
   def findValid[EE >: E, AA >: A](that: => Validated[EE, AA])(implicit EE: Semigroup[EE]): Validated[EE, AA] =
     this match {
       case v @ Valid(_) => v
-      case Invalid(e) =>
+      case Invalid(e)   =>
         that match {
           case v @ Valid(_) => v
           case Invalid(ee)  => Invalid(EE.combine(e, ee))
@@ -885,7 +885,7 @@ sealed abstract private[data] class ValidatedInstances extends ValidatedInstance
       def combineK[B](x: Validated[A, B], y: Validated[A, B]): Validated[A, B] =
         x match {
           case v @ Valid(_) => v
-          case Invalid(ix) =>
+          case Invalid(ix)  =>
             y match {
               case Invalid(iy)  => Invalid(A.combine(ix, iy))
               case v @ Valid(_) => v
@@ -991,7 +991,7 @@ sealed abstract private[data] class ValidatedInstances2 {
   implicit def catsDataEqForValidated[A: Eq, B: Eq]: Eq[Validated[A, B]] = _ === _
 
   implicit def catsDataTraverseFunctorForValidated[E]: Traverse[Validated[E, *]] =
-    new Traverse[Validated[E, *]] {
+    new Foldable.AbstractFoldable[Validated[E, *]] with Traverse[Validated[E, *]] {
 
       override def traverse[G[_]: Applicative, A, B](fa: Validated[E, A])(f: (A) => G[B]): G[Validated[E, B]] =
         fa.traverse(f)
@@ -1007,6 +1007,36 @@ sealed abstract private[data] class ValidatedInstances2 {
 
       override def map[A, B](fa: Validated[E, A])(f: (A) => B): Validated[E, B] =
         fa.map(f)
+
+      override def as[A, B](fa: Validated[E, A], b: B): Validated[E, B] =
+        fa match {
+          case Valid(_)       => Valid(b)
+          case i @ Invalid(_) => i.asInstanceOf[Validated[E, B]]
+        }
+
+      override def tupleLeft[A, B](fa: Validated[E, A], b: B): Validated[E, (B, A)] =
+        fa match {
+          case Valid(a)       => Valid((b, a))
+          case i @ Invalid(_) => i.asInstanceOf[Validated[E, (B, A)]]
+        }
+
+      override def tupleRight[A, B](fa: Validated[E, A], b: B): Validated[E, (A, B)] =
+        fa match {
+          case Valid(a)       => Valid((a, b))
+          case i @ Invalid(_) => i.asInstanceOf[Validated[E, (A, B)]]
+        }
+
+      override def fproduct[A, B](fa: Validated[E, A])(f: A => B): Validated[E, (A, B)] =
+        fa match {
+          case Valid(a)       => Valid((a, f(a)))
+          case i @ Invalid(_) => i.asInstanceOf[Validated[E, (A, B)]]
+        }
+
+      override def fproductLeft[A, B](fa: Validated[E, A])(f: A => B): Validated[E, (B, A)] =
+        fa match {
+          case Valid(a)       => Valid((f(a), a))
+          case i @ Invalid(_) => i.asInstanceOf[Validated[E, (B, A)]]
+        }
 
       override def reduceLeftToOption[A, B](fa: Validated[E, A])(f: A => B)(g: (B, A) => B): Option[B] =
         fa.map(f).toOption
@@ -1052,6 +1082,13 @@ sealed abstract private[data] class ValidatedInstances2 {
           case _        => Nil
         }
 
+      override def unzip[A, B](fab: Validated[E, (A, B)]): (Validated[E, A], Validated[E, B]) =
+        fab match {
+          case Valid((a, b))  => (Valid(a), Valid(b))
+          case i @ Invalid(_) =>
+            (i.asInstanceOf[Validated[E, A]], i.asInstanceOf[Validated[E, B]])
+        }
+
       override def isEmpty[A](fa: Validated[E, A]): Boolean = fa.isInvalid
 
       override def void[A](fa: Validated[E, A]): Validated[E, Unit] =
@@ -1060,7 +1097,10 @@ sealed abstract private[data] class ValidatedInstances2 {
     }
 }
 
-private[data] class ValidatedApplicative[E: Semigroup] extends CommutativeApplicative[Validated[E, *]] {
+private[data] class ValidatedApplicative[E: Semigroup]
+    extends Apply.AbstractApply[Validated[E, *]]
+    with CommutativeApplicative[Validated[E, *]] {
+
   override def map[A, B](fa: Validated[E, A])(f: A => B): Validated[E, B] =
     fa.map(f)
 

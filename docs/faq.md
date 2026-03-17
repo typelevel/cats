@@ -259,7 +259,7 @@ For example, `Set` can violate the "covariant composition" law of `Functor`, whi
 fa.map(f).map(g) <-> fa.map(f.andThen(g))
 ```
 
-Since `Set` in internally based on universal hashing and equality, it violates this law when used with a data type that
+Since `Set` is internally based on universal hashing and equality, it violates this law when used with a data type that
 overrides `equals` and `hashCode` in a such a way that its instances may appear equal but de-facto contain different
 values. One example of this type is `scala.concurrent.duration.Duration`:
 

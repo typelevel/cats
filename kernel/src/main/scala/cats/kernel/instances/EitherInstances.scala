@@ -48,7 +48,7 @@ trait EitherInstances extends EitherInstances0 {
       def combine(x: Either[A, B], y: Either[A, B]): Either[A, B] =
         x match {
           case left @ Left(_) => left
-          case Right(xx) =>
+          case Right(xx)      =>
             y match {
               case left @ Left(_) => left
               case Right(yy)      => Right(B.combine(xx, yy))
@@ -63,7 +63,7 @@ private[instances] trait EitherInstances0 extends EitherInstances1 {
     (x, y) =>
       x match {
         case left @ Left(_) => left
-        case Right(xx) =>
+        case Right(xx)      =>
           y match {
             case left @ Left(_) => left
             case Right(yy)      => Right(B.combine(xx, yy))

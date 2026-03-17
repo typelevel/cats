@@ -42,11 +42,13 @@ trait ArraySeqInstances extends cats.kernel.instances.ArraySeqInstances {
 private[cats] object ArraySeqInstances {
   final private val stdInstances
     : Traverse[ArraySeq] & Monad[ArraySeq] & Alternative[ArraySeq] & CoflatMap[ArraySeq] & Align[ArraySeq] =
-    new Traverse[ArraySeq]
+    new FlatMap.AbstractFoldableFlatMap[ArraySeq]
+      with Traverse[ArraySeq]
       with Monad[ArraySeq]
       with Alternative[ArraySeq]
       with CoflatMap[ArraySeq]
       with Align[ArraySeq] {
+
       def empty[A]: ArraySeq[A] =
         ArraySeq.untagged.empty
 
@@ -113,7 +115,7 @@ private[cats] object ArraySeqInstances {
       override def traverseVoid[G[_], A, B](fa: ArraySeq[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
         G match {
           case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa)(f)(x)
-          case _ =>
+          case _                    =>
             foldRight(fa, Eval.now(G.unit)) { (a, acc) =>
               G.map2Eval(f(a), acc) { (_, _) =>
                 ()

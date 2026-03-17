@@ -280,12 +280,28 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
   /**
    * Check whether at least one element satisfies the predicate
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.exists(i => i > 100)
+   * res0: scala.Boolean = false
+   * scala> nel.exists(i => i > 2)
+   * res1: scala.Boolean = true
+   * }}}
    */
   def exists(p: A => Boolean): Boolean =
     p(head) || tail.exists(p)
 
   /**
    * Check whether all elements satisfy the predicate
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.forall(_ > 0)
+   * res0: scala.Boolean = true
+   * scala> nel.forall(i => i > 2)
+   * res1: scala.Boolean = false
+   * }}}
    */
   def forall(p: A => Boolean): Boolean =
     p(head) && tail.forall(p)
@@ -321,7 +337,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     val buf = ListBuffer.empty[B]
     @tailrec def consume(as: List[A]): List[B] =
       as match {
-        case Nil => buf.toList
+        case Nil     => buf.toList
         case a :: as =>
           buf += f(NonEmptyList(a, as))
           consume(as)
@@ -693,7 +709,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * }}}
    */
   def toNem[T, U](implicit ev: A <:< (T, U), order: Order[T]): NonEmptyMap[T, U] =
-    NonEmptyMap.fromMapUnsafe(SortedMap(toList.map(ev): _*)(order.toOrdering))
+    NonEmptyMap.fromMapUnsafe(SortedMap(toList.map(ev)*)(using order.toOrdering))
 
   /**
    * Creates new `NonEmptySet`, similarly to List#toSet from scala standard library.
@@ -706,7 +722,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    * }}}
    */
   def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] =
-    NonEmptySet.of(head, tail: _*)
+    NonEmptySet.of(head, tail*)
 
   /**
    * Creates new `NonEmptyVector`, similarly to List#toVector from scala standard library.
@@ -777,7 +793,7 @@ object NonEmptyList extends NonEmptyListInstances {
       new ZipNonEmptyList(nev)
 
     implicit val catsDataCommutativeApplyForZipNonEmptyList: CommutativeApply[ZipNonEmptyList] =
-      new CommutativeApply[ZipNonEmptyList] {
+      new Apply.AbstractApply[ZipNonEmptyList] with CommutativeApply[ZipNonEmptyList] {
         def ap[A, B](ff: ZipNonEmptyList[A => B])(fa: ZipNonEmptyList[A]): ZipNonEmptyList[B] =
           ZipNonEmptyList(ff.value.zipWith(fa.value)(_.apply(_)))
 
@@ -815,11 +831,15 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
     : NonEmptyAlternative[NonEmptyList] & Bimonad[NonEmptyList] & NonEmptyTraverse[NonEmptyList] & Align[
       NonEmptyList
     ] =
-    new NonEmptyReducible[NonEmptyList, List]
+    new FlatMap.AbstractFoldableFlatMap[NonEmptyList]
+      with NonEmptyReducibleTrait[NonEmptyList, List]
       with NonEmptyAlternative[NonEmptyList]
       with Bimonad[NonEmptyList]
       with NonEmptyTraverse[NonEmptyList]
       with Align[NonEmptyList] {
+
+      override def G: Foldable[List] =
+        cats.instances.list.catsStdInstancesForList
 
       def combineK[A](a: NonEmptyList[A], b: NonEmptyList[A]): NonEmptyList[A] =
         a.concatNel(b)

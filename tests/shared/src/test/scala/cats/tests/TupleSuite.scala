@@ -28,6 +28,7 @@ import cats.{
   Comonad,
   ContravariantSemigroupal,
   FlatMap,
+  Functor,
   Invariant,
   Monad,
   Reducible,
@@ -177,6 +178,22 @@ class TupleSuite extends CatsSuite {
     forAll { (t: (Int, Int)) =>
       val u = t.swap
       assert(Order[(Int, Int)].compare(t, u) === (scala.math.Ordering[(Int, Int)].compare(t, u)))
+    }
+  }
+
+  test("functor default methods match map-based implementations for pair") {
+    type Pair[A] = (A, A)
+    val F = Functor[Pair]
+    forAll { (fa: (Int, Int), b: String, f: Int => Long) =>
+      assert(F.as(fa, b) === F.map(fa)(_ => b))
+      assert(F.tupleLeft(fa, b) === F.map(fa)(a => (b, a)))
+      assert(F.tupleRight(fa, b) === F.map(fa)(a => (a, b)))
+      assert(F.fproduct(fa)(f) === F.map(fa)(a => (a, f(a))))
+      assert(F.fproductLeft(fa)(f) === F.map(fa)(a => (f(a), a)))
+      assert(F.void(fa) === F.map(fa)(_ => ()))
+    }
+    forAll { (fab: ((Int, String), (Int, String))) =>
+      assert(F.unzip(fab) === (F.map(fab)(_._1), F.map(fab)(_._2)))
     }
   }
 

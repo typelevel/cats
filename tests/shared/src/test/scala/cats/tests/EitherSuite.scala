@@ -119,6 +119,21 @@ class EitherSuite extends CatsSuite {
     }
   }
 
+  test("functor default methods match map-based implementations") {
+    val F = Functor[Either[Int, *]]
+    forAll { (fa: Either[Int, String], b: Long, f: String => Double) =>
+      assert(F.as(fa, b) === F.map(fa)(_ => b))
+      assert(F.tupleLeft(fa, b) === F.map(fa)(a => (b, a)))
+      assert(F.tupleRight(fa, b) === F.map(fa)(a => (a, b)))
+      assert(F.fproduct(fa)(f) === F.map(fa)(a => (a, f(a))))
+      assert(F.fproductLeft(fa)(f) === F.map(fa)(a => (f(a), a)))
+      assert(F.void(fa) === F.map(fa)(_ => ()))
+    }
+    forAll { (fab: Either[Int, (String, Long)]) =>
+      assert(F.unzip(fab) === (F.map(fab)(_._1), F.map(fab)(_._2)))
+    }
+  }
+
   test("map2Eval is lazy") {
     val bomb: Eval[Either[String, Int]] = Later(sys.error("boom"))
     val x: Either[String, Int] = Left("l")

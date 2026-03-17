@@ -243,6 +243,6 @@ trait OrderLaws[A] extends Laws {
     name: String,
     parent: Option[RuleSet],
     props: (String, Prop)*
-  ) extends DefaultRuleSet(name, parent, props: _*)
+  ) extends DefaultRuleSet(name, parent, props*)
 
 }

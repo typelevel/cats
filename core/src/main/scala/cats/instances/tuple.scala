@@ -27,6 +27,7 @@ import cats.kernel.{CommutativeMonoid, CommutativeSemigroup}
 import scala.annotation.tailrec
 
 trait TupleInstances extends Tuple2Instances with cats.kernel.instances.TupleInstances
+abstract private[instances] class AbstractTupleInstances extends TupleInstances
 
 private[instances] trait Tuple2InstancesBinCompat0 {
 
@@ -50,6 +51,27 @@ private[instances] trait Tuple2InstancesBinCompat0 {
 
   implicit val catsDataFunctorForPair: Functor[λ[P => (P, P)]] = new Functor[λ[P => (P, P)]] {
     override def map[A, B](fa: (A, A))(f: A => B): (B, B) = (f(fa._1), f(fa._2))
+
+    override def as[A, B](fa: (A, A), b: B): (B, B) = (b, b)
+
+    override def tupleLeft[A, B](fa: (A, A), b: B): ((B, A), (B, A)) =
+      ((b, fa._1), (b, fa._2))
+
+    override def tupleRight[A, B](fa: (A, A), b: B): ((A, B), (A, B)) =
+      ((fa._1, b), (fa._2, b))
+
+    override def fproduct[A, B](fa: (A, A))(f: A => B): ((A, B), (A, B)) =
+      ((fa._1, f(fa._1)), (fa._2, f(fa._2)))
+
+    override def fproductLeft[A, B](fa: (A, A))(f: A => B): ((B, A), (B, A)) =
+      ((f(fa._1), fa._1), (f(fa._2), fa._2))
+
+    override def unzip[A, B](fab: ((A, B), (A, B))): ((A, A), (B, B)) =
+      ((fab._1._1, fab._2._1), (fab._1._2, fab._2._2))
+
+    private val unit: (Unit, Unit) = ((), ())
+
+    override def void[A](fa: (A, A)): (Unit, Unit) = unit
   }
 }
 
@@ -76,7 +98,7 @@ sealed private[instances] trait Tuple2Instances extends Tuple2Instances1 {
 
   @deprecated("Use catsStdInstancesForTuple2 in cats.instances.NTupleMonadInstances", "2.4.0")
   def catsStdInstancesForTuple2[X]: Traverse[(X, *)] & Comonad[(X, *)] & Reducible[(X, *)] =
-    new Traverse[(X, *)] with Comonad[(X, *)] with Reducible[(X, *)] {
+    new Foldable.AbstractFoldable[(X, *)] with Traverse[(X, *)] with Comonad[(X, *)] with Reducible[(X, *)] {
       def traverse[G[_], A, B](fa: (X, A))(f: A => G[B])(implicit G: Applicative[G]): G[(X, B)] =
         G.map(f(fa._2))((fa._1, _))
 
@@ -165,7 +187,7 @@ sealed private[instances] trait Tuple2Instances4 {
     new FlatMapTuple2[X](SX)
 }
 
-private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap[(X, *)] {
+private[instances] class FlatMapTuple2[X](s: Semigroup[X]) extends FlatMap.AbstractFlatMap[(X, *)] {
   override def ap[A, B](ff: (X, A => B))(fa: (X, A)): (X, B) = {
     val x = s.combine(ff._1, fa._1)
     val b = ff._2(fa._2)

@@ -451,7 +451,7 @@ class FoldableSuiteAdditional
 
     // foldMapM should short-circuit and not call the function when not necessary
     val f = (_: String) match {
-      case "Calvin" => None
+      case "Calvin"  => None
       case "Deirdra" =>
         assert(false)
         None
@@ -547,12 +547,12 @@ class FoldableSuiteAdditional
   test("Foldable[Vector] monadic folds stack safety")(checkMonadicFoldsStackSafety(_.toVector))
   test("Foldable[Vector].slidingN stack safety")(checkSlidingNStackSafety(_.toVector))
 
-  test("Foldable[SortedSet] monadic folds stack safety")(checkMonadicFoldsStackSafety(xs => SortedSet(xs: _*)))
-  test("Foldable[SortedSet].slidingN stack safety")(checkSlidingNStackSafety(xs => SortedSet(xs: _*)))
+  test("Foldable[SortedSet] monadic folds stack safety")(checkMonadicFoldsStackSafety(xs => SortedSet(xs*)))
+  test("Foldable[SortedSet].slidingN stack safety")(checkSlidingNStackSafety(xs => SortedSet(xs*)))
 
   // Can't checkSlidingNStackSafety because of iteration order.
   test("Foldable[SortedMap[String, *]] monadic stack safety") {
-    checkMonadicFoldsStackSafety(xs => SortedMap(xs.map(x => x.toString -> x): _*))
+    checkMonadicFoldsStackSafety(xs => SortedMap(xs.map(x => x.toString -> x)*))
   }
 
   test("Foldable[NonEmptyList] monadic folds stack safety")(
@@ -586,11 +586,11 @@ sealed trait FoldableSuiteAdditionalStreamSpecific { self: FoldableSuiteAddition
   test("Foldable[Stream].slidingN stack safety")(checkSlidingNStackSafety(_.toStream))
 
   test("Foldable[NonEmptyStream] monadic folds stack safety")(
-    checkMonadicFoldsStackSafety(xs => NonEmptyStream(xs.head, xs.tail: _*))
+    checkMonadicFoldsStackSafety(xs => NonEmptyStream(xs.head, xs.tail*))
   )
 
   test("Foldable[NonEmptyStream].slidingN stack safety")(
-    checkSlidingNStackSafety(xs => NonEmptyStream(xs.head, xs.tail: _*))
+    checkSlidingNStackSafety(xs => NonEmptyStream(xs.head, xs.tail*))
   )
 
   val F = Foldable[Stream]
@@ -619,7 +619,7 @@ sealed trait FoldableSuiteAdditionalStreamSpecific { self: FoldableSuiteAddition
   }
 
   test("Foldable[Stream]  trampolining") {
-    val large = Stream((1 to 10000): _*)
+    val large = Stream((1 to 10000)*)
     assert(contains(large, 10000).value)
   }
 
@@ -628,7 +628,7 @@ sealed trait FoldableSuiteAdditionalStreamSpecific { self: FoldableSuiteAddition
   }
 
   def foldableStreamWithDefaultImpl: Foldable[Stream] =
-    new Foldable[Stream] {
+    new Foldable.AbstractFoldable[Stream] {
       def foldLeft[A, B](fa: Stream[A], b: B)(f: (B, A) => B): B =
         Foldable[Stream].foldLeft(fa, b)(f)
 

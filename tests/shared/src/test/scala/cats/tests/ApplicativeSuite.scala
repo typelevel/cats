@@ -49,7 +49,7 @@ class ApplicativeSuite extends CatsSuite {
     for (num <- 0 to 10) {
       assertEquals(fa.replicateA_(num), aUnit)
       assertEquals(increment.replicateA_(num).runS(0).value, num)
-      assertEquals(increment.replicateA_(num).run(0).value, ((num, ())))
+      assertEquals(increment.replicateA_(num).run(0).value, (num, ()))
       assertEquals(increment.replicateA_(num).run(0).value, increment.replicateA(num).void.run(0).value)
     }
   }

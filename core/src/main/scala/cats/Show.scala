@@ -68,7 +68,7 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
   /**
    * creates an instance of [[Show]] using object toString
    */
-  def fromToString[A]: Show[A] = _.toString
+  def fromToString[A]: Show[A] = String.valueOf(_)
 
   final case class Shown(override val toString: String) extends AnyVal
   object Shown {
@@ -76,7 +76,7 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
   }
 
   final case class ShowInterpolator(_sc: StringContext) extends AnyVal {
-    def show(args: Shown*): String = _sc.s(args: _*)
+    def show(args: Shown*): String = _sc.s(args*)
   }
 
   implicit val catsContravariantForShow: Contravariant[Show] = new Contravariant[Show] {

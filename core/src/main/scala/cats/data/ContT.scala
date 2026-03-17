@@ -281,7 +281,7 @@ object ContT {
     }
 
   implicit def catsDataContTMonad[M[_]: Defer, A]: Monad[ContT[M, A, *]] =
-    new Monad[ContT[M, A, *]] {
+    new FlatMap.AbstractFlatMap[ContT[M, A, *]] with Monad[ContT[M, A, *]] {
       def pure[B](b: B): ContT[M, A, B] =
         ContT.pure(b)
 

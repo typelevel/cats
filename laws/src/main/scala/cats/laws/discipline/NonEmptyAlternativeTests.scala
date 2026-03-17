@@ -53,9 +53,9 @@ trait NonEmptyAlternativeTests[F[_]] extends ApplicativeTests[F] with SemigroupK
         "left distributivity" -> forAll(laws.nonEmptyAlternativeLeftDistributivity[A, B] _),
         "right distributivity" -> forAll(laws.nonEmptyAlternativeRightDistributivity[A, B] _),
         "prependK consistent with pure and combineK" ->
-          forAll(laws.nonEmptyAlternativePrependKConsitentWithPureAndCombineK[A] _),
+          forAll(laws.nonEmptyAlternativePrependKConsistentWithPureAndCombineK[A] _),
         "appendK consistent with pure and combineK" ->
-          forAll(laws.nonEmptyAlternativeAppendKConsitentWithPureAndCombineK[A] _)
+          forAll(laws.nonEmptyAlternativeAppendKConsistentWithPureAndCombineK[A] _)
       )
     }
 }

@@ -339,9 +339,9 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
    * {{{
    * scala> import cats.data.{NonEmptyMap, NonEmptySeq}
    * scala> import cats.syntax.all._
-   * scala> val nel = NonEmptySeq.of(12, -2, 3, -5)
+   * scala> val neSeq = NonEmptySeq.of(12, -2, 3, -5)
    * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptySeq.of(-2, -5), true -> NonEmptySeq.of(12, 3))
-   * scala> val result = nel.groupByNem(_ >= 0)
+   * scala> val result = neSeq.groupByNem(_ >= 0)
    * scala> result === expectedResult
    * res0: Boolean = true
    * }}}
@@ -355,9 +355,9 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
    * {{{
    * scala> import cats.data.NonEmptySeq
    * scala> import cats.syntax.all._
-   * scala> val nel = NonEmptySeq.of(12, -2, 3, -5)
+   * scala> val neSeq = NonEmptySeq.of(12, -2, 3, -5)
    * scala> val expectedResult = List(NonEmptySeq.of(12, -2), NonEmptySeq.of(3, -5))
-   * scala> val result = nel.grouped(2)
+   * scala> val result = neSeq.grouped(2)
    * scala> result.toList === expectedResult
    * res0: Boolean = true
    * }}}
@@ -381,7 +381,7 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
    * }}}
    */
   final def toNem[T, U](implicit ev: A <:< (T, U), order: Order[T]): NonEmptyMap[T, U] =
-    NonEmptyMap.fromMapUnsafe(SortedMap(toSeq.map(ev): _*)(order.toOrdering))
+    NonEmptyMap.fromMapUnsafe(SortedMap(toSeq.map(ev)*)(using order.toOrdering))
 
   /**
    * Creates new `NonEmptySet`, similarly to List#toSet from scala standard library.
@@ -395,7 +395,7 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
    * }}}
    */
   final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] =
-    NonEmptySet.of(head, tail: _*)
+    NonEmptySet.of(head, tail*)
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific
@@ -417,11 +417,15 @@ sealed abstract private[data] class NonEmptySeqInstances {
    */
   implicit val catsDataInstancesForNonEmptySeqBinCompat1
     : NonEmptyAlternative[NonEmptySeq] & Bimonad[NonEmptySeq] & NonEmptyTraverse[NonEmptySeq] & Align[NonEmptySeq] =
-    new NonEmptyReducible[NonEmptySeq, Seq]
+    new FlatMap.AbstractFoldableFlatMap[NonEmptySeq]
+      with NonEmptyReducibleTrait[NonEmptySeq, Seq]
       with NonEmptyAlternative[NonEmptySeq]
       with Bimonad[NonEmptySeq]
       with NonEmptyTraverse[NonEmptySeq]
       with Align[NonEmptySeq] {
+
+      override def G: Foldable[Seq] =
+        cats.instances.seq.catsStdInstancesForSeq
 
       def combineK[A](a: NonEmptySeq[A], b: NonEmptySeq[A]): NonEmptySeq[A] =
         a.concatNeSeq(b)
@@ -617,7 +621,7 @@ object NonEmptySeq extends NonEmptySeqInstances with Serializable {
       new ZipNonEmptySeq(nev)
 
     implicit val catsDataCommutativeApplyForZipNonEmptySeq: CommutativeApply[ZipNonEmptySeq] =
-      new CommutativeApply[ZipNonEmptySeq] {
+      new Apply.AbstractApply[ZipNonEmptySeq] with CommutativeApply[ZipNonEmptySeq] {
         def ap[A, B](ff: ZipNonEmptySeq[A => B])(fa: ZipNonEmptySeq[A]): ZipNonEmptySeq[B] =
           ZipNonEmptySeq(ff.value.zipWith(fa.value)(_.apply(_)))
 

@@ -110,7 +110,7 @@ sealed abstract class AndThen[-T, +R] extends (T => R) with Product with Seriali
     // technique implemented for `cats.effect.IO#map`
     g match {
       case atg: AndThen[A, T] => AndThen.andThen(atg, this)
-      case _ =>
+      case _                  =>
         this match {
           case Single(f, index) if index < fusionMaxStackDepth =>
             Single(f.compose(g), index + 1)
@@ -270,7 +270,7 @@ abstract private[data] class AndThenInstances0 extends AndThenInstances1 {
    * [[cats.Monad]] instance for [[AndThen]].
    */
   implicit def catsDataMonadForAndThen[T]: Monad[AndThen[T, *]] =
-    new Monad[AndThen[T, *]] {
+    new FlatMap.AbstractFlatMap[AndThen[T, *]] with Monad[AndThen[T, *]] {
       // Piggybacking on the instance for Function1
       private[this] val fn1 = instances.all.catsStdMonadForFunction1[T]
 

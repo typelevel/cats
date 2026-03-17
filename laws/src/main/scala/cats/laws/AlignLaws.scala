@@ -50,7 +50,7 @@ trait AlignLaws[F[_]] {
 
   private def assoc[A, B, C](x: Ior[A, Ior[B, C]]): Ior[Ior[A, B], C] =
     x match {
-      case Left(a) => Left(Left(a))
+      case Left(a)   => Left(Left(a))
       case Right(bc) =>
         bc match {
           case Left(b)    => Left(Right(b))

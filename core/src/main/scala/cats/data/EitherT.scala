@@ -1201,7 +1201,10 @@ private[data] trait EitherTFunctor[F[_], L] extends Functor[EitherT[F, L, *]] {
   override def map[A, B](fa: EitherT[F, L, A])(f: A => B): EitherT[F, L, B] = fa.map(f)
 }
 
-private[data] trait EitherTMonad[F[_], L] extends Monad[EitherT[F, L, *]] with EitherTFunctor[F, L] {
+private[data] trait EitherTMonad[F[_], L]
+    extends FlatMap.AbstractFlatMap[EitherT[F, L, *]]
+    with Monad[EitherT[F, L, *]]
+    with EitherTFunctor[F, L] {
   implicit val F: Monad[F]
   def pure[A](a: A): EitherT[F, L, A] = EitherT.pure(a)
 
@@ -1218,7 +1221,7 @@ private[data] trait EitherTMonad[F[_], L] extends Monad[EitherT[F, L, *]] with E
     )
 }
 
-private[data] trait EitherTMonadErrorF[F[_], E, L] extends MonadError[EitherT[F, L, *], E] with EitherTMonad[F, L] {
+private[data] trait EitherTMonadErrorF[F[_], E, L] extends EitherTMonad[F, L] with MonadError[EitherT[F, L, *], E] {
   implicit val F: MonadError[F, E]
 
   def handleErrorWith[A](fea: EitherT[F, L, A])(f: E => EitherT[F, L, A]): EitherT[F, L, A] =
@@ -1227,7 +1230,7 @@ private[data] trait EitherTMonadErrorF[F[_], E, L] extends MonadError[EitherT[F,
   def raiseError[A](e: E): EitherT[F, L, A] = EitherT(F.raiseError(e))
 }
 
-private[data] trait EitherTMonadError[F[_], L] extends MonadError[EitherT[F, L, *], L] with EitherTMonad[F, L] {
+private[data] trait EitherTMonadError[F[_], L] extends EitherTMonad[F, L] with MonadError[EitherT[F, L, *], L] {
   def handleErrorWith[A](fea: EitherT[F, L, A])(f: L => EitherT[F, L, A]): EitherT[F, L, A] =
     EitherT(F.flatMap(fea.value) {
       case Left(e)      => f(e).value
@@ -1246,7 +1249,7 @@ private[data] trait EitherTMonadError[F[_], L] extends MonadError[EitherT[F, L, 
     fla.recoverWith(pf)
 }
 
-sealed private[data] trait EitherTFoldable[F[_], L] extends Foldable[EitherT[F, L, *]] {
+sealed private[data] trait EitherTFoldable[F[_], L] extends Foldable.AbstractFoldable[EitherT[F, L, *]] {
   implicit def F0: Foldable[F]
 
   def foldLeft[A, B](fa: EitherT[F, L, A], b: B)(f: (B, A) => B): B =
@@ -1256,7 +1259,7 @@ sealed private[data] trait EitherTFoldable[F[_], L] extends Foldable[EitherT[F, 
     fa.foldRight(lb)(f)
 }
 
-sealed private[data] trait EitherTTraverse[F[_], L] extends Traverse[EitherT[F, L, *]] with EitherTFoldable[F, L] {
+sealed private[data] trait EitherTTraverse[F[_], L] extends EitherTFoldable[F, L] with Traverse[EitherT[F, L, *]] {
   implicit override def F0: Traverse[F]
 
   override def traverse[G[_]: Applicative, A, B](fa: EitherT[F, L, A])(f: A => G[B]): G[EitherT[F, L, B]] =

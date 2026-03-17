@@ -50,7 +50,7 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with Unorde
     g: A => N[B]
   )(implicit N: Applicative[N], M: Applicative[M]): IsEq[(M[F[B]], N[F[B]])] = {
     type MN[Z] = (M[Z], N[Z])
-    implicit val MN: Applicative[MN] = new Applicative[MN] {
+    implicit val MN: Applicative[MN] = new Apply.AbstractApply[MN] with Applicative[MN] {
       def pure[X](x: X): MN[X] = (M.pure(x), N.pure(x))
       def ap[X, Y](f: MN[X => Y])(fa: MN[X]): MN[Y] = {
         val (fam, fan) = fa
@@ -166,6 +166,9 @@ trait TraverseLaws[F[_]] extends FunctorLaws[F] with FoldableLaws[F] with Unorde
 
     lhs <-> rhs
   }
+
+  def traverseConsistentFoldMap[A, B: Monoid](fa: F[A], fn: A => B): IsEq[B] =
+    F.traverse(fa)(a => Const[B, B](fn(a))).getConst <-> F.foldMap(fa)(fn)
 }
 
 object TraverseLaws {

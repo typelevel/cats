@@ -316,7 +316,7 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
   final def combine[AA >: A, BB >: B](that: Either[AA, BB])(implicit BB: Semigroup[BB]): Either[AA, BB] =
     eab match {
       case left @ Left(_) => left
-      case Right(b1) =>
+      case Right(b1)      =>
         that match {
           case left @ Left(_) => left
           case Right(b2)      => Right(BB.combine(b1, b2))

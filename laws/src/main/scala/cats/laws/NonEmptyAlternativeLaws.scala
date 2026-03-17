@@ -34,11 +34,19 @@ trait NonEmptyAlternativeLaws[F[_]] extends ApplicativeLaws[F] with SemigroupKLa
   def nonEmptyAlternativeRightDistributivity[A, B](fa: F[A], ff: F[A => B], fg: F[A => B]): IsEq[F[B]] =
     ((ff |+| fg).ap(fa)) <-> ((ff.ap(fa)) |+| (fg.ap(fa)))
 
-  def nonEmptyAlternativePrependKConsitentWithPureAndCombineK[A](fa: F[A], a: A): IsEq[F[A]] =
+  def nonEmptyAlternativePrependKConsistentWithPureAndCombineK[A](fa: F[A], a: A): IsEq[F[A]] =
     fa.prependK(a) <-> (a.pure[F] <+> fa)
 
-  def nonEmptyAlternativeAppendKConsitentWithPureAndCombineK[A](fa: F[A], a: A): IsEq[F[A]] =
+  def nonEmptyAlternativeAppendKConsistentWithPureAndCombineK[A](fa: F[A], a: A): IsEq[F[A]] =
     fa.appendK(a) <-> (fa <+> a.pure[F])
+
+  @deprecated("typo in the name, use nonEmptyAlternativePrependKConsistentWithPureAndCombineK instead", "2.14.0")
+  private[laws] def nonEmptyAlternativePrependKConsitentWithPureAndCombineK[A](fa: F[A], a: A): IsEq[F[A]] =
+    nonEmptyAlternativePrependKConsistentWithPureAndCombineK(fa, a)
+
+  @deprecated("typo in the name, use nonEmptyAlternativeAppendKConsistentWithPureAndCombineK instead", "2.14.0")
+  private[laws] def nonEmptyAlternativeAppendKConsitentWithPureAndCombineK[A](fa: F[A], a: A): IsEq[F[A]] =
+    nonEmptyAlternativeAppendKConsistentWithPureAndCombineK(fa, a)
 }
 
 object NonEmptyAlternativeLaws {

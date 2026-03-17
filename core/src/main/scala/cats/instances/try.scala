@@ -31,7 +31,7 @@ import scala.annotation.tailrec
 trait TryInstances extends TryInstances1 {
 
   implicit def catsStdInstancesForTry: MonadThrow[Try] & CoflatMap[Try] & Traverse[Try] & Monad[Try] =
-    new TryCoflatMap with MonadThrow[Try] with Traverse[Try] with Monad[Try] {
+    new FlatMap.AbstractFoldableFlatMap[Try] with TryCoflatMap with MonadThrow[Try] with Traverse[Try] with Monad[Try] {
       def pure[A](x: A): Try[A] = Success(x)
 
       override def product[A, B](ta: Try[A], tb: Try[B]): Try[(A, B)] =
@@ -120,6 +120,36 @@ trait TryInstances extends TryInstances1 {
 
       override def map[A, B](ta: Try[A])(f: A => B): Try[B] = ta.map(f)
 
+      override def as[A, B](ta: Try[A], b: B): Try[B] =
+        ta match {
+          case Success(_)      => Success(b)
+          case err: Failure[?] => castFailure[B](err)
+        }
+
+      override def tupleLeft[A, B](ta: Try[A], b: B): Try[(B, A)] =
+        ta match {
+          case Success(a)      => Success((b, a))
+          case err: Failure[?] => castFailure[(B, A)](err)
+        }
+
+      override def tupleRight[A, B](ta: Try[A], b: B): Try[(A, B)] =
+        ta match {
+          case Success(a)      => Success((a, b))
+          case err: Failure[?] => castFailure[(A, B)](err)
+        }
+
+      override def fproduct[A, B](ta: Try[A])(f: A => B): Try[(A, B)] =
+        ta match {
+          case Success(a)      => Success((a, f(a)))
+          case err: Failure[?] => castFailure[(A, B)](err)
+        }
+
+      override def fproductLeft[A, B](ta: Try[A])(f: A => B): Try[(B, A)] =
+        ta match {
+          case Success(a)      => Success((f(a), a))
+          case err: Failure[?] => castFailure[(B, A)](err)
+        }
+
       override def reduceLeftToOption[A, B](fa: Try[A])(f: A => B)(g: (B, A) => B): Option[B] =
         fa.map(f).toOption
 
@@ -163,6 +193,12 @@ trait TryInstances extends TryInstances1 {
         fa match {
           case Failure(_) => Nil
           case Success(a) => a :: Nil
+        }
+
+      override def unzip[A, B](fab: Try[(A, B)]): (Try[A], Try[B]) =
+        fab match {
+          case Success((a, b)) => (Success(a), Success(b))
+          case err: Failure[?] => (castFailure[A](err), castFailure[B](err))
         }
 
       override def isEmpty[A](fa: Try[A]): Boolean = fa.isFailure
@@ -213,7 +249,7 @@ sealed private[instances] trait TryInstances2 {
     new TrySemigroup[A]
 }
 
-abstract private[cats] class TryCoflatMap extends CoflatMap[Try] {
+private[cats] trait TryCoflatMap extends CoflatMap[Try] {
   def map[A, B](ta: Try[A])(f: A => B): Try[B] = ta.map(f)
   def coflatMap[A, B](ta: Try[A])(f: Try[A] => B): Try[B] = Try(f(ta))
 }

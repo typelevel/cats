@@ -475,7 +475,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * }}}
    */
   final def toNem[T, U](implicit ev: A <:< (T, U), order: Order[T]): NonEmptyMap[T, U] =
-    NonEmptyMap.fromMapUnsafe(SortedMap(toLazyList.map(ev): _*)(order.toOrdering))
+    NonEmptyMap.fromMapUnsafe(SortedMap(toLazyList.map(ev)*)(using order.toOrdering))
 
   /**
    * Creates new `NonEmptySet`, similarly to List#toSet from scala standard library.
@@ -488,7 +488,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * }}}
    */
   final def toNes[B >: A](implicit order: Order[B]): NonEmptySet[B] =
-    NonEmptySet.of(head, tail: _*)
+    NonEmptySet.of(head, tail*)
 
   /**
    * Creates new `NonEmptyVector`, similarly to List#toVector from scala standard library.
@@ -514,7 +514,6 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
     NonEmptyLazyList
   ] & NonEmptyAlternative[NonEmptyLazyList] & Align[NonEmptyLazyList] =
     new AbstractNonEmptyInstances[LazyList, NonEmptyLazyList] with Align[NonEmptyLazyList] {
-
       def extract[A](fa: NonEmptyLazyList[A]): A = fa.head
 
       def nonEmptyTraverse[G[_]: Apply, A, B](fa: NonEmptyLazyList[A])(f: A => G[B]): G[NonEmptyLazyList[B]] = {
@@ -526,9 +525,12 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
         loop(fa.head, fa.tail).value
       }
 
-      def reduceLeftTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (B, A) => B): B = fa.reduceLeftTo(f)(g)
+      override def reduceLeftTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (B, A) => B): B =
+        fa.reduceLeftTo(f)(g)
 
-      def reduceRightTo[A, B](fa: NonEmptyLazyList[A])(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
+      override def reduceRightTo[A, B](
+        fa: NonEmptyLazyList[A]
+      )(f: A => B)(g: (A, cats.Eval[B]) => cats.Eval[B]): cats.Eval[B] =
         fa.tail match {
           case head +: tail =>
             val nell = NonEmptyLazyList.fromLazyListPrepend(head, tail)
