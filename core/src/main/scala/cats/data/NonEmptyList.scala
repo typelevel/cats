@@ -324,12 +324,24 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
   /**
    * Left-associative fold on the structure using f.
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.foldLeft (0) ((a, b)  => a + b)
+   * res0: Int = 15
+   * }}}
    */
   def foldLeft[B](b: B)(f: (B, A) => B): B =
     tail.foldLeft(f(b, head))(f)
 
   /**
    * Right-associative fold on the structure using f.
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.Eval
+   * scala> import scala.math.pow
+   * scala> val nel = NonEmptyList.of(2,2,2)
+   * scala> (nel.foldRight (Eval.now(1)) ((a, b)  => Eval.now(pow(a, b.value).toInt))).value
+   * res0: Int = 16
    */
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
     Foldable[List].foldRight(toList, lb)(f)
