@@ -104,6 +104,13 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
   /**
    * Applies f to all the elements of the structure
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.map(_ * 10)
+   * res0: cats.data.NonEmptyList[Int] = NonEmptyList(10, 20, 30, 40, 50)
+   * }}}
    */
   def map[B](f: A => B): NonEmptyList[B] =
     NonEmptyList(f(head), tail.map(f))
@@ -263,6 +270,15 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
   /**
    * Find the first element matching the partial function, if one exists
+   *
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(2, 4, 6, 8, 10)
+   * scala> nel.collectFirst { case v if v > 5 => v }
+   * res0:  Option[Int] = Some(6)
+   * scala> nel.collectFirst { case v if v % 2 == 1 => "odd" }
+   * res1:  Option[String] = None
+   * }}}
    */
   def collectFirst[B](pf: PartialFunction[A, B]): Option[B] =
     if (pf.isDefinedAt(head)) {
@@ -308,12 +324,24 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
   /**
    * Left-associative fold on the structure using f.
+   * {{{
+   * scala> import cats.data.NonEmptyList
+   * scala> val nel = NonEmptyList.of(1, 2, 3, 4, 5)
+   * scala> nel.foldLeft (0) ((a, b)  => a + b)
+   * res0: Int = 15
+   * }}}
    */
   def foldLeft[B](b: B)(f: (B, A) => B): B =
     tail.foldLeft(f(b, head))(f)
 
   /**
    * Right-associative fold on the structure using f.
+   * scala> import cats.data.NonEmptyList
+   * scala> import cats.Eval
+   * scala> import scala.math.pow
+   * scala> val nel = NonEmptyList.of(2,2,2)
+   * scala> (nel.foldRight (Eval.now(1)) ((a, b)  => Eval.now(pow(a, b.value).toInt))).value
+   * res0: Int = 16
    */
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
     Foldable[List].foldRight(toList, lb)(f)
