@@ -124,6 +124,21 @@ trait TraverseFilter[F[_]] extends FunctorFilter[F] {
     traverseFilter[Id, A, B](fa)(f)
 
   /**
+  * Like [[mapAccumulate]], but allows `Option` in supplied accumulating function,
+  * keeping only `Some`s.
+  *
+  * Example:
+  * {{{
+  * scala> import cats.syntax.all._
+  * scala> val sumAllAndKeepOdd = (s: Int, n: Int) => (s + n, Option.when(n % 2 == 1)(n))
+  * scala> List(1, 2, 3, 4).mapAccumulateFilter(0, sumAllAndKeepOdd)
+  * res1: (Int, List[Int]) = (10, List(1, 3))
+  * }}}
+  */
+  def mapAccumulateFilter[S, A, B](init: S, fa: F[A])(f: (S, A) => (S, Option[B])): (S, F[B]) =
+    traverseFilter(fa)(a => State(s => f(s, a))).run(init).value
+
+  /**
    * Removes duplicate elements from a list, keeping only the first occurrence.
    */
   def ordDistinct[A](fa: F[A])(implicit O: Order[A]): F[A] = {
@@ -185,6 +200,8 @@ object TraverseFilter {
       typeClassInstance.filterA[G, A](self)(f)(G)
     def traverseEither[G[_], B, C](f: A => G[Either[C, B]])(g: (A, C) => G[Unit])(implicit G: Monad[G]): G[F[B]] =
       typeClassInstance.traverseEither[G, A, B, C](self)(f)(g)(G)
+    def mapAccumulateFilter[S, B](init: S)(f: (S, A) => (S, Option[B])): (S, F[B]) =
+      typeClassInstance.mapAccumulateFilter[S, A, B](init, self)(f)
     def ordDistinct(implicit O: Order[A]): F[A] = typeClassInstance.ordDistinct(self)
     def hashDistinct(implicit H: Hash[A]): F[A] = typeClassInstance.hashDistinct(self)
   }
