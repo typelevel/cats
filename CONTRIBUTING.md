@@ -33,7 +33,7 @@ skip these steps and jump straight to submitting a pull request.
 
 ### Find something that belongs in Cats
 
-Looking for a way that you can help out? Check out our [open issues](https://github.com/typelevel/cats/issues) and look for ones tagged as _**help wanted**_ or _**low-hanging fruit**_. These issues are the easiest way to start contributing, but if you find other items that catch your eye, you're most than welcome to tackle them!
+Looking for a way that you can help out? Check out our [open issues](https://github.com/typelevel/cats/issues) and look for ones tagged as _**help wanted**_ or _**low-hanging fruit**_. These issues are the easiest way to start contributing, but if you find other items that catch your eye, you're more than welcome to tackle them!
 
 Make sure that it's not already assigned to someone and that nobody has left a comment saying that they are working on it!
 
