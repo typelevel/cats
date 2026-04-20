@@ -25,23 +25,19 @@ package lattice
 import scala.{specialized => sp}
 
 /**
- * De Morgan algebras are bounded lattices that are also equipped with
- * a De Morgan involution.
+ * De Morgan algebras are bounded lattices that are also equipped with a De Morgan involution.
  *
  * De Morgan involution obeys the following laws:
  *
- *  - ¬¬a = a
- *  - ¬(x∧y) = ¬x∨¬y
+ *   - ¬¬a = a
+ *   - ¬(x∧y) = ¬x∨¬y
  *
- * However, in De Morgan algebras this involution does not necessarily
- * provide the law of the excluded middle. This means that there is no
- * guarantee that (a ∨ ¬a) = 1. De Morgan algebra do not not necessarily
- * provide the law of non contradiction either. This means that there is
- * no guarantee that (a ∧ ¬a) = 0.
+ * However, in De Morgan algebras this involution does not necessarily provide the law of the excluded middle. This
+ * means that there is no guarantee that (a ∨ ¬a) = 1. De Morgan algebra do not not necessarily provide the law of non
+ * contradiction either. This means that there is no guarantee that (a ∧ ¬a) = 0.
  *
- * De Morgan algebras are useful to model fuzzy logic. For a model of
- * classical logic, see the boolean algebra type class implemented as
- * [[Bool]].
+ * De Morgan algebras are useful to model fuzzy logic. For a model of classical logic, see the boolean algebra type
+ * class implemented as [[Bool]].
  */
 trait DeMorgan[@sp(Int, Long) A] extends Any with Logic[A] { self =>
   def meet(a: A, b: A): A = and(a, b)
@@ -64,8 +60,7 @@ object DeMorgan extends DeMorganFunctions[DeMorgan] {
   @inline final def apply[@sp(Int, Long) A](implicit ev: DeMorgan[A]): DeMorgan[A] = ev
 
   /**
-   * Turn a [[Bool]] into a `DeMorgan`
-   * Used for binary compatibility.
+   * Turn a [[Bool]] into a `DeMorgan` Used for binary compatibility.
    */
   final def fromBool[@sp(Int, Long) A](bool: Bool[A]): DeMorgan[A] =
     new DeMorgan[A] {

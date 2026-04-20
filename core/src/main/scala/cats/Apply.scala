@@ -31,8 +31,7 @@ import cats.data.Ior
 trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArityFunctions[F] { self =>
 
   /**
-   * Given a value and a function in the Apply context, applies the
-   * function to the value.
+   * Given a value and a function in the Apply context, applies the function to the value.
    *
    * Example:
    * {{{
@@ -61,7 +60,8 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
   /**
    * Compose two actions, discarding any value produced by the first.
    *
-   * @see [[productL]] to discard the value of the second instead.
+   * @see
+   *   [[productL]] to discard the value of the second instead.
    *
    * Example:
    * {{{
@@ -95,7 +95,8 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
   /**
    * Compose two actions, discarding any value produced by the second.
    *
-   * @see [[productR]] to discard the value of the first instead.
+   * @see
+   *   [[productR]] to discard the value of the first instead.
    *
    * Example:
    * {{{
@@ -198,16 +199,14 @@ trait Apply[F[_]] extends Functor[F] with InvariantSemigroupal[F] with ApplyArit
     map(product(fa, fb))(f.tupled)
 
   /**
-   * Similar to [[map2]] but uses [[Eval]] to allow for laziness in the `F[B]`
-   * argument. This can allow for "short-circuiting" of computations.
+   * Similar to [[map2]] but uses [[Eval]] to allow for laziness in the `F[B]` argument. This can allow for
+   * "short-circuiting" of computations.
    *
-   * NOTE: the default implementation of `map2Eval` does not short-circuit
-   * computations. For data structures that can benefit from laziness, [[Apply]]
-   * instances should override this method.
+   * NOTE: the default implementation of `map2Eval` does not short-circuit computations. For data structures that can
+   * benefit from laziness, [[Apply]] instances should override this method.
    *
-   * In the following example, `x.map2(bomb)(_ + _)` would result in an error,
-   * but `map2Eval` "short-circuits" the computation. `x` is `None` and thus the
-   * result of `bomb` doesn't even need to be evaluated in order to determine
+   * In the following example, `x.map2(bomb)(_ + _)` would result in an error, but `map2Eval` "short-circuits" the
+   * computation. `x` is `None` and thus the result of `bomb` doesn't even need to be evaluated in order to determine
    * that the result of `map2Eval` should be `None`.
    *
    * {{{
@@ -252,10 +251,9 @@ object Apply {
   abstract private[cats] class AbstractApply[F[_]] extends Apply[F]
 
   /**
-   * This semigroup uses a product operation to combine `F`s.
-   * If the `Apply[F].product` results in larger `F` (i.e. when `F` is a `List`),
-   * accumulative usage of this instance, such as `combineAll`, will result in
-   * `F`s with exponentially increasing sizes.
+   * This semigroup uses a product operation to combine `F`s. If the `Apply[F].product` results in larger `F` (i.e. when
+   * `F` is a `List`), accumulative usage of this instance, such as `combineAll`, will result in `F`s with exponentially
+   * increasing sizes.
    */
   def semigroup[F[_], A](implicit f: Apply[F], sg: Semigroup[A]): Semigroup[F[A]] =
     new ApplySemigroup[F, A](f, sg)

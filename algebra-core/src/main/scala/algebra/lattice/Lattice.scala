@@ -25,18 +25,15 @@ package lattice
 import scala.{specialized => sp}
 
 /**
- * A lattice is a set `A` together with two operations (meet and
- * join). Both operations individually constitute semilattices (join-
- * and meet-semilattices respectively): each operation is commutative,
- * associative, and idempotent.
+ * A lattice is a set `A` together with two operations (meet and join). Both operations individually constitute
+ * semilattices (join- and meet-semilattices respectively): each operation is commutative, associative, and idempotent.
  *
- * Join can be thought of as finding a least upper bound (supremum),
- * and meet can be thought of as finding a greatest lower bound
- * (infimum).
+ * Join can be thought of as finding a least upper bound (supremum), and meet can be thought of as finding a greatest
+ * lower bound (infimum).
  *
  * The join and meet operations are also linked by absorption laws:
  *
- *   meet(a, join(a, b)) = join(a, meet(a, b)) = a
+ * meet(a, join(a, b)) = join(a, meet(a, b)) = a
  */
 trait Lattice[@sp(Int, Long, Float, Double) A] extends Any with JoinSemilattice[A] with MeetSemilattice[A] { self =>
 
