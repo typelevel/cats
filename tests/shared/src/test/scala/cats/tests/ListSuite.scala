@@ -137,6 +137,29 @@ class ListSuite extends CatsSuite {
 
     assert(sumAll == lst.sum)
   }
+
+  test(s"splitWhen") {
+    forAll { (li: List[Int]) =>
+      val pred = (x: Int) => x > 0
+      val res = li.splitWhen(pred)
+      val expectedFiltered = li.filterNot(pred)
+      val expectedSize = li.size - expectedFiltered.size + 1
+      assert(res.size === expectedSize)
+      assert(res.toList.flatten === expectedFiltered)
+    }
+  }
+
+  test(s"splitWhenM") {
+    forAll { (li: List[Int]) =>
+      val pred = (x: Int) => x > 0
+      val predM = (x: Int) => Eval.now(pred(x))
+      val res = li.splitWhenM(predM)
+      val expectedFiltered = li.filterNot(pred)
+      val expectedSize = li.size - expectedFiltered.size + 1
+      assert(res.value.size === expectedSize)
+      assert(res.value.toList.flatten === expectedFiltered)
+    }
+  }
 }
 
 final class ListInstancesSuite extends munit.FunSuite {
