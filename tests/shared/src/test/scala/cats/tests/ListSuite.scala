@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.{Align, Alternative, CoflatMap, Eval, Functor, Monad, Semigroupal, Traverse, TraverseFilter}
+import cats.{Align, Alternative, CoflatMap, Eval, Functor, Monad, Reducible, Semigroupal, Traverse, TraverseFilter}
 import cats.data.{NonEmptyList, ZipList}
 import cats.laws.discipline.{
   AlignTests,
@@ -139,25 +139,27 @@ class ListSuite extends CatsSuite {
   }
 
   test("splitWhen") {
-    forAll { (li: List[Int]) =>
-      val pred = (x: Int) => x > 0
+    forAll { (li: List[Int], x: Int) =>
+      val pred = (y: Int) => x == y
       val res = li.splitWhen(pred)
       val expectedFiltered = li.filterNot(pred)
       val expectedSize = li.size - expectedFiltered.size + 1
       assert(res.size === expectedSize)
       assert(res.toList.flatten === expectedFiltered)
+      assert(Reducible[NonEmptyList].nonEmptyIntercalate(res, List(x)) == li)
     }
   }
 
   test("splitWhenM") {
-    forAll { (li: List[Int]) =>
-      val pred = (x: Int) => x > 0
-      val predM = (x: Int) => Eval.now(pred(x))
-      val res = li.splitWhenM(predM)
+    forAll { (li: List[Int], x: Int) =>
+      val pred = (y: Int) => x == y
+      val predM = (y: Int) => Eval.now(pred(y))
+      val res = li.splitWhenM(predM).value
       val expectedFiltered = li.filterNot(pred)
       val expectedSize = li.size - expectedFiltered.size + 1
-      assert(res.value.size === expectedSize)
-      assert(res.value.toList.flatten === expectedFiltered)
+      assert(res.size === expectedSize)
+      assert(res.toList.flatten === expectedFiltered)
+      assert(Reducible[NonEmptyList].nonEmptyIntercalate(res, List(x)) == li)
     }
   }
 }
