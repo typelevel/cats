@@ -960,6 +960,49 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     import cats.instances.either.*
     partitionBifoldM[G, Either, A, B, C](fa)(f)(A, M, Bifoldable[Either])
   }
+
+  /**
+   * Split this Foldable into a List of Lists based on a predicate.
+   * The behaviour is aimed to be identical to that of haskell's `splitWhen`
+   * 
+   * {{{
+   * scala> import cats.syntax.all._, cats.Foldable
+   * scala> Foldable[List].splitWhen(List(1,1))(_ == 1)
+   * res1: List[List[Int]] = List(List(), List(), List())
+   * scala> Foldable[List].splitWhen(Nil)(_ == 1)
+   * res2: List[List[Nothing]] = List(List())
+   * scala> Foldable[List].splitWhen(List(1, 2, 3, 1, 4, 5))(_ == 1)
+   * res3: List[List[Int]] = List(List(), List(2, 3), List(4, 5))
+   * }}}
+   */
+
+  def splitWhen[A](fa: F[A])(f: A => Boolean): List[List[A]] = {
+    toList(fa).reverse.foldLeft(List.empty[A] :: Nil) { case (lst, e) =>
+      if (f(e)) Nil :: lst else (e :: lst.head) :: lst.tail
+    }
+  }
+
+  /**
+   * Split this Foldable into a List of Lists based on the effectufl predicate. Monadic version of `splitWhen`
+   * 
+   * {{{
+   * scala> import cats.syntax.all._, cats.Foldable, cats.Eval
+   * scala> Foldable[List].splitWhenM(List(1,1))(x => Eval.now(x == 1)).value
+   * res1: List[List[Int]] = List(List(), List(), List())
+   * scala> Foldable[List].splitWhenM(List.empty[Int])(x => Eval.now(x == 1)).value
+   * res2: List[List[Int]] = List(List())
+   * scala> Foldable[List].splitWhenM(List(1, 2, 3, 1, 4, 5))(x => Eval.now(x == 1)).value
+   * val res3: List[List[Int]] = List(List(), List(2, 3), List(4, 5))
+   * }}}
+   */
+
+  def splitWhenM[G[_], A](fa: F[A])(f: A => G[Boolean])(implicit M: Monad[G]): G[List[List[A]]] = {
+    toList(fa).reverse.foldLeft(M.pure(List.empty[A] :: Nil)) { case (acc, e) =>
+      M.flatMap(acc) { case lst =>
+        M.map(f(e))(if (_) Nil :: lst else (e :: lst.head) :: lst.tail)
+      }
+    }
+  }
 }
 
 object Foldable {

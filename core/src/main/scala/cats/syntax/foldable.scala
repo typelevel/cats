@@ -304,6 +304,14 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
   )(implicit A: Alternative[F], F: Foldable[F], M: Monad[G]): G[(F[B], F[C])] =
     F.partitionEitherM[G, A, B, C](fa)(f)(A, M)
 
+  def splitWhen(f: A => Boolean)(implicit F: Foldable[F]): List[List[A]] = {
+    F.splitWhen[A](fa)(f)
+  }
+
+  def splitWhenM[G[_]](f: A => G[Boolean])(implicit F: Foldable[F], G: Monad[G]): G[List[List[A]]] = {
+    F.splitWhenM[G, A](fa)(f)(G)
+  }
+
   def sliding2(implicit F: Foldable[F]): List[(A, A)] =
     F.sliding2(fa)
   def sliding3(implicit F: Foldable[F]): List[(A, A, A)] =

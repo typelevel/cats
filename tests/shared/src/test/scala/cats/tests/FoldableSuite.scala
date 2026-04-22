@@ -333,6 +333,29 @@ abstract class FoldableSuite[F[_]: Foldable](name: String)(implicit
     }
   }
 
+  test(s"Foldable[$name].splitWhen") {
+    forAll { (fa: F[Int]) =>
+      val pred = (x: Int) => x > 0
+      val res = fa.splitWhen(pred)
+      val expectedFiltered = iterator(fa).filterNot(pred).toList
+      val expectedSize = fa.size - expectedFiltered.size + 1
+      assert(res.size.toLong === expectedSize)
+      assert(res.flatten === expectedFiltered)
+    }
+  }
+
+  test(s"Foldable[$name].splitWhenM") {
+    forAll { (fa: F[Int]) =>
+      val pred = (x: Int) => x > 0
+      val predM = (x: Int) => Eval.now(pred(x))
+      val res = fa.splitWhenM(predM)
+      val expectedFiltered = iterator(fa).filterNot(pred).toList
+      val expectedSize = fa.size - expectedFiltered.size + 1
+      assert(res.value.size.toLong === expectedSize)
+      assert(res.value.flatten === expectedFiltered)
+    }
+  }
+
   test(s"Foldable[$name].sliding2 consistent with List#sliding(2)") {
     forAll { (fi: F[Int]) =>
       val n = 2
