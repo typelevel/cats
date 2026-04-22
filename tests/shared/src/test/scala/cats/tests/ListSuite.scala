@@ -138,7 +138,7 @@ class ListSuite extends CatsSuite {
     assert(sumAll == lst.sum)
   }
 
-  test(s"splitWhen") {
+  test("splitWhen") {
     forAll { (li: List[Int]) =>
       val pred = (x: Int) => x > 0
       val res = li.splitWhen(pred)
@@ -149,7 +149,7 @@ class ListSuite extends CatsSuite {
     }
   }
 
-  test(s"splitWhenM") {
+  test("splitWhenM") {
     forAll { (li: List[Int]) =>
       val pred = (x: Int) => x > 0
       val predM = (x: Int) => Eval.now(pred(x))

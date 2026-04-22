@@ -180,12 +180,26 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    */
 
   def splitWhenM[G[_]](f: A => G[Boolean])(implicit M: Monad[G]): G[NonEmptyList[List[A]]] = {
-    la.reverse.foldLeft(M.pure(NonEmptyList.one(List.empty[A]))) { case (acc, e) =>
-      M.flatMap(acc) { case lst =>
-        M.map(f(e))(if (_) Nil :: lst else NonEmptyList(e :: lst.head, lst.tail))
+    type State = (List[A], NonEmptyList[List[A]])
+
+    def step(state: State): G[Either[State, NonEmptyList[List[A]]]] =
+      state match {
+        case (e :: rest, acc) =>
+          M.map(f(e)) { shouldSplit =>
+            val nextAcc =
+              if (shouldSplit) Nil :: acc
+              else NonEmptyList(e :: acc.head, acc.tail)
+
+            Left((rest, nextAcc))
+          }
+
+        case (Nil, acc) =>
+          M.pure(Right(acc))
       }
-    }
+
+    M.tailRecM((la.reverse, NonEmptyList.one(List.empty[A])))(step)
   }
+
 }
 
 private[syntax] trait ListSyntaxBinCompat0 {
