@@ -139,67 +139,6 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
    */
   def scanRightNel[B](b: B)(f: (A, B) => B): NonEmptyList[B] =
     NonEmptyList.fromListUnsafe(la.scanRight(b)(f))
-
-  /**
-   * Split this List into a NonEmptyList of Lists based on a predicate.
-   * The behaviour is aimed to be identical to that of haskell's `splitWhen`
-   * 
-   * {{{
-   * scala> import cats.syntax.all._
-   * scala> List(1, 1).splitWhen(_ == 1)
-   * val res0: cats.data.NonEmptyList[List[Int]] = NonEmptyList(List(), List(), List())
-   * 
-   * scala> List.empty[Int].splitWhen(_ == 1)
-   * val res1: cats.data.NonEmptyList[List[Int]] = NonEmptyList(List())
-   * 
-   * scala> List(1, 2, 3, 1, 4, 5).splitWhen(_ == 1)
-   * val res2: cats.data.NonEmptyList[List[Int]] = NonEmptyList(List(), List(2, 3), List(4, 5))
-   * }}}
-   */
-
-  def splitWhen(f: A => Boolean): NonEmptyList[List[A]] = {
-    la.reverse.foldLeft(NonEmptyList.one(List.empty[A])) { case (lst, e) =>
-      if (f(e)) Nil :: lst else NonEmptyList(e :: lst.head, lst.tail)
-    }
-  }
-
-  /**
-   * Split this List into a NonEmptyList of Lists based on the effectufl predicate. Monadic version of `splitWhen`
-   * 
-   * {{{
-   * scala> import cats.syntax.all._, cats.Eval
-   * scala> List(1, 1).splitWhenM(x => Eval.now(x == 1)).value
-   * val res0: cats.data.NonEmptyList[List[Int]] = NonEmptyList(List(), List(), List())
-   * 
-   * scala> List.empty[Int].splitWhenM(x => Eval.now(x == 1)).value
-   * val res1: cats.data.NonEmptyList[List[Int]] = NonEmptyList(List())
-   * 
-   * scala> List(1, 2, 3, 1, 4, 5).splitWhenM(x => Eval.now(x == 1)).value
-   * val res2: cats.data.NonEmptyList[List[Int]] = NonEmptyList(List(), List(2, 3), List(4, 5))
-   * }}}
-   */
-
-  def splitWhenM[G[_]](f: A => G[Boolean])(implicit M: Monad[G]): G[NonEmptyList[List[A]]] = {
-    type State = (List[A], NonEmptyList[List[A]])
-
-    def step(state: State): G[Either[State, NonEmptyList[List[A]]]] =
-      state match {
-        case (e :: rest, acc) =>
-          M.map(f(e)) { shouldSplit =>
-            val nextAcc =
-              if (shouldSplit) Nil :: acc
-              else NonEmptyList(e :: acc.head, acc.tail)
-
-            Left((rest, nextAcc))
-          }
-
-        case (Nil, acc) =>
-          M.pure(Right(acc))
-      }
-
-    M.tailRecM((la.reverse, NonEmptyList.one(List.empty[A])))(step)
-  }
-
 }
 
 private[syntax] trait ListSyntaxBinCompat0 {

@@ -23,6 +23,7 @@ package cats
 
 import scala.collection.mutable
 import cats.kernel.CommutativeMonoid
+import cats.data.NonEmptyList
 
 import Foldable.{sentinel, Source}
 
@@ -959,6 +960,60 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   )(f: A => G[Either[B, C]])(implicit A: Alternative[F], M: Monad[G]): G[(F[B], F[C])] = {
     import cats.instances.either.*
     partitionBifoldM[G, Either, A, B, C](fa)(f)(A, M, Bifoldable[Either])
+  }
+
+  /**
+   * Split this Foldable into a NonEmptyList of Lists based on a predicate.
+   * The behaviour is aimed to be identical to that of haskell's `splitWhen`
+   * 
+   * {{{
+   * scala> import cats.syntax.all._, cats.Foldable, cats.data.NonEmptyList
+   * scala> Foldable[List].splitWhen(List(1,1))(_ == 1)
+   * res0: NonEmptyList[List[Int]] = NonEmptyList(List(), List(), List())
+   * scala> Foldable[List].splitWhen(Nil)(_ == 1)
+   * res1: NonEmptyList[List[Nothing]] = NonEmptyList(List())
+   * scala> Foldable[List].splitWhen(List(1, 2, 3, 1, 4, 5))(_ == 1)
+   * res2: NonEmptyList[List[Int]] = NonEmptyList(List(), List(2, 3), List(4, 5))
+   * }}}
+   */
+
+  def splitWhen[A](fa: F[A])(f: A => Boolean)(implicit
+    FA: Alternative[F]
+  ): NonEmptyList[F[A]] = {
+    foldRight(fa, Eval.now(NonEmptyList.one(FA.empty[A]))) {
+      case (a, acc) if f(a) => acc.map(FA.empty[A] :: _)
+      case (a, acc)         => acc.map(nel => NonEmptyList(FA.prependK(a, nel.head), nel.tail))
+    }.value
+  }
+
+  /**
+   * Split this Foldable into a NonEmptyList of Lists based on the effectufl predicate. Monadic version of `splitWhen`
+   * 
+   * {{{
+   * scala> import cats.syntax.all._, cats.Foldable, cats.Eval, cats.data.NonEmptyList
+   * scala> Foldable[List].splitWhenM(List(1,1))(x => Eval.now(x == 1)).value
+   * res0: NonEmptyList[List[Int]] = NonEmptyList(List(), List(), List())
+   * scala> Foldable[List].splitWhenM(List.empty[Int])(x => Eval.now(x == 1)).value
+   * res1: NonEmptyList[List[Int]] = NonEmptyList(List())
+   * scala> Foldable[List].splitWhenM(List(1, 2, 3, 1, 4, 5))(x => Eval.now(x == 1)).value
+   * val res2: NonEmptyList[List[Int]] = NonEmptyList(List(), List(2, 3), List(4, 5))
+   * }}}
+   */
+
+  def splitWhenM[G[_], A](fa: F[A])(f: A => G[Boolean])(implicit
+    M: Monad[G],
+    FA: Alternative[F]
+  ): G[NonEmptyList[F[A]]] = {
+    foldRight(fa, Eval.now(M.pure(NonEmptyList.one(FA.empty[A])))) { (a, evalGnel) =>
+      evalGnel.map { gnel =>
+        M.flatMap(f(a)) { isDelimiter =>
+          M.map(gnel) { nel =>
+            if (isDelimiter) FA.empty[A] :: nel
+            else NonEmptyList(FA.prependK(a, nel.head), nel.tail)
+          }
+        }
+      }
+    }.value
   }
 }
 

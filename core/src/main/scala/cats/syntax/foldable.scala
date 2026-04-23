@@ -22,6 +22,8 @@
 package cats
 package syntax
 
+import cats.data.NonEmptyList
+
 trait FoldableSyntax extends Foldable.ToFoldableOps with UnorderedFoldable.ToUnorderedFoldableOps {
 
   implicit final def catsSyntaxNestedFoldable[F[_]: Foldable, G[_], A](fga: F[G[A]]): NestedFoldableOps[F, G, A] =
@@ -303,6 +305,16 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
     f: A => G[Either[B, C]]
   )(implicit A: Alternative[F], F: Foldable[F], M: Monad[G]): G[(F[B], F[C])] =
     F.partitionEitherM[G, A, B, C](fa)(f)(A, M)
+
+  def splitWhen(f: A => Boolean)(implicit FF: Foldable[F], FA: Alternative[F]): NonEmptyList[F[A]] = {
+    FF.splitWhen[A](fa)(f)(FA)
+  }
+
+  def splitWhenM[G[_]](
+    f: A => G[Boolean]
+  )(implicit FF: Foldable[F], FA: Alternative[F], G: Monad[G]): G[NonEmptyList[F[A]]] = {
+    FF.splitWhenM[G, A](fa)(f)(G, FA)
+  }
 
   def sliding2(implicit F: Foldable[F]): List[(A, A)] =
     F.sliding2(fa)

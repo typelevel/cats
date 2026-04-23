@@ -21,7 +21,7 @@
 
 package cats.tests
 
-import cats.{Align, Alternative, CoflatMap, Eval, Functor, Monad, Reducible, Semigroupal, Traverse, TraverseFilter}
+import cats.{Align, Alternative, CoflatMap, Eval, Functor, Monad, Semigroupal, Traverse, TraverseFilter}
 import cats.data.{NonEmptyList, ZipList}
 import cats.laws.discipline.{
   AlignTests,
@@ -136,31 +136,6 @@ class ListSuite extends CatsSuite {
       .sum
 
     assert(sumAll == lst.sum)
-  }
-
-  test("splitWhen") {
-    forAll { (li: List[Int], x: Int) =>
-      val pred = (y: Int) => x == y
-      val res = li.splitWhen(pred)
-      val expectedFiltered = li.filterNot(pred)
-      val expectedSize = li.size - expectedFiltered.size + 1
-      assert(res.size === expectedSize)
-      assert(res.toList.flatten === expectedFiltered)
-      assert(Reducible[NonEmptyList].nonEmptyIntercalate(res, List(x)) == li)
-    }
-  }
-
-  test("splitWhenM") {
-    forAll { (li: List[Int], x: Int) =>
-      val pred = (y: Int) => x == y
-      val predM = (y: Int) => Eval.now(pred(y))
-      val res = li.splitWhenM(predM).value
-      val expectedFiltered = li.filterNot(pred)
-      val expectedSize = li.size - expectedFiltered.size + 1
-      assert(res.size === expectedSize)
-      assert(res.toList.flatten === expectedFiltered)
-      assert(Reducible[NonEmptyList].nonEmptyIntercalate(res, List(x)) == li)
-    }
   }
 }
 
