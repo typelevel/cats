@@ -649,7 +649,7 @@ object Boilerplate {
     override def range = 2 to maxArity
 
     def content(tv: TemplateVals) = {
-      import tv._
+      import tv.*
 
       val function = s"Function$arity[${`A..N`}, T]"
 
