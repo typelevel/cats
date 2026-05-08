@@ -35,7 +35,24 @@ class HashSuite extends CatsSuite {
     Contravariant[Hash]
   }
 
-  assert(1.hash == 1.hashCode)
-  assert("ABC".hash == "ABC".hashCode)
+  test("hash extension method is consistent with hashCode for Int") {
+    assert(1.hash == 1.hashCode)
+  }
+
+  test("hash extension method is consistent with hashCode for String") {
+    assert("ABC".hash == "ABC".hashCode)
+  }
+
+  test("fromUniversalHashCode should be consistent with hashCode on non-null references") {
+    case class ExplicitHashCode() { override val hashCode = 42 }
+    val hash = Hash.fromUniversalHashCode[ExplicitHashCode]
+    assertEquals(hash.hash(ExplicitHashCode()), 42)
+  }
+
+  test("fromUniversalHashCode should be null safe") {
+    val hash = Hash.fromUniversalHashCode[AnyRef]
+    assertEquals(hash.hash(null), 0)
+  }
+
   checkAll("Defer[Hash]", DeferTests[Hash].defer[MiniInt])
 }
