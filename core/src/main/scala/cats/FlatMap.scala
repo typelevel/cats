@@ -113,8 +113,10 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
   override def map2[A, B, Z](fa: F[A], fb: F[B])(f: (A, B) => Z): F[Z] =
     flatMap(fa)(a => map(fb)(b => f(a, b)))
 
-  override def map2Eval[A, B, Z](fa: F[A], fb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
-    Eval.now(flatMap(fa)(a => map(fb.value)(b => f(a, b))))
+  override def map2Eval[A, B, Z](fa: F[A], efb: Eval[F[B]])(f: (A, B) => Z): Eval[F[Z]] =
+    // Can't simply call `super.map2Eval(...)` because of MiMa errors.
+    // Neither can simly remove this override for the same reason.
+    efb.map(fb => map2(fa, fb)(f))
 
   override def productR[A, B](fa: F[A])(fb: F[B]): F[B] =
     flatMap(fa)(_ => fb)

@@ -25,15 +25,16 @@ import cats.*
 import cats.data.{Const, IdT, OptionT, State}
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, OrderTests, PartialOrderTests, SemigroupTests}
 import cats.laws.discipline.*
+import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.laws.discipline.arbitrary.*
 import cats.laws.discipline.eq.*
-import cats.laws.discipline.SemigroupalTests.Isomorphisms
 import cats.syntax.applicative.*
+import cats.syntax.apply.*
 import cats.syntax.either.*
+import cats.syntax.eq.*
 import cats.syntax.flatMap.*
 import cats.syntax.functor.*
 import cats.syntax.monadError.*
-import cats.syntax.eq.*
 import org.scalacheck.Prop.*
 
 class OptionTSuite extends CatsSuite {
@@ -581,6 +582,19 @@ class OptionTSuite extends CatsSuite {
     forAll { (o: OptionT[List, Int], f: Int => List[Unit]) =>
       assert(o.foreachF(f) === (o.foldF(List(()))(f)))
     }
+  }
+
+  test("Apply.map2Eval is stack safe for OptionT via Foldable.foldRight") {
+    val G = Applicative[OptionT[Id, *]]
+    val obtained =
+      Foldable[List]
+        .foldRight(List.range(0, 12345), Eval.now(OptionT.pure[Id](0L))) { (a, accEvalG) =>
+          G.pure(a).map2Eval(accEvalG) { _ + _ }
+        }
+        .value
+        .value
+
+    assertEquals(obtained, Some(76193340L))
   }
 
   /**
