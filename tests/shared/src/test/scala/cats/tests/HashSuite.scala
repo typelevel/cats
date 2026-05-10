@@ -44,9 +44,9 @@ class HashSuite extends CatsSuite {
   }
 
   test("fromUniversalHashCode should be consistent with hashCode on non-null references") {
-    case class ExplicitHashCode() { override val hashCode = 42 }
+    class ExplicitHashCode() { override val hashCode = 42 }
     val hash = Hash.fromUniversalHashCode[ExplicitHashCode]
-    assertEquals(hash.hash(ExplicitHashCode()), 42)
+    assertEquals(hash.hash(new ExplicitHashCode()), 42)
   }
 
   test("fromUniversalHashCode should be null safe") {
