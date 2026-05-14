@@ -35,8 +35,8 @@ trait Contravariant[F[_]] extends Invariant[F] { self =>
     }
 
   /**
-   * Lifts natural subtyping contravariance of contravariant Functors.
-   * could be implemented as contramap(identity), but the Functor laws say this is equivalent
+   * Lifts natural subtyping contravariance of contravariant Functors. could be implemented as contramap(identity), but
+   * the Functor laws say this is equivalent
    */
   def narrow[A, B <: A](fa: F[A]): F[B] = fa.asInstanceOf[F[B]]
 

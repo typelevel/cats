@@ -25,8 +25,7 @@ package laws
 /**
  * Laws that must be obeyed by any `Bimonad`.
  *
- * For more information, see definition 4.1 from this paper:
- * http://arxiv.org/pdf/0710.1163v3.pdf
+ * For more information, see definition 4.1 from this paper: http://arxiv.org/pdf/0710.1163v3.pdf
  */
 trait BimonadLaws[F[_]] extends MonadLaws[F] with ComonadLaws[F] {
   implicit override def F: Bimonad[F]
