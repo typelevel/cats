@@ -525,6 +525,7 @@ object SyntaxSuite {
   def testApplicative[F[_]: Applicative, A]: Unit = {
     val a = mock[A]
     val fa = a.pure[F]
+    val u: F[Unit] = unit[F]
     val replicateA = fa.replicateA(1)
     val replicateA_ = fa.replicateA_(1)
   }

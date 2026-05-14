@@ -23,6 +23,7 @@ package cats
 package syntax
 
 trait ApplicativeSyntax {
+  final def unit[F[_]](implicit F: Applicative[F]): F[Unit] = Applicative[F].unit
   implicit final def catsSyntaxApplicativeId[A](a: A): ApplicativeIdOps[A] =
     new ApplicativeIdOps[A](a)
   implicit final def catsSyntaxApplicativeByName[F[_], A](fa: => F[A]): ApplicativeByNameOps[F, A] =
