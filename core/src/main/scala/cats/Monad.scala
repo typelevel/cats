@@ -163,6 +163,20 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   }
 
   /**
+   * Returns the given argument (mapped to Unit) if `cond` evaluates to `false`, otherwise,
+   * unit lifted into F.
+   */
+  def unlessM[A](f: F[A])(cond: F[Boolean]): F[Unit] =
+    flatMap(cond)(bool => if (bool) unit else void(f))
+
+  /**
+   * Returns the given argument (mapped to Unit) if `cond` evaluates to `true`, otherwise,
+   * unit lifted into F.
+   */
+  def whenM[A](f: F[A])(cond: F[Boolean]): F[Unit] =
+    flatMap(cond)(bool => if (bool) void(f) else unit)
+
+  /**
    * Modifies the `A` value in `F[A]` with the supplied function, if the function is defined for the value.
    * Example:
    * {{{
@@ -204,6 +218,8 @@ object Monad {
     def untilM_(cond: => F[Boolean]): F[Unit] = typeClassInstance.untilM_[A](self)(cond)
     def iterateWhile(p: A => Boolean): F[A] = typeClassInstance.iterateWhile[A](self)(p)
     def iterateUntil(p: A => Boolean): F[A] = typeClassInstance.iterateUntil[A](self)(p)
+    def whenM(cond: F[Boolean]): F[Unit] = typeClassInstance.whenM[A](self)(cond)
+    def unlessM(cond: F[Boolean]): F[Unit] = typeClassInstance.unlessM[A](self)(cond)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with FlatMap.AllOps[F, A] with Applicative.AllOps[F, A] {
     type TypeClassType <: Monad[F]
