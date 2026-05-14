@@ -38,7 +38,7 @@ trait Invariant[F[_]] extends Serializable { self =>
 
   /**
    * Transform an `F[A]` into an `F[B]` by providing a transformation from `A`
-   * to `B` and one from `B` to `A`.
+   * to `B` and its left inverse (aka retraction) from `B` to `A` i.e. `f.andThen(g) == identity`.
    *
    * Example:
    * {{{
