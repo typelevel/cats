@@ -75,6 +75,8 @@ class LawTests extends munit.DisciplineSuite {
   checkAll("Boolean", LatticePartialOrderLaws[Boolean].boundedLatticePartialOrder)
   checkAll("Boolean", RingLaws[Boolean].boolRing(booleanRing))
 
+  checkAll("String => Boolean", LogicLaws[String => Boolean].logic)
+
   // ensure that Bool[A].asBoolRing is a valid BoolRing
   checkAll("Boolean-ring-from-bool", RingLaws[Boolean].boolRing(new BoolRingFromBool[Boolean](Bool[Boolean])))
 
