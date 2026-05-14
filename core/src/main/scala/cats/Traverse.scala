@@ -189,9 +189,9 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[
     mapWithLongIndex(fa)((a, long) => (a, long))
 
   /**
-   * If `fa` contains the element at index `idx`, 
-   * return the copy of `fa` where the element at `idx` is replaced with `b`. 
-   * If there is no element with such an index, return `None`. 
+   * If `fa` contains the element at index `idx`,
+   * return the copy of `fa` where the element at `idx` is replaced with `b`.
+   * If there is no element with such an index, return `None`.
    *
    * The behavior is consistent with the Scala collection library's
    * `updated` for collections such as `List`.
