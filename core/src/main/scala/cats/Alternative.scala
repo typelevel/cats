@@ -115,6 +115,36 @@ trait Alternative[F[_]] extends NonEmptyAlternative[F] with MonoidK[F] { self =>
   def guard(condition: Boolean): F[Unit] =
     if (condition) unit else empty
 
+  /**
+   * Lift `fa` from `F[A]` into `F[Option[A]]` by surfacing every `a` that `fa` produces as
+   * `Some(a)` and combining (via `combineK`) with a `pure(None)` so that `attemptOption(fa)`
+   * always succeeds at least once, with the additional `None` witnessing the possibility
+   * that `fa` produced no values.
+   *
+   * This is the standard `optional` combinator from parser-combinator libraries and matches
+   * Haskell's `Control.Applicative.optional`: `Just <$> fa <|> pure Nothing`.  Note that for
+   * non-deterministic instances such as `List`, `attemptOption` always appends an extra
+   * `None`, which is consistent with the Alternative laws but may look surprising at first
+   * glance.
+   *
+   * Example:
+   * {{{
+   * scala> Alternative[Option].attemptOption(Option(5))
+   * res0: Option[Option[Int]] = Some(Some(5))
+   *
+   * scala> Alternative[Option].attemptOption(Option.empty[Int])
+   * res1: Option[Option[Int]] = Some(None)
+   *
+   * scala> Alternative[List].attemptOption(List(1, 2, 3))
+   * res2: List[Option[Int]] = List(Some(1), Some(2), Some(3), None)
+   *
+   * scala> Alternative[List].attemptOption(List.empty[Int])
+   * res3: List[Option[Int]] = List(None)
+   * }}}
+   */
+  def attemptOption[A](fa: F[A]): F[Option[A]] =
+    combineK(map(fa)((a: A) => Some(a): Option[A]), pure(Option.empty[A]))
+
   override def compose[G[_]: Applicative]: Alternative[λ[α => F[G[α]]]] =
     new ComposedAlternative[F, G] {
       val F = self
@@ -158,6 +188,7 @@ object Alternative {
       typeClassInstance.separate[G, B, C](self.asInstanceOf[F[G[B, C]]])
     def separateFoldable[G[_, _], B, C](implicit ev$1: A <:< G[B, C], G: Bifoldable[G], FF: Foldable[F]): (F[B], F[C]) =
       typeClassInstance.separateFoldable[G, B, C](self.asInstanceOf[F[G[B, C]]])(G, FF)
+    def attemptOption: F[Option[A]] = typeClassInstance.attemptOption[A](self)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with NonEmptyAlternative.AllOps[F, A] with MonoidK.AllOps[F, A] {
     type TypeClassType <: Alternative[F]

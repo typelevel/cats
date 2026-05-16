@@ -85,4 +85,25 @@ class AlternativeSuite extends CatsSuite {
     assert(Alternative[Option].guard(true).isDefined)
     assert(Alternative[Option].guard(false).isEmpty)
   }
+
+  test("attemptOption") {
+    assert(Alternative[Option].attemptOption(Option(5)) === Some(Some(5)))
+    assert(Alternative[Option].attemptOption(Option.empty[Int]) === Some(None))
+    assert(Alternative[List].attemptOption(List(1, 2, 3)) === List(Some(1), Some(2), Some(3), None))
+    assert(Alternative[List].attemptOption(List.empty[Int]) === List(None))
+  }
+
+  property("attemptOption is map(Some) combineK pure(None) for List") {
+    forAll { (xs: List[Int]) =>
+      val expected: List[Option[Int]] = xs.map(Some(_)) :+ None
+      assert(Alternative[List].attemptOption(xs) === expected)
+    }
+  }
+
+  property("attemptOption on Option preserves Some, surfaces None as Some(None)") {
+    forAll { (o: Option[Int]) =>
+      val expected: Option[Option[Int]] = o.fold[Option[Option[Int]]](Some(None))(a => Some(Some(a)))
+      assert(Alternative[Option].attemptOption(o) === expected)
+    }
+  }
 }
