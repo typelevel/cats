@@ -45,11 +45,6 @@ trait NonEmptyAlternative[F[_]] extends Applicative[F] with SemigroupK[F] { self
    */
   def appendK[A](fa: F[A], a: A): F[A] = combineK(fa, pure(a))
 
-  // Cached `F[Option[Nothing]]` reused by `attemptOption`.  Widening to
-  // `F[Option[A]]` is a zero-cost cast (Option is covariant in its element),
-  // which avoids allocating a fresh `pure(None)` on every call.
-  private lazy val fempty: F[Option[Nothing]] = pure(Option.empty[Nothing])
-
   /**
    * Lift `fa` from `F[A]` into `F[Option[A]]` by surfacing every value `fa`
    * produces as `Some(a)` and combining (via `combineK`) with `pure(None)`,
@@ -78,7 +73,7 @@ trait NonEmptyAlternative[F[_]] extends Applicative[F] with SemigroupK[F] { self
    * }}}
    */
   def attemptOption[A](fa: F[A]): F[Option[A]] =
-    combineK(map(fa)((a: A) => Some(a): Option[A]), widen[Option[Nothing], Option[A]](fempty))
+    combineK(map(fa)((a: A) => Some(a): Option[A]), pure(Option.empty[A]))
 
   override def compose[G[_]: Applicative]: NonEmptyAlternative[λ[α => F[G[α]]]] =
     new ComposedNonEmptyAlternative[F, G] {
