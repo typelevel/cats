@@ -172,6 +172,8 @@ ThisBuild / mimaBinaryIssueFilters ++= Seq.concat(
     // (NonEmpty)AlternativeTests rule sets so the new attemptOption law can run.
     // Test-helper signatures only; source-compatible since callers pass implicits.
     ProblemFilters.exclude[DirectMissingMethodProblem]("cats.laws.discipline.AlternativeTests.alternative"),
-    ProblemFilters.exclude[DirectMissingMethodProblem]("cats.laws.discipline.NonEmptyAlternativeTests.nonEmptyAlternative")
+    ProblemFilters.exclude[DirectMissingMethodProblem](
+      "cats.laws.discipline.NonEmptyAlternativeTests.nonEmptyAlternative"
+    )
   )
 )
