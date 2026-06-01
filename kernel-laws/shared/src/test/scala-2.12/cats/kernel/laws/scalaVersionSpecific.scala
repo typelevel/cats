@@ -19,12 +19,14 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package cats.kernel
-package instances
+package cats.kernel.laws
+import scala.annotation.{Annotation, StaticAnnotation}
+import scala.collection.{mutable, IterableLike, TraversableLike}
+import scala.collection.JavaConverters._
 
-package object all
-    extends AllInstances
-    with AllInstancesBinCompat0
-    with AllInstancesBinCompat1
-    with AllInstancesBinCompat2
-    with AllInstancesBinCompat3
+private[cats] object scalaVersionSpecific {
+
+  implicit class iterableExtension[A](private val s: java.lang.Iterable[A]) extends AnyVal {
+    def asScala: Iterable[A] = iterableAsScalaIterable(s)
+  }
+}
