@@ -1075,13 +1075,22 @@ object Foldable {
       typeClassInstance.traverseVoid[G, A, B](self)(f)(G)
     def traverse_[G[_], B](f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
       traverseVoid[G, B](f)
-    // TODO: looks like these two methods below duplicate the same named methods from `NestedFoldableOps`.
-    //       Moreover, the other two methods take precedence, thereby these two are not in use whatsoever.
-    //       Perhaps it makes sense to deprecate one pair of them either here or there.
+    @deprecated(
+      "Use catsSyntaxNestedFoldable (via cats.syntax.all._) to call sequenceVoid on F[G[A]]",
+      "2.13.0"
+    )
     def sequenceVoid[G[_], B](implicit ev$1: A <:< G[B], ev$2: Applicative[G]): G[Unit] =
       typeClassInstance.sequenceVoid[G, B](self.asInstanceOf[F[G[B]]])
+    @deprecated(
+      "Use catsSyntaxNestedFoldable (via cats.syntax.all._) to call sequence_ on F[G[A]]",
+      "2.13.0"
+    )
     def sequence_[G[_], B](implicit ev$1: A <:< G[B], ev$2: Applicative[G]): G[Unit] =
       sequenceVoid[G, B]
+    @deprecated(
+      "Use catsSyntaxNestedFoldable (via cats.syntax.all._) to call foldK on F[G[A]]",
+      "2.13.0"
+    )
     def foldK[G[_], B](implicit ev$1: A <:< G[B], G: MonoidK[G]): G[B] =
       typeClassInstance.foldK[G, B](self.asInstanceOf[F[G[B]]])(G)
     def find(f: A => Boolean): Option[A] = typeClassInstance.find[A](self)(f)
