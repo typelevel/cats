@@ -30,8 +30,8 @@ trait UnorderedFoldableSyntax extends UnorderedFoldable.ToUnorderedFoldableOps {
 final class UnorderedFoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
-   * Tests if this `F[A]` contains `v` using the `Eq` instance for `A`,
-   * named contains_ to avoid conflict with existing contains which uses universal equality.
+   * Tests if this `F[A]` contains `v` using the `Eq` instance for `A`, named `contains_` to avoid conflict with
+   * existing contains which uses universal equality.
    *
    * Example:
    * {{{

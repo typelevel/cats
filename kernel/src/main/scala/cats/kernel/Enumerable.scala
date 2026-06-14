@@ -25,8 +25,7 @@ package kernel
 import scala.{specialized => sp}
 
 /**
- * A typeclass with an operation which returns a member which is
- * greater or `None` than the one supplied.
+ * A typeclass with an operation which returns a member which is greater or `None` than the one supplied.
  */
 trait PartialNext[@sp A] {
   def partialOrder: PartialOrder[A]
@@ -34,8 +33,7 @@ trait PartialNext[@sp A] {
 }
 
 /**
- * A typeclass with an operation which returns a member which is
- * always greater than the one supplied.
+ * A typeclass with an operation which returns a member which is always greater than the one supplied.
  */
 trait Next[@sp A] extends PartialNext[A] {
   def next(a: A): A
@@ -43,8 +41,7 @@ trait Next[@sp A] extends PartialNext[A] {
 }
 
 /**
- * A typeclass with an operation which returns a member which is
- * smaller or `None` than the one supplied.
+ * A typeclass with an operation which returns a member which is smaller or `None` than the one supplied.
  */
 trait PartialPrevious[@sp A] {
   def partialOrder: PartialOrder[A]
@@ -52,8 +49,7 @@ trait PartialPrevious[@sp A] {
 }
 
 /**
- * A typeclass with an operation which returns a member which is
- * always smaller than the one supplied.
+ * A typeclass with an operation which returns a member which is always smaller than the one supplied.
  */
 trait Previous[@sp A] extends PartialPrevious[A] {
   def partialOrder: PartialOrder[A]
@@ -62,8 +58,7 @@ trait Previous[@sp A] extends PartialPrevious[A] {
 }
 
 /**
- * A typeclass which has both `previous` and `next` operations
- * such that `next . previous == identity`.
+ * A typeclass which has both `previous` and `next` operations such that `next . previous == identity`.
  */
 trait UnboundedEnumerable[@sp A] extends Next[A] with Previous[A] {
   def order: Order[A]
@@ -102,8 +97,8 @@ object BoundedEnumerable {
   @inline def apply[A](implicit e: BoundedEnumerable[A]): BoundedEnumerable[A] = e
 
   /**
-   * Defines a `BoundedEnumerable[A]` from the given enumerable such that
-   * all arrows / successor functions switch direction.
+   * Defines a `BoundedEnumerable[A]` from the given enumerable such that all arrows / successor functions switch
+   * direction.
    */
   def reverse[@sp A](e: BoundedEnumerable[A]): BoundedEnumerable[A] =
     new BoundedEnumerable[A] {

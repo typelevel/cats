@@ -141,8 +141,8 @@ object eq {
 ) object DeprecatedEqInstances {
 
   /**
-   * Create an approximation of Eq[A => B] by generating random values for A
-   * and comparing the application of the two functions.
+   * Create an approximation of Eq[A => B] by generating random values for A and comparing the application of the two
+   * functions.
    */
   @deprecated(
     "This instance is problematic and will most likely be removed in a future version of Cats. Use catsLawsEqForFn1Exhaustive instead. See https://github.com/typelevel/cats/pull/2577 for more information.",
@@ -158,8 +158,8 @@ object eq {
   }
 
   /**
-   * Create an approximation of Eq[(A, B) => C] by generating random values for A and B
-   * and comparing the application of the two functions.
+   * Create an approximation of Eq[(A, B) => C] by generating random values for A and B and comparing the application of
+   * the two functions.
    */
   implicit def catsLawsEqForFn2[A, B, C](implicit A: Arbitrary[A], B: Arbitrary[B], C: Eq[C]): Eq[(A, B) => C] =
     Eq.by(_.tupled)
@@ -177,8 +177,8 @@ object eq {
     Eq.by(showA => showA.show _)
 
   /**
-   * Create an approximate Eq instance for some type A, by comparing
-   * the behavior of `f(x, b)` and `f(y, b)` across many `b` samples.
+   * Create an approximate Eq instance for some type A, by comparing the behavior of `f(x, b)` and `f(y, b)` across many
+   * `b` samples.
    */
   def sampledEq[A, B: Arbitrary, C: Eq](samples: Int)(f: (A, B) => C): Eq[A] = {
     val gen = Arbitrary.arbitrary[B]
@@ -215,8 +215,8 @@ object eq {
     sampledEq[Ordering[A], (A, A), Int](100) { case (p, (l, r)) => p.compare(l, r) }
 
   /**
-   * Creates an approximation of `Eq[Hash[A]]` by generating 100 values for A
-   * and comparing the application of the two hash functions.
+   * Creates an approximation of `Eq[Hash[A]]` by generating 100 values for A and comparing the application of the two
+   * hash functions.
    */
   implicit def catsLawsEqForHash[A](implicit arbA: Arbitrary[A]): Eq[Hash[A]] = { (f, g) =>
     val samples = List.fill(100)(arbA.arbitrary.sample).collect {
@@ -227,8 +227,8 @@ object eq {
   }
 
   /**
-   * Create an approximation of `Eq[Semigroup[A]]` by generating values for A
-   * and comparing the application of the two combine functions.
+   * Create an approximation of `Eq[Semigroup[A]]` by generating values for A and comparing the application of the two
+   * combine functions.
    */
   implicit def catsLawsEqForSemigroup[A](implicit arbAA: Arbitrary[(A, A)], eqA: Eq[A]): Eq[Semigroup[A]] =
     Eq.by[Semigroup[A], ((A, A)) => A](f => { case (x, y) => f.combine(x, y) })

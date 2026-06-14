@@ -26,15 +26,13 @@ import cats.data.{Ior, NonEmptyList}
 /**
  * Data structures that can be reduced to a summary value.
  *
- * `Reducible` is like a non-empty `Foldable`. In addition to the fold
- * methods it provides reduce methods which do not require an initial
- * value.
+ * `Reducible` is like a non-empty `Foldable`. In addition to the fold methods it provides reduce methods which do not
+ * require an initial value.
  *
- * In addition to the methods needed by `Foldable`, `Reducible` is
- * implemented in terms of two methods:
+ * In addition to the methods needed by `Foldable`, `Reducible` is implemented in terms of two methods:
  *
- *  - `reduceLeftTo(fa)(f)(g)` eagerly reduces with an additional mapping function
- *  - `reduceRightTo(fa)(f)(g)` lazily reduces with an additional mapping function
+ *   - `reduceLeftTo(fa)(f)(g)` eagerly reduces with an additional mapping function
+ *   - `reduceRightTo(fa)(f)(g)` lazily reduces with an additional mapping function
  */
 trait Reducible[F[_]] extends Foldable[F] { self =>
 
@@ -59,8 +57,7 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
     reduceLeft(fa)(A.combine)
 
   /**
-   * Reduce a `F[G[A]]` value using `SemigroupK[G]`, a universal
-   * semigroup for `G[_]`.
+   * Reduce a `F[G[A]]` value using `SemigroupK[G]`, a universal semigroup for `G[_]`.
    *
    * This method is a generalization of `reduce`.
    *
@@ -75,8 +72,7 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
     reduce(fga)(G.algebra)
 
   /**
-   * Apply `f` to each element of `fa` and combine them using the
-   * given `Semigroup[B]`.
+   * Apply `f` to each element of `fa` and combine them using the given `Semigroup[B]`.
    *
    * {{{
    * scala> import cats.Reducible
@@ -93,8 +89,7 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
     reduceLeftTo(fa)(f)((b, a) => B.combine(b, f(a)))
 
   /**
-   * Apply `f` to each element of `fa` and combine them using the
-   * given `SemigroupK[G]`.
+   * Apply `f` to each element of `fa` and combine them using the given `SemigroupK[G]`.
    *
    * {{{
    * scala> import cats._, cats.data._
@@ -109,8 +104,7 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
     reduceLeftTo(fa)(f)((b, a) => G.combineK(b, f(a)))
 
   /**
-   * Apply `f` to the "initial element" of `fa` and combine it with
-   * every other value using the given function `g`.
+   * Apply `f` to the "initial element" of `fa` and combine it with every other value using the given function `g`.
    */
   def reduceLeftTo[A, B](fa: F[A])(f: A => B)(g: (B, A) => B): B
 
@@ -121,8 +115,7 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
     reduceLeftTo(fa)(f)((gb, a) => G.flatMap(gb)(g(_, a)))
 
   /**
-   * Reduce a `F[G[A]]` value using `Applicative[G]` and `Semigroup[A]`, a universal
-   * semigroup for `G[_]`.
+   * Reduce a `F[G[A]]` value using `Applicative[G]` and `Semigroup[A]`, a universal semigroup for `G[_]`.
    *
    * This method is similar to [[reduce]], but may short-circuit.
    */
@@ -130,8 +123,8 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
     reduceMapA(fga)(identity)
 
   /**
-   * Reduce in an [[Apply]] context by mapping the `A` values to `G[B]`. combining
-   * the `B` values using the given `Semigroup[B]` instance.
+   * Reduce in an [[Apply]] context by mapping the `A` values to `G[B]`. combining the `B` values using the given
+   * `Semigroup[B]` instance.
    *
    * Similar to [[reduceMapM]], but may be less efficient.
    *
@@ -154,8 +147,8 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
     reduceRightTo(fa)(f)((a, egb) => G.map2Eval(f(a), egb)(B.combine)).value
 
   /**
-   * Reduce in an [[FlatMap]] context by mapping the `A` values to `G[B]`. combining
-   * the `B` values using the given `Semigroup[B]` instance.
+   * Reduce in an [[FlatMap]] context by mapping the `A` values to `G[B]`. combining the `B` values using the given
+   * `Semigroup[B]` instance.
    *
    * Similar to [[reduceLeftM]], but using a `Semigroup[B]`. May be more efficient than [[reduceMapA]].
    *
@@ -184,8 +177,8 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
     Some(reduceLeftTo(fa)(f)(g))
 
   /**
-   * Apply `f` to the "initial element" of `fa` and lazily combine it
-   * with every other value using the given function `g`.
+   * Apply `f` to the "initial element" of `fa` and lazily combine it with every other value using the given function
+   * `g`.
    */
   def reduceRightTo[A, B](fa: F[A])(f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B]
 
@@ -198,19 +191,15 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
   /**
    * Traverse `F[A]` using `Apply[G]`.
    *
-   * `A` values will be mapped into `G[B]` and combined using
-   * `Apply#map2`.
+   * `A` values will be mapped into `G[B]` and combined using `Apply#map2`.
    *
-   * This method is similar to [[Foldable.traverseVoid]]. There are two
-   * main differences:
+   * This method is similar to [[Foldable.traverseVoid]]. There are two main differences:
    *
-   * 1. We only need an [[Apply]] instance for `G` here, since we
-   * don't need to call [[Applicative.pure]] for a starting value.
-   * 2. This performs a strict left-associative traversal and thus
-   * must always traverse the entire data structure. Prefer
-   * [[Foldable.traverseVoid]] if you have an [[Applicative]] instance
-   * available for `G` and want to take advantage of short-circuiting
-   * the traversal.
+   *   1. We only need an [[Apply]] instance for `G` here, since we don't need to call [[Applicative.pure]] for a
+   *      starting value.
+   *   2. This performs a strict left-associative traversal and thus must always traverse the entire data structure.
+   *      Prefer [[Foldable.traverseVoid]] if you have an [[Applicative]] instance available for `G` and want to take
+   *      advantage of short-circuiting the traversal.
    */
   def nonEmptyTraverseVoid[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] = {
     val f1 = f.andThen(G.void)
@@ -220,7 +209,8 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
   /**
    * Alias for `nonEmptyTraverseVoid`.
    *
-   * @deprecated this method should be considered as deprecated and replaced by `nonEmptyTraverseVoid`.
+   * @deprecated
+   *   this method should be considered as deprecated and replaced by `nonEmptyTraverseVoid`.
    */
   def nonEmptyTraverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Apply[G]): G[Unit] =
     nonEmptyTraverseVoid(fa)(f)
@@ -228,9 +218,8 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
   /**
    * Sequence `F[G[A]]` using `Apply[G]`.
    *
-   * This method is similar to [[Foldable.sequenceVoid]] but requires only
-   * an [[Apply]] instance for `G` instead of [[Applicative]]. See the
-   * [[nonEmptyTraverseVoid]] documentation for a description of the differences.
+   * This method is similar to [[Foldable.sequenceVoid]] but requires only an [[Apply]] instance for `G` instead of
+   * [[Applicative]]. See the [[nonEmptyTraverseVoid]] documentation for a description of the differences.
    */
   def nonEmptySequenceVoid[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
     nonEmptyTraverseVoid(fga)(identity)
@@ -238,7 +227,8 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
   /**
    * Alias for `nonEmptySequenceVoid`.
    *
-   * @deprecated this method should be considered as deprecated and replaced by `nonEmptySequenceVoid`.
+   * @deprecated
+   *   this method should be considered as deprecated and replaced by `nonEmptySequenceVoid`.
    */
   def nonEmptySequence_[G[_], A](fga: F[G[A]])(implicit G: Apply[G]): G[Unit] =
     nonEmptySequenceVoid(fga)
@@ -263,7 +253,8 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
   /**
    * Find the minimum `A` item in this structure according to an `Order.by(f)`.
    *
-   * @see [[maximumBy]] for maximum instead of minimum.
+   * @see
+   *   [[maximumBy]] for maximum instead of minimum.
    */
   def minimumBy[A, B: Order](fa: F[A])(f: A => B): A =
     minimum(fa)(Order.by(f))
@@ -271,16 +262,18 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
   /**
    * Find the maximum `A` item in this structure according to an `Order.by(f)`.
    *
-   * @see [[minimumBy]] for minimum instead of maximum.
+   * @see
+   *   [[minimumBy]] for minimum instead of maximum.
    */
   def maximumBy[A, B: Order](fa: F[A])(f: A => B): A =
     maximum(fa)(Order.by(f))
 
   /**
-   * Find all the minimum `A` items in this structure.
-   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   * Find all the minimum `A` items in this structure. For all elements in the result Order.eqv(x, y) is true. Preserves
+   * order.
    *
-   * @see [[maximumNel]] for maximum instead of minimum.
+   * @see
+   *   [[maximumNel]] for maximum instead of minimum.
    */
   def minimumNel[A](fa: F[A])(implicit A: Order[A]): NonEmptyList[A] =
     reduceLeftTo(fa)(NonEmptyList.one) {
@@ -290,10 +283,11 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
     }.reverse
 
   /**
-   * Find all the maximum `A` items in this structure.
-   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   * Find all the maximum `A` items in this structure. For all elements in the result Order.eqv(x, y) is true. Preserves
+   * order.
    *
-   * @see [[minimumNel]] for minimum instead of maximum.
+   * @see
+   *   [[minimumNel]] for minimum instead of maximum.
    */
   def maximumNel[A](fa: F[A])(implicit A: Order[A]): NonEmptyList[A] =
     reduceLeftTo(fa)(NonEmptyList.one) {
@@ -303,19 +297,21 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
     }.reverse
 
   /**
-   * Find all the minimum `A` items in this structure according to an `Order.by(f)`.
-   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   * Find all the minimum `A` items in this structure according to an `Order.by(f)`. For all elements in the result
+   * Order.eqv(x, y) is true. Preserves order.
    *
-   * @see [[maximumByNel]] for maximum instead of minimum.
+   * @see
+   *   [[maximumByNel]] for maximum instead of minimum.
    */
   def minimumByNel[A, B: Order](fa: F[A])(f: A => B): NonEmptyList[A] =
     minimumNel(fa)(Order.by(f))
 
   /**
-   * Find all the maximum `A` items in this structure according to an `Order.by(f)`.
-   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   * Find all the maximum `A` items in this structure according to an `Order.by(f)`. For all elements in the result
+   * Order.eqv(x, y) is true. Preserves order.
    *
-   * @see [[minimumByNel]] for minimum instead of maximum.
+   * @see
+   *   [[minimumByNel]] for minimum instead of maximum.
    */
   def maximumByNel[A, B: Order](fa: F[A])(f: A => B): NonEmptyList[A] =
     maximumNel(fa)(Order.by(f))

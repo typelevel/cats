@@ -29,8 +29,7 @@ private[free] trait FreeFoldStep[S[_], A] {
   def step: Free[S, A]
 
   /**
-   * A combination of step and fold. May be used to define interpreters with custom
-   * (non-monoidial) control flow.
+   * A combination of step and fold. May be used to define interpreters with custom (non-monoidial) control flow.
    */
   final def foldStep[B](
     onPure: A => B,

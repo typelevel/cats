@@ -26,11 +26,9 @@ import cats.arrow.FunctionK
 import cats.data.AndThen
 
 /**
- * The dual view of the Yoneda lemma. The free functor on `F`.
- * This is isomorphic to `F` as long as `F` itself is a functor.
- * The function from `F[A]` to `Coyoneda[F,A]` exists even when
- * `F` is not a functor.
- * Implemented using a List of functions for stack-safety.
+ * The dual view of the Yoneda lemma. The free functor on `F`. This is isomorphic to `F` as long as `F` itself is a
+ * functor. The function from `F[A]` to `Coyoneda[F,A]` exists even when `F` is not a functor. Implemented using a List
+ * of functions for stack-safety.
  */
 sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
 
@@ -71,8 +69,7 @@ sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
     }
 
   /**
-   * Simple function composition. Allows map fusion without touching
-   * the underlying `F`.
+   * Simple function composition. Allows map fusion without touching the underlying `F`.
    */
   final def map[B](f: A => B): Aux[F, B, Pivot] =
     Coyoneda(fi)(AndThen(k).andThen(f))
@@ -92,8 +89,7 @@ sealed abstract class Coyoneda[F[_], A] extends Serializable { self =>
 object Coyoneda {
 
   /**
-   * Lift the `Pivot` type member to a parameter. It is usually more
-   * convenient to use `Aux` than a structural type.
+   * Lift the `Pivot` type member to a parameter. It is usually more convenient to use `Aux` than a structural type.
    */
   type Aux[F[_], A, B] = Coyoneda[F, A] { type Pivot = B }
 

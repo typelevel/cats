@@ -25,15 +25,13 @@ package lattice
 import scala.{specialized => sp}
 
 /**
- * Logic models a logic generally. It is a bounded distributive
- * lattice with an extra negation operator.
+ * Logic models a logic generally. It is a bounded distributive lattice with an extra negation operator.
  *
  * The negation operator obeys the weak De Morgan laws:
- *  - ¬(x∨y) = ¬x∧¬y
- *  - ¬(x∧y) = ¬¬(¬x∨¬y)
+ *   - ¬(x∨y) = ¬x∧¬y
+ *   - ¬(x∧y) = ¬¬(¬x∨¬y)
  *
- * For intuitionistic logic see [[Heyting]]
- * For fuzzy logic see [[DeMorgan]]
+ * For intuitionistic logic see [[Heyting]] For fuzzy logic see [[DeMorgan]]
  */
 trait Logic[@sp(Int, Long) A] extends Any with BoundedDistributiveLattice[A] { self =>
   def and(a: A, b: A): A
@@ -68,8 +66,7 @@ object Logic extends LogicFunctions[Logic] {
   @inline final def apply[@sp(Int, Long) A](implicit ev: Logic[A]): Logic[A] = ev
 
   /**
-   * Turn a [[Heyting]] into a `Logic`.
-   * Used for binary compatibility.
+   * Turn a [[Heyting]] into a `Logic`. Used for binary compatibility.
    */
   final def fromHeyting[@sp(Int, Long) A](h: Heyting[A]): Logic[A] =
     new Logic[A] {

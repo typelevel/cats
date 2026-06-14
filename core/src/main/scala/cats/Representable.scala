@@ -26,10 +26,9 @@ package cats
  *
  * Is a witness to the isomorphism forall A. F[A] <-> Representation => A
  *
- * Must obey the laws defined in cats.laws.RepresentableLaws
- * i.e.
- * tabulate andThen index = identity
- * index andThen tabulate = identity
+ * Must obey the laws defined in `cats.laws.RepresentableLaws` , i.e.
+ *   - tabulate andThen index = identity
+ *   - index andThen tabulate = identity
  *
  * Inspired by the Haskell representable package
  * http://hackage.haskell.org/package/representable-functors-3.2.0.2/docs/Data-Functor-Representable.html
@@ -173,8 +172,7 @@ object Representable {
     }
 
   /**
-   * Derives a `Bimonad` instance for any `Representable` functor whose representation
-   * has a `Monoid` instance.
+   * Derives a `Bimonad` instance for any `Representable` functor whose representation has a `Monoid` instance.
    */
   def bimonad[F[_], R](implicit Rep: Representable.Aux[F, R], Mon: Monoid[R]): Bimonad[F] =
     new RepresentableBimonad[F, R] {
