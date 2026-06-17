@@ -9,7 +9,7 @@ If you're using the constructs like [`Future`](http://www.scala-lang.org/api/cur
 it's very likely that Cats can simplify and improve the readability of your code.
 
 Please refer to the [wiki on GitHub](https://github.com/typelevel/cats) for guidelines on how to add the library to your project dependencies.
-We are sticking to [version 1.0.1](https://github.com/typelevel/cats/releases/tag/v1.0.1) in the entire post.
+We are sticking to [version 2.13.0](https://github.com/typelevel/cats/releases/tag/v2.13.0) in the entire post.
 
 Let's go through the library package-wise, looking at the syntax available in each package.
 
