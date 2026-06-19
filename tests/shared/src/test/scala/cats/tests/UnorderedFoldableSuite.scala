@@ -76,6 +76,16 @@ sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit
     }
   }
 
+  test(s"UnorderedFoldable[$name].unorderedReduceOption") {
+    forAll { (fa: F[Int]) =>
+      implicit val F: UnorderedFoldable[F] = instance
+      val expected =
+        if (instance.isEmpty(fa)) None
+        else Some(instance.unorderedFold(fa))
+      assert(fa.unorderedReduceOption === expected)
+    }
+  }
+
   checkAll("F[Int]", UnorderedFoldableTests[F](using instance).unorderedFoldable[Int, Int])
 }
 

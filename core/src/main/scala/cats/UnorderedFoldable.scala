@@ -21,7 +21,7 @@
 
 package cats
 
-import cats.kernel.CommutativeMonoid
+import cats.kernel.{CommutativeMonoid, CommutativeSemigroup}
 import scala.collection.immutable.{Queue, Seq, SortedMap, SortedSet}
 import scala.util.Try
 
@@ -34,6 +34,11 @@ trait UnorderedFoldable[F[_]] extends Serializable {
 
   def unorderedFold[A: CommutativeMonoid](fa: F[A]): A =
     unorderedFoldMap(fa)(identity)
+
+  def unorderedReduceOption[A](fa: F[A])(implicit A: CommutativeSemigroup[A]): Option[A] =
+    unorderedFoldMap(fa)(a => Some(a): Option[A])(
+      cats.kernel.instances.option.catsKernelStdCommutativeMonoidForOption
+    )
 
   /**
    * Fold in a [[CommutativeApplicative]] context by mapping the `A` values to `G[B]`. combining
