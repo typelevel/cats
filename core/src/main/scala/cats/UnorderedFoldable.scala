@@ -35,10 +35,15 @@ trait UnorderedFoldable[F[_]] extends Serializable {
   def unorderedFold[A: CommutativeMonoid](fa: F[A]): A =
     unorderedFoldMap(fa)(identity)
 
-  def unorderedReduceOption[A](fa: F[A])(implicit A: CommutativeSemigroup[A]): Option[A] =
-    unorderedFoldMap(fa)(a => Some(a): Option[A])(
-      cats.kernel.instances.option.catsKernelStdCommutativeMonoidForOption
-    )
+  /**
+   * Reduce this unordered structure by combining its elements with a [[CommutativeSemigroup]] instance.
+   *
+   * If there are no elements, the result is `None`.
+   */
+  def unorderedReduceOption[A: CommutativeSemigroup](fa: F[A]): Option[A] = {
+    val reducer = CommutativeMonoid[Option[A]]
+    unorderedFoldMap(fa)(a => Some(a): Option[A])(using reducer)
+  }
 
   /**
    * Fold in a [[CommutativeApplicative]] context by mapping the `A` values to `G[B]`. combining
