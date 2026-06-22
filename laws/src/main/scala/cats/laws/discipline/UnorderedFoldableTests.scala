@@ -28,6 +28,7 @@ import Prop.*
 import org.typelevel.discipline.Laws
 import cats.kernel.CommutativeMonoid
 import cats.instances.boolean.*
+import cats.instances.option.*
 
 trait UnorderedFoldableTests[F[_]] extends Laws {
   def laws: UnorderedFoldableLaws[F]
@@ -53,7 +54,10 @@ trait UnorderedFoldableTests[F[_]] extends Laws {
       "forall is lazy" -> forAll(laws.forallLazy[A] _),
       "contains consistent with exists" -> forAll(laws.containsConsistentWithExists[A] _),
       "contains consistent with forall" -> forAll(laws.containsConsistentWithForall[A] _),
-      "contains all elements from itself" -> forAll(laws.containsAllElementsFromItself[A] _)
+      "contains all elements from itself" -> forAll(laws.containsAllElementsFromItself[A] _),
+      "unorderedReduceOption consistent with unorderedFold" -> forAll(
+        laws.unorderedReduceOptionConsistentWithUnorderedFold[A] _
+      )
     )
 }
 
