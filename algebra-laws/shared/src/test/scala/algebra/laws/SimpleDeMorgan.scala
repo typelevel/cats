@@ -28,9 +28,8 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Gen.oneOf
 
 /**
- * The simplest De Morgan algebra that is not already a Boolean algebra.
- * It is the standard three valued logic.
- * Taken from https://en.wikipedia.org/wiki/De_Morgan_algebra#Kleene_algebra
+ * The simplest De Morgan algebra that is not already a Boolean algebra. It is the standard three valued logic. Taken
+ * from https://en.wikipedia.org/wiki/De_Morgan_algebra#Kleene_algebra
  */
 sealed trait SimpleDeMorgan
 

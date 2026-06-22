@@ -27,11 +27,9 @@ import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.util.Try
 
 /**
- * A type class to provide textual representation. It is meant to be a
- * better "toString". Whereas toString exists for any Object,
- * regardless of whether or not the creator of the class explicitly
- * made a toString method, a Show instance will only exist if someone
- * explicitly provided one.
+ * A type class to provide textual representation. It is meant to be a better "toString". Whereas toString exists for
+ * any Object, regardless of whether or not the creator of the class explicitly made a toString method, a Show instance
+ * will only exist if someone explicitly provided one.
  */
 trait Show[T] extends Show.ContravariantShow[T]
 

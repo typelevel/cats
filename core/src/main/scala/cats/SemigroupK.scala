@@ -30,20 +30,16 @@ import cats.kernel.compat.scalaVersionSpecific.*
 /**
  * SemigroupK is a universal semigroup which operates on kinds.
  *
- * This type class is useful when its type parameter F[_] has a
- * structure that can be combined for any particular type. Thus,
- * SemigroupK is like a Semigroup for kinds (i.e. parametrized
- * types).
+ * This type class is useful when its type parameter F[_] has a structure that can be combined for any particular type.
+ * Thus, SemigroupK is like a Semigroup for kinds (i.e. parametrized types).
  *
  * A SemigroupK[F] can produce a Semigroup[F[A]] for any type A.
  *
  * Here's how to distinguish Semigroup and SemigroupK:
  *
- *  - Semigroup[A] allows two A values to be combined.
- *
- *  - SemigroupK[F] allows two F[A] values to be combined, for any A.
- *    The combination operation just depends on the structure of F,
- *    but not the structure of A.
+ *   - Semigroup[A] allows two A values to be combined.
+ *   - SemigroupK[F] allows two F[A] values to be combined, for any A. The combination operation just depends on the
+ *     structure of F, but not the structure of A.
  */
 trait SemigroupK[F[_]] extends Serializable { self =>
 
@@ -61,16 +57,14 @@ trait SemigroupK[F[_]] extends Serializable { self =>
   def combineK[A](x: F[A], y: F[A]): F[A]
 
   /**
-   * Similar to [[combineK]] but uses [[Eval]] to allow for laziness in the second
-   * argument. This can allow for "short-circuiting" of computations.
+   * Similar to [[combineK]] but uses [[Eval]] to allow for laziness in the second argument. This can allow for
+   * "short-circuiting" of computations.
    *
-   * NOTE: the default implementation of `combineKEval` does not short-circuit
-   * computations. For data structures that can benefit from laziness, [[SemigroupK]]
-   * instances should override this method.
+   * NOTE: the default implementation of `combineKEval` does not short-circuit computations. For data structures that
+   * can benefit from laziness, [[SemigroupK]] instances should override this method.
    *
-   * In the following example, `x.combineK(bomb)` would result in an error,
-   * but `combineKEval` "short-circuits" the computation. `x` is `Some` and thus the
-   * result of `bomb` doesn't even need to be evaluated in order to determine
+   * In the following example, `x.combineK(bomb)` would result in an error, but `combineKEval` "short-circuits" the
+   * computation. `x` is `Some` and thus the result of `bomb` doesn't even need to be evaluated in order to determine
    * that the result of `combineKEval` should be `x`.
    *
    * {{{
@@ -97,9 +91,8 @@ trait SemigroupK[F[_]] extends Serializable { self =>
   def algebra[A]: Semigroup[F[A]] = combineK(_, _)
 
   /**
-   * "Compose" with a `G[_]` type to form a `SemigroupK` for `λ[α => F[G[α]]]`.
-   * Note that this universally works for any `G`, because the "inner" structure
-   * isn't considered when combining two instances.
+   * "Compose" with a `G[_]` type to form a `SemigroupK` for `λ[α => F[G[α]]]`. Note that this universally works for any
+   * `G`, because the "inner" structure isn't considered when combining two instances.
    *
    * Example:
    * {{{
@@ -174,8 +167,7 @@ trait SemigroupK[F[_]] extends Serializable { self =>
     as.iterator.reduceOption(combineK[A])
 
   /**
-   * return a semigroupK that reverses the order
-   * so combineK(a, b) == reverse.combineK(b, a)
+   * return a semigroupK that reverses the order so combineK(a, b) == reverse.combineK(b, a)
    */
   def reverse: SemigroupK[F] =
     new SemigroupK[F] {

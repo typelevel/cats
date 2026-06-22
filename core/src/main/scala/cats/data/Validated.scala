@@ -116,7 +116,8 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * Return the Valid value, or the result of f if Invalid
+   * Return the `Valid` value, or the result of `f` if Invalid
+   *
    * Example:
    * {{{
    * scala> import cats.syntax.all._
@@ -184,9 +185,9 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * Return this if it is Valid, or else fall back to the given default.
-   * The functionality is similar to that of [[findValid]] except for failure accumulation,
-   * where here only the error on the right is preserved and the error on the left is ignored.
+   * Return this if it is Valid, or else fall back to the given default. The functionality is similar to that of
+   * [[findValid]] except for failure accumulation, where here only the error on the right is preserved and the error on
+   * the left is ignored.
    *
    * Example:
    * {{{
@@ -210,8 +211,8 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * If `this` is valid return `this`, otherwise if `that` is valid return `that`, otherwise combine the failures.
-   * This is similar to [[orElse]] except that here failures are accumulated.
+   * If `this` is valid return `this`, otherwise if `that` is valid return `that`, otherwise combine the failures. This
+   * is similar to [[orElse]] except that here failures are accumulated.
    *
    * Example:
    * {{{
@@ -312,8 +313,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * Convert this value to a single element List if it is Valid,
-   * otherwise return an empty List
+   * Convert this value to a single element `List` if it is `Valid`, otherwise return an empty `List`
    *
    * Example:
    * {{{
@@ -336,7 +336,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * Lift the Invalid value into a NonEmptyList.
+   * Lift the `Invalid` value into a `NonEmptyList`.
    *
    * Example:
    * {{{
@@ -382,8 +382,8 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * Convert to an Either, apply a function, convert back.  This is handy
-   * when you want to use the Monadic properties of the Either type.
+   * Convert to an `Either`, apply a function, convert back. This is handy when you want to use the Monadic properties
+   * of the `Either` type.
    *
    * Example:
    * {{{
@@ -403,8 +403,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     Validated.fromEither(f(toEither))
 
   /**
-   * Validated is a [[Bifunctor]], this method applies one of the
-   * given functions.]
+   * `Validated` is a [[Bifunctor]], this method applies one of the given functions.]
    *
    * Example:
    * {{{
@@ -499,8 +498,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * From Apply:
-   * if both the function and this value are Valid, apply the function
+   * From `Apply`: if both the function and this value are `Valid`, apply the function
    *
    * Example:
    * {{{
@@ -581,8 +579,8 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * Apply a function to an Invalid value, returning a new Invalid value.
-   * Or, if the original valid was Valid, return it.
+   * Apply a function to an `Invalid` value, returning a new `Invalid` value. Or, if the original valid was `Valid`,
+   * return it.
    *
    * Example:
    * {{{
@@ -606,9 +604,8 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * When Valid, apply the function, marking the result as valid
-   * inside the Applicative's context,
-   * when Invalid, lift the Error into the Applicative's context
+   * When `Valid`, apply the function, marking the result as valid inside the `Applicative`'s context, when `Invalid`,
+   * lift the Error into the `Applicative`'s context
    *
    * Example:
    * {{{
@@ -640,8 +637,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * apply the given function to the value with the given B when
-   * valid, otherwise return the given B
+   * Apply the given function to the value with the given B when valid, otherwise return the given B
    *
    * Example:
    * {{{
@@ -664,8 +660,7 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * Lazily-apply the given function to the value with the given B
-   * when valid, otherwise return the given B.
+   * Lazily-apply the given function to the value with the given `B` when valid, otherwise return the given `B`.
    *
    * Example:
    * {{{
@@ -695,17 +690,13 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * Apply a function (that returns a `Validated`) in the valid case.
-   * Otherwise return the original `Validated`.
+   * Apply a function (that returns a `Validated`) in the valid case. Otherwise return the original `Validated`.
    *
-   * This allows "chained" validation: the output of one validation can be fed
-   * into another validation function.
+   * This allows "chained" validation: the output of one validation can be fed into another validation function.
    *
-   * This function is similar to `flatMap` on `Either`. It's not called `flatMap`,
-   * because by Cats convention, `flatMap` is a monadic bind that is consistent
-   * with `ap`. This method is not consistent with [[ap]] (or other
-   * `Apply`-based methods), because it has "fail-fast" behavior as opposed to
-   * accumulating validation failures.
+   * This function is similar to `flatMap` on `Either`. It's not called `flatMap`, because by Cats convention, `flatMap`
+   * is a monadic bind that is consistent with `ap`. This method is not consistent with [[ap]] (or other `Apply`-based
+   * methods), because it has "fail-fast" behavior as opposed to accumulating validation failures.
    *
    * Example:
    * {{{
@@ -729,9 +720,8 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * Combine this `Validated` with another `Validated`, using the `Semigroup`
-   * instances of the underlying `E` and `A` instances. The resultant `Validated`
-   * will be `Valid`, if, and only if, both this `Validated` instance and the
+   * Combine this `Validated` with another `Validated`, using the `Semigroup` instances of the underlying `E` and `A`
+   * instances. The resultant `Validated` will be `Valid`, if, and only if, both this `Validated` instance and the
    * supplied `Validated` instance are also `Valid`.
    *
    * Example:
@@ -806,9 +796,8 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * Ensure that a successful result passes the given predicate,
-   * falling back to an Invalid of `onFailure` if the predicate
-   * returns false.
+   * Ensure that a successful result passes the given predicate, falling back to an Invalid of `onFailure` if the
+   * predicate returns false.
    *
    * For example:
    * {{{
@@ -823,9 +812,8 @@ sealed abstract class Validated[+E, +A] extends Product with Serializable {
     }
 
   /**
-   * Ensure that a successful result passes the given predicate,
-   * falling back to the an Invalid of the result of `onFailure` if the predicate
-   * returns false.
+   * Ensure that a successful result passes the given predicate, falling back to the an Invalid of the result of
+   * `onFailure` if the predicate returns false.
    *
    * For example:
    * {{{
@@ -856,14 +844,15 @@ object Validated extends ValidatedInstances with ValidatedFunctions with Validat
    * res0: Validated[NumberFormatException, Int] = Invalid(java.lang.NumberFormatException: For input string: "foo")
    * }}}
    *
-   * This method and its usage of [[NotNull]] are inspired by and derived from
-   * the `fromTryCatchThrowable` method [[https://github.com/scalaz/scalaz/pull/746/files contributed]]
-   * to Scalaz by Brian McKenna.
+   * This method and its usage of [[NotNull]] are inspired by and derived from the `fromTryCatchThrowable` method
+   * [[https://github.com/scalaz/scalaz/pull/746/files contributed]] to Scalaz by Brian McKenna.
    */
   def catchOnly[T >: Null <: Throwable]: CatchOnlyPartiallyApplied[T] = new CatchOnlyPartiallyApplied[T]
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[data] class CatchOnlyPartiallyApplied[T](private val dummy: Boolean = true) extends AnyVal {
     /* Note: the NT parameter is not referenced at runtime, but serves a compile-time role.
@@ -1183,8 +1172,8 @@ private[data] trait ValidatedFunctions {
   def fromEither[A, B](e: Either[A, B]): Validated[A, B] = e.fold(invalid, valid)
 
   /**
-   * Converts an `Option[B]` to a `Validated[A, B]`, where the provided `ifNone` values is returned on
-   * the invalid of the `Validated` when the specified `Option` is `None`.
+   * Converts an `Option[B]` to a `Validated[A, B]`, where the provided `ifNone` values is returned on the invalid of
+   * the `Validated` when the specified `Option` is `None`.
    */
   def fromOption[A, B](o: Option[B], ifNone: => A): Validated[A, B] = o.fold(invalid[A, B](ifNone))(valid)
 
@@ -1194,15 +1183,13 @@ private[data] trait ValidatedFunctions {
   def fromIor[A, B](ior: Ior[A, B]): Validated[A, B] = ior.fold(invalid, valid, (_, b) => valid(b))
 
   /**
-   * If the condition is satisfied, return the given `A` as valid,
-   * otherwise return the given `E` as invalid.
+   * If the condition is satisfied, return the given `A` as valid, otherwise return the given `E` as invalid.
    */
   final def cond[E, A](test: Boolean, a: => A, e: => E): Validated[E, A] =
     if (test) valid(a) else invalid(e)
 
   /**
-   * If the condition is satisfied, return the given `A` as valid NEL,
-   * otherwise return the given `E` as invalid NEL.
+   * If the condition is satisfied, return the given `A` as valid NEL, otherwise return the given `E` as invalid NEL.
    */
   final def condNel[E, A](test: Boolean, a: => A, e: => E): ValidatedNel[E, A] =
     if (test) validNel(a) else invalidNel(e)
@@ -1238,8 +1225,7 @@ private[data] trait ValidatedFunctionsBinCompat0 {
   def invalidNec[A, B](a: A): ValidatedNec[A, B] = Validated.Invalid(NonEmptyChain.one(a))
 
   /**
-   * If the condition is satisfied, return the given `B` as valid NEC,
-   * otherwise return the given `A` as invalid NEC.
+   * If the condition is satisfied, return the given `B` as valid NEC, otherwise return the given `A` as invalid NEC.
    */
   final def condNec[A, B](test: Boolean, b: => B, a: => A): ValidatedNec[A, B] =
     if (test) validNec(b) else invalidNec(a)

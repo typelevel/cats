@@ -25,10 +25,10 @@ import scala.{specialized => sp}
 import scala.util.hashing.Hashing
 
 /**
- * A type class used to represent a hashing scheme for objects of a given type.
- * For any two instances `x` and `y` that are considered equivalent under the
- * equivalence relation defined by this object, `hash(x)` should equal `hash(y)`.
- * @author Tongfei Chen
+ * A type class used to represent a hashing scheme for objects of a given type. For any two instances `x` and `y` that
+ * are considered equivalent under the equivalence relation defined by this object, `hash(x)` should equal `hash(y)`.
+ * @author
+ *   Tongfei Chen
  */
 trait Hash[@sp A] extends Any with Eq[A] with Serializable { self =>
 

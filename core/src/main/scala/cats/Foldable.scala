@@ -29,22 +29,19 @@ import Foldable.{sentinel, Source}
 /**
  * Data structures that can be folded to a summary value.
  *
- * In the case of a collection (such as `List` or `Vector`), these
- * methods will fold together (combine) the values contained in the
- * collection to produce a single result. Most collection types have
- * `foldLeft` methods, which will usually be used by the associated
- * `Foldable[_]` instance.
+ * In the case of a collection (such as `List` or `Vector`), these methods will fold together (combine) the values
+ * contained in the collection to produce a single result. Most collection types have `foldLeft` methods, which will
+ * usually be used by the associated `Foldable[_]` instance.
  *
- * Instances of Foldable should be ordered collections to allow for consistent folding.
- * Use the `UnorderedFoldable` type class if you want to fold over unordered collections.
+ * Instances of Foldable should be ordered collections to allow for consistent folding. Use the `UnorderedFoldable` type
+ * class if you want to fold over unordered collections.
  *
  * Foldable[F] is implemented in terms of two basic methods:
  *
- *  - `foldLeft(fa, b)(f)` eagerly folds `fa` from left-to-right.
- *  - `foldRight(fa, b)(f)` lazily folds `fa` from right-to-left.
+ *   - `foldLeft(fa, b)(f)` eagerly folds `fa` from left-to-right.
+ *   - `foldRight(fa, b)(f)` lazily folds `fa` from right-to-left.
  *
- * Beyond these it provides many other useful methods related to
- * folding over F[A] values.
+ * Beyond these it provides many other useful methods related to folding over F[A] values.
  *
  * See: [[http://www.cs.nott.ac.uk/~pszgmh/fold.pdf A tutorial on the universality and expressiveness of fold]]
  */
@@ -79,13 +76,11 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Right associative lazy fold on `F` using the folding function 'f'.
    *
-   * This method evaluates `lb` lazily (in some cases it will not be
-   * needed), and returns a lazy value. We are using `(A, Eval[B]) =>
-   * Eval[B]` to support laziness in a stack-safe way. Chained
-   * computation should be performed via .map and .flatMap.
+   * This method evaluates `lb` lazily (in some cases it will not be needed), and returns a lazy value. We are using
+   * `(A, Eval[B]) => Eval[B]` to support laziness in a stack-safe way. Chained computation should be performed via .map
+   * and .flatMap.
    *
-   * For more detailed information about how this method works see the
-   * documentation for `Eval[_]`.
+   * For more detailed information about how this method works see the documentation for `Eval[_]`.
    *
    * Example:
    * {{{
@@ -146,17 +141,19 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   }
 
   /**
-   * Reduce the elements of this structure down to a single value by applying
-   * the provided aggregation function in a left-associative manner.
+   * Reduce the elements of this structure down to a single value by applying the provided aggregation function in a
+   * left-associative manner.
    *
-   * @return `None` if the structure is empty, otherwise the result of combining
-   * the cumulative left-associative result of the `f` operation over all of the
-   * elements.
+   * @return
+   *   `None` if the structure is empty, otherwise the result of combining the cumulative left-associative result of the
+   *   `f` operation over all of the elements.
    *
-   * @see [[reduceRightOption]] for a right-associative alternative.
+   * @see
+   *   [[reduceRightOption]] for a right-associative alternative.
    *
-   * @see [[Reducible#reduceLeft]] for a version that doesn't need to return an
-   * `Option` for structures that are guaranteed to be non-empty.
+   * @see
+   *   [[Reducible#reduceLeft]] for a version that doesn't need to return an `Option` for structures that are guaranteed
+   *   to be non-empty.
    *
    * Example:
    * {{{
@@ -174,17 +171,19 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     reduceLeftToOption(fa)(identity)(f)
 
   /**
-   * Reduce the elements of this structure down to a single value by applying
-   * the provided aggregation function in a right-associative manner.
+   * Reduce the elements of this structure down to a single value by applying the provided aggregation function in a
+   * right-associative manner.
    *
-   * @return `None` if the structure is empty, otherwise the result of combining
-   * the cumulative right-associative result of the `f` operation over the
-   * `A` elements.
+   * @return
+   *   `None` if the structure is empty, otherwise the result of combining the cumulative right-associative result of
+   *   the `f` operation over the `A` elements.
    *
-   * @see [[reduceLeftOption]] for a left-associative alternative
+   * @see
+   *   [[reduceLeftOption]] for a left-associative alternative
    *
-   * @see [[Reducible#reduceRight]] for a version that doesn't need to return an
-   * `Option` for structures that are guaranteed to be non-empty.
+   * @see
+   *   [[Reducible#reduceRight]] for a version that doesn't need to return an `Option` for structures that are
+   *   guaranteed to be non-empty.
    *
    * Example:
    * {{{
@@ -204,13 +203,15 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Find the minimum `A` item in this structure according to the `Order[A]`.
    *
-   * @return `None` if the structure is empty, otherwise the minimum element
-   * wrapped in a `Some`.
+   * @return
+   *   `None` if the structure is empty, otherwise the minimum element wrapped in a `Some`.
    *
-   * @see [[Reducible#minimum]] for a version that doesn't need to return an
-   * `Option` for structures that are guaranteed to be non-empty.
+   * @see
+   *   [[Reducible#minimum]] for a version that doesn't need to return an `Option` for structures that are guaranteed to
+   *   be non-empty.
    *
-   * @see [[maximumOption]] for maximum instead of minimum.
+   * @see
+   *   [[maximumOption]] for maximum instead of minimum.
    */
   def minimumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
     reduceLeftOption(fa)(A.min)
@@ -218,13 +219,15 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Find the maximum `A` item in this structure according to the `Order[A]`.
    *
-   * @return `None` if the structure is empty, otherwise the maximum element
-   * wrapped in a `Some`.
+   * @return
+   *   `None` if the structure is empty, otherwise the maximum element wrapped in a `Some`.
    *
-   * @see [[Reducible#maximum]] for a version that doesn't need to return an
-   * `Option` for structures that are guaranteed to be non-empty.
+   * @see
+   *   [[Reducible#maximum]] for a version that doesn't need to return an `Option` for structures that are guaranteed to
+   *   be non-empty.
    *
-   * @see [[minimumOption]] for minimum instead of maximum.
+   * @see
+   *   [[minimumOption]] for minimum instead of maximum.
    */
   def maximumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
     reduceLeftOption(fa)(A.max)
@@ -232,13 +235,15 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Find the minimum `A` item in this structure according to an `Order.by(f)`.
    *
-   * @return `None` if the structure is empty, otherwise the minimum element
-   * wrapped in a `Some`.
+   * @return
+   *   `None` if the structure is empty, otherwise the minimum element wrapped in a `Some`.
    *
-   * @see [[Reducible#minimumBy]] for a version that doesn't need to return an
-   * `Option` for structures that are guaranteed to be non-empty.
+   * @see
+   *   [[Reducible#minimumBy]] for a version that doesn't need to return an `Option` for structures that are guaranteed
+   *   to be non-empty.
    *
-   * @see [[maximumByOption]] for maximum instead of minimum.
+   * @see
+   *   [[maximumByOption]] for maximum instead of minimum.
    */
   def minimumByOption[A, B: Order](fa: F[A])(f: A => B): Option[A] =
     minimumOption(fa)(Order.by(f))
@@ -246,25 +251,29 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Find the maximum `A` item in this structure according to an `Order.by(f)`.
    *
-   * @return `None` if the structure is empty, otherwise the maximum element
-   * wrapped in a `Some`.
+   * @return
+   *   `None` if the structure is empty, otherwise the maximum element wrapped in a `Some`.
    *
-   * @see [[Reducible#maximumBy]] for a version that doesn't need to return an
-   * `Option` for structures that are guaranteed to be non-empty.
+   * @see
+   *   [[Reducible#maximumBy]] for a version that doesn't need to return an `Option` for structures that are guaranteed
+   *   to be non-empty.
    *
-   * @see [[minimumByOption]] for minimum instead of maximum.
+   * @see
+   *   [[minimumByOption]] for minimum instead of maximum.
    */
   def maximumByOption[A, B: Order](fa: F[A])(f: A => B): Option[A] =
     maximumOption(fa)(Order.by(f))
 
   /**
-   * Find all the minimum `A` items in this structure.
-   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   * Find all the minimum `A` items in this structure. For all elements in the result Order.eqv(x, y) is true. Preserves
+   * order.
    *
-   * @see [[Reducible#minimumNel]] for a version that doesn't need to return an
-   * `Option` for structures that are guaranteed to be non-empty.
+   * @see
+   *   [[Reducible#minimumNel]] for a version that doesn't need to return an `Option` for structures that are guaranteed
+   *   to be non-empty.
    *
-   * @see [[maximumList]] for maximum instead of minimum.
+   * @see
+   *   [[maximumList]] for maximum instead of minimum.
    */
   def minimumList[A](fa: F[A])(implicit A: Order[A]): List[A] =
     foldLeft(fa, List.empty[A]) {
@@ -274,13 +283,15 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     }.reverse
 
   /**
-   * Find all the maximum `A` items in this structure.
-   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   * Find all the maximum `A` items in this structure. For all elements in the result Order.eqv(x, y) is true. Preserves
+   * order.
    *
-   * @see [[Reducible#maximumNel]] for a version that doesn't need to return an
-   * `Option` for structures that are guaranteed to be non-empty.
+   * @see
+   *   [[Reducible#maximumNel]] for a version that doesn't need to return an `Option` for structures that are guaranteed
+   *   to be non-empty.
    *
-   * @see [[minimumList]] for minimum instead of maximum.
+   * @see
+   *   [[minimumList]] for minimum instead of maximum.
    */
   def maximumList[A](fa: F[A])(implicit A: Order[A]): List[A] =
     foldLeft(fa, List.empty[A]) {
@@ -290,25 +301,29 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     }.reverse
 
   /**
-   * Find all the minimum `A` items in this structure according to an `Order.by(f)`.
-   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   * Find all the minimum `A` items in this structure according to an `Order.by(f)`. For all elements in the result
+   * Order.eqv(x, y) is true. Preserves order.
    *
-   * @see [[Reducible#minimumByNel]] for a version that doesn't need to return an
-   * `Option` for structures that are guaranteed to be non-empty.
+   * @see
+   *   [[Reducible#minimumByNel]] for a version that doesn't need to return an `Option` for structures that are
+   *   guaranteed to be non-empty.
    *
-   * @see [[maximumByList]] for maximum instead of minimum.
+   * @see
+   *   [[maximumByList]] for maximum instead of minimum.
    */
   def minimumByList[A, B: Order](fa: F[A])(f: A => B): List[A] =
     minimumList(fa)(Order.by(f))
 
   /**
-   * Find all the maximum `A` items in this structure according to an `Order.by(f)`.
-   * For all elements in the result Order.eqv(x, y) is true. Preserves order.
+   * Find all the maximum `A` items in this structure according to an `Order.by(f)`. For all elements in the result
+   * Order.eqv(x, y) is true. Preserves order.
    *
-   * @see [[Reducible#maximumByNel]] for a version that doesn't need to return an
-   * `Option` for structures that are guaranteed to be non-empty.
+   * @see
+   *   [[Reducible#maximumByNel]] for a version that doesn't need to return an `Option` for structures that are
+   *   guaranteed to be non-empty.
    *
-   * @see [[minimumByList]] for minimum instead of maximum.
+   * @see
+   *   [[minimumByList]] for minimum instead of maximum.
    */
   def maximumByList[A, B: Order](fa: F[A])(f: A => B): List[A] =
     maximumList(fa)(Order.by(f))
@@ -341,8 +356,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     }.value
 
   /**
-   * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
-   * instead of `PartialFunction`s.
+   * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]` instead of `PartialFunction`s.
    * {{{
    * scala> import cats.syntax.all._
    * scala> val keys = List(1, 2, 4, 5)
@@ -363,8 +377,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Monadic version of `collectFirstSome`.
    *
-   * If there are no elements, the result is `None`. `collectFirstSomeM` short-circuits,
-   * i.e. once a Some element is found, no further effects are produced.
+   * If there are no elements, the result is `None`. `collectFirstSomeM` short-circuits, i.e. once a Some element is
+   * found, no further effects are produced.
    *
    * For example:
    * {{{
@@ -447,31 +461,27 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Convert F[A] to an Iterable[A].
    *
-   * This method may be overridden for the sake of performance, but implementers should take care
-   * not to force a full materialization of the collection.
+   * This method may be overridden for the sake of performance, but implementers should take care not to force a full
+   * materialization of the collection.
    */
   def toIterable[A](fa: F[A]): Iterable[A] =
     cats.compat.FoldableCompat.toIterable(fa)(self)
 
   /**
-   * Fold implemented by mapping `A` values into `B` and then
-   * combining them using the given `Monoid[B]` instance.
+   * Fold implemented by mapping `A` values into `B` and then combining them using the given `Monoid[B]` instance.
    */
   def foldMap[A, B](fa: F[A])(f: A => B)(implicit B: Monoid[B]): B =
     foldLeft(fa, B.empty)((b, a) => B.combine(b, f(a)))
 
   /**
-   * Perform a stack-safe monadic left fold from the source context `F`
-   * into the target monad `G`.
+   * Perform a stack-safe monadic left fold from the source context `F` into the target monad `G`.
    *
-   * This method can express short-circuiting semantics. Even when
-   * `fa` is an infinite structure, this method can potentially
-   * terminate if the `foldRight` implementation for `F` and the
-   * `tailRecM` implementation for `G` are sufficiently lazy.
+   * This method can express short-circuiting semantics. Even when `fa` is an infinite structure, this method can
+   * potentially terminate if the `foldRight` implementation for `F` and the `tailRecM` implementation for `G` are
+   * sufficiently lazy.
    *
-   * Instances for concrete structures (e.g. `List`) will often
-   * have a more efficient implementation than the default one
-   * in terms of `foldRight`.
+   * Instances for concrete structures (e.g. `List`) will often have a more efficient implementation than the default
+   * one in terms of `foldRight`.
    */
   def foldM[G[_], A, B](fa: F[A], z: B)(f: (B, A) => G[B])(implicit G: Monad[G]): G[B] = {
     val src = Foldable.Source.fromFoldable(fa)(self)
@@ -501,8 +511,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     foldMapA(fga)(identity)
 
   /**
-   * Fold implemented by mapping `A` values into `B` in a context `G` and then
-   * combining them using the `MonoidK[G]` instance.
+   * Fold implemented by mapping `A` values into `B` in a context `G` and then combining them using the `MonoidK[G]`
+   * instance.
    *
    * {{{
    * scala> import cats._, cats.implicits._
@@ -525,8 +535,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     foldM(fa, z)(f)
 
   /**
-   * Monadic folding on `F` by mapping `A` values to `G[B]`, combining the `B`
-   * values using the given `Monoid[B]` instance.
+   * Monadic folding on `F` by mapping `A` values to `G[B]`, combining the `B` values using the given `Monoid[B]`
+   * instance.
    *
    * Similar to [[foldM]], but using a `Monoid[B]`. Will typically be more efficient than [[foldMapA]].
    *
@@ -546,8 +556,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     foldM(fa, B.empty)((b, a) => G.map(f(a))(B.combine(b, _)))
 
   /**
-   * Fold in an [[Applicative]] context by mapping the `A` values to `G[B]`. combining
-   * the `B` values using the given `Monoid[B]` instance.
+   * Fold in an [[Applicative]] context by mapping the `A` values to `G[B]`. combining the `B` values using the given
+   * `Monoid[B]` instance.
    *
    * Similar to [[foldMapM]], but will typically be less efficient.
    *
@@ -569,8 +579,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Traverse `F[A]` using `Applicative[G]`.
    *
-   * `A` values will be mapped into `G[B]` and combined using
-   * `Applicative#map2`.
+   * `A` values will be mapped into `G[B]` and combined using `Applicative#map2`.
    *
    * For example:
    *
@@ -584,9 +593,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * res1: Option[Unit] = None
    * }}}
    *
-   * This method is primarily useful when `G[_]` represents an action
-   * or effect, and the specific `A` aspect of `G[A]` is not otherwise
-   * needed.
+   * This method is primarily useful when `G[_]` represents an action or effect, and the specific `A` aspect of `G[A]`
+   * is not otherwise needed.
    */
   def traverseVoid[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
     foldRight(fa, Always(G.unit)) { (a, acc) =>
@@ -598,7 +606,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Alias for `traverseVoid`.
    *
-   * @deprecated this method should be considered as deprecated and replaced by `traverseVoid`.
+   * @deprecated
+   *   this method should be considered as deprecated and replaced by `traverseVoid`.
    */
   def traverse_[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
     traverseVoid(fa)(f)
@@ -606,8 +615,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Sequence `F[G[A]]` using `Applicative[G]`.
    *
-   * This is similar to `traverseVoid` except it operates on `F[G[A]]`
-   * values, so no additional functions are needed.
+   * This is similar to `traverseVoid` except it operates on `F[G[A]]` values, so no additional functions are needed.
    *
    * For example:
    *
@@ -626,7 +634,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Alias for `sequenceVoid`.
    *
-   * @deprecated this method should be considered as deprecated and replaced by `sequenceVoid`.
+   * @deprecated
+   *   this method should be considered as deprecated and replaced by `sequenceVoid`.
    */
   def sequence_[G[_]: Applicative, A](fga: F[G[A]]): G[Unit] =
     sequenceVoid(fga)
@@ -634,8 +643,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Fold implemented using the given `MonoidK[G]` instance.
    *
-   * This method is identical to fold, except that we use the universal monoid (`MonoidK[G]`)
-   * to get a `Monoid[G[A]]` instance.
+   * This method is identical to fold, except that we use the universal monoid (`MonoidK[G]`) to get a `Monoid[G[A]]`
+   * instance.
    *
    * For example:
    *
@@ -658,8 +667,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Find the first element matching the effectful predicate, if one exists.
    *
-   * If there are no elements, the result is `None`. `findM` short-circuits,
-   * i.e. once an element is found, no further effects are produced.
+   * If there are no elements, the result is `None`. `findM` short-circuits, i.e. once an element is found, no further
+   * effects are produced.
    *
    * For example:
    * {{{
@@ -704,8 +713,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Check whether at least one element satisfies the effectful predicate.
    *
-   * If there are no elements, the result is `false`.  `existsM` short-circuits,
-   * i.e. once a `true` result is encountered, no further effects are produced.
+   * If there are no elements, the result is `false`. `existsM` short-circuits, i.e. once a `true` result is
+   * encountered, no further effects are produced.
    *
    * For example:
    *
@@ -739,8 +748,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   /**
    * Check whether all elements satisfy the effectful predicate.
    *
-   * If there are no elements, the result is `true`.  `forallM` short-circuits,
-   * i.e. once a `false` result is encountered, no further effects are produced.
+   * If there are no elements, the result is `true`. `forallM` short-circuits, i.e. once a `false` result is
+   * encountered, no further effects are produced.
    *
    * For example:
    *
@@ -780,8 +789,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     }.toList
 
   /**
-   * Separate this Foldable into a Tuple by a separating function `A => Either[B, C]`
-   * Equivalent to `Functor#map` and then `Alternative#separate`.
+   * Separate this Foldable into a Tuple by a separating function `A => Either[B, C]` Equivalent to `Functor#map` and
+   * then `Alternative#separate`.
    *
    * {{{
    * scala> import cats.syntax.all._
@@ -813,15 +822,13 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     }.toList
 
   /**
-   * Convert F[A] to a List[A], retaining only initial elements which
-   * match `p`.
+   * Convert F[A] to a List[A], retaining only initial elements which match `p`.
    */
   def takeWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
     toIterable(fa).iterator.takeWhile(p).toList
 
   /**
-   * Convert F[A] to a List[A], dropping all initial elements which
-   * match `p`.
+   * Convert F[A] to a List[A], dropping all initial elements which match `p`.
    */
   def dropWhile_[A](fa: F[A])(p: A => Boolean): List[A] =
     foldLeft(fa, mutable.ListBuffer.empty[A]) { (buf, a) =>
@@ -883,8 +890,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     foldMap(fa)(f)
 
   /**
-   * Separate this Foldable into a Tuple by a separating function `A => H[B, C]` for some `Bifoldable[H]`
-   * Equivalent to `Functor#map` and then `Alternative#separate`.
+   * Separate this Foldable into a Tuple by a separating function `A => H[B, C]` for some `Bifoldable[H]` Equivalent to
+   * `Functor#map` and then `Alternative#separate`.
    *
    * {{{
    * scala> import cats.syntax.all._, cats.Foldable, cats.data.Const
@@ -938,8 +945,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   }
 
   /**
-   * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]`
-   * Equivalent to `Traverse#traverse` over `Alternative#separate`
+   * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]` Equivalent to
+   * `Traverse#traverse` over `Alternative#separate`
    *
    * {{{
    * scala> import cats.syntax.all._, cats.Foldable, cats.Eval
@@ -986,12 +993,11 @@ object Foldable {
   /**
    * Isomorphic to
    *
-   *     type Source[+A] = () => Option[(A, Source[A])]
+   * type Source[+A] = () => Option[(A, Source[A])]
    *
    * (except that recursive type aliases are not allowed).
    *
-   * It could be made a value class after
-   * https://github.com/scala/bug/issues/9600 is resolved.
+   * It could be made a value class after https://github.com/scala/bug/issues/9600 is resolved.
    */
   sealed abstract private[cats] class Source[+A] {
     def uncons: Option[(A, Eval[Source[A]])]
