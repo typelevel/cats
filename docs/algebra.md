@@ -47,18 +47,21 @@ The `algebra.ring` package contains more sophisticated structures which combine 
 
 All ring-like structures are associative for both `+` and `*`, have commutative `+`, and have a `zero` element (an identity for `+`).
 
-|Name                |Has `negate`?|Has `1`?|Has `reciprocal`?|Commutative `*`?|
-|--------------------|-------------|--------|-----------------|----------------|
-|Semiring            |             |        |                 |                |
-|Rng                 |            ✓|        |                 |                |
-|Rig                 |             |       ✓|                 |                |
-|CommutativeRig      |             |       ✓|                 |               ✓|
-|Ring                |            ✓|       ✓|                 |                |
-|CommutativeRing     |            ✓|       ✓|                 |               ✓|
-|Semifield           |             |       ✓|                ✓|                |
-|CommutativeSemifield|             |       ✓|                ✓|               ✓|
-|Field               |            ✓|       ✓|                ✓|               ✓|
-
+| Name                 | Has `negate`?  | Has `1`?  | Has `reciprocal`?  | Commutative `*`?  | Has `gcd`/`lcm`?  | Has `quot`/`mod`?  |
+|----------------------|----------------|-----------|--------------------|-------------------|-------------------|--------------------|
+| Semiring             |                |           |                    |                   |                   |                    |
+| Rng                  | ✓              |           |                    |                   |                   |                    |
+| Rig                  |                | ✓         |                    |                   |                   |                    |
+| CommutativeSemiring  |                |           |                    | ✓                 |                   |                    |
+| CommutativeRng       | ✓              |           |                    | ✓                 |                   |                    |
+| CommutativeRig       |                | ✓         |                    | ✓                 |                   |                    |
+| Ring                 | ✓              | ✓         |                    |                   |                   |                    |
+| CommutativeRing      | ✓              | ✓         |                    | ✓                 |                   |                    |
+| Semifield            |                | ✓         | ✓                  |                   |                   |                    |
+| CommutativeSemifield |                | ✓         | ✓                  | ✓                 |                   |                    |
+| GCDRing              | ✓              | ✓         |                    | ✓                 | ✓                 |                    |
+| EuclideanRing        | ✓              | ✓         |                    | ✓                 | ✓                 | ✓                  |
+| Field                | ✓              | ✓         | ✓                  | ✓                 | ✓                 | ✓                  |
 
 (For a description of what the terminology in each column means, see [§algebraic properties and terminology](#algebraic-properties-and-terminology).)
 
