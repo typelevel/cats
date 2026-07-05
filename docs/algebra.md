@@ -91,18 +91,19 @@ The law of the excluded middle can be expressed as:
 
  - `(a ∨ (a → 0))` = `1`
 
-|Name                      |Has `join`?|Has `meet`?|Has `zero`?|Has `one`?|Distributive|Has `imp`?|Excludes middle?|
-|--------------------------|-----------|-----------|-----------|----------|------------|----------|----------------|
-|JoinSemilattice           |          ✓|           |           |          |            |          |                |
-|MeetSemilattice           |           |          ✓|           |          |            |          |                |
-|BoundedJoinSemilattice    |          ✓|           |          ✓|          |            |          |                |
-|BoundedMeetSemilattice    |           |          ✓|           |         ✓|            |          |                |
-|Lattice                   |          ✓|          ✓|           |          |            |          |                |
-|DistributiveLattice       |          ✓|          ✓|           |          |           ✓|          |                |
-|BoundedLattice            |          ✓|          ✓|          ✓|         ✓|            |          |                |
-|BoundedDistributiveLattice|          ✓|          ✓|          ✓|         ✓|           ✓|          |                |
-|Heyting                   |          ✓|          ✓|          ✓|         ✓|           ✓|         ✓|                |
-|Bool                      |          ✓|          ✓|          ✓|         ✓|           ✓|         ✓|               ✓|
+| Name                       | Has `join`? | Has `meet`? | Has `zero`? | Has `one`? | Distributive | Has `imp`? | Excludes middle? |
+|----------------------------|-------------|-------------|-------------|------------|--------------|------------|------------------|
+| JoinSemilattice            | ✓           |             |             |            |              |            |                  |
+| MeetSemilattice            |             | ✓           |             |            |              |            |                  |
+| BoundedJoinSemilattice     | ✓           |             | ✓           |            |              |            |                  |
+| BoundedMeetSemilattice     |             | ✓           |             | ✓          |              |            |                  |
+| Lattice                    | ✓           | ✓           |             |            |              |            |                  |
+| DistributiveLattice        | ✓           | ✓           |             |            | ✓            |            |                  |
+| BoundedLattice             | ✓           | ✓           | ✓           | ✓          |              |            |                  |
+| BoundedDistributiveLattice | ✓           | ✓           | ✓           | ✓          | ✓            |            |                  |
+| Heyting                    | ✓           | ✓           | ✓           | ✓          | ✓            | ✓          |                  |
+| GenBool                    | ✓           | ✓           | ✓           |            | ✓            |            |                  |
+| Bool                       | ✓           | ✓           | ✓           | ✓          | ✓            | ✓          | ✓                |
 
 Note that a `BoundedDistributiveLattice` gives you a `CommutativeRig`, but not the other way around: rigs aren't distributive with `a + (b * c) = (a + b) * (a + c)`.
 
