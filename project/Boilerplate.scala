@@ -626,7 +626,9 @@ object Boilerplate {
       |package syntax
       |
       |trait FunctionApplySyntax {
+      |  @deprecated("Use the variant that uses NonEmptyParallel instead of Parallel - catsSyntaxFunction1Apply2", "2.14.0")
       |  def catsSyntaxFunction1Apply[T, A0](f: Function1[A0, T]): Function1ApplyOps[T, A0] = new Function1ApplyOps(f)
+         -  @deprecated("Use the variant that uses NonEmptyParallel instead of Parallel - catsSyntaxFunction${arity}Apply2", "2.14.0")
          -  def catsSyntaxFunction${arity}Apply[T, ${`A..N`}](f: $function): Function${arity}ApplyOps[T, ${`A..N`}] = new Function${arity}ApplyOps(f)
       |}
       |
