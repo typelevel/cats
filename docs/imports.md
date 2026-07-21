@@ -8,7 +8,7 @@ import cats.data._
 import cats.syntax.all._
 ```
 
-The `cats._` import brings in quite a few [type classes](typeclasses.md) (similar to interfaces) such as [Monad](typeclasses/monad.md), [Semigroup](typeclasses/semigroup.md), and [Foldable](typeclasses/foldable.md). Instead of the entire `cats` package, you can import only the types that you need, for example:
+The `cats._` import brings in quite a few [type classes](typeclasses/index.md) (similar to interfaces) such as [Monad](typeclasses/monad.md), [Semigroup](typeclasses/semigroup.md), and [Foldable](typeclasses/foldable.md). Instead of the entire `cats` package, you can import only the types that you need, for example:
 
 ```scala mdoc:reset:silent
 import cats.Monad
