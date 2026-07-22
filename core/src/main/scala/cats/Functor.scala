@@ -36,8 +36,8 @@ trait Functor[F[_]] extends Invariant[F] { self =>
   // derived methods
 
   /**
-   * Alias for [[map]], since [[map]] can't be injected as syntax if
-   * the implementing type already had a built-in `.map` method.
+   * Alias for [[map]], since [[map]] can't be injected as syntax if the implementing type already had a built-in `.map`
+   * method.
    *
    * Example:
    * {{{
@@ -54,13 +54,11 @@ trait Functor[F[_]] extends Invariant[F] { self =>
   /**
    * Lifts natural subtyping covariance of covariant Functors.
    *
-   * NOTE: In certain (perhaps contrived) situations that rely on universal
-   * equality this can result in a `ClassCastException`, because it is
-   * implemented as a type cast. It could be implemented as `map(identity)`, but
-   * according to the functor laws, that should be equal to `fa`, and a type
-   * cast is often much more performant.
-   * See [[https://github.com/typelevel/cats/issues/1080#issuecomment-225892635 this example]]
-   * of `widen` creating a `ClassCastException`.
+   * NOTE: In certain (perhaps contrived) situations that rely on universal equality this can result in a
+   * `ClassCastException`, because it is implemented as a type cast. It could be implemented as `map(identity)`, but
+   * according to the functor laws, that should be equal to `fa`, and a type cast is often much more performant. See
+   * [[https://github.com/typelevel/cats/issues/1080#issuecomment-225892635 this example]] of `widen` creating a
+   * `ClassCastException`.
    *
    * Example:
    * {{{
@@ -102,8 +100,7 @@ trait Functor[F[_]] extends Invariant[F] { self =>
   def void[A](fa: F[A]): F[Unit] = as(fa, ())
 
   /**
-   * Tuple the values in fa with the result of applying a function
-   * with the value
+   * Tuple the values in fa with the result of applying a function with the value
    *
    * Example:
    * {{{
@@ -116,7 +113,7 @@ trait Functor[F[_]] extends Invariant[F] { self =>
   def fproduct[A, B](fa: F[A])(f: A => B): F[(A, B)] = map(fa)(a => a -> f(a))
 
   /**
-   *  Pair the result of function application with `A`.
+   * Pair the result of function application with `A`.
    *
    * Example:
    * {{{
@@ -171,8 +168,7 @@ trait Functor[F[_]] extends Invariant[F] { self =>
   def tupleRight[A, B](fa: F[A], b: B): F[(A, B)] = map(fa)(a => (a, b))
 
   /**
-   * Modifies the `A` value in `F[A]` with the supplied function, if the function is defined for the value.
-   * Example:
+   * Modifies the `A` value in `F[A]` with the supplied function, if the function is defined for the value. Example:
    * {{{
    * scala> import cats.syntax.all._
    *

@@ -26,18 +26,17 @@ import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Arbitrary.arbitrary
 
 /**
- * Helpers provides new concrete types where we control exactly which
- * type class instances are available. For example, the SL type has:
+ * Helpers provides new concrete types where we control exactly which type class instances are available. For example,
+ * the SL type has:
  *
- *  - Semilattice[SL]
- *  - Arbitrary[SL]
- *  - Eq[SL]
+ *   - Semilattice[SL]
+ *   - Arbitrary[SL]
+ *   - Eq[SL]
  *
  * (All types in Helpers have Arbitrary and Eq instances.)
  *
- * These are useful when a type constructor (e.g. Function0) can
- * produce many different instances depending on which instances are
- * available for its type parameter.
+ * These are useful when a type constructor (e.g. Function0) can produce many different instances depending on which
+ * instances are available for its type parameter.
  */
 object Helpers {
 

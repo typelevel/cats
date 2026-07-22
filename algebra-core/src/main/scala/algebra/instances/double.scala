@@ -37,12 +37,11 @@ trait DoubleInstances extends cats.kernel.instances.DoubleInstances {
 }
 
 /**
- * Due to the way floating-point equality works, this instance is not
- * lawful under equality, but is correct when taken as an
- * approximation of an exact value.
+ * Due to the way floating-point equality works, this instance is not lawful under equality, but is correct when taken
+ * as an approximation of an exact value.
  *
- * If you would prefer an absolutely lawful fractional value, you'll
- * need to investigate rational numbers or more exotic types.
+ * If you would prefer an absolutely lawful fractional value, you'll need to investigate rational numbers or more exotic
+ * types.
  */
 class DoubleAlgebra extends Field[Double] with Serializable {
 

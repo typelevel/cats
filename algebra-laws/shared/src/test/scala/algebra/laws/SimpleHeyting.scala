@@ -28,8 +28,8 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Gen.oneOf
 
 /**
- * The simplest Heyting algebra that is not already a Boolean algebra.
- * Taken from https://en.wikipedia.org/wiki/Heyting_algebra#Examples
+ * The simplest Heyting algebra that is not already a Boolean algebra. Taken from
+ * https://en.wikipedia.org/wiki/Heyting_algebra#Examples
  */
 sealed trait SimpleHeyting
 

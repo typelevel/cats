@@ -31,11 +31,9 @@ import scala.collection.mutable
 import scala.collection.immutable.{SortedMap, TreeMap, TreeSet, VectorBuilder}
 
 /**
- * A data type which represents a `Vector` guaranteed to contain at least one element.
- * <br/>
- * Note that the constructor is `private` to prevent accidental construction of an empty
- * `NonEmptyVector`. However, due to https://issues.scala-lang.org/browse/SI-6601, on
- * Scala 2.10, this may be bypassed due to a compiler bug.
+ * A data type which represents a `Vector` guaranteed to contain at least one element. <br/> Note that the constructor
+ * is `private` to prevent accidental construction of an empty `NonEmptyVector`. However, due to
+ * https://issues.scala-lang.org/browse/SI-6601, on Scala 2.10, this may be bypassed due to a compiler bug.
  */
 final class NonEmptyVector[+A] private (val toVector: Vector[A])
     extends AnyVal
@@ -59,8 +57,8 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
     if (toVector.isDefinedAt(i)) Some(new NonEmptyVector(toVector.updated(i, a))) else None
 
   /**
-   * Updates the element at the index, or throws an `IndexOutOfBoundsException`
-   * if none exists (if `i` does not satisfy `0 <= i < length`).
+   * Updates the element at the index, or throws an `IndexOutOfBoundsException` if none exists (if `i` does not satisfy
+   * `0 <= i < length`).
    */
   def updatedUnsafe[AA >: A](i: Int, a: AA): NonEmptyVector[AA] = new NonEmptyVector(toVector.updated(i, a))
 
@@ -126,7 +124,7 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
 
   /**
    * Append another `Vector` to this, producing a new `NonEmptyVector`
-   * 
+   *
    * {{{
    * scala> import cats.data.NonEmptyVector
    * scala> val nev = NonEmptyVector.of(1, 2, 3)
@@ -221,10 +219,8 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
   /**
    * Typesafe equality operator.
    *
-   * This method is similar to == except that it only allows two
-   * NonEmptyVector[A] values to be compared to each other, and uses
-   * equality provided by Eq[_] instances, rather than using the
-   * universal equality provided by .equals.
+   * This method is similar to == except that it only allows two NonEmptyVector[A] values to be compared to each other,
+   * and uses equality provided by Eq[_] instances, rather than using the universal equality provided by .equals.
    */
   def ===[AA >: A](that: NonEmptyVector[AA])(implicit A: Eq[AA]): Boolean =
     Eq[Vector[AA]].eqv(toVector, that.toVector)
@@ -232,9 +228,8 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
   /**
    * Typesafe stringification method.
    *
-   * This method is similar to .toString except that it stringifies
-   * values according to Show[_] instances, rather than using the
-   * universal .toString method.
+   * This method is similar to .toString except that it stringifies values according to Show[_] instances, rather than
+   * using the universal .toString method.
    */
   def show[AA >: A](implicit AA: Show[AA]): String =
     s"NonEmpty${Show[Vector[AA]].show(toVector)}"
@@ -293,8 +288,8 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
     new NonEmptyVector(toVector.sorted(AA.toOrdering))
 
   /**
-   * Groups elements inside this `NonEmptyVector` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * Groups elements inside this `NonEmptyVector` according to the `Order` of the keys produced by the given mapping
+   * function.
    *
    * {{{
    * scala> import scala.collection.immutable.SortedMap
@@ -326,8 +321,8 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
   }
 
   /**
-   * Groups elements inside this `NonEmptyVector` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * Groups elements inside this `NonEmptyVector` according to the `Order` of the keys produced by the given mapping
+   * function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyMap, NonEmptyVector}

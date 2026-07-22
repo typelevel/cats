@@ -58,11 +58,11 @@ private[syntax] trait BitraverseSyntaxBinCompat0 {
 final private[syntax] class BitraverseOpsBinCompat0[F[_, _], A, B](val fab: F[A, B]) extends AnyVal {
 
   /**
-   *  Traverse over the left side of the structure.
-   *  For the right side, use the standard `traverse` from [[cats.Traverse]].
+   * Traverse over the left side of the structure. For the right side, use the standard `traverse` from
+   * [[cats.Traverse]].
    *
-   *  Example:
-   *  {{{
+   * Example:
+   * {{{
    *  scala> import cats.syntax.all._
    *
    *  scala> val intAndString: (Int, String) = (7, "test")
@@ -72,7 +72,7 @@ final private[syntax] class BitraverseOpsBinCompat0[F[_, _], A, B](val fab: F[A,
    *
    *  scala> intAndString.leftTraverse(i => Option(i).filter(_ < 5))
    *  res2: Option[(Int, String)] = None
-   *  }}}
+   * }}}
    */
   def leftTraverse[G[_], C](f: A => G[C])(implicit F: Bitraverse[F], G: Applicative[G]): G[F[C, B]] =
     F.leftTraverse[G, A, B, C](fab)(f)
@@ -81,8 +81,7 @@ final private[syntax] class BitraverseOpsBinCompat0[F[_, _], A, B](val fab: F[A,
 final class LeftNestedBitraverseOps[F[_, _], G[_], A, B](val fgab: F[G[A], B]) extends AnyVal {
 
   /**
-   * Sequence the left side of the structure.
-   * For the right side, use the standard `sequence` from [[cats.Traverse]].
+   * Sequence the left side of the structure. For the right side, use the standard `sequence` from [[cats.Traverse]].
    *
    * Example:
    * {{{
