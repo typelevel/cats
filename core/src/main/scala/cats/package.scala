@@ -155,6 +155,8 @@ package object cats {
       override def get[A](fa: Id[A])(idx: Long): Option[A] =
         if (idx == 0L) Some(fa) else None
       override def isEmpty[A](fa: Id[A]): Boolean = false
+
+      override val traverseStrategy: Apply.TraverseStrategy[Id] = Apply.TraverseStrategy.direct(this)
     }
 
   /**
