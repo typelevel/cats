@@ -93,7 +93,7 @@ catches exceptions in `.map` and `.flatMap`, some people are skeptical
 that `Try` fulfills the necessary functor/monad laws.
 
 Alleycats provides a `Monad[Try]`. You can import this instance via
-`import alleycats.std.try._`.
+`import alleycats.std.try_._`.
 
 ### Iterable\[\_\] instances
 
