@@ -25,17 +25,70 @@ package data
 import cats.Contravariant
 
 /**
- * [[Func]] is a function `A => F[B]`.
+ * [[Func]] is a function `A => F[B]`, where `F` is a functor.
  *
- * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
+ * `Func` is similar to [[Kleisli]], but with weaker requirements. While `Kleisli` requires `FlatMap` (or `Monad`)
+ * for sequential composition, `Func` only requires `Functor` and supports parallel (applicative) composition via
+ * [[AppFunc]]. This makes `Func` useful when you want to compose effects in parallel rather than sequentially.
+ *
+ * '''Kleisli vs Func'''
+ *
+ * `Kleisli` is for ''sequential'' composition: `a => F[B]` andThen `b => F[C]` requires the output of the first
+ * to feed into the second, and needs `FlatMap` to chain them. `Func` is for ''parallel'' composition: given
+ * `a => F[B]` and `a => F[C]`, we can combine them into `a => F[(B, C)]` using only `Applicative#product`.
+ *
+ * Example:
+ * {{{
+ * scala> import cats.data._
+ * scala> import cats.syntax.all._
+ *
+ * scala> val parseInt: Func[Option, String, Int] = Func.func(s => scala.util.Try(s.toInt).toOption)
+ * scala> val double: Func[Option, String, Double] = Func.func(s => scala.util.Try(s.toDouble).toOption)
+ *
+ * scala> // Compose in parallel: parse and double the same input independently
+ * scala> val combined: Func[Option, String, (Int, Double)] = parseInt.product(double)
+ * scala> combined.run("42")
+ * res0: Option[(Int, Double)] = Some((42,42.0))
+ * }}}
+ *
+ * For more powerful composition (compose, andThen, traverse), see [[AppFunc]].
+ *
+ * See also: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
  */
 sealed abstract class Func[F[_], A, B] { self =>
   def run: A => F[B]
+
+  /**
+   * Lift a function `B => C` over this `Func`, producing a `Func[F, A, C]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data._
+   * scala> import cats.syntax.all._
+   *
+   * scala> val f: Func[Option, Int, Int] = Func.func(i => Some(i + 1))
+   * scala> f.map(_ * 10).run(5)
+   * res0: Option[Int] = Some(60)
+   * }}}
+   */
   def map[C](f: B => C)(implicit FF: Functor[F]): Func[F, A, C] =
     Func.func(a => FF.map(self.run(a))(f))
 
   /**
-   * Modify the context `F` using transformation `f`.
+   * Modify the context `F` using a natural transformation `f: F ~> G`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data._
+   * scala> import cats.arrow.FunctionK
+   * scala> val f: Func[List, Int, Int] = Func.func(i => List(i + 1))
+   * scala> val toOption: List ~> Option = FunctionK.from {
+   *      |   case Nil => None
+   *      |   case h :: _ => Some(h)
+   *      | }
+   * scala> f.mapK(toOption).run(5)
+   * res0: Option[Int] = Some(6)
+   * }}}
    */
   def mapK[G[_]](f: F ~> G): Func[G, A, B] =
     Func.func(a => f(run(a)))
@@ -44,7 +97,15 @@ sealed abstract class Func[F[_], A, B] { self =>
 object Func extends FuncInstances {
 
   /**
-   * function `A => F[B]`.
+   * Create a `Func` from a function `A => F[B]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data._
+   * scala> val f: Func[Option, String, Int] = Func.func(s => scala.util.Try(s.toInt).toOption)
+   * scala> f.run("42")
+   * res0: Option[Int] = Some(42)
+   * }}}
    */
   def func[F[_], A, B](run0: A => F[B]): Func[F, A, B] =
     new Func[F, A, B] {
@@ -52,7 +113,24 @@ object Func extends FuncInstances {
     }
 
   /**
-   * applicative function.
+   * Create an [[AppFunc]] (applicative function) from a function `A => F[B]`.
+   *
+   * `AppFunc` supports parallel composition via `product`, `compose`, `andThen`, and `traverse`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data._
+   * scala> import cats.syntax.all._
+   *
+   * scala> val parse: AppFunc[Option, String, Int] =
+   *      |   Func.appFunc(s => scala.util.Try(s.toInt).toOption)
+   * scala> val double: AppFunc[Option, String, Double] =
+   *      |   Func.appFunc(s => scala.util.Try(s.toDouble * 2).toOption)
+   *
+   * scala> val combined = parse.product(double)
+   * scala> combined.run("21")
+   * res0: Option[(Int, Double)] = Some((21,42.0))
+   * }}}
    */
   def appFunc[F[_], A, B](run0: A => F[B])(implicit FF: Applicative[F]): AppFunc[F, A, B] =
     new AppFunc[F, A, B] {
@@ -120,10 +198,45 @@ sealed private[data] trait FuncApplicative[F[_], C] extends FuncApply[F, C] with
 
 /**
  * An implementation of [[Func]] that's specialized to [[Applicative]].
+ *
+ * `AppFunc` is the more powerful version of [[Func]], requiring an `Applicative` instance for `F`.
+ * It supports parallel composition via `product`, `compose`, `andThen`, and `traverse`.
+ *
+ * While [[Kleisli]] is for ''sequential'' composition (requires `FlatMap`/`Monad`), `AppFunc` is for
+ * ''parallel'' composition (requires only `Applicative`). This means `AppFunc` can compose effects
+ * that don't depend on each other, running them in parallel.
+ *
+ * Example:
+ * {{{
+ * scala> import cats.data._
+ * scala> import cats.syntax.all._
+ *
+ * scala> val validateName: AppFunc[Either[String, *], Config, String] =
+ *      |   Func.appFunc(c => if (c.name.nonEmpty) Right(c.name) else Left("Name required"))
+ * scala> val validateAge: AppFunc[Either[String, *], Config, Int] =
+ *      |   Func.appFunc(c => if (c.age > 0) Right(c.age) else Left("Invalid age"))
+ *
+ * scala> // Combine validators: both must pass
+ * scala> val combined = validateName.product(validateAge)
+ * }}}
  */
 sealed abstract class AppFunc[F[_], A, B] extends Func[F, A, B] { self =>
   def F: Applicative[F]
 
+  /**
+   * Combine this `AppFunc` with another in parallel, producing a tuple of results.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data._
+   * scala> import cats.syntax.all._
+   *
+   * scala> val f: AppFunc[Option, Int, Int] = Func.appFunc(i => Some(i + 1))
+   * scala> val g: AppFunc[Option, Int, String] = Func.appFunc(i => Some(i.toString))
+   * scala> f.product(g).run(42)
+   * res0: Option[(Int, String)] = Some((43,"42"))
+   * }}}
+   */
   def product[G[_]](g: AppFunc[G, A, B]): AppFunc[λ[α => Tuple2K[F, G, α]], A, B] = {
     implicit val FF: Applicative[F] = self.F
     implicit val GG: Applicative[G] = g.F
@@ -132,6 +245,23 @@ sealed abstract class AppFunc[F[_], A, B] extends Func[F, A, B] { self =>
     }
   }
 
+  /**
+   * Compose this `AppFunc` with another, where this function's input is the other's output.
+   *
+   * The resulting function's context is `Nested[G, F, *]`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data._
+   * scala> import cats.syntax.all._
+   *
+   * scala> val f: AppFunc[Option, Int, Int] = Func.appFunc(i => Some(i + 1))
+   * scala> val g: AppFunc[Option, String, Int] = Func.appFunc(s => scala.util.Try(s.toInt).toOption)
+   * scala> val composed = f.compose(g)
+   * scala> composed.run("42")
+   * res0: Nested[Option, Option, Int] = Nested(Some(Some(43)))
+   * }}}
+   */
   def compose[G[_], C](g: AppFunc[G, C, A]): AppFunc[Nested[G, F, *], C, B] = {
     implicit val gfApplicative: Applicative[Nested[G, F, *]] = Nested.catsDataApplicativeForNested[G, F](using g.F, F)
     Func.appFunc[Nested[G, F, *], C, B] { (c: C) =>
@@ -139,14 +269,35 @@ sealed abstract class AppFunc[F[_], A, B] extends Func[F, A, B] { self =>
     }
   }
 
+  /**
+   * Compose this `AppFunc` with another, where the other function's input is this function's output.
+   *
+   * This is the opposite direction of `compose`.
+   */
   def andThen[G[_], C](g: AppFunc[G, B, C]): AppFunc[Nested[F, G, *], A, C] =
     g.compose(self)
 
+  /**
+   * Lift a function `B => C` over this `AppFunc`, producing an `AppFunc[F, A, C]`.
+   */
   def map[C](f: B => C): AppFunc[F, A, C] = {
     implicit val FF: Applicative[F] = self.F
     Func.appFunc(a => F.map(self.run(a))(f))
   }
 
+  /**
+   * Apply this function to each element of a traversable structure.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data._
+   * scala> import cats.syntax.all._
+   *
+   * scala> val f: AppFunc[Option, Int, Int] = Func.appFunc(i => Some(i * 2))
+   * scala> f.traverse(List(1, 2, 3))
+   * res0: Option[List[Int]] = Some(List(2, 4, 6))
+   * }}}
+   */
   def traverse[G[_]](ga: G[A])(implicit GG: Traverse[G]): F[G[B]] =
     GG.traverse(ga)(self.run)(using F)
 }
