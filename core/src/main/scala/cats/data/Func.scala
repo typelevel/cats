@@ -45,7 +45,7 @@ import cats.Contravariant
  * scala> val parseInt: Func[Option, String, Int] = Func.func(s => scala.util.Try(s.toInt).toOption)
  * scala> val double: Func[Option, String, Double] = Func.func(s => scala.util.Try(s.toDouble).toOption)
  *
- * scala> // Compose in parallel: parse and double the same input independently
+ * scala> // Compose in parallel: parse the same input into both Int and Double simultaneously
  * scala> val combined: Func[Option, String, (Int, Double)] = parseInt.product(double)
  * scala> combined.run("42")
  * res0: Option[(Int, Double)] = Some((42,42.0))
