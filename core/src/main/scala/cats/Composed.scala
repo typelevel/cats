@@ -64,6 +64,8 @@ private[cats] trait ComposedApply[F[_], G[_]] extends Apply.AbstractApply[λ[α 
 
   override def product[A, B](fga: F[G[A]], fgb: F[G[B]]): F[G[(A, B)]] =
     F.map2(fga, fgb)(G.product)
+
+  override def traverseStrategy = Apply.TraverseStrategy.composeOuter(F.traverseStrategy, G)
 }
 
 private[cats] trait ComposedApplicative[F[_], G[_]] extends ComposedApply[F, G] with Applicative[λ[α => F[G[α]]]] {
