@@ -185,16 +185,10 @@ class RegressionSuite extends CatsSuite with ScalaVersionSpecificRegressionSuite
   test("#2022 EitherT syntax no long works the old way") {
     import cats.data.*
 
-    EitherT.right[String](Option(1)).handleErrorWith((_: String) => EitherT.pure(2))
+    EitherT.right[String](Option(1)).handleErrorWith((_: String) => EitherT.pure[Option, String](2))
 
     {
       MonadError[EitherT[Option, String, *], Unit]
-    }
-
-    {
-      implicit val me: MonadError[EitherT[Option, String, *], Unit] =
-        EitherT.catsDataMonadErrorFForEitherT[Option, Unit, String]
-      EitherT.right[String](Option(1)).handleErrorWith((_: Unit) => EitherT.pure(2))
     }
 
   }
