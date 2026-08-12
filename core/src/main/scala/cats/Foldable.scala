@@ -483,6 +483,9 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     }
   }
 
+  def foldMK[A, G[_], H[_]](fgha: F[G[H[A]]])(implicit G: Monad[G], M: MonoidK[H]): G[H[A]] =
+    foldMapMK(fgha)(identity)
+
   /**
    * Fold implemented using the given `Applicative[G]` and `Monoid[A]` instance.
    *
@@ -499,6 +502,9 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    */
   def foldA[G[_], A](fga: F[G[A]])(implicit G: Applicative[G], A: Monoid[A]): G[A] =
     foldMapA(fga)(identity)
+
+  def foldAK[A, G[_], H[_]](fgha: F[G[H[A]]])(implicit G: Applicative[G], M: MonoidK[H]): G[H[A]] =
+    foldMapAK(fgha)(identity)
 
   /**
    * Fold implemented by mapping `A` values into `B` in a context `G` and then
@@ -545,6 +551,9 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   def foldMapM[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Monad[G], B: Monoid[B]): G[B] =
     foldM(fa, B.empty)((b, a) => G.map(f(a))(B.combine(b, _)))
 
+  def foldMapMK[A, B, G[_], H[_]](fa: F[A])(f: A => G[H[B]])(implicit G: Monad[G], M: MonoidK[H]): G[H[B]] =
+    foldMapM(fa)(f)(G, M.algebra)
+
   /**
    * Fold in an [[Applicative]] context by mapping the `A` values to `G[B]`. combining
    * the `B` values using the given `Monoid[B]` instance.
@@ -565,6 +574,9 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    */
   def foldMapA[G[_], A, B](fa: F[A])(f: A => G[B])(implicit G: Applicative[G], B: Monoid[B]): G[B] =
     foldRight(fa, Eval.now(G.pure(B.empty)))((a, egb) => G.map2Eval(f(a), egb)(B.combine)).value
+
+  def foldMapAK[A, B, G[_], H[_]](fa: F[A])(f: A => G[H[B]])(implicit G: Applicative[G], M: MonoidK[H]): G[H[B]] =
+    foldMapA(fa)(f)(G, M.algebra)
 
   /**
    * Traverse `F[A]` using `Applicative[G]`.
