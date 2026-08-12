@@ -135,3 +135,128 @@ in `Foldable`, there's an alias `foldr`:
 ```scala mdoc
 allFalse.foldr(Eval.True)((a,b) => if (a) b else Eval.False).value
 ```
+
+## collectFirst and collectFirstSome
+
+`collectFirst` finds the first element for which a `PartialFunction` is defined and returns
+the mapped result. `collectFirstSome` is the same idea but uses an `A => Option[B]` instead.
+Both short-circuit — no further elements are examined once a match is found.
+
+```scala mdoc
+val m = Map(2 -> "two", 4 -> "four")
+
+Foldable[List].collectFirst(List(1, 2, 3, 4)) { case n if m.contains(n) => m(n) }
+
+Foldable[List].collectFirst(List(1, 3, 5)) { case n if m.contains(n) => m(n) }
+
+List(1, 2, 3, 4).collectFirstSome(m.get)
+
+List(1, 3, 5).collectFirstSome(m.get)
+```
+
+## collectFold and collectFoldSome
+
+`collectFold` applies a `PartialFunction` to every element where it is defined and
+combines all the results using their `Monoid`. `collectFoldSome` does the same with
+an `A => Option[B]`.
+
+```scala mdoc
+val xs = List(1, 2, 3, 4, 5, 6)
+
+// sum only the even numbers
+Foldable[List].collectFold(xs) { case n if n % 2 == 0 => n }
+
+// same, using Option instead of PartialFunction
+Foldable[List].collectFoldSome(xs)(n => if (n % 2 == 0) Some(n) else None)
+```
+
+## findM
+
+`findM` is a monadic version of `find`. The predicate returns a value in a context `G[_]`
+and the search short-circuits as soon as a `true` result is produced. This is useful when
+the predicate itself performs effects.
+
+```scala mdoc
+val nums = List(1, 2, 3, 4)
+
+// finds first element >= 2; the predicate is wrapped in Either for error handling
+Foldable[List].findM(nums)(n => (n >= 2).asRight[String])
+
+// no element satisfies the predicate
+Foldable[List].findM(nums)(n => (n > 4).asRight[String])
+
+// short-circuits before reaching the element that would fail
+Foldable[List].findM(nums)(n => Either.cond(n < 3, n >= 2, "error"))
+```
+
+## foldMapM and foldMapA
+
+`foldMapM` maps each element into a monadic `G[B]` and combines the results with a
+`Monoid[B]`. It uses `Monad` and will short-circuit on failure (e.g., the first `None`
+in `Option`). `foldMapA` is the `Applicative` variant — it cannot short-circuit but
+works in a broader set of contexts.
+
+```scala mdoc
+val evenOpt: Int => Option[Int] = i => if (i % 2 == 0) Some(i) else None
+
+// all even — succeeds and sums them
+Foldable[List].foldMapM(List(2, 4, 6))(evenOpt)
+
+// contains an odd — short-circuits to None
+Foldable[List].foldMapM(List(2, 3, 6))(evenOpt)
+
+// foldMapA behaves the same for Option
+Foldable[List].foldMapA(List(2, 4, 6))(evenOpt)
+
+Foldable[List].foldMapA(List(2, 3, 6))(evenOpt)
+```
+
+## foldMapK
+
+`foldMapK` is like `foldMap` but the target type `G[B]` is combined using a `MonoidK[G]`
+rather than a plain `Monoid`. This is handy for combining higher-kinded results such as
+`List`, `Option`, or `Vector`.
+
+```scala mdoc
+// look up each key in a map and collect all found values into a List
+val dict = Map(1 -> "one", 3 -> "three")
+Foldable[List].foldMapK(List(1, 2, 3, 4))(dict.get(_).toList)
+```
+
+## minimumByList and maximumByList
+
+Unlike `minimumOption` / `maximumOption`, which return a single `Option[A]`,
+`minimumByList` and `maximumByList` return **all** elements that share the minimum
+(or maximum) key. This is useful when you need every tied winner, not just one.
+
+```scala mdoc
+case class Student(name: String, grade: Int)
+val students = List(
+  Student("Alice", 90),
+  Student("Bob",   75),
+  Student("Carol", 90),
+  Student("Dave",  75)
+)
+
+// all students with the lowest grade
+Foldable[List].minimumByList(students)(_.grade).map(_.name)
+
+// all students with the highest grade
+Foldable[List].maximumByList(students)(_.grade).map(_.name)
+```
+
+## partitionEither
+
+`partitionEither` splits a structure into two collections by applying a function
+`A => Either[B, C]`. All `Left` values end up in the first result; all `Right`
+values in the second. It requires an `Alternative[F]` instance so that the two
+result collections can be built.
+
+```scala mdoc
+val numbers = List(1, 2, 3, 4, 5, 6)
+
+// even numbers go Left as strings, odd numbers go Right
+Foldable[List].partitionEither(numbers) { n =>
+  if (n % 2 == 0) Left(n.toString) else Right(n)
+}
+```
