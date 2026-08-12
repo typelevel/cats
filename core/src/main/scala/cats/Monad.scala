@@ -40,6 +40,16 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    * Collects the results into an arbitrary `Alternative` value, such as a `Vector`.
    * This implementation uses append on each evaluation result,
    * so avoid data structures with non-constant append performance, e.g. `List`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   * scala> import cats.syntax.all._
+   * scala> val appendStr = State { i: String  => (i+"a", i)}
+   * scala> val (result, agg) = appendStr.whileM[Vector](State.inspect(i => !(i.length >= 5))).run("").value
+   * result: String = aaaaa
+   * agg: Vector[String] = Vector("", a, aa, aaa, aaaa)
+   * }}}
    */
 
   def whileM[G[_], A](p: F[Boolean])(body: => F[A])(implicit G: Alternative[G]): F[G[A]] = {
@@ -60,6 +70,15 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    * Execute an action repeatedly as long as the given `Boolean` expression
    * returns `true`. The condition is evaluated before the loop body.
    * Discards results.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   * scala> import cats.syntax.all._
+   * scala> val appendStr = State { i: String  => (i+"a", i)}
+   * scala> val (result, _) = appendStr.whileM_(State.inspect(i => !(i.length >= 3))).run("").value
+   * result: String = aaa
+   * }}}
    */
 
   def whileM_[A](p: F[Boolean])(body: => F[A]): F[Unit] = {
@@ -80,6 +99,16 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    * arbitrary `Alternative` value, such as a `Vector`.
    * This implementation uses append on each evaluation result,
    * so avoid data structures with non-constant append performance, e.g. `List`.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   * scala> import cats.syntax.all._
+   * scala> val increment = State { i: Int  => (i+1, i)}
+   * scala> val (result, aggregation) = increment.untilM[Vector](State.inspect(_ >= 5)).run(-1).value
+   * result: Int = 5
+   * aggregation: Vector[Int] = Vector(-1, 0, 1, 2, 3, 4)
+   * }}}
    */
   def untilM[G[_], A](f: F[A])(cond: => F[Boolean])(implicit G: Alternative[G]): F[G[A]] = {
     val p = Eval.later(cond)
@@ -89,6 +118,15 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   /**
    * Execute an action repeatedly until the `Boolean` condition returns `true`.
    * The condition is evaluated after the loop body. Discards results.
+   * 
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   * scala> import cats.syntax.all._
+   * scala> val increment = State { i: Int  => (i+1, i)}
+   * scala> val (result, _) = increment.untilM_(State.inspect(_ >= 5)).run(-1).value
+   * result: Int = 5
+   * }}}
    */
   def untilM_[A](f: F[A])(cond: => F[Boolean]): F[Unit] = {
     val p = Eval.later(cond)
@@ -98,6 +136,16 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   /**
    * Execute an action repeatedly until its result fails to satisfy the given predicate
    * and return that result, discarding all others.
+   * 
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   * scala> import cats.syntax.all._
+   * scala> val increment = State { i: Int  => (i+1, i)}
+   * scala> val (result, agg) = increment.iterateWhile(_ < 5).run(-1).value
+   * result: Int = 6
+   * agg: Int = 5
+   * }}}
    */
   def iterateWhile[A](f: F[A])(p: A => Boolean): F[A] =
     flatMap(f) { i =>
@@ -107,6 +155,16 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   /**
    * Execute an action repeatedly until its result satisfies the given predicate
    * and return that result, discarding all others.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   * scala> import cats.syntax.all._
+   * scala> val increment = State { i: Int  => (i+1, i)}
+   * scala> val (result, agg) = increment.iterateUntil(_ == 5).run(-1).value
+   * result: Int = 6
+   * agg: Int = 5
+   * }}}
    */
   def iterateUntil[A](f: F[A])(p: A => Boolean): F[A] =
     flatMap(f) { i =>
@@ -116,6 +174,16 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   /**
    * Apply a monadic function iteratively until its result fails
    * to satisfy the given predicate and return that result.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   * scala> import cats.syntax.all._
+   * scala> val increment = State { i: Int  => (i+1, i)}
+   * scala> val (n, sum) = 0.iterateWhileM(s => increment.map(_ + s))(_ < 5).run(0).value
+   * n: Int = 4
+   * sum: Int = 6
+   * }}}
    */
   def iterateWhileM[A](init: A)(f: A => F[A])(p: A => Boolean): F[A] =
     tailRecM(init) { a =>
@@ -128,6 +196,16 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   /**
    * Apply a monadic function iteratively until its result satisfies
    * the given predicate and return that result.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.data.State
+   * scala> import cats.syntax.all._
+   * scala> val increment = State { i: Int  => (i+1, i)}
+   * scala> val (n, sum) = 0.iterateUntilM(s => increment.map(_ + s))(_ > 5).run(0).value
+   * n: Int = 4
+   * sum: Int = 6
+   * }}}
    */
   def iterateUntilM[A](init: A)(f: A => F[A])(p: A => Boolean): F[A] =
     iterateWhileM(init)(f)(!p(_))
