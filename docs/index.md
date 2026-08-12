@@ -65,7 +65,7 @@ We thankfully accept <a href="https://opencollective.com/typelevel/donate">one-t
 
 <script src="/cats/js/sponsors.js"></script>
 
-### Getting Started
+## Getting Started
 
 Cats is available for [Scala.js](http://www.scala-js.org/) and [Scala Native](https://www.scala-native.org/), as well as the standard JVM runtime.
 
@@ -130,7 +130,7 @@ into larger problems.
 If you are being harassed, please contact one of [us](#maintainers)
 immediately so that we can support you.
 
-### Binary compatibility and versioning
+## Binary Compatibility and Versioning
 
 After `1.0.0` release, we [decided](https://github.com/typelevel/cats/issues/1233)
 to use *MAJOR.MINOR.PATCH* [Semantic Versioning 2.0.0](http://semver.org/)
@@ -157,11 +157,11 @@ Any binary breaking changes will require a *MAJOR* version bump, which we will b
 cautious about. We will also consider using `organization` and package name for major
 versioning in the future. But that decision is yet to be made.
 
-### Adopters
+## Adopters
 
 A (non-exhaustive) list of companies that use Cats in production is featured on the [Adopters page]. Don't see yours? [You can add it in a PR!](https://github.com/typelevel/cats/edit/main/ADOPTERS.md) And if you can, consider [supporting us](https://opencollective.com/typelevel).
 
-### Maintainers
+## Maintainers
 
 The current maintainers (people who can merge pull requests) are:
 
@@ -194,7 +194,7 @@ wait for more). For typos, documentation improvements or minor build fix we
 relax this to a single sign-off. More detail in the [process document](https://github.com/typelevel/cats/blob/main/PROCESS.md).
 
 
-### Copyright and License
+## Copyright and License
 
 All code is available to you under the MIT license, available at
 http://opensource.org/licenses/mit-license.php and also in the

@@ -1,4 +1,4 @@
-# Type Classes
+# Overview
 Type classes are a powerful tool used in functional programming to enable ad-hoc polymorphism, more commonly
 known as overloading. Where many object-oriented languages leverage subtyping for polymorphic code, functional
 programming tends towards a combination of parametric polymorphism (think type parameters, like Java generics)
@@ -223,7 +223,7 @@ val result = Monoid[Int].combine(sumLeft, sumRight)
 Cats provides laws for type classes via the `kernel-laws` and `laws` modules which makes law checking
 type class instances easy.
 
-You can find out more about law testing [here](typeclasses/lawtesting.md).
+You can find out more about law testing [here](lawtesting.md).
 
 ## Type classes in Cats
 
