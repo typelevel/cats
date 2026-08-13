@@ -33,6 +33,29 @@ trait PartialNext[@sp A] {
   def partialNext(a: A): Option[A]
 }
 
+object PartialNext {
+
+  def apply[A](implicit A: PartialNext[A]): PartialNext[A] =
+    A
+
+  implicit def catsKernelPartialNextForUnit: PartialNext[Unit] =
+    cats.kernel.instances.unit.catsKernelStdOrderForUnit
+  implicit def catsKernelPartialNextForBoolean: PartialNext[Boolean] =
+    cats.kernel.instances.boolean.catsKernelStdOrderForBoolean
+  implicit def catsKernelPartialNextForByte: PartialNext[Byte] =
+    cats.kernel.instances.byte.catsKernelStdOrderForByte
+  implicit def catsKernelPartialNextForInt: PartialNext[Int] =
+    cats.kernel.instances.int.catsKernelStdOrderForInt
+  implicit def catsKernelPartialNextForShort: PartialNext[Short] =
+    cats.kernel.instances.short.catsKernelStdOrderForShort
+  implicit def catsKernelPartialNextForLong: PartialNext[Long] =
+    cats.kernel.instances.long.catsKernelStdOrderForLong
+  implicit def catsKernelPartialNextForChar: PartialNext[Char] =
+    cats.kernel.instances.char.catsKernelStdOrderForChar
+  implicit def catsKernelPartialNextForBigInt: PartialNext[BigInt] =
+    cats.kernel.instances.bigInt.catsKernelStdOrderForBigInt
+}
+
 /**
  * A typeclass with an operation which returns a member which is
  * always greater than the one supplied.
@@ -42,6 +65,14 @@ trait Next[@sp A] extends PartialNext[A] {
   override def partialNext(a: A): Option[A] = Some(next(a))
 }
 
+object Next {
+  def apply[A](implicit A: Next[A]): Next[A] =
+    A
+
+  implicit def catsKernelNextForBigInt: Next[BigInt] =
+    cats.kernel.instances.bigInt.catsKernelStdOrderForBigInt
+}
+
 /**
  * A typeclass with an operation which returns a member which is
  * smaller or `None` than the one supplied.
@@ -49,6 +80,28 @@ trait Next[@sp A] extends PartialNext[A] {
 trait PartialPrevious[@sp A] {
   def partialOrder: PartialOrder[A]
   def partialPrevious(a: A): Option[A]
+}
+
+object PartialPrevious {
+  def apply[A](implicit A: PartialPrevious[A]): PartialPrevious[A] =
+    A
+
+  implicit def catsKernelPartialPreviousForUnit: PartialPrevious[Unit] =
+    cats.kernel.instances.unit.catsKernelStdOrderForUnit
+  implicit def catsKernelPartialPreviousForBoolean: PartialPrevious[Boolean] =
+    cats.kernel.instances.boolean.catsKernelStdOrderForBoolean
+  implicit def catsKernelPartialPreviousForByte: PartialPrevious[Byte] =
+    cats.kernel.instances.byte.catsKernelStdOrderForByte
+  implicit def catsKernelPartialPreviousForInt: PartialPrevious[Int] =
+    cats.kernel.instances.int.catsKernelStdOrderForInt
+  implicit def catsKernelPartialPreviousForShort: PartialPrevious[Short] =
+    cats.kernel.instances.short.catsKernelStdOrderForShort
+  implicit def catsKernelPartialPreviousForLong: PartialPrevious[Long] =
+    cats.kernel.instances.long.catsKernelStdOrderForLong
+  implicit def catsKernelPartialPreviousForChar: PartialPrevious[Char] =
+    cats.kernel.instances.char.catsKernelStdOrderForChar
+  implicit def catsKernelPartialPreviousForBigInt: PartialPrevious[BigInt] =
+    cats.kernel.instances.bigInt.catsKernelStdOrderForBigInt
 }
 
 /**
@@ -61,6 +114,14 @@ trait Previous[@sp A] extends PartialPrevious[A] {
   override def partialPrevious(a: A): Option[A] = Some(previous(a))
 }
 
+object Previous {
+  def apply[A](implicit A: Previous[A]): Previous[A] =
+    A
+
+  implicit def catsKernelPreviousForBigInt: Previous[BigInt] =
+    cats.kernel.instances.bigInt.catsKernelStdOrderForBigInt
+}
+
 /**
  * A typeclass which has both `previous` and `next` operations
  * such that `next . previous == identity`.
@@ -68,6 +129,11 @@ trait Previous[@sp A] extends PartialPrevious[A] {
 trait UnboundedEnumerable[@sp A] extends Next[A] with Previous[A] {
   def order: Order[A]
   override def partialOrder: PartialOrder[A] = order
+}
+
+object UnboundedEnumerable {
+  def apply[A](implicit A: UnboundedEnumerable[A]): UnboundedEnumerable[A] =
+    A
 }
 
 trait BoundedEnumerable[@sp A] extends PartialPreviousUpperBounded[A] with PartialNextLowerBounded[A] {
