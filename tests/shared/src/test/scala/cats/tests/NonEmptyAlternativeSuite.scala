@@ -23,6 +23,8 @@ package cats.tests
 
 import cats.NonEmptyAlternative
 import cats.laws.discipline.NonEmptyAlternativeTests
+import cats.syntax.eq.*
+import org.scalacheck.Prop.*
 
 class NonEmptyAlternativeSuite extends CatsSuite {
   implicit val listWrapperNeAlternative: NonEmptyAlternative[ListWrapper] = ListWrapper.nonEmptyAlternative
@@ -42,4 +44,18 @@ class NonEmptyAlternativeSuite extends CatsSuite {
     "compose ListWrapper[ListWrapper[Int]]",
     NonEmptyAlternativeTests.composed[ListWrapper, ListWrapper].nonEmptyAlternative[Int, Int, Int]
   )
+
+  property("attemptOption on List concatenates map(Some) with pure(None)") {
+    forAll { (xs: List[Int]) =>
+      val expected: List[Option[Int]] = xs.map(Some(_)) :+ None
+      assert(NonEmptyAlternative[List].attemptOption(xs) === expected)
+    }
+  }
+
+  property("attemptOption on Option preserves Some, surfaces empty as Some(None)") {
+    forAll { (o: Option[Int]) =>
+      val expected: Option[Option[Int]] = o.fold[Option[Option[Int]]](Some(None))(a => Some(Some(a)))
+      assert(NonEmptyAlternative[Option].attemptOption(o) === expected)
+    }
+  }
 }
