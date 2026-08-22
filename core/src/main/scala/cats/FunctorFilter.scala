@@ -97,6 +97,20 @@ trait FunctorFilter[F[_]] extends Serializable {
 }
 
 object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances with FunctorFilterInstances0 {
+
+  /**
+   * A lazy wrapper supporting Scala `for`-comprehensions.
+   */
+  class WithFilter[F[_], A](fa: F[A], p: A => Boolean)(implicit F: FunctorFilter[F]) {
+    def map[B](f: A => B): F[B] =
+      F.mapFilter(fa)(a => if (p(a)) Some(f(a)) else None)
+
+    def flatMap[B](f: A => F[B])(implicit flatMapF: FlatMap[F]): F[B] =
+      flatMapF.flatMap(F.filter(fa)(p))(f)
+
+    def withFilter(q: A => Boolean): WithFilter[F, A] =
+      new WithFilter[F, A](fa, a => p(a) && q(a))
+  }
   implicit def catsTraverseFilterForOption: TraverseFilter[Option] =
     cats.instances.option.catsStdTraverseFilterForOption
   implicit def catsTraverseFilterForList: TraverseFilter[List] = cats.instances.list.catsStdTraverseFilterForList
@@ -135,6 +149,8 @@ object FunctorFilter extends ScalaVersionSpecificTraverseFilterInstances with Fu
       typeClassInstance.flattenOption[B](self.asInstanceOf[F[Option[B]]])
     def filter(f: A => Boolean): F[A] = typeClassInstance.filter[A](self)(f)
     def filterNot(f: A => Boolean): F[A] = typeClassInstance.filterNot[A](self)(f)
+    def withFilter(f: A => Boolean): FunctorFilter.WithFilter[F, A] =
+      new FunctorFilter.WithFilter[F, A](self, f)(typeClassInstance)
   }
   trait AllOps[F[_], A] extends Ops[F, A]
   trait ToFunctorFilterOps extends Serializable {
