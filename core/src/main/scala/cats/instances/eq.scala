@@ -29,15 +29,15 @@ trait EqInstances extends kernel.instances.EqInstances {
     new ContravariantMonoidal[Eq] {
 
       /**
-       * Defaults to the trivial equivalence relation
-       * contracting the type to a point
+       * Defaults to the trivial equivalence relation contracting the type to a point
        */
       def unit: Eq[Unit] = Eq.allEqual
 
       /**
        * Derive an `Eq` for `B` given an `Eq[A]` and a function `B => A`.
        *
-       * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
+       * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one
+       * mapping)
        */
       def contramap[A, B](fa: Eq[A])(f: B => A): Eq[B] =
         Eq.by(f)(fa)

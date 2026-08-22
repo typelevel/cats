@@ -53,7 +53,8 @@ final class NestedFoldableOps[F[_], G[_], A](private val fga: F[G[A]]) extends A
   def sequence_(implicit F: Foldable[F], G: Applicative[G]): G[Unit] = sequenceVoid
 
   /**
-   * @see [[Foldable.foldK]].
+   * @see
+   *   [[Foldable.foldK]].
    *
    * Example:
    * {{{
@@ -129,8 +130,8 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
   /**
    * Monadic version of `collectFirstSome`.
    *
-   * If there are no elements, the result is `None`. `collectFirstSomeM` short-circuits,
-   * i.e. once a Some element is found, no further effects are produced.
+   * If there are no elements, the result is `None`. `collectFirstSomeM` short-circuits, i.e. once a Some element is
+   * found, no further effects are produced.
    *
    * For example:
    * {{{
@@ -160,8 +161,8 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
   /**
    * Find the first element matching the effectful predicate, if one exists.
    *
-   * If there are no elements, the result is `None`. `findM` short-circuits,
-   * i.e. once an element is found, no further effects are produced.
+   * If there are no elements, the result is `None`. `findM` short-circuits, i.e. once an element is found, no further
+   * effects are produced.
    *
    * For example:
    * {{{
@@ -233,8 +234,8 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
     new FoldableOps(fa).mkString_("", delim, "")
 
   /**
-   * Fold implemented by mapping `A` values into `B` in a context `G` and then
-   * combining them using the `MonoidK[G]` instance.
+   * Fold implemented by mapping `A` values into `B` in a context `G` and then combining them using the `MonoidK[G]`
+   * instance.
    *
    * {{{
    * scala> import cats._, cats.syntax.all._
@@ -284,8 +285,8 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
     F.partitionBifoldM[G, H, A, B, C](fa)(f)(A, M, H)
 
   /**
-   * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]`
-   * Equivalent to `Traverse#traverse` over `Alternative#separate`
+   * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]` Equivalent to
+   * `Traverse#traverse` over `Alternative#separate`
    *
    * {{{
    * scala> import cats.syntax.all._, cats.Eval

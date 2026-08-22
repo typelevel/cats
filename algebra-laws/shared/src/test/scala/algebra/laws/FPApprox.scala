@@ -30,14 +30,12 @@ import algebra.*
 import algebra.ring.*
 
 /**
- * A wrapper type for approximate floating point values like Float, Double, and
- * BigDecimal which maintains an error bound on the current approximation. The
- * `Eq` instance for this type returns true if 2 values could be equal to each
- * other, given the error bounds, rather than if they actually are equal. So,
- * if x == 0.5, and y = 0.6, and the error bound of (x - y) is greater than or
- * equal to 0.1, then it's plausible they could be equal to each other, so we
- * return true. On the other hand, if the error bound is less than 0.1, then we
- * can definitely say they cannot be equal to each other.
+ * A wrapper type for approximate floating point values like Float, Double, and BigDecimal which maintains an error
+ * bound on the current approximation. The `Eq` instance for this type returns true if 2 values could be equal to each
+ * other, given the error bounds, rather than if they actually are equal. So, if x == 0.5, and y = 0.6, and the error
+ * bound of (x - y) is greater than or equal to 0.1, then it's plausible they could be equal to each other, so we return
+ * true. On the other hand, if the error bound is less than 0.1, then we can definitely say they cannot be equal to each
+ * other.
  */
 case class FPApprox[A](approx: A, mes: A, ind: BigInt) {
   import FPApprox.{abs, Epsilon}

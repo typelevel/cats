@@ -35,11 +35,10 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
     flatMap(fa)(a => pure(f(a)))
 
   /**
-   * Execute an action repeatedly as long as the given `Boolean` expression
-   * returns `true`. The condition is evaluated before the loop body.
-   * Collects the results into an arbitrary `Alternative` value, such as a `Vector`.
-   * This implementation uses append on each evaluation result,
-   * so avoid data structures with non-constant append performance, e.g. `List`.
+   * Execute an action repeatedly as long as the given `Boolean` expression returns `true`. The condition is evaluated
+   * before the loop body. Collects the results into an arbitrary `Alternative` value, such as a `Vector`. This
+   * implementation uses append on each evaluation result, so avoid data structures with non-constant append
+   * performance, e.g. `List`.
    */
 
   def whileM[G[_], A](p: F[Boolean])(body: => F[A])(implicit G: Alternative[G]): F[G[A]] = {
@@ -57,9 +56,8 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   }
 
   /**
-   * Execute an action repeatedly as long as the given `Boolean` expression
-   * returns `true`. The condition is evaluated before the loop body.
-   * Discards results.
+   * Execute an action repeatedly as long as the given `Boolean` expression returns `true`. The condition is evaluated
+   * before the loop body. Discards results.
    */
 
   def whileM_[A](p: F[Boolean])(body: => F[A]): F[Unit] = {
@@ -75,11 +73,9 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   }
 
   /**
-   * Execute an action repeatedly until the `Boolean` condition returns `true`.
-   * The condition is evaluated after the loop body. Collects results into an
-   * arbitrary `Alternative` value, such as a `Vector`.
-   * This implementation uses append on each evaluation result,
-   * so avoid data structures with non-constant append performance, e.g. `List`.
+   * Execute an action repeatedly until the `Boolean` condition returns `true`. The condition is evaluated after the
+   * loop body. Collects results into an arbitrary `Alternative` value, such as a `Vector`. This implementation uses
+   * append on each evaluation result, so avoid data structures with non-constant append performance, e.g. `List`.
    */
   def untilM[G[_], A](f: F[A])(cond: => F[Boolean])(implicit G: Alternative[G]): F[G[A]] = {
     val p = Eval.later(cond)
@@ -87,8 +83,8 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   }
 
   /**
-   * Execute an action repeatedly until the `Boolean` condition returns `true`.
-   * The condition is evaluated after the loop body. Discards results.
+   * Execute an action repeatedly until the `Boolean` condition returns `true`. The condition is evaluated after the
+   * loop body. Discards results.
    */
   def untilM_[A](f: F[A])(cond: => F[Boolean]): F[Unit] = {
     val p = Eval.later(cond)
@@ -96,8 +92,8 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   }
 
   /**
-   * Execute an action repeatedly until its result fails to satisfy the given predicate
-   * and return that result, discarding all others.
+   * Execute an action repeatedly until its result fails to satisfy the given predicate and return that result,
+   * discarding all others.
    */
   def iterateWhile[A](f: F[A])(p: A => Boolean): F[A] =
     flatMap(f) { i =>
@@ -105,8 +101,8 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
     }
 
   /**
-   * Execute an action repeatedly until its result satisfies the given predicate
-   * and return that result, discarding all others.
+   * Execute an action repeatedly until its result satisfies the given predicate and return that result, discarding all
+   * others.
    */
   def iterateUntil[A](f: F[A])(p: A => Boolean): F[A] =
     flatMap(f) { i =>
@@ -114,8 +110,7 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
     }
 
   /**
-   * Apply a monadic function iteratively until its result fails
-   * to satisfy the given predicate and return that result.
+   * Apply a monadic function iteratively until its result fails to satisfy the given predicate and return that result.
    */
   def iterateWhileM[A](init: A)(f: A => F[A])(p: A => Boolean): F[A] =
     tailRecM(init) { a =>
@@ -126,16 +121,14 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
     }
 
   /**
-   * Apply a monadic function iteratively until its result satisfies
-   * the given predicate and return that result.
+   * Apply a monadic function iteratively until its result satisfies the given predicate and return that result.
    */
   def iterateUntilM[A](init: A)(f: A => F[A])(p: A => Boolean): F[A] =
     iterateWhileM(init)(f)(!p(_))
 
   /**
-   * Simulates an if/else-if/else in the context of an F. It evaluates conditions until
-   * one evaluates to true, and returns the associated F[A]. If no condition is true,
-   * returns els.
+   * Simulates an if/else-if/else in the context of an F. It evaluates conditions until one evaluates to true, and
+   * returns the associated F[A]. If no condition is true, returns els.
    *
    * {{{
    * scala> import cats._
@@ -145,7 +138,8 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
    *
    * Based on a [[https://gist.github.com/1b92a6e338f4e1537692e748c54b9743 gist]] by Daniel Spiewak with a stack-safe
    * [[https://github.com/typelevel/cats/pull/3553#discussion_r468121480 implementation]] due to P. Oscar Boykin
-   * @see See [[https://gitter.im/typelevel/cats-effect?at=5f297e4314c413356f56d230]] for the discussion.
+   * @see
+   *   See [[https://gitter.im/typelevel/cats-effect?at=5f297e4314c413356f56d230]] for the discussion.
    */
 
   def ifElseM[A](branches: (F[Boolean], F[A])*)(els: F[A]): F[A] = {
@@ -163,8 +157,7 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   }
 
   /**
-   * Modifies the `A` value in `F[A]` with the supplied function, if the function is defined for the value.
-   * Example:
+   * Modifies the `A` value in `F[A]` with the supplied function, if the function is defined for the value. Example:
    * {{{
    * scala> import cats.syntax.all._
    *

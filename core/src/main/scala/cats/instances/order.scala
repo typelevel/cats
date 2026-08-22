@@ -39,7 +39,8 @@ trait OrderInstances extends kernel.instances.OrderInstances {
       /**
        * Derive an `Order` for `B` given an `Order[A]` and a function `B => A`.
        *
-       * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
+       * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one
+       * mapping)
        */
       def contramap[A, B](fa: Order[A])(f: B => A): Order[B] =
         Order.by(f)(fa)

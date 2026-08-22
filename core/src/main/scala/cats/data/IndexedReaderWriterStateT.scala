@@ -25,11 +25,11 @@ package data
 import cats.arrow.{Profunctor, Strong}
 
 /**
- * Represents a stateful computation in a context `F[_]`, from state `SA` to state `SB`,
- *  with an initial environment `E`, an accumulated log `L` and a result `A`.
+ * Represents a stateful computation in a context `F[_]`, from state `SA` to state `SB`, with an initial environment
+ * `E`, an accumulated log `L` and a result `A`.
  *
- * In other words, it is a pre-baked stack of `[[ReaderT]][F, E, A]`, `[[WriterT]][F, L, A]`
- * and `[[IndexedStateT]][F, SA, SB, A]`.
+ * In other words, it is a pre-baked stack of `[[ReaderT]][F, E, A]`, `[[WriterT]][F, L, A]` and
+ * `[[IndexedStateT]][F, SA, SB, A]`.
  */
 final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA) => F[(L, SB, A)]])
     extends Serializable {
@@ -118,8 +118,8 @@ final class IndexedReaderWriterStateT[F[_], E, L, SA, SB, A](val runF: F[(E, SA)
     }
 
   /**
-   * Modify the result of the computation by feeding it into `f`, threading the state
-   * through the resulting computation and combining the log values.
+   * Modify the result of the computation by feeding it into `f`, threading the state through the resulting computation
+   * and combining the log values.
    */
   def flatMap[SC, B](
     f: A => IndexedReaderWriterStateT[F, E, L, SB, SC, B]
@@ -489,11 +489,11 @@ object IndexedReaderWriterStateT extends IRWSTInstances with CommonIRWSTConstruc
   /**
    * Internal API — shifts the execution of `run` in the `F` context.
    *
-   * Used to build IndexedReaderWriterStateT values for `F[_]` data types that implement `Monad`,
-   * in which case it is safer to trigger the `F[_]` context earlier.
+   * Used to build IndexedReaderWriterStateT values for `F[_]` data types that implement `Monad`, in which case it is
+   * safer to trigger the `F[_]` context earlier.
    *
-   * This is needed for [[IndexedReaderWriterStateT.flatMap]] to be stack-safe when the underlying F[_] is,
-   * for further explanation see [[Kleisli.shift]].
+   * This is needed for [[IndexedReaderWriterStateT.flatMap]] to be stack-safe when the underlying F[_] is, for further
+   * explanation see [[Kleisli.shift]].
    */
   private[data] def shift[F[_], E, L, SA, SB, A](
     runF: F[(E, SA) => F[(L, SB, A)]]

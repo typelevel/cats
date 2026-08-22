@@ -49,16 +49,14 @@ trait Bifoldable[F[_, _]] extends Serializable { self =>
   def bifoldLeft[A, B, C](fab: F[A, B], c: C)(f: (C, A) => C, g: (C, B) => C): C
 
   /**
-   * Collapse the structure with a right-associative function
-   * Right associative lazy bifold on `F` using the folding function 'f' and 'g'.
+   * Collapse the structure with a right-associative function Right associative lazy bifold on `F` using the folding
+   * function 'f' and 'g'.
    *
-   * This method evaluates `c` lazily (in some cases it will not be
-   * needed), and returns a lazy value. We are using `(_, Eval[C]) =>
-   * Eval[C]` to support laziness in a stack-safe way. Chained
-   * computation should be performed via .map and .flatMap.
+   * This method evaluates `c` lazily (in some cases it will not be needed), and returns a lazy value. We are using `(_,
+   * Eval[C]) => Eval[C]` to support laziness in a stack-safe way. Chained computation should be performed via .map and
+   * .flatMap.
    *
-   * For more detailed information about how this method works see the
-   * documentation for `Eval[_]`.
+   * For more detailed information about how this method works see the documentation for `Eval[_]`.
    *
    * Example:
    * {{{

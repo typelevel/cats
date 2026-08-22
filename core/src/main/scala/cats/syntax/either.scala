@@ -44,7 +44,9 @@ trait EitherSyntax {
 object EitherSyntax {
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[syntax] class CatchOnlyPartiallyApplied[T](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](f: => A)(implicit CT: ClassTag[T], NT: NotNull[T]): Either[T, A] =
@@ -151,8 +153,8 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
     }
 
   /**
-   * Returns a [[cats.data.ValidatedNel]] representation of this disjunction with the `Left` value
-   * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]].
+   * Returns a [[cats.data.ValidatedNel]] representation of this disjunction with the `Left` value as a single element
+   * on the `Invalid` side of the [[cats.data.NonEmptyList]].
    */
   def toValidatedNel[AA >: A]: ValidatedNel[AA, B] =
     eab match {
@@ -284,13 +286,10 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
   /**
    * Combine with another `Either` value.
    *
-   * If this `Either` is a `Left` then it will be returned as-is.
-   * If this `Either` is a `Right` and `that` `Either` is a left, then `that` will be
-   * returned.
-   * If both `Either`s are `Right`s, then the `Semigroup[BB]` instance will be used
-   * to combine both values and return them as a `Right`.
-   * Note: If both `Either`s are `Left`s then their values are not combined. Use
-   * `Validated` if you prefer to combine `Left` values.
+   * If this `Either` is a `Left` then it will be returned as-is. If this `Either` is a `Right` and `that` `Either` is a
+   * left, then `that` will be returned. If both `Either`s are `Right`s, then the `Semigroup[BB]` instance will be used
+   * to combine both values and return them as a `Right`. Note: If both `Either`s are `Left`s then their values are not
+   * combined. Use `Validated` if you prefer to combine `Left` values.
    *
    * Examples:
    * {{{
@@ -385,8 +384,8 @@ final class EitherObjectOps(private val either: Either.type) extends AnyVal {
   def rightNel[A, B](b: B): EitherNel[A, B] = Right(b)
 
   /**
-   * Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of
-   * the resulting `Either`. Uncaught exceptions are propagated.
+   * Evaluates the specified block, catching exceptions of the specified type and returning them on the left side of the
+   * resulting `Either`. Uncaught exceptions are propagated.
    *
    * For example:
    * {{{
@@ -415,8 +414,8 @@ final class EitherObjectOps(private val either: Either.type) extends AnyVal {
     }
 
   /**
-   * Converts an `Option[B]` to an `Either[A, B]`, where the provided `ifNone` values is returned on
-   * the left of the `Either` when the specified `Option` is `None`.
+   * Converts an `Option[B]` to an `Either[A, B]`, where the provided `ifNone` values is returned on the left of the
+   * `Either` when the specified `Option` is `None`.
    */
   def fromOption[A, B](o: Option[B], ifNone: => A): Either[A, B] =
     o match {
@@ -432,7 +431,9 @@ final class EitherObjectOps(private val either: Either.type) extends AnyVal {
   /**
    * Returns `Left(ifTrue)` when the `cond` is true, otherwise `Right(())`
    *
-   * @example {{{
+   * @example
+   *
+   * {{{
    * val tooMany = 5
    * val x: Int = ???
    * Either.raiseWhen(x >= tooMany)(new IllegalArgumentException("Too many"))
@@ -444,7 +445,9 @@ final class EitherObjectOps(private val either: Either.type) extends AnyVal {
   /**
    * Returns `Left(ifFalse)` when `cond` is false, otherwise `Right(())`
    *
-   * @example {{{
+   * @example
+   *
+   * {{{
    * val tooMany = 5
    * val x: Int = ???
    * Either.raiseUnless(x < tooMany)(new IllegalArgumentException("Too many"))
@@ -546,8 +549,8 @@ final private[syntax] class EitherIdOpsBinCompat0[A](private val value: A) exten
 final private[syntax] class EitherOpsBinCompat0[A, B](private val value: Either[A, B]) extends AnyVal {
 
   /**
-   * Returns a [[cats.data.ValidatedNec]] representation of this disjunction with the `Left` value
-   * as a single element on the `Invalid` side of the [[cats.data.NonEmptyList]].
+   * Returns a [[cats.data.ValidatedNec]] representation of this disjunction with the `Left` value as a single element
+   * on the `Invalid` side of the [[cats.data.NonEmptyList]].
    */
   def toValidatedNec: ValidatedNec[A, B] =
     value match {

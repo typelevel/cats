@@ -28,31 +28,26 @@ import scala.annotation.tailrec
 /**
  * Eval is a monad which controls evaluation.
  *
- * This type wraps a value (or a computation that produces a value)
- * and can produce it on command via the `.value` method.
+ * This type wraps a value (or a computation that produces a value) and can produce it on command via the `.value`
+ * method.
  *
  * There are three basic evaluation strategies:
  *
- *  - Now:    evaluated immediately
- *  - Later:  evaluated once when value is needed
- *  - Always: evaluated every time value is needed
+ *   - Now: evaluated immediately
+ *   - Later: evaluated once when value is needed
+ *   - Always: evaluated every time value is needed
  *
- * The Later and Always are both lazy strategies while Now is eager.
- * Later and Always are distinguished from each other only by
- * memoization: once evaluated Later will save the value to be returned
- * immediately if it is needed again. Always will run its computation
- * every time.
+ * The Later and Always are both lazy strategies while Now is eager. Later and Always are distinguished from each other
+ * only by memoization: once evaluated Later will save the value to be returned immediately if it is needed again.
+ * Always will run its computation every time.
  *
- * Eval supports stack-safe lazy computation via the .map and .flatMap
- * methods, which use an internal trampoline to avoid stack overflows.
- * Computation done within .map and .flatMap is always done lazily,
- * even when applied to a Now instance.
+ * Eval supports stack-safe lazy computation via the .map and .flatMap methods, which use an internal trampoline to
+ * avoid stack overflows. Computation done within .map and .flatMap is always done lazily, even when applied to a Now
+ * instance.
  *
- * It is not generally good style to pattern-match on Eval instances.
- * Rather, use .map and .flatMap to chain computation, and use .value
- * to get the result when needed. It is also not good style to create
- * Eval instances whose computation involves calling .value on another
- * Eval instance -- this can defeat the trampolining and lead to stack
+ * It is not generally good style to pattern-match on Eval instances. Rather, use .map and .flatMap to chain
+ * computation, and use .value to get the result when needed. It is also not good style to create Eval instances whose
+ * computation involves calling .value on another Eval instance -- this can defeat the trampolining and lead to stack
  * overflows.
  */
 sealed abstract class Eval[+A] extends Serializable { self =>
@@ -60,36 +55,29 @@ sealed abstract class Eval[+A] extends Serializable { self =>
   /**
    * Evaluate the computation and return an A value.
    *
-   * For lazy instances (Later, Always), any necessary computation
-   * will be performed at this point. For eager instances (Now), a
-   * value will be immediately returned.
+   * For lazy instances (Later, Always), any necessary computation will be performed at this point. For eager instances
+   * (Now), a value will be immediately returned.
    */
   def value: A
 
   /**
-   * Transform an Eval[A] into an Eval[B] given the transformation
-   * function `f`.
+   * Transform an Eval[A] into an Eval[B] given the transformation function `f`.
    *
-   * This call is stack-safe -- many .map calls may be chained without
-   * consumed additional stack during evaluation.
+   * This call is stack-safe -- many .map calls may be chained without consumed additional stack during evaluation.
    *
-   * Computation performed in f is always lazy, even when called on an
-   * eager (Now) instance.
+   * Computation performed in f is always lazy, even when called on an eager (Now) instance.
    */
   def map[B](f: A => B): Eval[B] =
     flatMap(a => Now(f(a)))
 
   /**
-   * Lazily perform a computation based on an Eval[A], using the
-   * function `f` to produce an Eval[B] given an A.
+   * Lazily perform a computation based on an Eval[A], using the function `f` to produce an Eval[B] given an A.
    *
-   * This call is stack-safe -- many .flatMap calls may be chained
-   * without consumed additional stack during evaluation. It is also
-   * written to avoid left-association problems, so that repeated
-   * calls to .flatMap will be efficiently applied.
+   * This call is stack-safe -- many .flatMap calls may be chained without consumed additional stack during evaluation.
+   * It is also written to avoid left-association problems, so that repeated calls to .flatMap will be efficiently
+   * applied.
    *
-   * Computation performed in f is always lazy, even when called on an
-   * eager (Now) instance.
+   * Computation performed in f is always lazy, even when called on an eager (Now) instance.
    */
   def flatMap[B](f: A => Eval[B]): Eval[B] =
     this match {
@@ -122,11 +110,10 @@ sealed abstract class Eval[+A] extends Serializable { self =>
     }
 
   /**
-   * Ensure that the result of the computation (if any) will be
-   * memoized.
+   * Ensure that the result of the computation (if any) will be memoized.
    *
-   * Practically, this means that when called on an Always[A] a
-   * Later[A] with an equivalent computation will be returned.
+   * Practically, this means that when called on an Always[A] a Later[A] with an equivalent computation will be
+   * returned.
    */
   def memoize: Eval[A]
 }
@@ -136,8 +123,8 @@ sealed abstract class Eval[+A] extends Serializable { self =>
  *
  * In some sense it is equivalent to using a val.
  *
- * This type should be used when an A value is already in hand, or
- * when the computation to produce an A value is pure and very fast.
+ * This type should be used when an A value is already in hand, or when the computation to produce an A value is pure
+ * and very fast.
  */
 final case class Now[+A](value: A) extends Eval.Leaf[A] {
   def memoize: Eval[A] = this
@@ -146,16 +133,13 @@ final case class Now[+A](value: A) extends Eval.Leaf[A] {
 /**
  * Construct a lazy Eval[A] instance.
  *
- * This type should be used for most "lazy" values. In some sense it
- * is equivalent to using a lazy val.
+ * This type should be used for most "lazy" values. In some sense it is equivalent to using a lazy val.
  *
- * When caching is not required or desired (e.g. if the value produced
- * may be large) prefer Always. When there is no computation
- * necessary, prefer Now.
+ * When caching is not required or desired (e.g. if the value produced may be large) prefer Always. When there is no
+ * computation necessary, prefer Now.
  *
- * Once Later has been evaluated, the closure (and any values captured
- * by the closure) will not be retained, and will be available for
- * garbage collection.
+ * Once Later has been evaluated, the closure (and any values captured by the closure) will not be retained, and will be
+ * available for garbage collection.
  */
 final class Later[+A](f: () => A) extends Eval.Leaf[A] {
   private[this] var thunk: () => A = f
@@ -183,12 +167,10 @@ object Later {
 /**
  * Construct a lazy Eval[A] instance.
  *
- * This type can be used for "lazy" values. In some sense it is
- * equivalent to using a Function0 value.
+ * This type can be used for "lazy" values. In some sense it is equivalent to using a Function0 value.
  *
- * This type will evaluate the computation every time the value is
- * required. It should be avoided except when laziness is required and
- * caching must be avoided. Generally, prefer Later.
+ * This type will evaluate the computation every time the value is required. It should be avoided except when laziness
+ * is required and caching must be avoided. Generally, prefer Later.
  */
 final class Always[+A](f: () => A) extends Eval.Leaf[A] {
   def value: A = f()
@@ -202,9 +184,7 @@ object Always {
 object Eval extends EvalInstances {
 
   /**
-   * A Leaf does not depend on any other Eval
-   * so calling .value does not trigger
-   * any flatMaps or defers
+   * A Leaf does not depend on any other Eval so calling .value does not trigger any flatMaps or defers
    */
   sealed abstract class Leaf[+A] extends Eval[A]
 
@@ -226,8 +206,8 @@ object Eval extends EvalInstances {
   /**
    * Defer a computation which produces an Eval[A] value.
    *
-   * This is useful when you want to delay execution of an expression
-   * which produces an Eval[A] value. Like .flatMap, it is stack-safe.
+   * This is useful when you want to delay execution of an expression which produces an Eval[A] value. Like .flatMap, it
+   * is stack-safe.
    */
   def defer[A](a: => Eval[A]): Eval[A] =
     new Eval.Defer[A](() => a) {}
@@ -235,49 +215,42 @@ object Eval extends EvalInstances {
   /**
    * Static Eval instance for common value `Unit`.
    *
-   * This can be useful in cases where the same value may be needed
-   * many times.
+   * This can be useful in cases where the same value may be needed many times.
    */
   val Unit: Eval[Unit] = Now(())
 
   /**
    * Static Eval instance for common value `true`.
    *
-   * This can be useful in cases where the same value may be needed
-   * many times.
+   * This can be useful in cases where the same value may be needed many times.
    */
   val True: Eval[Boolean] = Now(true)
 
   /**
    * Static Eval instance for common value `false`.
    *
-   * This can be useful in cases where the same value may be needed
-   * many times.
+   * This can be useful in cases where the same value may be needed many times.
    */
   val False: Eval[Boolean] = Now(false)
 
   /**
    * Static Eval instance for common value `0`.
    *
-   * This can be useful in cases where the same value may be needed
-   * many times.
+   * This can be useful in cases where the same value may be needed many times.
    */
   val Zero: Eval[Int] = Now(0)
 
   /**
    * Static Eval instance for common value `1`.
    *
-   * This can be useful in cases where the same value may be needed
-   * many times.
+   * This can be useful in cases where the same value may be needed many times.
    */
   val One: Eval[Int] = Now(1)
 
   /**
-   * Defer is a type of Eval[A] that is used to defer computations
-   * which produce Eval[A].
+   * Defer is a type of Eval[A] that is used to defer computations which produce Eval[A].
    *
-   * Users should not instantiate Defer instances themselves. Instead,
-   * they will be automatically created when needed.
+   * Users should not instantiate Defer instances themselves. Instead, they will be automatically created when needed.
    */
   sealed abstract class Defer[A](val thunk: () => Eval[A]) extends Eval[A] {
 
@@ -286,17 +259,13 @@ object Eval extends EvalInstances {
   }
 
   /**
-   * FlatMap is a type of Eval[A] that is used to chain computations
-   * involving .map and .flatMap. Along with Eval#flatMap it
-   * implements the trampoline that guarantees stack-safety.
+   * FlatMap is a type of Eval[A] that is used to chain computations involving .map and .flatMap. Along with
+   * Eval#flatMap it implements the trampoline that guarantees stack-safety.
    *
-   * Users should not instantiate FlatMap instances
-   * themselves. Instead, they will be automatically created when
-   * needed.
+   * Users should not instantiate FlatMap instances themselves. Instead, they will be automatically created when needed.
    *
-   * Unlike a traditional trampoline, the internal workings of the
-   * trampoline are not exposed. This allows a slightly more efficient
-   * implementation of the .value method.
+   * Unlike a traditional trampoline, the internal workings of the trampoline are not exposed. This allows a slightly
+   * more efficient implementation of the .value method.
    */
   sealed abstract class FlatMap[A] extends Eval[A] { self =>
     type Start

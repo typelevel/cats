@@ -24,16 +24,15 @@ package cats
 /**
  * Comonad
  *
- * Comonad is the dual of Monad. Whereas Monads allow for the composition of effectful functions,
- * Comonads allow for composition of functions that extract the value from their context.
+ * Comonad is the dual of Monad. Whereas Monads allow for the composition of effectful functions, Comonads allow for
+ * composition of functions that extract the value from their context.
  *
  * Must obey the laws defined in cats.laws.ComonadLaws.
  */
 trait Comonad[F[_]] extends CoflatMap[F] {
 
   /**
-   * `extract` is the dual of `pure` on Monad (via `Applicative`)
-   * and extracts the value from its context
+   * `extract` is the dual of `pure` on Monad (via `Applicative`) and extracts the value from its context
    *
    * Example:
    * {{{

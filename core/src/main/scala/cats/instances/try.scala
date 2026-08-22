@@ -222,9 +222,8 @@ trait TryInstances extends TryInstances1 {
   }
 
   /**
-   * you may wish to do equality by making `implicit val eqT: Eq[Throwable] = Eq.allEqual`
-   * doing a fine grained equality on Throwable can make the code very execution
-   * order dependent
+   * you may wish to do equality by making `implicit val eqT: Eq[Throwable] = Eq.allEqual` doing a fine grained equality
+   * on Throwable can make the code very execution order dependent
    */
   implicit def catsStdEqForTry[A](implicit A: Eq[A], T: Eq[Throwable]): Eq[Try[A]] =
     Eq.catsStdEqForTry
@@ -233,8 +232,8 @@ trait TryInstances extends TryInstances1 {
 private[instances] object TryInstances {
 
   /**
-   * A `Failure` can be statically typed as `Try[A]` for all `A`, because it
-   * does not actually contain an `A` value (as `Success[A]` does).
+   * A `Failure` can be statically typed as `Try[A]` for all `A`, because it does not actually contain an `A` value (as
+   * `Success[A]` does).
    */
   @inline final def castFailure[A](f: Failure[?]): Try[A] = f.asInstanceOf[Try[A]]
 }

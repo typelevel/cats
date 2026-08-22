@@ -62,11 +62,12 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   /**
    * Returns `raiseError` when the `cond` is true, otherwise `F.unit`
    *
-   * @example {{{
-   * val tooMany = 5
-   * val x: Int = ???
-   * F.raiseWhen(x >= tooMany)(new IllegalArgumentException("Too many"))
-   * }}}
+   * @example
+   *   {{{
+   *   val tooMany = 5
+   *   val x: Int = ???
+   *   F.raiseWhen(x >= tooMany)(new IllegalArgumentException("Too many"))
+   *   }}}
    */
   def raiseWhen(cond: Boolean)(e: => E): F[Unit] =
     whenA(cond)(raiseError(e))
@@ -74,41 +75,42 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   /**
    * Returns `raiseError` when `cond` is false, otherwise `F.unit`
    *
-   * @example {{{
-   * val tooMany = 5
-   * val x: Int = ???
-   * F.raiseUnless(x < tooMany)(new IllegalArgumentException("Too many"))
-   * }}}
+   * @example
+   *   {{{
+   *   val tooMany = 5
+   *   val x: Int = ???
+   *   F.raiseUnless(x < tooMany)(new IllegalArgumentException("Too many"))
+   *   }}}
    */
   def raiseUnless(cond: Boolean)(e: => E): F[Unit] =
     unlessA(cond)(raiseError(e))
 
   /**
-   * Handle any error, potentially recovering from it, by mapping it to an
-   * `F[A]` value.
+   * Handle any error, potentially recovering from it, by mapping it to an `F[A]` value.
    *
-   * @see [[handleError]] to handle any error by simply mapping it to an `A`
-   * value instead of an `F[A]`.
+   * @see
+   *   [[handleError]] to handle any error by simply mapping it to an `A` value instead of an `F[A]`.
    *
-   * @see [[recoverWith]] to recover from only certain errors.
+   * @see
+   *   [[recoverWith]] to recover from only certain errors.
    */
   def handleErrorWith[A](fa: F[A])(f: E => F[A]): F[A]
 
   /**
    * Handle any error, by mapping it to an `A` value.
    *
-   * @see [[handleErrorWith]] to map to an `F[A]` value instead of simply an
-   * `A` value.
+   * @see
+   *   [[handleErrorWith]] to map to an `F[A]` value instead of simply an `A` value.
    *
-   * @see [[recover]] to only recover from certain errors.
+   * @see
+   *   [[recover]] to only recover from certain errors.
    */
   def handleError[A](fa: F[A])(f: E => A): F[A] = handleErrorWith(fa)(f.andThen(pure))
 
   /**
    * Void any error, by mapping it to `Unit`.
    *
-   * This is useful when errors are reported via a side-channel but not directly handled.
-   * For example in Cats Effect:
+   * This is useful when errors are reported via a side-channel but not directly handled. For example in Cats Effect:
    *
    * {{{
    * IO.deferred[OutcomeIO[A]].flatMap { oc =>
@@ -117,11 +119,13 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * }
    * }}}
    *
-   * Without the `.voidError`, the Cats Effect runtime would consider an error in `ioa` to be
-   * unhandled and elevate it to [[scala.concurrent.ExecutionContext.reportFailure ExecutionContext#reportFailure]].
+   * Without the `.voidError`, the Cats Effect runtime would consider an error in `ioa` to be unhandled and elevate it
+   * to [[scala.concurrent.ExecutionContext.reportFailure ExecutionContext#reportFailure]].
    *
-   * @see [[handleError]] to map to an `A` value instead of `Unit`.
-   * @see [[https://github.com/typelevel/cats-effect/issues/3152 cats-effect#3152]]
+   * @see
+   *   [[handleError]] to map to an `A` value instead of `Unit`.
+   * @see
+   *   [[https://github.com/typelevel/cats-effect/issues/3152 cats-effect#3152]]
    */
   def voidError(fu: F[Unit]): F[Unit] = handleError(fu)(Function.const(()))
 
@@ -138,8 +142,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
     )(e => pure(Left(e)))
 
   /**
-   * Similar to [[attempt]], but wraps the result in a [[cats.data.EitherT]] for
-   * convenience.
+   * Similar to [[attempt]], but wraps the result in a [[cats.data.EitherT]] for convenience.
    */
   def attemptT[A](fa: F[A]): EitherT[F, E, A] = EitherT(attempt(fa))
 
@@ -152,10 +155,11 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   /**
    * Recover from certain errors by mapping them to an `A` value.
    *
-   * @see [[handleError]] to handle any/all errors.
+   * @see
+   *   [[handleError]] to handle any/all errors.
    *
-   * @see [[recoverWith]] to recover from certain errors by mapping them to
-   * `F[A]` values.
+   * @see
+   *   [[recoverWith]] to recover from certain errors by mapping them to `F[A]` values.
    */
   def recover[A](fa: F[A])(pf: PartialFunction[E, A]): F[A] =
     handleErrorWith(fa)(e => pf.andThen(pure(_)).applyOrElse(e, raiseError[A](_)))
@@ -163,17 +167,18 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
   /**
    * Recover from certain errors by mapping them to an `F[A]` value.
    *
-   * @see [[handleErrorWith]] to handle any/all errors.
+   * @see
+   *   [[handleErrorWith]] to handle any/all errors.
    *
-   * @see [[recover]] to recover from certain errors by mapping them to `A`
-   * values.
+   * @see
+   *   [[recover]] to recover from certain errors by mapping them to `A` values.
    */
   def recoverWith[A](fa: F[A])(pf: PartialFunction[E, F[A]]): F[A] =
     handleErrorWith(fa)(e => pf.applyOrElse(e, raiseError))
 
   /**
-   * Transform certain errors using `pf` and rethrow them.
-   * Non matching errors and successful values are not affected by this function.
+   * Transform certain errors using `pf` and rethrow them. Non matching errors and successful values are not affected by
+   * this function.
    *
    * Example:
    * {{{
@@ -191,20 +196,18 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * res2: Either[String,Int] = Right(1)
    * }}}
    *
-   * The same function is available in `ApplicativeErrorOps` as `adaptErr` - it cannot have the same
-   * name because this would result in ambiguous implicits due to `adaptError`
-   * having originally been included in the `MonadError` API and syntax.
+   * The same function is available in `ApplicativeErrorOps` as `adaptErr` - it cannot have the same name because this
+   * would result in ambiguous implicits due to `adaptError` having originally been included in the `MonadError` API and
+   * syntax.
    */
   def adaptError[A](fa: F[A])(pf: PartialFunction[E, E]): F[A] =
     recoverWith(fa)(pf.andThen(raiseError[A] _))
 
   /**
-   * Returns a new value that transforms the result of the source,
-   * given the `recover` or `map` functions, which get executed depending
-   * on whether the result is successful or if it ends in error.
+   * Returns a new value that transforms the result of the source, given the `recover` or `map` functions, which get
+   * executed depending on whether the result is successful or if it ends in error.
    *
-   * This is an optimization on usage of [[attempt]] and [[map]],
-   * this equivalence being available:
+   * This is an optimization on usage of [[attempt]] and [[map]], this equivalence being available:
    *
    * {{{
    *   fa.redeem(fe, fs) <-> fa.attempt.map(_.fold(fe, fs))
@@ -216,25 +219,24 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    *   fa.redeem(fe, id) <-> fa.handleError(fe)
    * }}}
    *
-   * Implementations are free to override it in order to optimize
-   * error recovery.
+   * Implementations are free to override it in order to optimize error recovery.
    *
-   * @see [[MonadError.redeemWith]], [[attempt]] and [[handleError]]
+   * @see
+   *   [[MonadError.redeemWith]], [[attempt]] and [[handleError]]
    *
-   * @param fa is the source whose result is going to get transformed
-   * @param recover is the function that gets called to recover the source
-   *        in case of error
+   * @param fa
+   *   is the source whose result is going to get transformed
+   * @param recover
+   *   is the function that gets called to recover the source in case of error
    */
   def redeem[A, B](fa: F[A])(recover: E => B, f: A => B): F[B] =
     handleError(map(fa)(f))(recover)
 
   /**
-   * Execute a callback on certain errors, then rethrow them.
-   * Any non matching error is rethrown as well.
+   * Execute a callback on certain errors, then rethrow them. Any non matching error is rethrown as well.
    *
-   * In the following example, only one of the errors is logged,
-   * but they are both rethrown, to be possibly handled by another
-   * layer of the program:
+   * In the following example, only one of the errors is logged, but they are both rethrown, to be possibly handled by
+   * another layer of the program:
    *
    * {{{
    * scala> import cats._, data._, implicits._
@@ -262,8 +264,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
     handleErrorWith(fa)(e => pf.andThen(map2(_, raiseError[A](e))((_, b) => b)).applyOrElse(e, raiseError))
 
   /**
-   * Often E is Throwable. Here we try to call pure or catch
-   * and raise.
+   * Often E is Throwable. Here we try to call pure or catch and raise.
    */
   def catchNonFatal[A](a: => A)(implicit ev: Throwable <:< E): F[A] =
     try pure(a)
@@ -272,8 +273,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
     }
 
   /**
-   * Often E is Throwable. Here we try to call pure or catch
-   * and raise
+   * Often E is Throwable. Here we try to call pure or catch and raise
    */
   def catchNonFatalEval[A](a: Eval[A])(implicit ev: Throwable <:< E): F[A] =
     try pure(a.value)

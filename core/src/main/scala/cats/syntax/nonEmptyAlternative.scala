@@ -30,7 +30,8 @@ trait NonEmptyAlternativeSyntax {
 final class NonEmptyAlternativeOps[F[_], A] private[syntax] (private val fa: F[A]) extends AnyVal {
 
   /**
-   * @see [[NonEmptyAlternative.prependK]]
+   * @see
+   *   [[NonEmptyAlternative.prependK]]
    *
    * Example:
    * {{{
@@ -43,7 +44,8 @@ final class NonEmptyAlternativeOps[F[_], A] private[syntax] (private val fa: F[A
   def prependK(a: A)(implicit F: NonEmptyAlternative[F]): F[A] = F.prependK(a, fa)
 
   /**
-   * @see [[NonEmptyAlternative.appendK]]
+   * @see
+   *   [[NonEmptyAlternative.appendK]]
    *
    * Example:
    * {{{

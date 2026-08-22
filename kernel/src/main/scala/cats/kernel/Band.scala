@@ -24,8 +24,7 @@ package cats.kernel
 import scala.{specialized => sp}
 
 /**
- * Bands are semigroups whose operation
- * (i.e. combine) is also idempotent.
+ * Bands are semigroups whose operation (i.e. combine) is also idempotent.
  */
 trait Band[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
   override protected[this] def repeatedCombineN(a: A, n: Int): A =

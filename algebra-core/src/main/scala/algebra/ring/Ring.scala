@@ -28,15 +28,13 @@ import scala.annotation.tailrec
 /**
  * Ring consists of:
  *
- *  - a commutative group for addition (+)
- *  - a monoid for multiplication (*)
+ *   - a commutative group for addition (+)
+ *   - a monoid for multiplication (*)
  *
  * Additionally, multiplication must distribute over addition.
  *
- * Ring implements some methods (for example fromInt) in terms of
- * other more fundamental methods (zero, one and plus). Where
- * possible, these methods should be overridden by more efficient
- * implementations.
+ * Ring implements some methods (for example fromInt) in terms of other more fundamental methods (zero, one and plus).
+ * Where possible, these methods should be overridden by more efficient implementations.
  */
 trait Ring[@sp(Int, Long, Float, Double) A] extends Any with Rig[A] with Rng[A] {
 
@@ -45,22 +43,19 @@ trait Ring[@sp(Int, Long, Float, Double) A] extends Any with Rig[A] with Rng[A] 
    *
    * Defined to be equivalent to `sumN(one, n)`.
    *
-   * That is, `n` repeated summations of this ring's `one`, or `-n`
-   * summations of `-one` if `n` is negative.
+   * That is, `n` repeated summations of this ring's `one`, or `-n` summations of `-one` if `n` is negative.
    *
-   * Most type class instances should consider overriding this method
-   * for performance reasons.
+   * Most type class instances should consider overriding this method for performance reasons.
    */
   def fromInt(n: Int): A = sumN(one, n)
 
   /**
    * Convert the given BigInt to an instance of A.
    *
-   * This is equivalent to `n` repeated summations of this ring's `one`, or
-   * `-n` summations of `-one` if `n` is negative.
+   * This is equivalent to `n` repeated summations of this ring's `one`, or `-n` summations of `-one` if `n` is
+   * negative.
    *
-   * Most type class instances should consider overriding this method for
-   * performance reasons.
+   * Most type class instances should consider overriding this method for performance reasons.
    */
   def fromBigInt(n: BigInt): A = Ring.defaultFromBigInt(n)(this)
 }
@@ -93,12 +88,10 @@ trait RingFunctions[R[T] <: Ring[T]] extends AdditiveGroupFunctions[R] with Mult
   }
 
   /**
-   * Returns the given Double, understood as a rational number, in the provided
-   * (division) ring.
+   * Returns the given Double, understood as a rational number, in the provided (division) ring.
    *
-   * This is implemented in terms of basic ops. However, this is
-   * probably significantly less efficient than can be done with a specific
-   * type. So, it is recommended to specialize this general method.
+   * This is implemented in terms of basic ops. However, this is probably significantly less efficient than can be done
+   * with a specific type. So, it is recommended to specialize this general method.
    */
   final def defaultFromDouble[A](a: Double)(implicit ringA: Ring[A], mgA: MultiplicativeGroup[A]): A =
     if (a == 0.0) ringA.zero

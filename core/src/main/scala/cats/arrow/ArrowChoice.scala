@@ -28,13 +28,10 @@ package arrow
 trait ArrowChoice[F[_, _]] extends Arrow[F] with Choice[F] { self =>
 
   /**
-   * ArrowChoice yields Arrows with choice, allowing distribution
-   * over coproducts.
+   * ArrowChoice yields Arrows with choice, allowing distribution over coproducts.
    *
-   * Given two `F`s (`f` and `g`), create a new `F` with
-   * domain the coproduct of the domains of `f` and `g`,
-   * and codomain the coproduct of the codomains of `f` and `g`.
-   * This is the sum notion to `split`'s product.
+   * Given two `F`s (`f` and `g`), create a new `F` with domain the coproduct of the domains of `f` and `g`, and
+   * codomain the coproduct of the codomains of `f` and `g`. This is the sum notion to `split`'s product.
    *
    * Example:
    * {{{

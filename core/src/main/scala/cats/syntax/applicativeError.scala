@@ -103,8 +103,8 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
     F.handleErrorWith(fa)(_ => other)
 
   /**
-   * Transform certain errors using `pf` and rethrow them.
-   * Non matching errors and successful values are not affected by this function.
+   * Transform certain errors using `pf` and rethrow them. Non matching errors and successful values are not affected by
+   * this function.
    *
    * Example:
    * {{{
@@ -122,8 +122,8 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
    * res2: Either[String,Int] = Right(1)
    * }}}
    *
-   * This is the same as `MonadErrorOps#adaptError`. It cannot have the same name because
-   * this would result in ambiguous implicits.
+   * This is the same as `MonadErrorOps#adaptError`. It cannot have the same name because this would result in ambiguous
+   * implicits.
    */
   def adaptErr(pf: PartialFunction[E, E])(implicit F: ApplicativeError[F, E]): F[A] = F.adaptError(fa)(pf)
 

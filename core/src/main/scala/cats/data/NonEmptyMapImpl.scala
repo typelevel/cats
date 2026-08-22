@@ -29,9 +29,9 @@ import scala.collection.immutable.*
 /**
  * Actual implementation for [[cats.data.NonEmptyMap]]
  *
- * @note This object is kept public for the sake of binary compatibility only
- *       and therefore is subject to changes in future versions of Cats.
- *       Do not use directly - use [[cats.data.NonEmptyMap]] instead.
+ * @note
+ *   This object is kept public for the sake of binary compatibility only and therefore is subject to changes in future
+ *   versions of Cats. Do not use directly - use [[cats.data.NonEmptyMap]] instead.
  */
 object NonEmptyMapImpl extends NonEmptyMapInstances with Newtype2 {
 
@@ -216,8 +216,7 @@ sealed class NonEmptyMapOps[K, A](private[data] val value: NonEmptyMap[K, A]) {
     reduceLeftTo(identity)(f)
 
   /**
-   * Apply `f` to the "initial element" of `fa` and combine it with
-   * every other value using the given function `g`.
+   * Apply `f` to the "initial element" of `fa` and combine it with every other value using the given function `g`.
    */
   def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B =
     tail.foldLeft(f(head._2))((b, a) => g(b, a._2))
@@ -229,8 +228,8 @@ sealed class NonEmptyMapOps[K, A](private[data] val value: NonEmptyMap[K, A]) {
     reduceRightTo(identity)(f)
 
   /**
-   * Apply `f` to the "initial element" of this map and lazily combine it
-   * with every other value using the given function `g`.
+   * Apply `f` to the "initial element" of this map and lazily combine it with every other value using the given
+   * function `g`.
    */
   def reduceRightTo[B](f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
     Always((head, tail)).flatMap { case ((_, a), ga) =>
@@ -247,9 +246,8 @@ sealed class NonEmptyMapOps[K, A](private[data] val value: NonEmptyMap[K, A]) {
     reduceLeft(S.combine)
 
   /**
-   * Given a function which returns a G effect, thread this effect
-   * through the running of this function on all the values in this map,
-   * returning an NonEmptyMap[K, B] in a G context.
+   * Given a function which returns a G effect, thread this effect through the running of this function on all the
+   * values in this map, returning an NonEmptyMap[K, B] in a G context.
    */
   def nonEmptyTraverse[G[_], B](f: A => G[B])(implicit G: Apply[G]): G[NonEmptyMap[K, B]] = {
     def loop(h: (K, A), t: SortedMap[K, A]): Eval[G[NonEmptyMap[K, B]]] =
@@ -264,9 +262,8 @@ sealed class NonEmptyMapOps[K, A](private[data] val value: NonEmptyMap[K, A]) {
   /**
    * Typesafe stringification method.
    *
-   * This method is similar to .toString except that it stringifies
-   * values according to Show[_] instances, rather than using the
-   * universal .toString method.
+   * This method is similar to .toString except that it stringifies values according to Show[_] instances, rather than
+   * using the universal .toString method.
    */
   def show(implicit A: Show[A], K: Show[K]): String =
     s"NonEmpty${Show[SortedMap[K, A]].show(toSortedMap)}"
@@ -274,10 +271,8 @@ sealed class NonEmptyMapOps[K, A](private[data] val value: NonEmptyMap[K, A]) {
   /**
    * Typesafe equality operator.
    *
-   * This method is similar to == except that it only allows two
-   * NonEmptySet[A] values to be compared to each other, and uses
-   * equality provided by Eq[_] instances, rather than using the
-   * universal equality provided by .equals.
+   * This method is similar to == except that it only allows two NonEmptySet[A] values to be compared to each other, and
+   * uses equality provided by Eq[_] instances, rather than using the universal equality provided by .equals.
    */
   def ===(that: NonEmptyMap[K, A])(implicit A: Eq[A]): Boolean =
     Eq[SortedMap[K, A]].eqv(toSortedMap, that.toSortedMap)

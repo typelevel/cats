@@ -30,9 +30,9 @@ import scala.collection.immutable.SortedMap
 /**
  * Actual implementation for [[cats.data.NonEmptyChain]]
  *
- * @note This object is kept public for the sake of binary compatibility only
- *       and therefore is subject to changes in future versions of Cats.
- *       Do not use directly - use [[cats.data.NonEmptyChain]] instead.
+ * @note
+ *   This object is kept public for the sake of binary compatibility only and therefore is subject to changes in future
+ *   versions of Cats. Do not use directly - use [[cats.data.NonEmptyChain]] instead.
  */
 object NonEmptyChainImpl extends NonEmptyChainInstances with ScalaVersionSpecificNonEmptyChainImpl {
   // The following 3 types are components of a technique to
@@ -176,9 +176,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
     prependChain(c)
 
   /**
-   * Yields to Some(a, Chain[A]) with `a` removed where `f` holds for the first time,
-   * otherwise yields None, if `a` was not found
-   * Traverses only until `a` is found.
+   * Yields to Some(a, Chain[A]) with `a` removed where `f` holds for the first time, otherwise yields None, if `a` was
+   * not found Traverses only until `a` is found.
    */
   final def deleteFirst(f: A => Boolean): Option[(A, Chain[A])] =
     toChain.deleteFirst(f)
@@ -275,14 +274,13 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
   final def collect[B](pf: PartialFunction[A, B]): Chain[B] = toChain.collect(pf)
 
   /**
-   * Finds the first element of this `NonEmptyChain` for which the given partial
-   * function is defined, and applies the partial function to it.
+   * Finds the first element of this `NonEmptyChain` for which the given partial function is defined, and applies the
+   * partial function to it.
    */
   final def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = toChain.collectFirst(pf)
 
   /**
-   * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]`
-   * instead of `PartialFunction`s.
+   * Like `collectFirst` from `scala.collection.Traversable` but takes `A => Option[B]` instead of `PartialFunction`s.
    */
   final def collectFirstSome[B](f: A => Option[B]): Option[B] = toChain.collectFirstSome(f)
 
@@ -325,8 +323,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
   }
 
   /**
-   * Apply `f` to the "initial element" of this chain and lazily combine it
-   * with every other value using the given function `g`.
+   * Apply `f` to the "initial element" of this chain and lazily combine it with every other value using the given
+   * function `g`.
    * {{{
    * scala> import cats.data.NonEmptyChain
    * scala> val nec = NonEmptyChain(4, 5, 6)
@@ -358,8 +356,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
   }
 
   /**
-   * Apply `f` to the "initial element" of this chain and lazily combine it
-   * with every other value using the given function `g`.
+   * Apply `f` to the "initial element" of this chain and lazily combine it with every other value using the given
+   * function `g`.
    * {{{
    * scala> import cats.data.NonEmptyChain
    * scala> val nec = NonEmptyChain(4, 5, 6)
@@ -412,8 +410,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
     create(toChain.zipWith(b.toChain)(f))
 
   /**
-   * Groups elements inside this `NonEmptyChain` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * Groups elements inside this `NonEmptyChain` according to the `Order` of the keys produced by the given mapping
+   * function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
@@ -447,8 +445,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
   }
 
   /**
-   * Groups elements inside this `NonEmptyChain` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * Groups elements inside this `NonEmptyChain` according to the `Order` of the keys produced by the given mapping
+   * function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
@@ -464,10 +462,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
     groupBy(f)
 
   /**
-   * Groups elements inside this `NonEmptyChain` according to the `Order`
-   * of the keys produced by the given key function.
-   * And each element in a group is transformed into a value of type B
-   * using the mapping function.
+   * Groups elements inside this `NonEmptyChain` according to the `Order` of the keys produced by the given key
+   * function. And each element in a group is transformed into a value of type B using the mapping function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
@@ -483,10 +479,8 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
     toChain.groupMap(key)(f).asInstanceOf[NonEmptyMap[K, NonEmptyChain[B]]]
 
   /**
-   * Groups elements inside this `NonEmptyChain` according to the `Order`
-   * of the keys produced by the given key function.
-   * And each element in a group is transformed into a value of type B
-   * using the mapping function.
+   * Groups elements inside this `NonEmptyChain` according to the `Order` of the keys produced by the given key
+   * function. And each element in a group is transformed into a value of type B using the mapping function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
@@ -502,12 +496,9 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
     groupMap(key)(f)
 
   /**
-   * Groups elements inside this `NonEmptyChain` according to the `Order`
-   * of the keys produced by the given key function.
-   * Then each element in a group is transformed into a value of type B
-   * using the mapping function.
-   * And finally they are all reduced into a single value
-   * using their `Semigroup`
+   * Groups elements inside this `NonEmptyChain` according to the `Order` of the keys produced by the given key
+   * function. Then each element in a group is transformed into a value of type B using the mapping function. And
+   * finally they are all reduced into a single value using their `Semigroup`
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
@@ -523,12 +514,9 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
     toChain.groupMapReduce(key)(f).asInstanceOf[NonEmptyMap[K, B]]
 
   /**
-   * Groups elements inside this `NonEmptyChain` according to the `Order`
-   * of the keys produced by the given key function.
-   * Then each element in a group is transformed into a value of type B
-   * using the mapping function.
-   * And finally they are all reduced into a single value
-   * using their `Semigroup`
+   * Groups elements inside this `NonEmptyChain` according to the `Order` of the keys produced by the given key
+   * function. Then each element in a group is transformed into a value of type B using the mapping function. And
+   * finally they are all reduced into a single value using their `Semigroup`
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
@@ -544,12 +532,9 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
     groupMapReduce(key)(f)
 
   /**
-   * Groups elements inside this `NonEmptyChain` according to the `Order`
-   * of the keys produced by the given key function.
-   * Then each element in a group is transformed into a value of type B
-   * using the mapping function.
-   * And finally they are all reduced into a single value
-   * using the provided combine function.
+   * Groups elements inside this `NonEmptyChain` according to the `Order` of the keys produced by the given key
+   * function. Then each element in a group is transformed into a value of type B using the mapping function. And
+   * finally they are all reduced into a single value using the provided combine function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}
@@ -567,12 +552,9 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
     toChain.groupMapReduceWith(key)(f)(combine).asInstanceOf[NonEmptyMap[K, B]]
 
   /**
-   * Groups elements inside this `NonEmptyChain` according to the `Order`
-   * of the keys produced by the given key function.
-   * Then each element in a group is transformed into a value of type B
-   * using the mapping function.
-   * And finally they are all reduced into a single value
-   * using the provided combine function.
+   * Groups elements inside this `NonEmptyChain` according to the `Order` of the keys produced by the given key
+   * function. Then each element in a group is transformed into a value of type B using the mapping function. And
+   * finally they are all reduced into a single value using the provided combine function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyChain, NonEmptyMap}

@@ -30,9 +30,8 @@ import scala.util.control.NonFatal
 /**
  * Check for Java Serializability.
  *
- * This law is only applicable on the JVM, but is something we want
- * to be sure to enforce. Therefore, we use bricks.Platform to do a
- * runtime check rather than create a separate jvm-laws project.
+ * This law is only applicable on the JVM, but is something we want to be sure to enforce. Therefore, we use
+ * bricks.Platform to do a runtime check rather than create a separate jvm-laws project.
  */
 object SerializableLaws {
 

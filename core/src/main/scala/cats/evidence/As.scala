@@ -27,26 +27,23 @@ import arrow.Category
 /**
  * As substitutability: A better `<:<`
  *
- * This class exists to aid in the capture proof of subtyping
- * relationships, which can be applied in other context to widen other
- * type
+ * This class exists to aid in the capture proof of subtyping relationships, which can be applied in other context to
+ * widen other type
  *
- * `A As B` holds whenever `A` could be used in any negative context
- * that expects a `B`.  (e.g. if you could pass an `A` into any
- * function that expects a `B` as input.)
+ * `A As B` holds whenever `A` could be used in any negative context that expects a `B`. (e.g. if you could pass an `A`
+ * into any function that expects a `B` as input.)
  *
  * This code was ported directly from scalaz to cats using this version from scalaz:
  * https://github.com/scalaz/scalaz/blob/a89b6d63/core/src/main/scala/scalaz/Liskov.scala
  *
- *  The original contribution to scalaz came from Jason Zaugg
+ * The original contribution to scalaz came from Jason Zaugg
  */
 sealed abstract class As[-A, +B] extends Serializable {
 
   /**
-   * Use this subtyping relationship to replace B with a value of type
-   * A in a contravariant context.  This would commonly be the input
-   * to a function, such as F in: `type F[-B] = B => String`. In this
-   * case, we could use A As B to turn an F[B] Into F[A].
+   * Use this subtyping relationship to replace B with a value of type A in a contravariant context. This would commonly
+   * be the input to a function, such as F in: `type F[-B] = B => String`. In this case, we could use A As B to turn an
+   * F[B] Into F[A].
    */
   def substitute[F[-_]](p: F[B]): F[A]
 
@@ -57,8 +54,7 @@ sealed abstract class As[-A, +B] extends Serializable {
   @inline final def coerce(a: A): B = As.witness(this)(a)
 
   /**
-   * A value `A As B` is always sufficient to produce a similar `Predef.<:<`
-   * value.
+   * A value `A As B` is always sufficient to produce a similar `Predef.<:<` value.
    */
   @inline final def toPredef: A <:< B = {
     type F[-Z] = <:<[Z, B]
@@ -82,8 +78,7 @@ sealed abstract class AsInstances {
 object As extends AsInstances with AsSupport {
 
   /**
-   * In truth, "all values of `A Is B` are `refl`". `reflAny` is that
-   * single value.
+   * In truth, "all values of `A Is B` are `refl`". `reflAny` is that single value.
    */
   private[this] val reflAny = new (Any As Any) {
     def substitute[F[-_]](fa: F[Any]) = fa
@@ -117,9 +112,8 @@ object As extends AsInstances with AsSupport {
   @inline def reify[A, B >: A]: A As B = refl
 
   /**
-   * It can be convenient to convert a <:< value into a `<~<` value.
-   * This is not actually unsafe, but was previously labeled as such out
-   * of an abundance of caution
+   * It can be convenient to convert a <:< value into a `<~<` value. This is not actually unsafe, but was previously
+   * labeled as such out of an abundance of caution
    */
   def fromPredef[A, B](eq: A <:< B): A As B =
     asFromPredef(eq)
@@ -142,8 +136,7 @@ object As extends AsInstances with AsSupport {
   }
 
   /**
-   * Widen a F[X,+A] to a F[X,B] if (A As B). This can be used to widen
-   * the output of a Function1, for example.
+   * Widen a F[X,+A] to a F[X,B] if (A As B). This can be used to widen the output of a Function1, for example.
    */
   def co2_2[T[_, +_], Z, A, B](a: B As Z): T[A, B] As T[A, Z] = {
     type L[-α] = T[A, α] As T[A, Z]
@@ -171,8 +164,7 @@ object As extends AsInstances with AsSupport {
   def onF[X, A, B](ev: A As B)(fa: X => A): X => B = co2_2[Function1, B, X, A](ev).coerce(fa)
 
   /**
-   * widen two types for binary type constructors covariant in both
-   * parameters
+   * widen two types for binary type constructors covariant in both parameters
    *
    * lift2(a,b) = co1_2(a) compose co2_2(b)
    */
@@ -186,11 +178,9 @@ object As extends AsInstances with AsSupport {
   }
 
   /**
-   *  We can lift a subtyping relationship into a contravariant type
-   *  constructor.
+   * We can lift a subtyping relationship into a contravariant type constructor.
    *
-   *  Given that F has the shape: F[-_], we show that:
-   *     (A As B) implies (F[B] As F[A])
+   * Given that F has the shape: F[-_], we show that: (A As B) implies (F[B] As F[A])
    */
   def contra[T[-_], A, B](a: A As B): T[B] As T[A] = {
     type L[-α] = T[B] As T[α]

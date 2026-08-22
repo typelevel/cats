@@ -34,44 +34,41 @@ import compat.scalaVersionSpecific.*
  *   - if x <= y and y <= x, then x = y (anti-symmetry)
  *   - if x <= y and y <= z, then x <= z (transitivity)
  *
- * To compute both <= and >= at the same time, we use a Double number
- * to encode the result of the comparisons x <= y and x >= y.
- * The truth table is defined as follows:
+ * To compute both <= and >= at the same time, we use a Double number to encode the result of the comparisons x <= y and
+ * x >= y. The truth table is defined as follows:
  *
- * | x <= y | x >= y | result | note |
- * | :--    | :--    | --:    | :-- |
- * | true   |true    | 0.0    | (corresponds to x = y) |
- * | false  |false   | NaN    | (x and y cannot be compared) |
- * | true   |false   | -1.0   | (corresponds to x < y) |
- * | false  |true    | 1.0    | (corresponds to x > y) |
+ * | x <= y | x >= y | result | note                         |
+ * |:-------|:-------|-------:|:-----------------------------|
+ * | true   | true   |    0.0 | (corresponds to x = y)       |
+ * | false  | false  |    NaN | (x and y cannot be compared) |
+ * | true   | false  |   -1.0 | (corresponds to x < y)       |
+ * | false  | true   |    1.0 | (corresponds to x > y)       |
  */
 trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
 
   /**
-   * Result of comparing `x` with `y`. Returns NaN if operands are not
-   * comparable. If operands are comparable, returns a Double whose
-   * sign is:
+   * Result of comparing `x` with `y`. Returns NaN if operands are not comparable. If operands are comparable, returns a
+   * Double whose sign is:
    *
    *   - negative iff `x < y`
-   *   - zero     iff `x = y`
+   *   - zero iff `x = y`
    *   - positive iff `x > y`
    */
   def partialCompare(x: A, y: A): Double
 
   /**
-   * Like `partialCompare`, but returns a [[cats.kernel.Comparison]] instead of an Double.
-   * Has the benefit of being able to pattern match on, but not as performant.
+   * Like `partialCompare`, but returns a [[cats.kernel.Comparison]] instead of an Double. Has the benefit of being able
+   * to pattern match on, but not as performant.
    */
   def partialComparison(x: A, y: A): Option[Comparison] =
     Comparison.fromDouble(partialCompare(x, y))
 
   /**
-   * Result of comparing `x` with `y`. Returns None if operands are
-   * not comparable. If operands are comparable, returns Some[Int]
-   * where the Int sign is:
+   * Result of comparing `x` with `y`. Returns None if operands are not comparable. If operands are comparable, returns
+   * Some[Int] where the Int sign is:
    *
    *   - negative iff `x < y`
-   *   - zero     iff `x = y`
+   *   - zero iff `x = y`
    *   - positive iff `x > y`
    */
   def tryCompare(x: A, y: A): Option[Int] = {
@@ -158,8 +155,7 @@ object PartialOrder extends PartialOrderFunctions[PartialOrder] with PartialOrde
   @inline final def apply[A](implicit ev: PartialOrder[A]): PartialOrder[A] = ev
 
   /**
-   * Convert an implicit `PartialOrder[B]` to an `PartialOrder[A]` using the given
-   * function `f`.
+   * Convert an implicit `PartialOrder[B]` to an `PartialOrder[A]` using the given function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: PartialOrder[B]): PartialOrder[A] =
     (x, y) => ev.partialCompare(f(x), f(y))

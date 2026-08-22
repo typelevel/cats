@@ -22,14 +22,12 @@
 package cats
 
 /**
- * A type class of types which give rise to two independent, covariant
- * functors.
+ * A type class of types which give rise to two independent, covariant functors.
  */
 trait Bifunctor[F[_, _]] extends Serializable { self =>
 
   /**
-   * The quintessential method of the Bifunctor trait, it applies a
-   * function to each "side" of the bifunctor.
+   * The quintessential method of the Bifunctor trait, it applies a function to each "side" of the bifunctor.
    *
    * Example:
    * {{{
@@ -65,6 +63,7 @@ trait Bifunctor[F[_, _]] extends Serializable { self =>
 
   /**
    * Widens A into a supertype AA.
+   *
    * Example:
    * {{{
    * scala> import cats.syntax.all._
@@ -78,13 +77,13 @@ trait Bifunctor[F[_, _]] extends Serializable { self =>
 
   /**
    * Lift left into F using Applicative.
-   * * Example:
+   *
+   * Example:
    * {{{
    * scala> import cats.syntax.all._
    * scala> val x0: Either[String, Int] = Either.left("foo")
    * scala> val x1: Either[List[String], Int] = x0.leftLiftTo[List]
    * }}}
-   *
    */
   def leftLiftTo[A, B, C[_]](fab: F[A, B])(implicit C: Applicative[C]): F[C[A], B] =
     leftMap[A, B, C[A]](fab)(C.pure[A])
