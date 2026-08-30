@@ -19,12 +19,11 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package cats.kernel
+package cats
 package instances
 
-package object all
-    extends AllInstances
-    with AllInstancesBinCompat0
-    with AllInstancesBinCompat1
-    with AllInstancesBinCompat2
-    with AllInstancesBinCompat3
+import java.util.Currency
+
+trait CurrencyInstances extends cats.kernel.instances.CurrencyInstances {
+  implicit val catsStdShowForCurrency: Show[Currency] = Show.fromToString[Currency]
+}
