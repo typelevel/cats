@@ -27,14 +27,13 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
 /**
- * [[Semigroupal]] captures the idea of composing independent effectful values.
- * It is of particular interest when taken together with [[Functor]] - where [[Functor]]
- * captures the idea of applying a unary pure function to an effectful value,
- * calling `product` with `map` allows one to apply a function of arbitrary arity to multiple
- * independent effectful values.
+ * [[Semigroupal]] captures the idea of composing independent effectful values. It is of particular interest when taken
+ * together with [[Functor]] - where [[Functor]] captures the idea of applying a unary pure function to an effectful
+ * value, calling `product` with `map` allows one to apply a function of arbitrary arity to multiple independent
+ * effectful values.
  *
- * That same idea is also manifested in the form of [[Apply]], and indeed [[Apply]] extends both
- * [[Semigroupal]] and [[Functor]] to illustrate this.
+ * That same idea is also manifested in the form of [[Apply]], and indeed [[Apply]] extends both [[Semigroupal]] and
+ * [[Functor]] to illustrate this.
  */
 trait Semigroupal[F[_]] extends Serializable {
 
@@ -73,12 +72,13 @@ object Semigroupal extends SemigroupalArityFunctions with ScalaVersionSpecificSe
 
   /**
    * @deprecated
-   *   Any non-pure use of [[scala.concurrent.Future Future]] with Cats is error prone
-   *   (particularly the semantics of [[cats.Traverse#traverse traverse]] with regard to execution order are unspecified).
-   *   We recommend using [[https://typelevel.org/cats-effect/ Cats Effect `IO`]] as a replacement for ''every'' use case of [[scala.concurrent.Future Future]].
-   *   However, at this time there are no plans to remove these instances from Cats.
+   *   Any non-pure use of [[scala.concurrent.Future Future]] with Cats is error prone (particularly the semantics of
+   *   [[cats.Traverse#traverse traverse]] with regard to execution order are unspecified). We recommend using
+   *   [[https://typelevel.org/cats-effect/ Cats Effect `IO`]] as a replacement for ''every'' use case of
+   *   [[scala.concurrent.Future Future]]. However, at this time there are no plans to remove these instances from Cats.
    *
-   * @see [[https://github.com/typelevel/cats/issues/4176 Changes in Future traverse behavior between 2.6 and 2.7]]
+   * @see
+   *   [[https://github.com/typelevel/cats/issues/4176 Changes in Future traverse behavior between 2.6 and 2.7]]
    */
   implicit def catsSemigroupalForFuture(implicit ec: ExecutionContext): Semigroupal[Future] =
     cats.instances.future.catsStdInstancesForFuture(ec)

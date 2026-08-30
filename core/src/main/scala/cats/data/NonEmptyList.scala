@@ -31,8 +31,7 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 /**
- * A data type which represents a non empty list of A, with
- * single element (head) and optional structure (tail).
+ * A data type which represents a non empty list of A, with single element (head) and optional structure (tail).
  */
 final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollection[A, List, NonEmptyList] {
 
@@ -142,7 +141,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
   /**
    * Alias for [[prependList]]
-   * 
+   *
    * {{{
    * scala> import cats.data.NonEmptyList
    * scala> val nel = NonEmptyList.of(1, 2, 3)
@@ -246,8 +245,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   }
 
   /**
-   * Builds a new `List` by applying a partial function to
-   * all the elements from this `NonEmptyList` on which the function is defined
+   * Builds a new `List` by applying a partial function to all the elements from this `NonEmptyList` on which the
+   * function is defined
    *
    * {{{
    * scala> import cats.data.NonEmptyList
@@ -336,12 +335,14 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
 
   /**
    * Right-associative fold on the structure using f.
+   * {{{
    * scala> import cats.data.NonEmptyList
    * scala> import cats.Eval
    * scala> import scala.math.pow
    * scala> val nel = NonEmptyList.of(2,2,2)
    * scala> (nel.foldRight (Eval.now(1)) ((a, b)  => Eval.now(pow(a, b.value).toInt))).value
    * res0: Int = 16
+   * }}}
    */
   def foldRight[B](lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
     Foldable[List].foldRight(toList, lb)(f)
@@ -517,8 +518,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     NonEmptyList.fromListUnsafe(toList.sorted(AA.toOrdering))
 
   /**
-   * Groups elements inside this `NonEmptyList` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * Groups elements inside this `NonEmptyList` according to the `Order` of the keys produced by the given mapping
+   * function.
    *
    * {{{
    * scala> import scala.collection.immutable.SortedMap
@@ -535,8 +536,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     groupMap(key = f)(identity)
 
   /**
-   * Groups elements inside this `NonEmptyList` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * Groups elements inside this `NonEmptyList` according to the `Order` of the keys produced by the given mapping
+   * function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyList, NonEmptyMap}
@@ -552,10 +553,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     NonEmptyMap.fromMapUnsafe(groupBy(f))
 
   /**
-   * Groups elements inside this `NonEmptyList` according to the `Order`
-   * of the keys produced by the given key function.
-   * And each element in a group is transformed into a value of type B
-   * using the mapping function.
+   * Groups elements inside this `NonEmptyList` according to the `Order` of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type B using the mapping function.
    *
    * {{{
    * scala> import scala.collection.immutable.SortedMap
@@ -587,10 +586,8 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   }
 
   /**
-   * Groups elements inside this `NonEmptyList` according to the `Order`
-   * of the keys produced by the given key function.
-   * And each element in a group is transformed into a value of type B
-   * using the mapping function.
+   * Groups elements inside this `NonEmptyList` according to the `Order` of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type B using the mapping function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyList, NonEmptyMap}
@@ -606,12 +603,9 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     NonEmptyMap.fromMapUnsafe(groupMap(key)(f))
 
   /**
-   * Groups elements inside this `NonEmptyList` according to the `Order`
-   * of the keys produced by the given key function.
-   * Then each element in a group is transformed into a value of type B
-   * using the mapping function.
-   * And finally they are all reduced into a single value
-   * using their `Semigroup`.
+   * Groups elements inside this `NonEmptyList` according to the `Order` of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B using the mapping function. And finally they are
+   * all reduced into a single value using their `Semigroup`.
    *
    * {{{
    * scala> import scala.collection.immutable.SortedMap
@@ -628,12 +622,9 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     groupMapReduceWith(key)(f)(B.combine)
 
   /**
-   * Groups elements inside this `NonEmptyList` according to the `Order`
-   * of the keys produced by the given key function.
-   * Then each element in a group is transformed into a value of type B
-   * using the mapping function.
-   * And finally they are all reduced into a single value
-   * using their `Semigroup`.
+   * Groups elements inside this `NonEmptyList` according to the `Order` of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B using the mapping function. And finally they are
+   * all reduced into a single value using their `Semigroup`.
    *
    * {{{
    * scala> import cats.data.{NonEmptyList, NonEmptyMap}
@@ -649,12 +640,9 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
     NonEmptyMap.fromMapUnsafe(groupMapReduce(key)(f))
 
   /**
-   * Groups elements inside this `NonEmptyList` according to the `Order`
-   * of the keys produced by the given key function.
-   * Then each element in a group is transformed into a value of type B
-   * using the mapping function.
-   * And finally they are all reduced into a single value
-   * using the provided combine function.
+   * Groups elements inside this `NonEmptyList` according to the `Order` of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B using the mapping function. And finally they are
+   * all reduced into a single value using the provided combine function.
    *
    * {{{
    * scala> import scala.collection.immutable.SortedMap
@@ -684,12 +672,9 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
   }
 
   /**
-   * Groups elements inside this `NonEmptyList` according to the `Order`
-   * of the keys produced by the given key function.
-   * Then each element in a group is transformed into a value of type B
-   * using the mapping function.
-   * And finally they are all reduced into a single value
-   * using the provided combine function.
+   * Groups elements inside this `NonEmptyList` according to the `Order` of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B using the mapping function. And finally they are
+   * all reduced into a single value using the provided combine function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyList, NonEmptyMap}
@@ -782,11 +767,10 @@ object NonEmptyList extends NonEmptyListInstances {
   /**
    * Create a `NonEmptyList` from a `List`.
    *
-   * The result will be `None` if the input list is empty and `Some` wrapping a
-   * `NonEmptyList` otherwise.
+   * The result will be `None` if the input list is empty and `Some` wrapping a `NonEmptyList` otherwise.
    *
-   * @see [[fromListUnsafe]] for an unsafe version that throws an exception if
-   * the input list is empty.
+   * @see
+   *   [[fromListUnsafe]] for an unsafe version that throws an exception if the input list is empty.
    */
   def fromList[A](l: List[A]): Option[NonEmptyList[A]] =
     l match {
@@ -795,11 +779,10 @@ object NonEmptyList extends NonEmptyListInstances {
     }
 
   /**
-   * Create a `NonEmptyList` from a `List`, or throw an
-   * `IllegalArgumentException` if the input list is empty.
+   * Create a `NonEmptyList` from a `List`, or throw an `IllegalArgumentException` if the input list is empty.
    *
-   * @see [[fromList]] for a safe version that returns `None` if the input list
-   * is empty.
+   * @see
+   *   [[fromList]] for a safe version that returns `None` if the input list is empty.
    */
   def fromListUnsafe[A](l: List[A]): NonEmptyList[A] =
     l match {

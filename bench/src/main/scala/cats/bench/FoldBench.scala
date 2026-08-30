@@ -36,12 +36,16 @@ class FoldBench {
   val charsVector: Vector[String] = chars.toVector
   val combineStringsSome: (String, String) => Option[String] = (s1, s2) => Some(s1 + s2)
 
-  /** Benchmark fold of Foldable[List] */
+  /**
+   * Benchmark fold of Foldable[List]
+   */
   @Benchmark
   def fold(): String =
     Foldable[List].fold(chars)
 
-  /** Benchmark fold using traverse with Const */
+  /**
+   * Benchmark fold using traverse with Const
+   */
   @Benchmark
   def traverseConst(): String =
     Traverse[List].traverse[Const[String, *], String, String](chars)(Const(_)).getConst

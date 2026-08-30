@@ -40,8 +40,7 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
     fab.ap(fa) <-> fab.flatMap(f => fa.map(f))
 
   /**
-   * The composition of `cats.data.Kleisli` arrows is associative. This is
-   * analogous to [[flatMapAssociativity]].
+   * The composition of `cats.data.Kleisli` arrows is associative. This is analogous to [[flatMapAssociativity]].
    */
   def kleisliAssociativity[A, B, C, D](f: A => F[B], g: B => F[C], h: C => F[D], a: A): IsEq[F[D]] = {
     val (kf, kg, kh) = (Kleisli(f), Kleisli(g), Kleisli(h))
@@ -68,8 +67,7 @@ trait FlatMapLaws[F[_]] extends ApplyLaws[F] {
   }
 
   /**
-   * It is possible to implement flatMap from tailRecM and map
-   * and it should agree with the flatMap implementation.
+   * It is possible to implement flatMap from tailRecM and map and it should agree with the flatMap implementation.
    */
   def flatMapFromTailRecMConsistency[A, B](fa: F[A], fn: A => F[B]): IsEq[F[B]] = {
     val tailRecMFlatMap = F.tailRecM[Option[A], B](Option.empty[A]) {

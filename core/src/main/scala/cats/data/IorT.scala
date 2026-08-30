@@ -61,8 +61,7 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
       case Ior.Both(_, b) => F.pure(b)
     }
 
-  /***
-   *
+  /**
    * Like [[getOrElseF]] but accept an error `E` and raise it when the inner `Ior` is `Left`
    *
    * Equivalent to `getOrElseF(F.raiseError(e)))`
@@ -72,7 +71,7 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
    * scala> import cats.data.IorT
    * scala> import cats.syntax.all._
    * scala> import scala.util.{Success, Failure, Try}
-
+   *
    * scala> val iorT: IorT[Try,String,Int] = IorT.leftT("abc")
    * scala> iorT.getOrRaise(new RuntimeException("ERROR!"))
    * res0: Try[Int] = Failure(java.lang.RuntimeException: ERROR!)
@@ -185,7 +184,9 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
 object IorT extends IorTInstances {
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[data] class LeftPartiallyApplied[B](private val dummy: Boolean = true) extends AnyVal {
     def apply[F[_], A](fa: F[A])(implicit F: Functor[F]): IorT[F, A, B] = IorT(F.map(fa)(Ior.left))
@@ -203,7 +204,9 @@ object IorT extends IorTInstances {
   final def left[B]: LeftPartiallyApplied[B] = new LeftPartiallyApplied[B]
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[data] class LeftTPartiallyApplied[F[_], B](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](a: A)(implicit F: Applicative[F]): IorT[F, A, B] = IorT(F.pure(Ior.left(a)))
@@ -222,7 +225,9 @@ object IorT extends IorTInstances {
   final def leftT[F[_], B]: LeftTPartiallyApplied[F, B] = new LeftTPartiallyApplied[F, B]
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[data] class RightPartiallyApplied[A](private val dummy: Boolean = true) extends AnyVal {
     def apply[F[_], B](fb: F[B])(implicit F: Functor[F]): IorT[F, A, B] = IorT(F.map(fb)(Ior.right))
@@ -263,7 +268,9 @@ object IorT extends IorTInstances {
     IorT(F.map2(fa, fb)((a, b) => Ior.Both(a, b)))
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[data] class BothTPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A, B](a: A, b: B)(implicit F: Applicative[F]): IorT[F, A, B] = IorT(F.pure(Ior.Both(a, b)))
@@ -281,7 +288,9 @@ object IorT extends IorTInstances {
   final def bothT[F[_]]: BothTPartiallyApplied[F] = new BothTPartiallyApplied[F]
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[data] class PurePartiallyApplied[F[_], A](private val dummy: Boolean = true) extends AnyVal {
     def apply[B](b: B)(implicit F: Applicative[F]): IorT[F, A, B] = IorT(F.pure(Ior.right(b)))
@@ -329,7 +338,9 @@ object IorT extends IorTInstances {
     }
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[data] class FromIorPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A, B](ior: Ior[A, B])(implicit F: Applicative[F]): IorT[F, A, B] = IorT(F.pure(ior))
@@ -348,7 +359,9 @@ object IorT extends IorTInstances {
   final def fromIor[F[_]]: FromIorPartiallyApplied[F] = new FromIorPartiallyApplied[F]
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[data] class FromEitherPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[E, A](either: Either[E, A])(implicit F: Applicative[F]): IorT[F, E, A] =
@@ -381,7 +394,9 @@ object IorT extends IorTInstances {
     IorT(F.map(feither)(Ior.fromEither))
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[data] class FromOptionPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[E, A](option: Option[A], ifNone: => E)(implicit F: Applicative[F]): IorT[F, E, A] =
@@ -389,8 +404,8 @@ object IorT extends IorTInstances {
   }
 
   /**
-   * Transforms an `Option` into an `IorT`, lifted into the specified `Applicative` and using
-   * the second argument if the `Option` is a `None`.
+   * Transforms an `Option` into an `IorT`, lifted into the specified `Applicative` and using the second argument if the
+   * `Option` is a `None`.
    * {{{
    * scala> import cats.data.IorT
    * scala> import cats.syntax.all._
@@ -430,7 +445,9 @@ object IorT extends IorTInstances {
     )
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[data] class CondPartiallyApplied[F[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A, B](test: Boolean, right: => B, left: => A)(implicit F: Applicative[F]): IorT[F, A, B] =
@@ -438,8 +455,8 @@ object IorT extends IorTInstances {
   }
 
   /**
-   * If the condition is satisfied, return the given `B` in `Ior.Right`, otherwise, return the given
-   * `A` in `Ior.Left`, lifted into the specified `Applicative`.
+   * If the condition is satisfied, return the given `B` in `Ior.Right`, otherwise, return the given `A` in `Ior.Left`,
+   * lifted into the specified `Applicative`.
    * {{{
    * scala> import cats.data.IorT
    * scala> import cats.syntax.all._
@@ -454,8 +471,8 @@ object IorT extends IorTInstances {
   final def cond[F[_]]: CondPartiallyApplied[F] = new CondPartiallyApplied[F]
 
   /**
-   * If the condition is satisfied, return the value of `IorT.right` on `F[B]`, otherwise, return the
-   * value of `IorT.left` on `F[A]`.
+   * If the condition is satisfied, return the value of `IorT.right` on `F[B]`, otherwise, return the value of
+   * `IorT.left` on `F[A]`.
    * {{{
    * scala> import cats.data.IorT
    * scala> import cats.syntax.all._
@@ -488,16 +505,12 @@ abstract private[data] class IorTInstances extends IorTInstances1 {
     new IorTMonoid[F, A, B] { val F0: Monoid[F[Ior[A, B]]] = F }
 
   /**
-   * An alternative [[Parallel]] implementation which merges the semantics of
-   * the outer Parallel (the F[_] effect) with the effects of the inner
-   * one (the Ior). The inner Parallel has the semantics of [[Ior]]'s Parallel,
-   * while the outer has the semantics of parallel ''evaluation'' (in most cases).
-   * The default Parallel for [[IorT]], when the nested F also has a Parallel,
-   * is to strictly take the semantics of the nested F and to short-circuit any
-   * lefts (often, errors) in a left-to-right fashion, mirroring the semantics of
-   * [[Applicative]] on IorT. This instance is different in that it will not
-   * ''short-circuit'' but instead accumulate all lefts according to the supplied
-   * [[Semigroup]].
+   * An alternative [[Parallel]] implementation which merges the semantics of the outer Parallel (the F[_] effect) with
+   * the effects of the inner one (the Ior). The inner Parallel has the semantics of [[Ior]]'s Parallel, while the outer
+   * has the semantics of parallel ''evaluation'' (in most cases). The default Parallel for [[IorT]], when the nested F
+   * also has a Parallel, is to strictly take the semantics of the nested F and to short-circuit any lefts (often,
+   * errors) in a left-to-right fashion, mirroring the semantics of [[Applicative]] on IorT. This instance is different
+   * in that it will not ''short-circuit'' but instead accumulate all lefts according to the supplied [[Semigroup]].
    *
    * {{{
    * implicit val p: Parallel[IorT[IO, Chain[Error], *]] = IorT.accumulatingParallel

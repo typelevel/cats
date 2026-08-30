@@ -25,9 +25,8 @@ import scala.{specialized => sp}
 import compat.scalaVersionSpecific.*
 
 /**
- * A monoid is a semigroup with an identity. A monoid is a specialization of a
- * semigroup, so its operation must be associative. Additionally,
- * `combine(x, empty) == combine(empty, x) == x`. For example, if we have `Monoid[String]`,
+ * A monoid is a semigroup with an identity. A monoid is a specialization of a semigroup, so its operation must be
+ * associative. Additionally, `combine(x, empty) == combine(empty, x) == x`. For example, if we have `Monoid[String]`,
  * with `combine` as string concatenation, then `empty = ""`.
  */
 trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] { self =>

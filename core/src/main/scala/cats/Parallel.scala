@@ -25,8 +25,8 @@ import cats.arrow.FunctionK
 import cats.data.{Validated, ZipList, ZipVector}
 
 /**
- * Some types that form a FlatMap, are also capable of forming an Apply that supports parallel composition.
- * The NonEmptyParallel type class allows us to represent this relationship.
+ * Some types that form a FlatMap, are also capable of forming an Apply that supports parallel composition. The
+ * NonEmptyParallel type class allows us to represent this relationship.
  */
 trait NonEmptyParallel[M[_]] extends Serializable {
   type F[_]
@@ -52,8 +52,7 @@ trait NonEmptyParallel[M[_]] extends Serializable {
   def parallel: M ~> F
 
   /**
-   * Like [[Apply.productR]], but uses the apply instance
-   * corresponding to the Parallel instance instead.
+   * Like [[Apply.productR]], but uses the apply instance corresponding to the Parallel instance instead.
    */
   def parProductR[A, B](ma: M[A])(mb: M[B]): M[B] =
     Parallel.parMap2(ma, mb)((_, b) => b)(this)
@@ -62,8 +61,7 @@ trait NonEmptyParallel[M[_]] extends Serializable {
   @inline private[cats] def parFollowedBy[A, B](ma: M[A])(mb: M[B]): M[B] = parProductR(ma)(mb)
 
   /**
-   * Like [[Apply.productL]], but uses the apply instance
-   * corresponding to the Parallel instance instead.
+   * Like [[Apply.productL]], but uses the apply instance corresponding to the Parallel instance instead.
    */
   def parProductL[A, B](ma: M[A])(mb: M[B]): M[A] =
     Parallel.parMap2(ma, mb)((a, _) => a)(this)
@@ -74,8 +72,8 @@ trait NonEmptyParallel[M[_]] extends Serializable {
 }
 
 /**
- * Some types that form a Monad, are also capable of forming an Applicative that supports parallel composition.
- * The Parallel type class allows us to represent this relationship.
+ * Some types that form a Monad, are also capable of forming an Applicative that supports parallel composition. The
+ * Parallel type class allows us to represent this relationship.
  */
 trait Parallel[M[_]] extends NonEmptyParallel[M] {
 
@@ -94,10 +92,9 @@ trait Parallel[M[_]] extends NonEmptyParallel[M] {
   override def flatMap: FlatMap[M] = monad
 
   /**
-   * Provides an `ApplicativeError[F, E]` instance for any F, that has a `Parallel.Aux[M, F]`
-   * and a `MonadError[M, E]` instance.
-   * I.e. if you have a type M[_], that supports parallel composition through type F[_],
-   * then you can get `ApplicativeError[F, E]` from `MonadError[M, E]`.
+   * Provides an `ApplicativeError[F, E]` instance for any F, that has a `Parallel.Aux[M, F]` and a `MonadError[M, E]`
+   * instance. I.e. if you have a type M[_], that supports parallel composition through type F[_], then you can get
+   * `ApplicativeError[F, E]` from `MonadError[M, E]`.
    */
   def applicativeError[E](implicit E: MonadError[M, E]): ApplicativeError[F, E] =
     new Apply.AbstractApply[F] with ApplicativeError[F, E] {
@@ -152,8 +149,8 @@ object Parallel extends ParallelArityFunctions2 {
   def apply[M[_]](implicit P: Parallel[M], D: DummyImplicit): Parallel.Aux[M, P.F] = P
 
   /**
-   * Like `TraverseFilter#traverseFilter`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `TraverseFilter#traverseFilter`, but uses the applicative instance corresponding to the Parallel instance
+   * instead.
    *
    * Example:
    * {{{
@@ -177,8 +174,8 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `TraverseFilter#sequenceFilter`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `TraverseFilter#sequenceFilter`, but uses the applicative instance corresponding to the Parallel instance
+   * instead.
    *
    * Example:
    * {{{
@@ -196,8 +193,7 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `TraverseFilter#filterA`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `TraverseFilter#filterA`, but uses the applicative instance corresponding to the Parallel instance instead.
    *
    * Example:
    * {{{
@@ -220,8 +216,7 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `Traverse[A].sequence`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `Traverse[A].sequence`, but uses the applicative instance corresponding to the Parallel instance instead.
    */
   def parSequence[T[_]: Traverse, M[_], A](tma: T[M[A]])(implicit P: Parallel[M]): M[T[A]] = {
     val fta: P.F[T[A]] = Traverse[T].traverse(tma)(P.parallel.apply(_))(using P.applicative)
@@ -229,8 +224,7 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `Traverse[A].traverse`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `Traverse[A].traverse`, but uses the applicative instance corresponding to the Parallel instance instead.
    */
   def parTraverse[T[_]: Traverse, M[_], A, B](ta: T[A])(f: A => M[B])(implicit P: Parallel[M]): M[T[B]] = {
     val gtb: P.F[T[B]] = Traverse[T].traverse(ta)(a => P.parallel(f(a)))(using P.applicative)
@@ -238,8 +232,7 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `Traverse[A].flatTraverse`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `Traverse[A].flatTraverse`, but uses the applicative instance corresponding to the Parallel instance instead.
    */
   def parFlatTraverse[T[_]: Traverse: FlatMap, M[_], A, B](
     ta: T[A]
@@ -249,8 +242,7 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `Traverse[A].flatSequence`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `Traverse[A].flatSequence`, but uses the applicative instance corresponding to the Parallel instance instead.
    */
   def parFlatSequence[T[_]: Traverse: FlatMap, M[_], A](
     tma: T[M[T[A]]]
@@ -260,8 +252,7 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `Foldable[A].sequenceVoid`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `Foldable[A].sequenceVoid`, but uses the applicative instance corresponding to the Parallel instance instead.
    */
   def parSequenceVoid[T[_]: Foldable, M[_], A](tma: T[M[A]])(implicit P: Parallel[M]): M[Unit] = {
     val fu: P.F[Unit] = Foldable[T].traverseVoid(tma)(P.parallel.apply(_))(P.applicative)
@@ -271,14 +262,14 @@ object Parallel extends ParallelArityFunctions2 {
   /**
    * Alias for `parSequenceVoid`.
    *
-   * @deprecated this method should be considered as deprecated and replaced by `parSequenceVoid`.
+   * @deprecated
+   *   this method should be considered as deprecated and replaced by `parSequenceVoid`.
    */
   def parSequence_[T[_]: Foldable, M[_], A](tma: T[M[A]])(implicit P: Parallel[M]): M[Unit] =
     parSequenceVoid(tma)
 
   /**
-   * Like `Foldable[A].traverseVoid`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `Foldable[A].traverseVoid`, but uses the applicative instance corresponding to the Parallel instance instead.
    */
   def parTraverseVoid[T[_]: Foldable, M[_], A, B](ta: T[A])(f: A => M[B])(implicit P: Parallel[M]): M[Unit] = {
     val gtb: P.F[Unit] = Foldable[T].traverseVoid(ta)(a => P.parallel(f(a)))(P.applicative)
@@ -288,7 +279,8 @@ object Parallel extends ParallelArityFunctions2 {
   /**
    * Alias for `parTraverseVoid`.
    *
-   * @deprecated this method should be considered as deprecated and replaced by `parTraverseVoid`.
+   * @deprecated
+   *   this method should be considered as deprecated and replaced by `parTraverseVoid`.
    */
   def parTraverse_[T[_]: Foldable, M[_], A, B](ta: T[A])(f: A => M[B])(implicit P: Parallel[M]): M[Unit] =
     parTraverseVoid(ta)(f)
@@ -314,8 +306,8 @@ object Parallel extends ParallelArityFunctions2 {
     parUnorderedFlatTraverse[T, M, F, M[T[A]], A](ta)(Predef.identity)
 
   /**
-   * Like `NonEmptyTraverse[A].nonEmptySequence`, but uses the apply instance
-   * corresponding to the Parallel instance instead.
+   * Like `NonEmptyTraverse[A].nonEmptySequence`, but uses the apply instance corresponding to the Parallel instance
+   * instead.
    */
   def parNonEmptySequence[T[_]: NonEmptyTraverse, M[_], A](
     tma: T[M[A]]
@@ -325,8 +317,8 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `NonEmptyTraverse[A].nonEmptyTraverse`, but uses the apply instance
-   * corresponding to the Parallel instance instead.
+   * Like `NonEmptyTraverse[A].nonEmptyTraverse`, but uses the apply instance corresponding to the Parallel instance
+   * instead.
    */
   def parNonEmptyTraverse[T[_]: NonEmptyTraverse, M[_], A, B](
     ta: T[A]
@@ -336,8 +328,8 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `NonEmptyTraverse[A].nonEmptyFlatTraverse`, but uses the apply instance
-   * corresponding to the Parallel instance instead.
+   * Like `NonEmptyTraverse[A].nonEmptyFlatTraverse`, but uses the apply instance corresponding to the Parallel instance
+   * instead.
    */
   def parNonEmptyFlatTraverse[T[_]: NonEmptyTraverse: FlatMap, M[_], A, B](
     ta: T[A]
@@ -348,8 +340,8 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `NonEmptyTraverse[A].nonEmptyFlatSequence`, but uses the apply instance
-   * corresponding to the Parallel instance instead.
+   * Like `NonEmptyTraverse[A].nonEmptyFlatSequence`, but uses the apply instance corresponding to the Parallel instance
+   * instead.
    */
   def parNonEmptyFlatSequence[T[_]: NonEmptyTraverse: FlatMap, M[_], A](
     tma: T[M[T[A]]]
@@ -359,8 +351,8 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `Reducible[A].nonEmptySequenceVoid`, but uses the apply instance
-   * corresponding to the Parallel instance instead.
+   * Like `Reducible[A].nonEmptySequenceVoid`, but uses the apply instance corresponding to the Parallel instance
+   * instead.
    */
   def parNonEmptySequenceVoid[T[_]: Reducible, M[_], A](
     tma: T[M[A]]
@@ -372,7 +364,8 @@ object Parallel extends ParallelArityFunctions2 {
   /**
    * Alias for `parNonEmptySequenceVoid`.
    *
-   * @deprecated this method should be considered as deprecated and replaced by `parNonEmptySequenceVoid`.
+   * @deprecated
+   *   this method should be considered as deprecated and replaced by `parNonEmptySequenceVoid`.
    */
   def parNonEmptySequence_[T[_]: Reducible, M[_], A](
     tma: T[M[A]]
@@ -380,8 +373,8 @@ object Parallel extends ParallelArityFunctions2 {
     parNonEmptySequenceVoid[T, M, A](tma)
 
   /**
-   * Like `Reducible[A].nonEmptyTraverseVoid`, but uses the apply instance
-   * corresponding to the Parallel instance instead.
+   * Like `Reducible[A].nonEmptyTraverseVoid`, but uses the apply instance corresponding to the Parallel instance
+   * instead.
    */
   def parNonEmptyTraverseVoid[T[_]: Reducible, M[_], A, B](
     ta: T[A]
@@ -393,7 +386,8 @@ object Parallel extends ParallelArityFunctions2 {
   /**
    * Alias for `parNonEmptyTraverseVoid`.
    *
-   * @deprecated this method should be considered as deprecated and replaced by `parNonEmptyTraverseVoid`.
+   * @deprecated
+   *   this method should be considered as deprecated and replaced by `parNonEmptyTraverseVoid`.
    */
   def parNonEmptyTraverse_[T[_]: Reducible, M[_], A, B](
     ta: T[A]
@@ -401,8 +395,7 @@ object Parallel extends ParallelArityFunctions2 {
     parNonEmptyTraverseVoid[T, M, A, B](ta)(f)
 
   /**
-   * Like `Bitraverse[A].bitraverse`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `Bitraverse[A].bitraverse`, but uses the applicative instance corresponding to the Parallel instance instead.
    */
   def parBitraverse[T[_, _]: Bitraverse, M[_], A, B, C, D](
     tab: T[A, B]
@@ -413,8 +406,7 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `Bitraverse[A].bisequence`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `Bitraverse[A].bisequence`, but uses the applicative instance corresponding to the Parallel instance instead.
    */
   def parBisequence[T[_, _]: Bitraverse, M[_], A, B](
     tmamb: T[M[A], M[B]]
@@ -425,8 +417,8 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `Bitraverse[A].leftTraverse`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `Bitraverse[A].leftTraverse`, but uses the applicative instance corresponding to the Parallel instance
+   * instead.
    */
   def parLeftTraverse[T[_, _]: Bitraverse, M[_], A, B, C](
     tab: T[A, B]
@@ -437,8 +429,8 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `Bitraverse[A].leftSequence`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `Bitraverse[A].leftSequence`, but uses the applicative instance corresponding to the Parallel instance
+   * instead.
    */
   def parLeftSequence[T[_, _]: Bitraverse, M[_], A, B](
     tmab: T[M[A], B]
@@ -449,8 +441,7 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `Foldable[A].foldMapA`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `Foldable[A].foldMapA`, but uses the applicative instance corresponding to the Parallel instance instead.
    */
   def parFoldMapA[T[_], M[_], A, B](
     ta: T[A]
@@ -461,8 +452,8 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `Reducible[A].reduceMapA`, but uses the apply instance corresponding
-   * to the `NonEmptyParallel` instance instead.
+   * Like `Reducible[A].reduceMapA`, but uses the apply instance corresponding to the `NonEmptyParallel` instance
+   * instead.
    */
   def parReduceMapA[T[_], M[_], A, B](
     ta: T[A]
@@ -473,22 +464,19 @@ object Parallel extends ParallelArityFunctions2 {
   }
 
   /**
-   * Like `Applicative[F].ap`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `Applicative[F].ap`, but uses the applicative instance corresponding to the Parallel instance instead.
    */
   def parAp[M[_], A, B](mf: M[A => B])(ma: M[A])(implicit P: NonEmptyParallel[M]): M[B] =
     P.sequential(P.apply.ap(P.parallel(mf))(P.parallel(ma)))
 
   /**
-   * Like `Applicative[F].product`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `Applicative[F].product`, but uses the applicative instance corresponding to the Parallel instance instead.
    */
   def parProduct[M[_], A, B](ma: M[A], mb: M[B])(implicit P: NonEmptyParallel[M]): M[(A, B)] =
     P.sequential(P.apply.product(P.parallel(ma), P.parallel(mb)))
 
   /**
-   * Like `Applicative[F].ap2`, but uses the applicative instance
-   * corresponding to the Parallel instance instead.
+   * Like `Applicative[F].ap2`, but uses the applicative instance corresponding to the Parallel instance instead.
    */
   def parAp2[M[_], A, B, Z](ff: M[(A, B) => Z])(ma: M[A], mb: M[B])(implicit P: NonEmptyParallel[M]): M[Z] =
     P.sequential(
@@ -496,33 +484,29 @@ object Parallel extends ParallelArityFunctions2 {
     )
 
   /**
-   * Like `Applicative[F].replicateA`, but uses the apply instance
-   * corresponding to the Parallel instance instead.
+   * Like `Applicative[F].replicateA`, but uses the apply instance corresponding to the Parallel instance instead.
    */
   def parReplicateA[M[_], A](n: Int, ma: M[A])(implicit P: Parallel[M]): M[List[A]] =
     P.sequential(P.applicative.replicateA(n, P.parallel(ma)))
 
   /**
-   * Like `Applicative[F].replicateA_`, but uses the apply instance
-   * corresponding to the Parallel instance instead.
+   * Like `Applicative[F].replicateA_`, but uses the apply instance corresponding to the Parallel instance instead.
    */
   def parReplicateA_[M[_], A](n: Int, ma: M[A])(implicit P: Parallel[M]): M[Unit] =
     P.sequential(P.applicative.replicateA_(n, P.parallel(ma)))
 
   /**
-   * Provides an `ApplicativeError[F, E]` instance for any F, that has a `Parallel.Aux[M, F]`
-   * and a `MonadError[M, E]` instance.
-   * I.e. if you have a type M[_], that supports parallel composition through type F[_],
-   * then you can get `ApplicativeError[F, E]` from `MonadError[M, E]`.
+   * Provides an `ApplicativeError[F, E]` instance for any F, that has a `Parallel.Aux[M, F]` and a `MonadError[M, E]`
+   * instance. I.e. if you have a type M[_], that supports parallel composition through type F[_], then you can get
+   * `ApplicativeError[F, E]` from `MonadError[M, E]`.
    */
   def applicativeError[M[_], E](implicit P: Parallel[M], E: MonadError[M, E]): ApplicativeError[P.F, E] =
     P.applicativeError[E]
 
   /**
-   * A Parallel instance for any type `M[_]` that supports parallel composition through itself.
-   * Can also be used for giving `Parallel` instances to types that do not support parallel composition,
-   * but are required to have an instance of `Parallel` defined,
-   * in which case parallel composition will actually be sequential.
+   * A Parallel instance for any type `M[_]` that supports parallel composition through itself. Can also be used for
+   * giving `Parallel` instances to types that do not support parallel composition, but are required to have an instance
+   * of `Parallel` defined, in which case parallel composition will actually be sequential.
    */
   def identity[M[_]: Monad]: Parallel.Aux[M, M] =
     new Parallel[M] {

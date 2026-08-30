@@ -36,8 +36,8 @@ trait UnorderedFoldable[F[_]] extends Serializable {
     unorderedFoldMap(fa)(identity)
 
   /**
-   * Fold in a [[CommutativeApplicative]] context by mapping the `A` values to `G[B]`. combining
-   * the `B` values using the given `CommutativeMonoid[B]` instance.
+   * Fold in a [[CommutativeApplicative]] context by mapping the `A` values to `G[B]`, combining the `B` values using
+   * the given `CommutativeMonoid[B]` instance.
    *
    * {{{
    * scala> import cats.UnorderedFoldable
@@ -90,8 +90,7 @@ trait UnorderedFoldable[F[_]] extends Serializable {
   /**
    * The size of this UnorderedFoldable.
    *
-   * This is overridden in structures that have more efficient size implementations
-   * (e.g. Vector, Set, Map).
+   * This is overridden in structures that have more efficient size implementations (e.g. `Vector`, `Set`, `Map`).
    *
    * Note: will not terminate for infinite-sized collections.
    */

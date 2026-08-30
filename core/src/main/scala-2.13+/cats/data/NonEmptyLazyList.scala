@@ -240,15 +240,15 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
     toLazyList.collect(pf)
 
   /**
-   * Finds the first element of this `NonEmptyLazyList` for which the given partial
-   * function is defined, and applies the partial function to it.
+   * Finds the first element of this `NonEmptyLazyList` for which the given partial function is defined, and applies the
+   * partial function to it.
    */
   @deprecated("Use collectFirst", "2.2.0-M1")
   final def collectLazyList[B](pf: PartialFunction[A, B]): Option[B] = collectFirst(pf)
 
   /**
-   * Finds the first element of this `NonEmptyLazyList` for which the given partial
-   * function is defined, and applies the partial function to it.
+   * Finds the first element of this `NonEmptyLazyList` for which the given partial function is defined, and applies the
+   * partial function to it.
    */
   final def collectFirst[B](pf: PartialFunction[A, B]): Option[B] = toLazyList.collectFirst(pf)
 
@@ -281,8 +281,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
     toLazyList.reduceLeft(f)
 
   /**
-   * Apply `f` to the "initial element" of this LazyList and lazily combine it
-   * with every other value using the given function `g`.
+   * Apply `f` to the "initial element" of this LazyList and lazily combine it with every other value using the given
+   * function `g`.
    */
   final def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B = {
     val iter = toLazyList.iterator
@@ -298,8 +298,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
     toLazyList.reduceRight(f)
 
   /**
-   * Apply `f` to the "initial element" of this NonEmptyLazyList and
-   * lazily combine it with every other value using the given function `g`.
+   * Apply `f` to the "initial element" of this NonEmptyLazyList and lazily combine it with every other value using the
+   * given function `g`.
    */
   final def reduceRightTo[B](f: A => B)(g: (A, B) => B): B = {
     val iter = toLazyList.reverseIterator
@@ -392,8 +392,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
     create(toLazyList.sorted(AA.toOrdering))
 
   /**
-   * Groups elements inside this `NonEmptyLazyList` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * Groups elements inside this `NonEmptyLazyList` according to the `Order` of the keys produced by the given mapping
+   * function.
    *
    * {{{
    * scala> import scala.collection.immutable.SortedMap
@@ -425,8 +425,8 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
   }
 
   /**
-   * Groups elements inside this `NonEmptyLazyList` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * Groups elements inside this `NonEmptyLazyList` according to the `Order` of the keys produced by the given mapping
+   * function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyLazyList, NonEmptyMap}

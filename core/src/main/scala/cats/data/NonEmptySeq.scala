@@ -30,11 +30,9 @@ import scala.collection.mutable
 import scala.collection.immutable.{Seq, SortedMap, TreeMap, TreeSet}
 
 /**
- * A data type which represents a `Seq` guaranteed to contain at least one element.
- * <br/>
- * Note that the constructor is `private` to prevent accidental construction of an empty
- * `NonEmptySeq`. However, due to https://issues.scala-lang.org/browse/SI-6601, on
- * Scala 2.10, this may be bypassed due to a compiler bug.
+ * A data type which represents a `Seq` guaranteed to contain at least one element. <br/> Note that the constructor is
+ * `private` to prevent accidental construction of an empty `NonEmptySeq`. However, due to
+ * https://issues.scala-lang.org/browse/SI-6601, on Scala 2.10, this may be bypassed due to a compiler bug.
  */
 final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonEmptyCollection[A, Seq, NonEmptySeq] {
 
@@ -56,8 +54,8 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
     if (toSeq.isDefinedAt(i)) Some(new NonEmptySeq(toSeq.updated(i, a))) else None
 
   /**
-   * Updates the element at the index, or throws an `IndexOutOfBoundsException`
-   * if none exists (if `i` does not satisfy `0 <= i < length`).
+   * Updates the element at the index, or throws an `IndexOutOfBoundsException` if none exists (if `i` does not satisfy
+   * `0 <= i < length`).
    */
   def updatedUnsafe[AA >: A](i: Int, a: AA): NonEmptySeq[AA] = new NonEmptySeq(toSeq.updated(i, a))
 
@@ -211,10 +209,8 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
   /**
    * Typesafe equality operator.
    *
-   * This method is similar to == except that it only allows two
-   * NonEmptySeq[A] values to be compared to each other, and uses
-   * equality provided by Eq[_] instances, rather than using the
-   * universal equality provided by .equals.
+   * This method is similar to == except that it only allows two NonEmptySeq[A] values to be compared to each other, and
+   * uses equality provided by Eq[_] instances, rather than using the universal equality provided by .equals.
    */
   def ===[AA >: A](that: NonEmptySeq[AA])(implicit A: Eq[AA]): Boolean =
     Eq[Seq[AA]].eqv(toSeq, that.toSeq)
@@ -222,9 +218,8 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
   /**
    * Typesafe stringification method.
    *
-   * This method is similar to .toString except that it stringifies
-   * values according to Show[_] instances, rather than using the
-   * universal .toString method.
+   * This method is similar to .toString except that it stringifies values according to Show[_] instances, rather than
+   * using the universal .toString method.
    */
   def show[AA >: A](implicit AA: Show[AA]): String =
     s"NonEmptySeq(${toSeq.iterator.map(AA.show).mkString(", ")})"
@@ -300,8 +295,8 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
     new NonEmptySeq(toSeq.sorted(AA.toOrdering))
 
   /**
-   * Groups elements inside this `NonEmptySeq` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * Groups elements inside this `NonEmptySeq` according to the `Order` of the keys produced by the given mapping
+   * function.
    *
    * {{{
    * scala> import scala.collection.immutable.SortedMap
@@ -333,8 +328,8 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
   }
 
   /**
-   * Groups elements inside this `NonEmptySeq` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * Groups elements inside this `NonEmptySeq` according to the `Order` of the keys produced by the given mapping
+   * function.
    *
    * {{{
    * scala> import cats.data.{NonEmptyMap, NonEmptySeq}
@@ -410,8 +405,8 @@ sealed abstract private[data] class NonEmptySeqInstances {
     catsDataInstancesForNonEmptySeqBinCompat1
 
   /**
-   * This is not a bug. The declared type of `catsDataInstancesForNonEmptySeq` intentionally ignores
-   * `NonEmptyReducible` trait for it not being a typeclass.
+   * This is not a bug. The declared type of `catsDataInstancesForNonEmptySeq` intentionally ignores `NonEmptyReducible`
+   * trait for it not being a typeclass.
    *
    * Also see the discussion: PR #3541 and issue #3069.
    */

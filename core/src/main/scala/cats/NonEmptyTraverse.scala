@@ -24,15 +24,14 @@ package cats
 /**
  * NonEmptyTraverse, also known as Traversable1.
  *
- * `NonEmptyTraverse` is like a non-empty `Traverse`. In addition to the traverse and sequence
- * methods it provides nonEmptyTraverse and nonEmptySequence methods which require an `Apply` instance instead of `Applicative`.
+ * `NonEmptyTraverse` is like a non-empty `Traverse`. In addition to the traverse and sequence methods it provides
+ * nonEmptyTraverse and nonEmptySequence methods which require an `Apply` instance instead of `Applicative`.
  */
 trait NonEmptyTraverse[F[_]] extends Traverse[F] with Reducible[F] { self =>
 
   /**
-   * Given a function which returns a G effect, thread this effect
-   * through the running of this function on all the values in F,
-   * returning an F[B] in a G context.
+   * Given a function which returns a G effect, thread this effect through the running of this function on all the
+   * values in F, returning an F[B] in a G context.
    *
    * Example:
    * {{{
@@ -50,8 +49,7 @@ trait NonEmptyTraverse[F[_]] extends Traverse[F] with Reducible[F] { self =>
   def nonEmptyTraverse[G[_]: Apply, A, B](fa: F[A])(f: A => G[B]): G[F[B]]
 
   /**
-   * Thread all the G effects through the F structure to invert the
-   * structure from F[G[A]] to G[F[A]].
+   * Thread all the G effects through the F structure to invert the structure from F[G[A]] to G[F[A]].
    *
    * Example:
    * {{{
@@ -84,8 +82,7 @@ trait NonEmptyTraverse[F[_]] extends Traverse[F] with Reducible[F] { self =>
     G.map(nonEmptyTraverse(fa)(f))(F.flatten)
 
   /**
-   * Thread all the G effects through the F structure and flatten to invert the
-   * structure from F[G[F[A]]] to G[F[A]].
+   * Thread all the G effects through the F structure and flatten to invert the structure from F[G[F[A]]] to G[F[A]].
    *
    * Example:
    * {{{

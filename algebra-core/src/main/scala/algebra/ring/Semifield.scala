@@ -27,8 +27,8 @@ import scala.{specialized => sp}
 /**
  * Semifield consists of:
  *
- *  - a commutative monoid for addition (+)
- *  - a group for multiplication (*)
+ *   - a commutative monoid for addition (+)
+ *   - a group for multiplication (*)
  *
  * Alternately, a Semifield can be thought of as a DivisionRing without an additive inverse.
  */
