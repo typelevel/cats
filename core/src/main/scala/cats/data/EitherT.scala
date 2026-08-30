@@ -31,6 +31,77 @@ import cats.syntax.EitherUtil
  *
  * `EitherT[F, A, B]` wraps a value of type `F[Either[A, B]]`. An `F[C]` can be lifted in to `EitherT[F, A, C]` via `EitherT.right`,
  * and lifted in to a `EitherT[F, C, B]` via `EitherT.left`.
+ *
+ * For example `EitherT` can be combined with types such as [[Eval]],
+ * `scala.concurrent.Future` or `cats.effect.IO` for principled error
+ * handling:
+ *
+ * {{{
+ *   import cats.Eval
+ *   import cats.Eval.always
+ *   import cats.data.EitherT
+ *   import java.lang.Long.{parseNum => javaParseNum}
+ *
+ *   def parseNum(s: String, radix: Int = 10): EitherT[Eval, NumberFormatException, Long] =
+ *     EitherT(always {
+ *       try
+ *         Right(javaParseNum(s, radix))
+ *       catch { case e: NumberFormatException =>
+ *         Left(e)
+ *       }
+ *     })
+ * }}}
+ *
+ * Note that in this function the error type is part of the signature and
+ * is more specific than the customary `Throwable` or `Exception`. You can
+ * always "upcast" its error type to `Throwable` later using
+ * [[Bifunctor.leftWiden]]:
+ *
+ * {{{
+ *   val num: EitherT[Eval, Throwable, Long] =
+ *     parseNum("10210", 10).leftWiden
+ * }}}
+ *
+ * The power of `EitherT` is that it combines `F[_]` with the `Either`
+ * data type, with the result still being a `MonadError`, so you can
+ * comfortably use operations such as [[map]], [[flatMap]], [[attempt]]
+ * and others:
+ *
+ * {{{
+ *   def parseEvenNum(s: String, radix: Int = 10): EitherT[Eval, NumberFormatException, Long] =
+ *     parseNum(s, radix).flatMap { i =>
+ *       if (i % 2 == 0)
+ *         EitherT.rightT(i)
+ *       else
+ *         EitherT.leftT(new NumberFormatException(s"Not an even number: $$i"))
+ *     }
+ * }}}
+ *
+ * Tip: An `F[A]` can be lifted in to `EitherT[F, E, A]` via [[EitherT.right]]
+ * and lifted in to a `EitherT[F, A, B]` via [[EitherT.left]].
+ *
+ * {{{
+ *   def rand(seed: Long): Eval[Int] =
+ *     Eval.always {
+ *       val newSeed = (seed * 0x5DEECE66DL + 0xBL) & 0xFFFFFFFFFFFFL
+ *       (newSeed >>> 16).toInt
+ *     }
+ *
+ *   // Lifting values
+ *   def randPredicate(seed: Long)(p: Int => Boolean): EitherT[Eval, String, Int] =
+ *     EitherT.right(rand(seed)).flatMap { nr =>
+ *       if (p(nr))
+ *         EitherT.leftT("Predicate was false")
+ *       else
+ *         EitherT.pure(nr)
+ *     }
+ * }}}
+ *
+ * @define monadErrorF For example data types like `cats.effect.IO` implement
+ *         [[MonadError]] and can thus express computations that can fail on their
+ *         own, usually via `Throwable`. When working with `EitherT`, if the
+ *         underlying `F` is implementing [[ApplicativeError]], sometimes it is
+ *         necessary to recover from such errors thrown in `F[_]`.
  */
 final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
 
@@ -175,6 +246,193 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
     })
 
   /**
+   * Handles errors by materializing them into `Either` values.
+   *
+   * This is the implementation of [[ApplicativeError.attempt]].
+   *
+   * Example:
+   * {{{
+   *   parseNum(x).attempt.map {
+   *     case Right(num) => num
+   *     case Left(_) => 0L
+   *   }
+   * }}}
+   *
+   * @see [[attemptF]] for recovering errors thrown in `F[_]`
+   *
+   * @see [[redeem]] and [[redeemWith]] for optimizations on `attempt.map`
+   *      and `attempt.flatMap` respectively
+   */
+  def attempt(implicit F: Functor[F]): EitherT[F, A, Either[A, B]] =
+    EitherT.right(value)
+
+  /**
+   * Handles errors thrown in `F[_]` (if it implements [[ApplicativeError]]),
+   * by materializing them into `Either` values.
+   *
+   * $monadErrorF
+   *
+   * Example:
+   * {{{
+   *   import cats.effect.IO
+   *
+   *   val rio = EitherT.pure[IO, String](10)
+   *
+   *   // Yields Right(10)
+   *   rio.attemptF
+   *
+   *   val dummy = new RuntimeException("dummy")
+   *   val lio = EitherT[IO, String, Int](IO.raiseError(dummy))
+   *
+   *   // Yields Left(RuntimeException("dummy"))
+   *   lio.attemptF
+   * }}}
+   *
+   * Note that in this sample we are materializing the `Throwable` of the
+   * underlying `IO`, even the source `EitherT` value is not parametrized
+   * with it.
+   *
+   * @see [[attempt]] for recovering errors expressed via `EitherT`
+   *
+   * @see [[redeemF]] and [[redeemWithF]] for optimizations on `attemptF.map`
+   *      and `attemptF.flatMap` respectively
+   */
+  def attemptF[E](implicit F: ApplicativeError[F, E]): EitherT[F, A, Either[E, B]] =
+    EitherT(F.map(F.attempt(value)) {
+      case Right(Right(b)) => Right(Right(b))
+      case Right(Left(a))  => Left(a)
+      case Left(e)         => Right(Left(e))
+    })
+
+  /**
+   * Handle any error, potentially recovering from it, by mapping it via
+   * the provided function.
+   *
+   * This is the implementation of [[ApplicativeError.handleError]].
+   *
+   * Example:
+   * {{{
+   *   parseNum(s).handleError(_ => 0L)
+   * }}}
+   *
+   * @see [[handleErrorWith]] for recovering errors by mapping them to
+   *      `EitherT` values (aka the equivalent of `flatMap` for errors)
+   *
+   * @see [[handleErrorF]] for recovering errors thrown in `F[_]`
+   */
+  def handleError[A1](f: A => B)(implicit F: Functor[F]): EitherT[F, A1, B] =
+    EitherT(F.map(value) {
+      case Left(a)  => Right(f(a))
+      case Right(a) => Right(a)
+    })
+
+  /**
+   * Handles any error in `F[_]`, potentially recovering from it, by mapping
+   * it via the provided function.
+   *
+   * $monadErrorF
+   *
+   * Example:
+   * {{{
+   *   import cats.effect.IO
+   *   import java.lang.Long.{parseNum => javaParseNum}
+   *
+   *   def parseNum(s: String, r: Int = 10): IO[Long] =
+   *     IO(javaParseNum(s, r))
+   *
+   *   val eio = EitherT.right[String](parseNum("invalid"))
+   *
+   *   // Yields 0L on evaluation
+   *   eio.handleErrorF(_ => 0L)
+   * }}}
+   *
+   * @see [[handleErrorWithF]] for recovering errors by mapping them to
+   *      `EitherT` values (aka the equivalent of `flatMap` for errors)
+   *
+   * @see [[handleError]] for recovering errors expressed via `EitherT`
+   */
+  def handleErrorF[A1 >: A, E](f: E => B)(implicit F: ApplicativeError[F, E]): EitherT[F, A1, B] =
+    EitherT(F.widen(F.handleError(value)(e => Right(f(e)))))
+
+  /**
+   * Handle any error, potentially recovering from it, by mapping it via
+   * the provided function to another `EitherT` value.
+   *
+   * This is the implementation of [[ApplicativeError.handleErrorWith]].
+   *
+   * Example:
+   * {{{
+   *   import cats.Eval
+   *   import java.lang.Long.{parseNum => javaParseNum}
+   *
+   *   def parseNum(s: String, r: Int = 10): EitherT[Eval, String, Long] =
+   *     EitherT(Eval.always {
+   *       try
+   *         Right(javaParseNum(s, r))
+   *       catch { case _: NumberFormatException =>
+   *         Left("invalid number")
+   *       }
+   *     })
+   *
+   *   // Yields 10210 because there's no error here
+   *   parseNum("10210").handleErrorWith(_ => EitherT.pure(0L))
+   *
+   *   parseNum("Hello").handleErrorWith {
+   *     case "invalid number" =>
+   *       EitherT.pure(0L)
+   *     case other =>
+   *       // Rethrowing error, because we don't know what it is
+   *       EitherT.leftT(other)
+   *   }
+   * }}}
+   *
+   * @see [[handleError]] for recovering errors by mapping them to simple values
+   *
+   * @see [[handleErrorWithF]] for recovering errors thrown in `F[_]`
+   */
+  def handleErrorWith[A1 >: A](f: A => EitherT[F, A1, B])(implicit F: Monad[F]): EitherT[F, A1, B] =
+    EitherT(F.flatMap(value) {
+      case Left(a) => f(a).value
+      // N.B. pattern match does not do `case Right(_)` on purpose
+      case right => F.pure(right)
+    })
+
+  /**
+   * Handles any error in `F[_]`, potentially recovering from it, by mapping
+   * it via the provided function to another `EitherT` value.
+   *
+   * $monadErrorF
+   *
+   * Example:
+   * {{{
+   *   import cats.effect.IO
+   *   import java.lang.Long.{parseNum => javaParseNum}
+   *
+   *   def parseNum(s: String, r: Int = 10): IO[Long] =
+   *     IO(javaParseNum(s, r))
+   *
+   *   val eio = EitherT.right[String](parseNum("invalid"))
+   *
+   *   // Yields 0L on evaluation
+   *   eio.handleErrorWithF {
+   *     case _: NumberFormatException =>
+   *       EitherT.pure(0L)
+   *     case other =>
+   *       // We are only recovering from NumberFormatException here because we
+   *       // don't know of other exceptions that could be thrown and thus we
+   *       // prefer to treat them as unrecoverable
+   *       EitherT.right(IO.raiseError(other))
+   *   }
+   * }}}
+   *
+   * @see [[handleErrorF]] for recovering errors by mapping them to simple values
+   *
+   * @see [[handleErrorWith]] for recovering errors expressed via `EitherT`
+   */
+  def handleErrorWithF[A1 >: A, E](f: E => EitherT[F, A1, B])(implicit F: ApplicativeError[F, E]): EitherT[F, A1, B] =
+    EitherT(F.handleErrorWith[Either[A1, B]](F.widen(value))(f(_).value))
+
+  /**
    * Example:
    * {{{
    * scala> import cats.syntax.all._
@@ -186,7 +444,12 @@ final case class EitherT[F[_], A, B](value: F[Either[A, B]]) {
    * scala> eitherT.recover(pf)
    * res0: EitherT[List, String, Int] = EitherT(List(Right(123), Right(456)))
    * }}}
+   *
+   * @see [[handleError]] for handling all errors via a total function
+   *
+   * @see [[recoverF]] for handling errors thrown in `F[_]`
    */
+
   def recover(pf: PartialFunction[A, B])(implicit F: Functor[F]): EitherT[F, A, B] =
     EitherT(
       F.map(value) { eab =>
