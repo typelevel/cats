@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Typelevel
+ * Copyright (c) 2022 Typelevel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -22,26 +22,32 @@
 package algebra
 package instances
 
-package object all extends AllInstances
+import algebra.lattice.{Logic, Heyting}
+//import cats.kernel.Eq
 
-trait AllInstances
-    extends ArrayInstances
-    with BigDecimalInstances
-    with BigIntInstances
-    with BitSetInstances
-    with BooleanInstances
-    with ByteInstances
-    with CharInstances
-    with DoubleInstances
-    with FloatInstances
-    with Function1Instances
-    with IntInstances
-    with ListInstances
-    with LongInstances
-    with MapInstances
-    with OptionInstances
-    with SetInstances
-    with ShortInstances
-    with StringInstances
-    with TupleInstances
-    with UnitInstances
+package object function1 extends Function1Instances
+
+trait Function1Instances {
+  implicit def function1Logic[A]: Function1Logic[A] =
+    new Function1Logic[A]
+  implicit def function1Eq[A]: Eq[A => Boolean] = Eq.instance(_ == _)
+}
+
+class Function1Logic[A] extends Logic[A => Boolean] with Heyting[A => Boolean] {
+  // Type alias
+  private type AB = A => Boolean
+
+  def zero: AB = _ => false
+  def one: AB = _ => true
+  override def join(lhs: AB, rhs: AB): AB = x => lhs(x) || rhs(x)
+  override def meet(lhs: AB, rhs: AB): AB = x => lhs(x) && rhs(x)
+  def imp(a: AB, b: AB): AB = or(not(a), b)
+  def and(a: AB, b: AB): AB = meet(a, b)
+  def or(a: AB, b: AB): AB = join(a, b)
+  def not(a: AB): AB = x => !a(x)
+  def complement(a: AB): AB = not(a)
+  override def xor(a: AB, b: AB): AB = or(and(a, not(b)), and(not(a), b))
+  override def nand(a: AB, b: AB): AB = not(and(a, b))
+  override def nor(a: AB, b: AB): AB = not(or(a, b))
+  override def nxor(a: AB, b: AB): AB = not(xor(a, b))
+}
