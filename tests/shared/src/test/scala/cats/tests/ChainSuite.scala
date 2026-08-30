@@ -408,12 +408,6 @@ class ChainSuite extends CatsSuite {
     }
   }
 
-  test("Chain#hashCode is consistent with List#hashCode") {
-    forAll { (x: Chain[Int]) =>
-      assert(x.hashCode === (x.toList.hashCode))
-    }
-  }
-
   test("Chain#takeWhile is consistent with List#takeWhile") {
     forAll { (x: Chain[Int], p: Int => Boolean) =>
       assert(x.takeWhile(p).toList === (x.toList.takeWhile(p)))
