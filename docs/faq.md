@@ -68,7 +68,7 @@ It's really common to have a `List` of values with types like `Option`, `Either`
 
 ## Where is ListT?
 
-There are monad transformers for various types, such as [OptionT](datatypes/optiont.md), so people often wonder why there isn't a `ListT`. For example, in the following example, people might reach for `ListT` to simplify making nested `map` and `exists` calls:
+There are monad transformers for various types, such as [OptionT](monadtransformers/optiont.md), so people often wonder why there isn't a `ListT`. For example, in the following example, people might reach for `ListT` to simplify making nested `map` and `exists` calls:
 
 ```scala mdoc:reset:silent
 val l: Option[List[Int]] = Some(List(1, 2, 3, 4, 5))
