@@ -287,10 +287,10 @@ final class NonEmptyVector[+A] private (val toVector: Vector[A])
     new NonEmptyVector(toVector.zipWithIndex)
 
   def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyVector[A] =
-    new NonEmptyVector(toVector.sortBy(f)(B.toOrdering))
+    new NonEmptyVector(toVector.sortBy(f)(using B.toOrdering))
 
   def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyVector[AA] =
-    new NonEmptyVector(toVector.sorted(AA.toOrdering))
+    new NonEmptyVector(toVector.sorted(using AA.toOrdering))
 
   /**
    * Groups elements inside this `NonEmptyVector` according to the `Order`
@@ -478,13 +478,13 @@ sealed abstract private[data] class NonEmptyVectorInstances extends NonEmptyVect
       override def mapAccumulate[S, A, B](init: S, fa: NonEmptyVector[A])(
         f: (S, A) => (S, B)
       ): (S, NonEmptyVector[B]) =
-        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(using this)
 
       override def mapWithLongIndex[A, B](fa: NonEmptyVector[A])(f: (A, Long) => B): NonEmptyVector[B] =
-        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(using this)
 
       override def mapWithIndex[A, B](fa: NonEmptyVector[A])(f: (A, Int) => B): NonEmptyVector[B] =
-        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(using this)
 
       override def zipWithIndex[A](fa: NonEmptyVector[A]): NonEmptyVector[(A, Int)] =
         fa.zipWithIndex

@@ -244,17 +244,17 @@ object Traverse {
     def traverseTap[G[_], B](f: A => G[B])(implicit ev$1: Applicative[G]): G[F[A]] =
       typeClassInstance.traverseTap[G, A, B](self)(f)
     def flatTraverse[G[_], B](f: A => G[F[B]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[B]] =
-      typeClassInstance.flatTraverse[G, A, B](self)(f)(G, F)
+      typeClassInstance.flatTraverse[G, A, B](self)(f)(using G, F)
     def sequence[G[_], B](implicit ev$1: A <:< G[B], ev$2: Applicative[G]): G[F[B]] =
       typeClassInstance.sequence[G, B](self.asInstanceOf[F[G[B]]])
     def flatSequence[G[_], B](implicit ev$1: A <:< G[F[B]], G: Applicative[G], F: FlatMap[F]): G[F[B]] =
-      typeClassInstance.flatSequence[G, B](self.asInstanceOf[F[G[F[B]]]])(G, F)
+      typeClassInstance.flatSequence[G, B](self.asInstanceOf[F[G[F[B]]]])(using G, F)
     def mapAccumulate[S, B](init: S)(f: (S, A) => (S, B)): (S, F[B]) =
       typeClassInstance.mapAccumulate[S, A, B](init, self)(f)
     def mapWithIndex[B](f: (A, Int) => B): F[B] =
       typeClassInstance.mapWithIndex[A, B](self)(f)
     def traverseWithIndexM[G[_], B](f: (A, Int) => G[B])(implicit G: Monad[G]): G[F[B]] =
-      typeClassInstance.traverseWithIndexM[G, A, B](self)(f)(G)
+      typeClassInstance.traverseWithIndexM[G, A, B](self)(f)(using G)
     def zipWithIndex: F[(A, Int)] =
       typeClassInstance.zipWithIndex[A](self)
     def zipWithLongIndex: F[(A, Long)] =

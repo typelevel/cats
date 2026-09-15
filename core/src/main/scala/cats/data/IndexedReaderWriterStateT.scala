@@ -500,7 +500,7 @@ object IndexedReaderWriterStateT extends IRWSTInstances with CommonIRWSTConstruc
   )(implicit F: FlatMap[F]): IndexedReaderWriterStateT[F, E, L, SA, SB, A] =
     F match {
       case ap: Applicative[F] @unchecked =>
-        IndexedReaderWriterStateT.apply[F, E, L, SA, SB, A]((e: E, sa: SA) => F.flatMap(runF)(f => f(e, sa)))(ap)
+        IndexedReaderWriterStateT.apply[F, E, L, SA, SB, A]((e: E, sa: SA) => F.flatMap(runF)(f => f(e, sa)))(using ap)
       case _ =>
         IndexedReaderWriterStateT.applyF(runF)
     }
@@ -840,6 +840,6 @@ private trait RWSTAlternative1[F[_], E, L, S]
   def ap[A, B](
     ff: ReaderWriterStateT[F, E, L, S, A => B]
   )(fa: ReaderWriterStateT[F, E, L, S, A]): ReaderWriterStateT[F, E, L, S, B] =
-    ff.flatMap(f => fa.map(f)(F))(F, L)
+    ff.flatMap(f => fa.map(f)(using F))(using F, L)
 
 }

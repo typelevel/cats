@@ -180,11 +180,11 @@ object TraverseFilter {
     def self: F[A]
     val typeClassInstance: TypeClassType
     def traverseFilter[G[_], B](f: A => G[Option[B]])(implicit G: Applicative[G]): G[F[B]] =
-      typeClassInstance.traverseFilter[G, A, B](self)(f)(G)
+      typeClassInstance.traverseFilter[G, A, B](self)(f)(using G)
     def filterA[G[_]](f: A => G[Boolean])(implicit G: Applicative[G]): G[F[A]] =
-      typeClassInstance.filterA[G, A](self)(f)(G)
+      typeClassInstance.filterA[G, A](self)(f)(using G)
     def traverseEither[G[_], B, C](f: A => G[Either[C, B]])(g: (A, C) => G[Unit])(implicit G: Monad[G]): G[F[B]] =
-      typeClassInstance.traverseEither[G, A, B, C](self)(f)(g)(G)
+      typeClassInstance.traverseEither[G, A, B, C](self)(f)(g)(using G)
     def ordDistinct(implicit O: Order[A]): F[A] = typeClassInstance.ordDistinct(self)
     def hashDistinct(implicit H: Hash[A]): F[A] = typeClassInstance.hashDistinct(self)
   }

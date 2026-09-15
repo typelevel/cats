@@ -77,7 +77,7 @@ class SortedSetHash[A](implicit hashA: Hash[A]) extends Hash[SortedSet[A]] {
   import scala.util.hashing.MurmurHash3.*
 
   @deprecated("Use the constructor _without_ Order instead, since Order is not required", "2.1.0")
-  private[instances] def this(o: Order[A], h: Hash[A]) = this()(h)
+  private[instances] def this(o: Order[A], h: Hash[A]) = this()(using h)
 
   // adapted from [[scala.util.hashing.MurmurHash3]],
   // but modified standard `Any#hashCode` to `ev.hash`.
@@ -98,7 +98,7 @@ class SortedSetHash[A](implicit hashA: Hash[A]) extends Hash[SortedSet[A]] {
     finalizeHash(h, n)
   }
   override def eqv(s1: SortedSet[A], s2: SortedSet[A]): Boolean =
-    StaticMethods.iteratorEq(s1.iterator, s2.iterator)(Eq[A])
+    StaticMethods.iteratorEq(s1.iterator, s2.iterator)(using Eq[A])
 }
 
 class SortedSetSemilattice[A: Order] extends BoundedSemilattice[SortedSet[A]] {

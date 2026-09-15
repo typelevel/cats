@@ -49,7 +49,7 @@ trait Alternative[F[_]] extends NonEmptyAlternative[F] with MonoidK[F] { self =>
    * }}}
    */
   def unite[G[_], A](fga: F[G[A]])(implicit FM: FlatMap[F], G: Foldable[G]): F[A] =
-    FM.flatMap(fga) { G.foldMapK(_)(pure)(self) }
+    FM.flatMap(fga) { G.foldMapK(_)(pure)(using self) }
 
   // Note: `protected` is only necessary to enforce binary compatibility
   // since neither `private` nor `private[cats]` work properly here.
@@ -71,8 +71,8 @@ trait Alternative[F[_]] extends NonEmptyAlternative[F] with MonoidK[F] { self =>
    * }}}
    */
   def separate[G[_, _], A, B](fgab: F[G[A, B]])(implicit FM: FlatMap[F], G: Bifoldable[G]): (F[A], F[B]) = {
-    val as = FM.flatMap(fgab)(gab => G.bifoldMap(gab)(pure, _ => empty[A])(algebra[A]))
-    val bs = FM.flatMap(fgab)(gab => G.bifoldMap(gab)(_ => empty[B], pure)(algebra[B]))
+    val as = FM.flatMap(fgab)(gab => G.bifoldMap(gab)(pure, _ => empty[A])(using algebra[A]))
+    val bs = FM.flatMap(fgab)(gab => G.bifoldMap(gab)(_ => empty[B], pure)(using algebra[B]))
     (as, bs)
   }
 
@@ -157,7 +157,7 @@ object Alternative {
       // Note: edited manually since seems Simulacrum is not able to handle the bin-compat redirection properly.
       typeClassInstance.separate[G, B, C](self.asInstanceOf[F[G[B, C]]])
     def separateFoldable[G[_, _], B, C](implicit ev$1: A <:< G[B, C], G: Bifoldable[G], FF: Foldable[F]): (F[B], F[C]) =
-      typeClassInstance.separateFoldable[G, B, C](self.asInstanceOf[F[G[B, C]]])(G, FF)
+      typeClassInstance.separateFoldable[G, B, C](self.asInstanceOf[F[G[B, C]]])(using G, FF)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with NonEmptyAlternative.AllOps[F, A] with MonoidK.AllOps[F, A] {
     type TypeClassType <: Alternative[F]

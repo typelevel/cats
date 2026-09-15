@@ -395,7 +395,7 @@ final case class OptionT[F[_], A](value: F[Option[A]]) {
    * }}}
    */
   def withFilter(p: A => Boolean)(implicit F: Functor[F]): OptionT[F, A] =
-    filter(p)(F)
+    filter(p)(using F)
 
   /**
    * Example:

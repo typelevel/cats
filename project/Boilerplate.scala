@@ -265,13 +265,13 @@ object Boilerplate {
       | * @groupprio TupleArity 999
       | */
       |trait ApplyArityFunctions[F[_]] { self: Apply[F] =>
-      |  def tuple2[A, B](f1: F[A], f2: F[B]): F[(A, B)] = Semigroupal.tuple2(f1, f2)(self, self)
+      |  def tuple2[A, B](f1: F[A], f2: F[B]): F[(A, B)] = Semigroupal.tuple2(f1, f2)(using self, self)
         -  /** @group ApArity */
         -  def ap$arity[${`A..N`}, Z](f: F[(${`A..N`}) => Z])($fparams):F[Z] = $apply
         -  /** @group MapArity */
-        -  def map$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z): F[Z] = Semigroupal.map$arity($fparams)(f)(self, self)
+        -  def map$arity[${`A..N`}, Z]($fparams)(f: (${`A..N`}) => Z): F[Z] = Semigroupal.map$arity($fparams)(f)(using self, self)
         -  /** @group TupleArity */
-        -  def tuple$arity[${`A..N`}]($fparams): F[(${`A..N`})] = Semigroupal.tuple$arity($fparams)(self, self)
+        -  def tuple$arity[${`A..N`}]($fparams): F[(${`A..N`})] = Semigroupal.tuple$arity($fparams)(using self, self)
       |}
       """
     }

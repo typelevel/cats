@@ -503,7 +503,7 @@ sealed abstract private[data] class IndexedStateTContravariantMonoidal[F[_], S]
           f(tup._2) match {
             case (b, c) => (G.pure((tup._1, b)), G.pure((tup._1, c)))
           }
-        )(G, F)
+        )(using G, F)
       )
     )
 }
@@ -514,10 +514,10 @@ sealed abstract private[data] class IndexedStateTAlternative[F[_], S]
   def G: Alternative[F]
 
   def combineK[A](x: IndexedStateT[F, S, S, A], y: IndexedStateT[F, S, S, A]): IndexedStateT[F, S, S, A] =
-    IndexedStateT[F, S, S, A](s => G.combineK(x.run(s), y.run(s)))(G)
+    IndexedStateT[F, S, S, A](s => G.combineK(x.run(s), y.run(s)))(using G)
 
   def empty[A]: IndexedStateT[F, S, S, A] =
-    IndexedStateT.liftF[F, S, A](G.empty[A])(G)
+    IndexedStateT.liftF[F, S, A](G.empty[A])(using G)
 }
 
 sealed abstract private[data] class IndexedStateTMonadError[F[_], S, E]
@@ -537,7 +537,7 @@ private[this] trait IndexedStateTFunctorFilter[F[_], SA, SB] extends FunctorFilt
   def FF: FunctorFilter[F]
 
   def functor: Functor[IndexedStateT[F, SA, SB, *]] =
-    IndexedStateT.catsDataFunctorForIndexedStateT(FF.functor)
+    IndexedStateT.catsDataFunctorForIndexedStateT(using FF.functor)
 
   def mapFilter[A, B](fa: IndexedStateT[F, SA, SB, A])(f: A => Option[B]): IndexedStateT[F, SA, SB, B] =
     fa.flatMapF(a => FF.mapFilter(F0.pure(a))(f))

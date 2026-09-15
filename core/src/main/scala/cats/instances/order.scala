@@ -42,7 +42,7 @@ trait OrderInstances extends kernel.instances.OrderInstances {
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
       def contramap[A, B](fa: Order[A])(f: B => A): Order[B] =
-        Order.by(f)(fa)
+        Order.by(f)(using fa)
 
       def product[A, B](fa: Order[A], fb: Order[B]): Order[(A, B)] = { (x, y) =>
         val z = fa.compare(x._1, y._1)

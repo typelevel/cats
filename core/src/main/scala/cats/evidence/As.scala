@@ -122,7 +122,7 @@ object As extends AsInstances with AsSupport {
    * of an abundance of caution
    */
   def fromPredef[A, B](eq: A <:< B): A As B =
-    asFromPredef(eq)
+    asFromPredef(using eq)
 
   /**
    * We can lift subtyping into any covariant type constructor

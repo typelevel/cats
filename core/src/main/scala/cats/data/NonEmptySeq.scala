@@ -294,10 +294,10 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
     new NonEmptySeq(toSeq.zipWithIndex)
 
   def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptySeq[A] =
-    new NonEmptySeq(toSeq.sortBy(f)(B.toOrdering))
+    new NonEmptySeq(toSeq.sortBy(f)(using B.toOrdering))
 
   def sorted[AA >: A](implicit AA: Order[AA]): NonEmptySeq[AA] =
-    new NonEmptySeq(toSeq.sorted(AA.toOrdering))
+    new NonEmptySeq(toSeq.sorted(using AA.toOrdering))
 
   /**
    * Groups elements inside this `NonEmptySeq` according to the `Order`

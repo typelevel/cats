@@ -32,7 +32,7 @@ trait HashInstances extends kernel.instances.HashInstances {
       /**
        * Derive a `Hash` for `B` given an `Hash[A]` and a function `B => A`.
        */
-      def contramap[A, B](ha: Hash[A])(f: B => A): Hash[B] = Hash.by(f)(ha)
+      def contramap[A, B](ha: Hash[A])(f: B => A): Hash[B] = Hash.by(f)(using ha)
 
     }
 

@@ -34,7 +34,7 @@ trait PartialOrderInstances extends kernel.instances.PartialOrderInstances {
        *
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
-      def contramap[A, B](fa: PartialOrder[A])(f: B => A): PartialOrder[B] = PartialOrder.by[B, A](f)(fa)
+      def contramap[A, B](fa: PartialOrder[A])(f: B => A): PartialOrder[B] = PartialOrder.by[B, A](f)(using fa)
 
       def product[A, B](fa: PartialOrder[A], fb: PartialOrder[B]): PartialOrder[(A, B)] = { (x, y) =>
         val z = fa.partialCompare(x._1, y._1)
