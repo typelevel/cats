@@ -231,8 +231,8 @@ You can find out more about law testing [here](typeclasses/lawtesting.md).
 
 ## Type classes in Cats
 
-<img src="https://cdn.rawgit.com/tpolecat/cats-infographic/master/cats.svg" alt="infographic" style="width: 100%;"/>
-From [cats-infographic by @tpolecat](https://github.com/tpolecat/cats-infographic).
+<img src="https://raw.githubusercontent.com/ShapelessCat/cats-infographic/main/cats-infographic.svg" alt="infographic" style="width: 100%;"/>
+From [cats-infographic by @tpolecat, updated by @ShapelessCat](https://github.com/ShapelessCat/cats-infographic).
 
 ## Incomplete type class instances in cats
 
