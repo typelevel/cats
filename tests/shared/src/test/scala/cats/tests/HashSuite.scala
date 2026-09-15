@@ -27,6 +27,7 @@ import cats.laws.discipline.{DeferTests, MiniInt}
 import cats.laws.discipline.arbitrary.*
 import cats.laws.discipline.eq.*
 import cats.syntax.hash.*
+import org.scalacheck.Prop
 
 class HashSuite extends CatsSuite {
 
@@ -35,7 +36,26 @@ class HashSuite extends CatsSuite {
     Contravariant[Hash]
   }
 
-  assert(1.hash == 1.hashCode)
-  assert("ABC".hash == "ABC".hashCode)
+  property("hash extension method is consistent with hashCode for Int") {
+    Prop.forAll { (n: Int) => assertEquals(n.hash, n.hashCode) }
+  }
+
+  property("hash extension method is consistent with hashCode for String") {
+    Prop.forAll { (s: String) => assertEquals(s.hash, s.hashCode) }
+  }
+
+  property("fromUniversalHashCode should be consistent with hashCode on non-null references") {
+    Prop.forAll { (n: Int) =>
+      class ExplicitHashCode() { override val hashCode = n }
+      val hash = Hash.fromUniversalHashCode[ExplicitHashCode]
+      assertEquals(hash.hash(new ExplicitHashCode()), n)
+    }
+  }
+
+  test("fromUniversalHashCode should be null safe") {
+    val hash = Hash.fromUniversalHashCode[AnyRef]
+    assertEquals(hash.hash(null), 0)
+  }
+
   checkAll("Defer[Hash]", DeferTests[Hash].defer[MiniInt])
 }
