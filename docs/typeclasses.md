@@ -1,10 +1,12 @@
 # Type Classes
+
 Type classes are a powerful tool used in functional programming to enable ad-hoc polymorphism, more commonly
 known as overloading. Where many object-oriented languages leverage subtyping for polymorphic code, functional
 programming tends towards a combination of parametric polymorphism (think type parameters, like Java generics)
 and ad-hoc polymorphism.
 
 ## Example: collapsing a list
+
 The following code snippets show code that sums a list of integers, concatenates a list of strings, and unions a list
 of sets.
 
@@ -42,6 +44,7 @@ def combineAll[A](list: List[A], m: Monoid[A]): A = list.foldRight(m.empty)(m.co
 ```
 
 ## Type classes vs. subtyping
+
 The definition above takes an actual monoid argument instead of doing the usual object-oriented practice of using
 subtype constraints.
 
@@ -156,6 +159,7 @@ combineAll(List(Paired(1, "hello"), Paired(2, " "), Paired(3, "world")))
 ```
 
 ## A note on syntax
+
 In many cases, including the `combineAll` function above, the implicit arguments can be written with syntactic sugar.
 
 ```scala mdoc:compile-only
@@ -230,33 +234,27 @@ You can find out more about law testing [here](typeclasses/lawtesting.md).
 <img src="https://cdn.rawgit.com/tpolecat/cats-infographic/master/cats.svg" alt="infographic" style="width: 100%;"/>
 From [cats-infographic by @tpolecat](https://github.com/tpolecat/cats-infographic).
 
-
 ## Incomplete type class instances in cats
 
 Originally from [@hobwekiva](https://gist.github.com/hobwekiva/d63508ddb6a728015ace53cb70a1fd5d)
 
-
-| Type            | Functor | Apply             | Applicative | Monad | MonoidK | ApplicativeError  | MonadError | CoflatMap | Comonad | Bimonad |
-| --------------- |:-------:|:-----------------:|:-----------:|:-----:|:-------:|:-----------------:|:----------:|:---------:|:-------:|:-------:|
-| `Id[A]`           | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✔       |✔       |
-| `Eval[A]`         | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✔       |✔       |
-| `Option[A]`       | ✔       | ✔                 | ✔           | ✔     | ✔       | ✔                 | ✔          | ✔         | ✗       |✗       |
-| `Const[K, A]`     | ✔       | ✔ (`K:Monoid`)    | ✔           | ✗     | ✗       | ✗                 | ✗          | ✗         | ✗       |✗       |
-| `Either[E, A]`    | ✔       | ✔                 | ✔           | ✔     | ✔       | ✔                 | ✔          | ✗         | ✗       |✗       |
-| `List[A]`         | ✔       | ✔                 | ✔           | ✔     | ✔       | ✗                 | ✗          | ✔         | ✗       |✗       |
-| `NonEmptyList[A]` | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✔       |✔       |
-| `Stream[A]`       | ✔       | ✔                 | ✔           | ✔     | ✔       | ✗                 | ✗          | ✔         | ✗       |✗       |
-| `Map[K, A]`       | ✔       | ✔                 | ✗           | ✗     | ✔       | ✗                 | ✗          | ✗         | ✗       |✗       |
-| `Validated[E, A]` | ✔       | ✔ (`E: Semigroup`)| ✔           | ✗     | ✗       | ✔ (`E: Semigroup`)| ✗          | ✗         | ✗       |✗       |
-| `Reader[E, A]`    | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✗         | ✗       |✗       |
-| `Writer[E, A]`    | ✔       | ✔ (`E:Monoid`)    | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✗       |✗       |
-
-
-
+| Type              | Functor | Apply             | Applicative | Monad | MonoidK | ApplicativeError  | MonadError | CoflatMap | Comonad | Bimonad |
+| ----------------- |:-------:|:-----------------:|:-----------:|:-----:|:-------:|:-----------------:|:----------:|:---------:|:-------:|:-------:|
+| `Id[A]`           | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✔       |✔        |
+| `Eval[A]`         | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✔       |✔        |
+| `Option[A]`       | ✔       | ✔                 | ✔           | ✔     | ✔       | ✔                 | ✔          | ✔         | ✗       |✗        |
+| `Const[K, A]`     | ✔       | ✔ (`K:Monoid`)    | ✔           | ✗     | ✗       | ✗                 | ✗          | ✗         | ✗       |✗        |
+| `Either[E, A]`    | ✔       | ✔                 | ✔           | ✔     | ✔       | ✔                 | ✔          | ✗         | ✗       |✗        |
+| `List[A]`         | ✔       | ✔                 | ✔           | ✔     | ✔       | ✗                 | ✗          | ✔         | ✗       |✗        |
+| `NonEmptyList[A]` | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✔       |✔        |
+| `Stream[A]`       | ✔       | ✔                 | ✔           | ✔     | ✔       | ✗                 | ✗          | ✔         | ✗       |✗        |
+| `Map[K, A]`       | ✔       | ✔                 | ✗           | ✗     | ✔       | ✗                 | ✗          | ✗         | ✗       |✗        |
+| `Validated[E, A]` | ✔       | ✔ (`E: Semigroup`)| ✔           | ✗     | ✗       | ✔ (`E: Semigroup`)| ✗          | ✗         | ✗       |✗        |
+| `Reader[E, A]`    | ✔       | ✔                 | ✔           | ✔     | ✗       | ✗                 | ✗          | ✗         | ✗       |✗        |
+| `Writer[E, A]`    | ✔       | ✔ (`E:Monoid`)    | ✔           | ✔     | ✗       | ✗                 | ✗          | ✔         | ✗       |✗        |
 
 ## Further reading
+
 * [Returning the "Current" Type in Scala][fbounds]
-
-
 
 [fbounds]: http://tpolecat.github.io/2015/04/29/f-bounds.html "Returning the "Current" Type in Scala"
