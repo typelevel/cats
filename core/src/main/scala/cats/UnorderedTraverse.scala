@@ -53,9 +53,14 @@ object UnorderedTraverse {
     type TypeClassType <: UnorderedTraverse[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
-    def unorderedTraverse[G[_], B](f: A => G[B])(implicit ev$1: CommutativeApplicative[G]): G[F[B]] =
+    def unorderedTraverse[G[_], B](f: A => G[B])(implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: CommutativeApplicative[G]
+    ): G[F[B]] =
       typeClassInstance.unorderedTraverse[G, A, B](self)(f)
-    def unorderedSequence[G[_], B](implicit ev$1: A <:< G[B], ev$2: CommutativeApplicative[G]): G[F[B]] =
+    def unorderedSequence[G[_], B](implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: A <:< G[B],
+      @deprecatedName(Symbol("ev$2"), "2.14.0") ev2: CommutativeApplicative[G]
+    ): G[F[B]] =
       typeClassInstance.unorderedSequence[G, B](self.asInstanceOf[F[G[B]]])
   }
   trait AllOps[F[_], A] extends Ops[F, A] with UnorderedFoldable.AllOps[F, A] {

@@ -239,15 +239,26 @@ object Traverse {
     type TypeClassType <: Traverse[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
-    def traverse[G[_], B](f: A => G[B])(implicit ev$1: Applicative[G]): G[F[B]] =
+    def traverse[G[_], B](f: A => G[B])(implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: Applicative[G]
+    ): G[F[B]] =
       typeClassInstance.traverse[G, A, B](self)(f)
-    def traverseTap[G[_], B](f: A => G[B])(implicit ev$1: Applicative[G]): G[F[A]] =
+    def traverseTap[G[_], B](f: A => G[B])(implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: Applicative[G]
+    ): G[F[A]] =
       typeClassInstance.traverseTap[G, A, B](self)(f)
     def flatTraverse[G[_], B](f: A => G[F[B]])(implicit G: Applicative[G], F: FlatMap[F]): G[F[B]] =
       typeClassInstance.flatTraverse[G, A, B](self)(f)(G, F)
-    def sequence[G[_], B](implicit ev$1: A <:< G[B], ev$2: Applicative[G]): G[F[B]] =
+    def sequence[G[_], B](implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: A <:< G[B],
+      @deprecatedName(Symbol("ev$2"), "2.14.0") ev2: Applicative[G]
+    ): G[F[B]] =
       typeClassInstance.sequence[G, B](self.asInstanceOf[F[G[B]]])
-    def flatSequence[G[_], B](implicit ev$1: A <:< G[F[B]], G: Applicative[G], F: FlatMap[F]): G[F[B]] =
+    def flatSequence[G[_], B](implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: A <:< G[F[B]],
+      G: Applicative[G],
+      F: FlatMap[F]
+    ): G[F[B]] =
       typeClassInstance.flatSequence[G, B](self.asInstanceOf[F[G[F[B]]]])(G, F)
     def mapAccumulate[S, B](init: S)(f: (S, A) => (S, B)): (S, F[B]) =
       typeClassInstance.mapAccumulate[S, A, B](init, self)(f)

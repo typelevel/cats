@@ -286,15 +286,19 @@ object Apply {
     type TypeClassType <: Apply[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
-    def ap[B, C](fa: F[B])(implicit ev$1: A <:< (B => C)): F[C] =
+    def ap[B, C](fa: F[B])(implicit @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: A <:< (B => C)): F[C] =
       typeClassInstance.ap[B, C](self.asInstanceOf[F[B => C]])(fa)
     def productR[B](fb: F[B]): F[B] = typeClassInstance.productR[A, B](self)(fb)
     def productL[B](fb: F[B]): F[A] = typeClassInstance.productL[A, B](self)(fb)
-    @inline final def <*>[B, C](fa: F[B])(implicit ev$1: A <:< (B => C)): F[C] =
+    @inline final def <*>[B, C](fa: F[B])(implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: A <:< (B => C)
+    ): F[C] =
       typeClassInstance.<*>[B, C](self.asInstanceOf[F[B => C]])(fa)
     @inline final def *>[B](fb: F[B]): F[B] = typeClassInstance.*>[A, B](self)(fb)
     @inline final def <*[B](fb: F[B]): F[A] = typeClassInstance.<*[A, B](self)(fb)
-    def ap2[B, C, D](fa: F[B], fb: F[C])(implicit ev$1: A <:< ((B, C) => D)): F[D] =
+    def ap2[B, C, D](fa: F[B], fb: F[C])(implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: A <:< ((B, C) => D)
+    ): F[D] =
       typeClassInstance.ap2[B, C, D](self.asInstanceOf[F[(B, C) => D]])(fa, fb)
     def map2[B, C](fb: F[B])(f: (A, B) => C): F[C] = typeClassInstance.map2[A, B, C](self, fb)(f)
     def map2Eval[B, C](fb: Eval[F[B]])(f: (A, B) => C): Eval[F[C]] = typeClassInstance.map2Eval[A, B, C](self, fb)(f)

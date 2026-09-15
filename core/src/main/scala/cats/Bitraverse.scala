@@ -152,9 +152,15 @@ object Bitraverse {
     type TypeClassType <: Bitraverse[F]
     def self: F[A, B]
     val typeClassInstance: TypeClassType
-    def bitraverse[G[_], C, D](f: A => G[C], g: B => G[D])(implicit ev$1: Applicative[G]): G[F[C, D]] =
+    def bitraverse[G[_], C, D](f: A => G[C], g: B => G[D])(implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: Applicative[G]
+    ): G[F[C, D]] =
       typeClassInstance.bitraverse[G, A, B, C, D](self)(f, g)
-    def bisequence[G[_], C, D](implicit ev$1: A <:< G[C], ev$2: B <:< G[D], ev$3: Applicative[G]): G[F[C, D]] =
+    def bisequence[G[_], C, D](implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: A <:< G[C],
+      @deprecatedName(Symbol("ev$2"), "2.14.0") ev2: B <:< G[D],
+      @deprecatedName(Symbol("ev$3"), "2.14.0") ev3: Applicative[G]
+    ): G[F[C, D]] =
       typeClassInstance.bisequence[G, C, D](self.asInstanceOf[F[G[C], G[D]]])
   }
   trait AllOps[F[_, _], A, B] extends Ops[F, A, B] with Bifoldable.AllOps[F, A, B] with Bifunctor.AllOps[F, A, B] {

@@ -150,13 +150,25 @@ object Alternative {
     type TypeClassType <: Alternative[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
-    def unite[G[_], B](implicit ev$1: A <:< G[B], FM: Monad[F], G: Foldable[G]): F[B] =
+    def unite[G[_], B](implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: A <:< G[B],
+      FM: Monad[F],
+      G: Foldable[G]
+    ): F[B] =
       // Note: edited manually since seems Simulacrum is not able to handle the bin-compat redirection properly.
       typeClassInstance.unite[G, B](self.asInstanceOf[F[G[B]]])
-    def separate[G[_, _], B, C](implicit ev$1: A <:< G[B, C], FM: Monad[F], G: Bifoldable[G]): (F[B], F[C]) =
+    def separate[G[_, _], B, C](implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: A <:< G[B, C],
+      FM: Monad[F],
+      G: Bifoldable[G]
+    ): (F[B], F[C]) =
       // Note: edited manually since seems Simulacrum is not able to handle the bin-compat redirection properly.
       typeClassInstance.separate[G, B, C](self.asInstanceOf[F[G[B, C]]])
-    def separateFoldable[G[_, _], B, C](implicit ev$1: A <:< G[B, C], G: Bifoldable[G], FF: Foldable[F]): (F[B], F[C]) =
+    def separateFoldable[G[_, _], B, C](implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: A <:< G[B, C],
+      G: Bifoldable[G],
+      FF: Foldable[F]
+    ): (F[B], F[C]) =
       typeClassInstance.separateFoldable[G, B, C](self.asInstanceOf[F[G[B, C]]])(G, FF)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with NonEmptyAlternative.AllOps[F, A] with MonoidK.AllOps[F, A] {

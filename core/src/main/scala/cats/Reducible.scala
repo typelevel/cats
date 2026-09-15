@@ -402,7 +402,7 @@ object Reducible {
     def reduceLeft(f: (A, A) => A): A = typeClassInstance.reduceLeft[A](self)(f)
     def reduceRight(f: (A, Eval[A]) => Eval[A]): Eval[A] = typeClassInstance.reduceRight[A](self)(f)
     def reduce(implicit A: Semigroup[A]): A = typeClassInstance.reduce[A](self)(A)
-    def reduceK[G[_], B](implicit ev$1: A <:< G[B], G: SemigroupK[G]): G[B] =
+    def reduceK[G[_], B](implicit @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: A <:< G[B], G: SemigroupK[G]): G[B] =
       typeClassInstance.reduceK[G, B](self.asInstanceOf[F[G[B]]])(G)
     def reduceMap[B](f: A => B)(implicit B: Semigroup[B]): B = typeClassInstance.reduceMap[A, B](self)(f)(B)
     def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B = typeClassInstance.reduceLeftTo[A, B](self)(f)(g)
@@ -418,20 +418,28 @@ object Reducible {
       typeClassInstance.nonEmptyTraverseVoid[G, A, B](self)(f)
     def nonEmptyTraverse_[G[_], B](f: A => G[B])(implicit G: Apply[G]): G[Unit] =
       nonEmptyTraverseVoid[G, B](f)
-    def nonEmptySequenceVoid[G[_], B](implicit ev$1: A <:< G[B], G: Apply[G]): G[Unit] =
+    def nonEmptySequenceVoid[G[_], B](implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: A <:< G[B],
+      G: Apply[G]
+    ): G[Unit] =
       typeClassInstance.nonEmptySequenceVoid[G, B](self.asInstanceOf[F[G[B]]])
-    def nonEmptySequence_[G[_], B](implicit ev$1: A <:< G[B], G: Apply[G]): G[Unit] =
+    def nonEmptySequence_[G[_], B](implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: A <:< G[B],
+      G: Apply[G]
+    ): G[Unit] =
       nonEmptySequenceVoid[G, B]
     def toNonEmptyList: NonEmptyList[A] = typeClassInstance.toNonEmptyList[A](self)
     def minimum(implicit A: Order[A]): A = typeClassInstance.minimum[A](self)(A)
     def maximum(implicit A: Order[A]): A = typeClassInstance.maximum[A](self)(A)
-    def minimumBy[B](f: A => B)(implicit ev$1: Order[B]): A = typeClassInstance.minimumBy[A, B](self)(f)
-    def maximumBy[B](f: A => B)(implicit ev$1: Order[B]): A = typeClassInstance.maximumBy[A, B](self)(f)
+    def minimumBy[B](f: A => B)(implicit @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: Order[B]): A =
+      typeClassInstance.minimumBy[A, B](self)(f)
+    def maximumBy[B](f: A => B)(implicit @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: Order[B]): A =
+      typeClassInstance.maximumBy[A, B](self)(f)
     def minimumNel(implicit A: Order[A]): NonEmptyList[A] = typeClassInstance.minimumNel[A](self)(A)
     def maximumNel(implicit A: Order[A]): NonEmptyList[A] = typeClassInstance.maximumNel[A](self)(A)
-    def minimumByNel[B](f: A => B)(implicit ev$1: Order[B]): NonEmptyList[A] =
+    def minimumByNel[B](f: A => B)(implicit @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: Order[B]): NonEmptyList[A] =
       typeClassInstance.minimumByNel[A, B](self)(f)
-    def maximumByNel[B](f: A => B)(implicit ev$1: Order[B]): NonEmptyList[A] =
+    def maximumByNel[B](f: A => B)(implicit @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: Order[B]): NonEmptyList[A] =
       typeClassInstance.maximumByNel[A, B](self)(f)
     def nonEmptyIntercalate(a: A)(implicit A: Semigroup[A]): A = typeClassInstance.nonEmptyIntercalate[A](self, a)(A)
     def nonEmptyPartition[B, C](f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] =

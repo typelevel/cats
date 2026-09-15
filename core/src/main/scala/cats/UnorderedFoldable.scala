@@ -188,12 +188,18 @@ object UnorderedFoldable
     type TypeClassType <: UnorderedFoldable[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
-    def unorderedFoldMap[B](f: A => B)(implicit ev$1: CommutativeMonoid[B]): B =
+    def unorderedFoldMap[B](f: A => B)(implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: CommutativeMonoid[B]
+    ): B =
       typeClassInstance.unorderedFoldMap[A, B](self)(f)
-    def unorderedFold(implicit ev$1: CommutativeMonoid[A]): A = typeClassInstance.unorderedFold[A](self)
+    def unorderedFold(implicit @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: CommutativeMonoid[A]): A =
+      typeClassInstance.unorderedFold[A](self)
     def unorderedFoldMapA[G[_], B](
       f: A => G[B]
-    )(implicit ev$1: CommutativeApplicative[G], ev$2: CommutativeMonoid[B]): G[B] =
+    )(implicit
+      @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: CommutativeApplicative[G],
+      @deprecatedName(Symbol("ev$2"), "2.14.0") ev2: CommutativeMonoid[B]
+    ): G[B] =
       typeClassInstance.unorderedFoldMapA[G, A, B](self)(f)
     def isEmpty: Boolean = typeClassInstance.isEmpty[A](self)
     def nonEmpty: Boolean = typeClassInstance.nonEmpty[A](self)

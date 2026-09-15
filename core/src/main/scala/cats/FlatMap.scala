@@ -246,7 +246,8 @@ object FlatMap {
     def self: F[A]
     val typeClassInstance: TypeClassType
     def flatMap[B](f: A => F[B]): F[B] = typeClassInstance.flatMap[A, B](self)(f)
-    def flatten[B](implicit ev$1: A <:< F[B]): F[B] = typeClassInstance.flatten[B](self.asInstanceOf[F[F[B]]])
+    def flatten[B](implicit @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: A <:< F[B]): F[B] =
+      typeClassInstance.flatten[B](self.asInstanceOf[F[F[B]]])
     def productREval[B](fb: Eval[F[B]]): F[B] = typeClassInstance.productREval[A, B](self)(fb)
     def productLEval[B](fb: Eval[F[B]]): F[A] = typeClassInstance.productLEval[A, B](self)(fb)
     def mproduct[B](f: A => F[B]): F[(A, B)] = typeClassInstance.mproduct[A, B](self)(f)

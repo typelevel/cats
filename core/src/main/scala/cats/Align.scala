@@ -182,7 +182,8 @@ object Align extends ScalaVersionSpecificAlignInstances {
     val typeClassInstance: TypeClassType
     def align[B](fb: F[B]): F[Ior[A, B]] = typeClassInstance.align[A, B](self, fb)
     def alignWith[B, C](fb: F[B])(f: Ior[A, B] => C): F[C] = typeClassInstance.alignWith[A, B, C](self, fb)(f)
-    def alignCombine(fa2: F[A])(implicit ev$1: Semigroup[A]): F[A] = typeClassInstance.alignCombine[A](self, fa2)
+    def alignCombine(fa2: F[A])(implicit @deprecatedName(Symbol("ev$1"), "2.14.0") ev1: Semigroup[A]): F[A] =
+      typeClassInstance.alignCombine[A](self, fa2)
     def alignMergeWith(fa2: F[A])(f: (A, A) => A): F[A] = typeClassInstance.alignMergeWith[A](self, fa2)(f)
     def padZip[B](fb: F[B]): F[(Option[A], Option[B])] = typeClassInstance.padZip[A, B](self, fb)
     def padZipWith[B, C](fb: F[B])(f: (Option[A], Option[B]) => C): F[C] =
