@@ -25,6 +25,7 @@ import java.util.UUID
 import scala.collection.immutable.{BitSet, Queue, Seq, SortedMap, SortedSet}
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.util.Try
+import scala.{specialized => sp}
 
 /**
  * A type class to provide textual representation. It is meant to be a
@@ -64,6 +65,13 @@ object Show extends ScalaVersionSpecificShowInstances with ShowInstances {
    * creates an instance of [[Show]] using the provided function
    */
   def show[A](f: A => String): Show[A] = f(_)
+
+  /**
+   * Convert an implicit `Show[B]` to a `Show[A]` using the given
+   * function `f`.
+   */
+  def by[@sp A, @sp B](f: A => B)(implicit ev: Show[B]): Show[A] =
+    a => ev.show(f(a))
 
   /**
    * creates an instance of [[Show]] using object toString
