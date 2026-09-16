@@ -42,6 +42,7 @@ trait NonEmptyAlternativeTests[F[_]] extends ApplicativeTests[F] with SemigroupK
     EqFA: Eq[F[A]],
     EqFB: Eq[F[B]],
     EqFC: Eq[F[C]],
+    EqFOA: Eq[F[Option[A]]],
     EqFABC: Eq[F[(A, B, C)]],
     iso: Isomorphisms[F]
   ): RuleSet =
@@ -55,7 +56,9 @@ trait NonEmptyAlternativeTests[F[_]] extends ApplicativeTests[F] with SemigroupK
         "prependK consistent with pure and combineK" ->
           forAll(laws.nonEmptyAlternativePrependKConsistentWithPureAndCombineK[A] _),
         "appendK consistent with pure and combineK" ->
-          forAll(laws.nonEmptyAlternativeAppendKConsistentWithPureAndCombineK[A] _)
+          forAll(laws.nonEmptyAlternativeAppendKConsistentWithPureAndCombineK[A] _),
+        "attemptOption consistent with combineK and pure" ->
+          forAll(laws.nonEmptyAlternativeAttemptOptionConsistentWithCombineKAndPure[A] _)
       )
     }
 }

@@ -167,5 +167,13 @@ ThisBuild / mimaBinaryIssueFilters ++= Seq.concat(
     ProblemFilters.exclude[MissingTypesProblem]("cats.free.FreeFoldable"),
     ProblemFilters.exclude[IncompatibleTemplateDefProblem]("cats.RepresentableBimonad"),
     ProblemFilters.exclude[IncompatibleTemplateDefProblem]("cats.RepresentableMonad")
+  ),
+  Seq( // PR#4862 (issue #2936): added EqFOA: Eq[F[Option[A]]] implicit param to
+    // (NonEmpty)AlternativeTests rule sets so the new attemptOption law can run.
+    // Test-helper signatures only; source-compatible since callers pass implicits.
+    ProblemFilters.exclude[DirectMissingMethodProblem]("cats.laws.discipline.AlternativeTests.alternative"),
+    ProblemFilters.exclude[DirectMissingMethodProblem](
+      "cats.laws.discipline.NonEmptyAlternativeTests.nonEmptyAlternative"
+    )
   )
 )
