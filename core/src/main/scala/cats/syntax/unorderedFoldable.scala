@@ -69,6 +69,11 @@ final class UnorderedFoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
   def count(p: A => Boolean)(implicit F: UnorderedFoldable[F]): Long =
     F.count(fa)(p)
 
+  /**
+   * Reduce this unordered structure using a [[CommutativeSemigroup]] instance.
+   *
+   * @return `None` if empty, otherwise `Some` of the combined value.
+   */
   def unorderedReduceOption(implicit A: CommutativeSemigroup[A], F: UnorderedFoldable[F]): Option[A] =
     F.unorderedReduceOption(fa)
 }
