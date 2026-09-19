@@ -40,7 +40,7 @@ trait EqInstances extends kernel.instances.EqInstances {
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
       def contramap[A, B](fa: Eq[A])(f: B => A): Eq[B] =
-        Eq.by(f)(fa)
+        Eq.by(f)(using fa)
 
       def product[A, B](fa: Eq[A], fb: Eq[B]): Eq[(A, B)] =
         (left, right) => fa.eqv(left._1, right._1) && fb.eqv(left._2, right._2)

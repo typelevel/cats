@@ -83,5 +83,5 @@ object ContravariantSemigroupal extends SemigroupalArityFunctions {
 
 private[cats] class ContravariantSemigroupalSemigroup[F[_], A](f: ContravariantSemigroupal[F]) extends Semigroup[F[A]] {
   def combine(a: F[A], b: F[A]): F[A] =
-    ContravariantSemigroupal.contramap2(a, b)((a: A) => (a, a))(f, f)
+    ContravariantSemigroupal.contramap2(a, b)((a: A) => (a, a))(using f, f)
 }

@@ -140,9 +140,9 @@ object NonEmptyTraverse {
     def nonEmptySequence[G[_], B](implicit ev$1: A <:< G[B], ev$2: Apply[G]): G[F[B]] =
       typeClassInstance.nonEmptySequence[G, B](self.asInstanceOf[F[G[B]]])
     def nonEmptyFlatTraverse[G[_], B](f: A => G[F[B]])(implicit G: Apply[G], F: FlatMap[F]): G[F[B]] =
-      typeClassInstance.nonEmptyFlatTraverse[G, A, B](self)(f)(G, F)
+      typeClassInstance.nonEmptyFlatTraverse[G, A, B](self)(f)(using G, F)
     def nonEmptyFlatSequence[G[_], B](implicit ev$1: A <:< G[F[B]], G: Apply[G], F: FlatMap[F]): G[F[B]] =
-      typeClassInstance.nonEmptyFlatSequence[G, B](self.asInstanceOf[F[G[F[B]]]])(G, F)
+      typeClassInstance.nonEmptyFlatSequence[G, B](self.asInstanceOf[F[G[F[B]]]])(using G, F)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with Traverse.AllOps[F, A] with Reducible.AllOps[F, A] {
     type TypeClassType <: NonEmptyTraverse[F]

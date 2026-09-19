@@ -136,5 +136,5 @@ object Is extends IsInstances with IsSupport {
    */
   @deprecated("use Is.isFromPredef", "2.2.0")
   @inline def unsafeFromPredef[A, B](eq: A =:= B): A Is B =
-    Is.isFromPredef(eq)
+    Is.isFromPredef(using eq)
 }

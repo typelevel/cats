@@ -200,7 +200,7 @@ object Monad {
     def self: F[A]
     val typeClassInstance: TypeClassType
     def untilM[G[_]](cond: => F[Boolean])(implicit G: Alternative[G]): F[G[A]] =
-      typeClassInstance.untilM[G, A](self)(cond)(G)
+      typeClassInstance.untilM[G, A](self)(cond)(using G)
     def untilM_(cond: => F[Boolean]): F[Unit] = typeClassInstance.untilM_[A](self)(cond)
     def iterateWhile(p: A => Boolean): F[A] = typeClassInstance.iterateWhile[A](self)(p)
     def iterateUntil(p: A => Boolean): F[A] = typeClassInstance.iterateUntil[A](self)(p)

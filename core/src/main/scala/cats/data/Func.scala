@@ -93,7 +93,7 @@ abstract private[data] class FuncInstances1 {
 sealed private[data] trait FuncFunctor[F[_], C] extends Functor[λ[α => Func[F, C, α]]] {
   def F: Functor[F]
   override def map[A, B](fa: Func[F, C, A])(f: A => B): Func[F, C, B] =
-    fa.map(f)(F)
+    fa.map(f)(using F)
 }
 
 sealed private[data] trait FuncContravariant[F[_], C] extends Contravariant[λ[α => Func[F, α, C]]] {
@@ -168,9 +168,9 @@ sealed abstract private[data] class AppFuncApplicative[F[_], C]
   override def map[A, B](fa: AppFunc[F, C, A])(f: A => B): AppFunc[F, C, B] =
     fa.map(f)
   def ap[A, B](f: AppFunc[F, C, A => B])(fa: AppFunc[F, C, A]): AppFunc[F, C, B] =
-    Func.appFunc[F, C, B](c => F.ap(f.run(c))(fa.run(c)))(F)
+    Func.appFunc[F, C, B](c => F.ap(f.run(c))(fa.run(c)))(using F)
   override def product[A, B](fa: AppFunc[F, C, A], fb: AppFunc[F, C, B]): AppFunc[F, C, (A, B)] =
-    Func.appFunc[F, C, (A, B)](c => F.product(fa.run(c), fb.run(c)))(F)
+    Func.appFunc[F, C, (A, B)](c => F.product(fa.run(c), fb.run(c)))(using F)
   def pure[A](a: A): AppFunc[F, C, A] =
-    Func.appFunc[F, C, A](Function.const(F.pure(a)))(F)
+    Func.appFunc[F, C, A](Function.const(F.pure(a)))(using F)
 }

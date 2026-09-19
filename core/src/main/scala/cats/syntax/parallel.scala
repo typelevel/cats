@@ -332,7 +332,7 @@ final class NonEmptyParallelApOps[M[_], A](private val ma: M[A]) extends AnyVal 
 @deprecated("Kept for binary compatibility", "2.8.0")
 final class ParallelApplyOps[M[_], A, B](private val mab: M[A => B]) extends AnyVal {
   def <&>(ma: M[A])(implicit P: Parallel[M]): M[B] =
-    Parallel.parAp(mab)(ma)(P)
+    Parallel.parAp(mab)(ma)(using P)
 
   def parAp(ma: M[A])(implicit P: Parallel[M]): M[B] =
     Parallel.parAp(mab)(ma)
@@ -340,7 +340,7 @@ final class ParallelApplyOps[M[_], A, B](private val mab: M[A => B]) extends Any
 
 final class NonEmptyParallelApplyOps[M[_], A, B](private val mab: M[A => B]) extends AnyVal {
   def <&>(ma: M[A])(implicit P: NonEmptyParallel[M]): M[B] =
-    Parallel.parAp[M, A, B](mab)(ma)(P)
+    Parallel.parAp[M, A, B](mab)(ma)(using P)
 
   def parAp(ma: M[A])(implicit P: NonEmptyParallel[M]): M[B] =
     Parallel.parAp[M, A, B](mab)(ma)

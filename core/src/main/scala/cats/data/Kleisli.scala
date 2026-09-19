@@ -461,7 +461,7 @@ sealed abstract private[data] class KleisliInstances1 extends KleisliInstances2 
     new Parallel[Kleisli[M, A, *]] {
       type F[x] = Kleisli[P.F, A, x]
       implicit val monadM: Monad[M] = P.monad
-      def applicative: Applicative[Kleisli[P.F, A, *]] = catsDataApplicativeForKleisli(P.applicative)
+      def applicative: Applicative[Kleisli[P.F, A, *]] = catsDataApplicativeForKleisli(using P.applicative)
       def monad: Monad[Kleisli[M, A, *]] = catsDataMonadForKleisli
 
       def sequential: Kleisli[P.F, A, *] ~> Kleisli[M, A, *] =
@@ -765,7 +765,7 @@ private[this] trait KleisliFunctorFilter[F[_], R] extends FunctorFilter[Kleisli[
 
   def FF: FunctorFilter[F]
 
-  def functor: Functor[Kleisli[F, R, *]] = Kleisli.catsDataFunctorForKleisli(FF.functor)
+  def functor: Functor[Kleisli[F, R, *]] = Kleisli.catsDataFunctorForKleisli(using FF.functor)
 
-  def mapFilter[A, B](fa: Kleisli[F, R, A])(f: A => Option[B]): Kleisli[F, R, B] = fa.mapFilter(f)(FF)
+  def mapFilter[A, B](fa: Kleisli[F, R, A])(f: A => Option[B]): Kleisli[F, R, B] = fa.mapFilter(f)(using FF)
 }

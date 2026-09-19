@@ -354,5 +354,5 @@ private class FutureMonoid[A](A: Monoid[A], ec: ExecutionContext)
 }
 
 private class FutureSemigroup[A](A: Semigroup[A], ec: ExecutionContext) extends Semigroup[Future[A]] {
-  def combine(x: Future[A], y: Future[A]): Future[A] = x.flatMap(xv => y.map(A.combine(xv, _))(ec))(ec)
+  def combine(x: Future[A], y: Future[A]): Future[A] = x.flatMap(xv => y.map(A.combine(xv, _))(using ec))(using ec)
 }
