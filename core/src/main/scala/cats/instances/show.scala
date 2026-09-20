@@ -28,22 +28,22 @@ trait ShowInstances {
   implicit def catsDeferForShow: Defer[Show] = ShowInstances.catsDeferForShowCache
 }
 object ShowInstances {
+  final private case class Deferred[A](fa: () => Show[A]) extends Show[A] {
+    private lazy val resolved: Show[A] = {
+      @tailrec
+      def loop(f: () => Show[A]): Show[A] =
+        f() match {
+          case Deferred(f) => loop(f)
+          case next        => next
+        }
+
+      loop(fa)
+    }
+    override def show(t: A): String = resolved.show(t)
+  }
+
   private val catsDeferForShowCache: Defer[Show] =
     new Defer[Show] {
-      case class Deferred[A](fa: () => Show[A]) extends Show[A] {
-        private lazy val resolved: Show[A] = {
-          @tailrec
-          def loop(f: () => Show[A]): Show[A] =
-            f() match {
-              case Deferred(f) => loop(f)
-              case next        => next
-            }
-
-          loop(fa)
-        }
-        override def show(t: A): String = resolved.show(t)
-      }
-
       override def defer[A](fa: => Show[A]): Show[A] = {
         lazy val cachedFa = fa
         Deferred(() => cachedFa)

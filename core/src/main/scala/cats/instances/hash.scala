@@ -39,28 +39,28 @@ trait HashInstances extends kernel.instances.HashInstances {
   implicit def catsDeferForHash: Defer[Hash] = HashInstances.catsDeferForHashCache
 }
 object HashInstances {
-  private val catsDeferForHashCache: Defer[Hash] =
-    new Defer[Hash] {
-      case class Deferred[A](fa: () => Hash[A]) extends Hash[A] {
-        private lazy val resolve: Hash[A] = {
-          @tailrec
-          def loop(f: () => Hash[A]): Hash[A] =
-            f() match {
-              case Deferred(f) => loop(f)
-              case next        => next
-            }
-
-          loop(fa)
+  final private case class Deferred[A](fa: () => Hash[A]) extends Hash[A] {
+    private lazy val resolve: Hash[A] = {
+      @tailrec
+      def loop(f: () => Hash[A]): Hash[A] =
+        f() match {
+          case Deferred(f) => loop(f)
+          case next        => next
         }
 
-        override def hash(x: A): Int = resolve.hash(x)
+      loop(fa)
+    }
 
-        /**
-         * Returns `true` if `x` and `y` are equivalent, `false` otherwise.
-         */
-        override def eqv(x: A, y: A): Boolean = resolve.eqv(x, y)
-      }
+    override def hash(x: A): Int = resolve.hash(x)
 
+    /**
+     * Returns `true` if `x` and `y` are equivalent, `false` otherwise.
+     */
+    override def eqv(x: A, y: A): Boolean = resolve.eqv(x, y)
+  }
+
+  private val catsDeferForHashCache: Defer[Hash] =
+    new Defer[Hash] {
       override def defer[A](fa: => Hash[A]): Hash[A] = {
         lazy val cachedFa = fa
         Deferred(() => cachedFa)

@@ -47,22 +47,22 @@ trait PartialOrderInstances extends kernel.instances.PartialOrderInstances {
   implicit def catsDeferForPartialOrder: Defer[PartialOrder] = PartialOrderInstances.catsDeferForPartialOrderCache
 }
 object PartialOrderInstances {
+  final private case class Deferred[A](fa: () => PartialOrder[A]) extends PartialOrder[A] {
+    private lazy val resolved: PartialOrder[A] = {
+      @tailrec
+      def loop(f: () => PartialOrder[A]): PartialOrder[A] =
+        f() match {
+          case Deferred(f) => loop(f)
+          case next        => next
+        }
+
+      loop(fa)
+    }
+    override def partialCompare(x: A, y: A): Double = resolved.partialCompare(x, y)
+  }
+
   private val catsDeferForPartialOrderCache: Defer[PartialOrder] =
     new Defer[PartialOrder] {
-      case class Deferred[A](fa: () => PartialOrder[A]) extends PartialOrder[A] {
-        private lazy val resolved: PartialOrder[A] = {
-          @tailrec
-          def loop(f: () => PartialOrder[A]): PartialOrder[A] =
-            f() match {
-              case Deferred(f) => loop(f)
-              case next        => next
-            }
-
-          loop(fa)
-        }
-        override def partialCompare(x: A, y: A): Double = resolved.partialCompare(x, y)
-      }
-
       override def defer[A](fa: => PartialOrder[A]): PartialOrder[A] = {
         lazy val cachedFa = fa
         Deferred(() => cachedFa)
