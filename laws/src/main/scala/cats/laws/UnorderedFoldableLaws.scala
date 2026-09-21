@@ -33,6 +33,9 @@ trait UnorderedFoldableLaws[F[_]] {
   def unorderedFoldMapAIdentity[A, B: CommutativeMonoid](fa: F[A], f: A => B): IsEq[B] =
     F.unorderedFoldMapA[Id, A, B](fa)(f) <-> F.unorderedFoldMap(fa)(f)
 
+  def unorderedReduceOptionConsistentWithUnorderedFold[A: CommutativeMonoid](fa: F[A]): IsEq[Option[A]] =
+    F.unorderedReduceOption(fa) <-> (if (F.isEmpty(fa)) None else Some(F.unorderedFold(fa)))
+
   def forallConsistentWithExists[A](fa: F[A], p: A => Boolean): Boolean =
     if (F.forall(fa)(p)) {
       val negationExists = F.exists(fa)(a => !p(a))

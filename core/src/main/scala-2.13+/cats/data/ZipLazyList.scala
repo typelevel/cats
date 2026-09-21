@@ -48,5 +48,5 @@ object ZipLazyList {
     }
 
   implicit def catsDataEqForZipLazyList[A: Eq]: Eq[ZipLazyList[A]] =
-    Eq.by((_: ZipLazyList[A]).value)(cats.kernel.instances.lazyList.catsKernelStdEqForLazyList[A])
+    Eq.by((_: ZipLazyList[A]).value)(using cats.kernel.instances.lazyList.catsKernelStdEqForLazyList[A])
 }

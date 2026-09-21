@@ -372,7 +372,7 @@ object WriterT extends WriterTInstances with WriterTFunctions with WriterTFuncti
 
 sealed abstract private[data] class WriterTInstances extends WriterTInstances0 {
   implicit def catsDataTraverseForWriterTId[L](implicit F: Traverse[Id]): Traverse[WriterT[Id, L, *]] =
-    catsDataTraverseForWriterT[Id, L](F)
+    catsDataTraverseForWriterT[Id, L](using F)
 
   implicit def catsDataDeferForWriterT[F[_], L](implicit F: Defer[F]): Defer[WriterT[F, L, *]] =
     new Defer[WriterT[F, L, *]] {
@@ -400,7 +400,7 @@ sealed abstract private[data] class WriterTInstances1 extends WriterTInstances2 
     }
 
   implicit def catsDataFoldableForWriterTId[L](implicit F: Foldable[Id]): Foldable[WriterT[Id, L, *]] =
-    catsDataFoldableForWriterT[Id, L](F)
+    catsDataFoldableForWriterT[Id, L](using F)
 
   implicit def catsDataOrderForWriterT[F[_], L, V](implicit Ord: Order[F[(L, V)]]): Order[WriterT[F, L, V]] =
     _ compare _
@@ -423,7 +423,7 @@ sealed abstract private[data] class WriterTInstances2 extends WriterTInstances3 
       type F[x] = WriterT[P.F, L, x]
       implicit val monadM: Monad[M] = P.monad
 
-      def applicative: Applicative[WriterT[P.F, L, *]] = catsDataApplicativeForWriterT(P.applicative, Monoid[L])
+      def applicative: Applicative[WriterT[P.F, L, *]] = catsDataApplicativeForWriterT(using P.applicative, Monoid[L])
       def monad: Monad[WriterT[M, L, *]] = catsDataMonadForWriterT
 
       def sequential: WriterT[P.F, L, *] ~> WriterT[M, L, *] =
@@ -468,7 +468,7 @@ sealed abstract private[data] class WriterTInstances3 extends WriterTInstances4 
     catsDataSemigroupForWriterT[Id, L, V]
 
   implicit def catsDataComonadForWriterTId[L](implicit F: Comonad[Id]): Comonad[WriterT[Id, L, *]] =
-    catsDataComonadForWriterT[Id, L](F)
+    catsDataComonadForWriterT[Id, L](using F)
 }
 
 sealed abstract private[data] class WriterTInstances4 extends WriterTInstances5 {

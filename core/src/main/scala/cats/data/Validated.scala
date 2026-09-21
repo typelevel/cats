@@ -1107,10 +1107,10 @@ private[data] class ValidatedApplicative[E: Semigroup]
   def pure[A](a: A): Validated[E, A] = Validated.valid(a)
 
   def ap[A, B](ff: Validated[E, (A) => B])(fa: Validated[E, A]): Validated[E, B] =
-    fa.ap(ff)(Semigroup[E])
+    fa.ap(ff)(using Semigroup[E])
 
   override def product[A, B](fa: Validated[E, A], fb: Validated[E, B]): Validated[E, (A, B)] =
-    fa.product(fb)(Semigroup[E])
+    fa.product(fb)(using Semigroup[E])
 
   override def unit: Validated[E, Unit] = Validated.validUnit
 }

@@ -56,7 +56,7 @@ trait NonEmptyParallel[M[_]] extends Serializable {
    * corresponding to the Parallel instance instead.
    */
   def parProductR[A, B](ma: M[A])(mb: M[B]): M[B] =
-    Parallel.parMap2(ma, mb)((_, b) => b)(this)
+    Parallel.parMap2(ma, mb)((_, b) => b)(using this)
 
   @deprecated("Use parProductR instead.", "1.0.0-RC2")
   @inline private[cats] def parFollowedBy[A, B](ma: M[A])(mb: M[B]): M[B] = parProductR(ma)(mb)
@@ -66,7 +66,7 @@ trait NonEmptyParallel[M[_]] extends Serializable {
    * corresponding to the Parallel instance instead.
    */
   def parProductL[A, B](ma: M[A])(mb: M[B]): M[A] =
-    Parallel.parMap2(ma, mb)((a, _) => a)(this)
+    Parallel.parMap2(ma, mb)((a, _) => a)(using this)
 
   @deprecated("Use parProductL instead.", "1.0.0-RC2")
   @inline private[cats] def parForEffect[A, B](ma: M[A])(mb: M[B]): M[A] = parProductL(ma)(mb)
@@ -171,7 +171,7 @@ object Parallel extends ParallelArityFunctions2 {
   def parTraverseFilter[T[_], M[_], A, B](
     ta: T[A]
   )(f: A => M[Option[B]])(implicit T: TraverseFilter[T], P: Parallel[M]): M[T[B]] = {
-    val ftb: P.F[T[B]] = T.traverseFilter[P.F, A, B](ta)(a => P.parallel(f(a)))(P.applicative)
+    val ftb: P.F[T[B]] = T.traverseFilter[P.F, A, B](ta)(a => P.parallel(f(a)))(using P.applicative)
 
     P.sequential(ftb)
   }
@@ -190,7 +190,7 @@ object Parallel extends ParallelArityFunctions2 {
    * }}}
    */
   def parSequenceFilter[T[_], M[_], A](ta: T[M[Option[A]]])(implicit T: TraverseFilter[T], P: Parallel[M]): M[T[A]] = {
-    val fta: P.F[T[A]] = T.traverseFilter[P.F, M[Option[A]], A](ta)(P.parallel.apply(_))(P.applicative)
+    val fta: P.F[T[A]] = T.traverseFilter[P.F, M[Option[A]], A](ta)(P.parallel.apply(_))(using P.applicative)
 
     P.sequential(fta)
   }
@@ -214,7 +214,7 @@ object Parallel extends ParallelArityFunctions2 {
   def parFilterA[T[_], M[_], A](
     ta: T[A]
   )(f: A => M[Boolean])(implicit T: TraverseFilter[T], P: Parallel[M]): M[T[A]] = {
-    val fta: P.F[T[A]] = T.filterA(ta)(a => P.parallel(f(a)))(P.applicative)
+    val fta: P.F[T[A]] = T.filterA(ta)(a => P.parallel(f(a)))(using P.applicative)
 
     P.sequential(fta)
   }
@@ -244,7 +244,7 @@ object Parallel extends ParallelArityFunctions2 {
   def parFlatTraverse[T[_]: Traverse: FlatMap, M[_], A, B](
     ta: T[A]
   )(f: A => M[T[B]])(implicit P: Parallel[M]): M[T[B]] = {
-    val gtb: P.F[T[B]] = Traverse[T].flatTraverse(ta)(a => P.parallel(f(a)))(P.applicative, FlatMap[T])
+    val gtb: P.F[T[B]] = Traverse[T].flatTraverse(ta)(a => P.parallel(f(a)))(using P.applicative, FlatMap[T])
     P.sequential(gtb)
   }
 
@@ -255,7 +255,7 @@ object Parallel extends ParallelArityFunctions2 {
   def parFlatSequence[T[_]: Traverse: FlatMap, M[_], A](
     tma: T[M[T[A]]]
   )(implicit P: Parallel[M]): M[T[A]] = {
-    val fta: P.F[T[A]] = Traverse[T].flatTraverse(tma)(P.parallel.apply(_))(P.applicative, FlatMap[T])
+    val fta: P.F[T[A]] = Traverse[T].flatTraverse(tma)(P.parallel.apply(_))(using P.applicative, FlatMap[T])
     P.sequential(fta)
   }
 
@@ -264,7 +264,7 @@ object Parallel extends ParallelArityFunctions2 {
    * corresponding to the Parallel instance instead.
    */
   def parSequenceVoid[T[_]: Foldable, M[_], A](tma: T[M[A]])(implicit P: Parallel[M]): M[Unit] = {
-    val fu: P.F[Unit] = Foldable[T].traverseVoid(tma)(P.parallel.apply(_))(P.applicative)
+    val fu: P.F[Unit] = Foldable[T].traverseVoid(tma)(P.parallel.apply(_))(using P.applicative)
     P.sequential(fu)
   }
 
@@ -281,7 +281,7 @@ object Parallel extends ParallelArityFunctions2 {
    * corresponding to the Parallel instance instead.
    */
   def parTraverseVoid[T[_]: Foldable, M[_], A, B](ta: T[A])(f: A => M[B])(implicit P: Parallel[M]): M[Unit] = {
-    val gtb: P.F[Unit] = Foldable[T].traverseVoid(ta)(a => P.parallel(f(a)))(P.applicative)
+    val gtb: P.F[Unit] = Foldable[T].traverseVoid(ta)(a => P.parallel(f(a)))(using P.applicative)
     P.sequential(gtb)
   }
 
@@ -343,7 +343,7 @@ object Parallel extends ParallelArityFunctions2 {
     ta: T[A]
   )(f: A => M[T[B]])(implicit P: NonEmptyParallel[M]): M[T[B]] = {
     val gtb: P.F[T[B]] =
-      NonEmptyTraverse[T].nonEmptyFlatTraverse(ta)(a => P.parallel(f(a)))(P.apply, FlatMap[T])
+      NonEmptyTraverse[T].nonEmptyFlatTraverse(ta)(a => P.parallel(f(a)))(using P.apply, FlatMap[T])
     P.sequential(gtb)
   }
 
@@ -354,7 +354,7 @@ object Parallel extends ParallelArityFunctions2 {
   def parNonEmptyFlatSequence[T[_]: NonEmptyTraverse: FlatMap, M[_], A](
     tma: T[M[T[A]]]
   )(implicit P: NonEmptyParallel[M]): M[T[A]] = {
-    val fta: P.F[T[A]] = NonEmptyTraverse[T].nonEmptyFlatTraverse(tma)(P.parallel.apply(_))(P.apply, FlatMap[T])
+    val fta: P.F[T[A]] = NonEmptyTraverse[T].nonEmptyFlatTraverse(tma)(P.parallel.apply(_))(using P.apply, FlatMap[T])
     P.sequential(fta)
   }
 
@@ -365,7 +365,7 @@ object Parallel extends ParallelArityFunctions2 {
   def parNonEmptySequenceVoid[T[_]: Reducible, M[_], A](
     tma: T[M[A]]
   )(implicit P: NonEmptyParallel[M]): M[Unit] = {
-    val fu: P.F[Unit] = Reducible[T].nonEmptyTraverseVoid(tma)(P.parallel.apply(_))(P.apply)
+    val fu: P.F[Unit] = Reducible[T].nonEmptyTraverseVoid(tma)(P.parallel.apply(_))(using P.apply)
     P.sequential(fu)
   }
 
@@ -386,7 +386,7 @@ object Parallel extends ParallelArityFunctions2 {
   def parNonEmptyTraverseVoid[T[_]: Reducible, M[_], A, B](
     ta: T[A]
   )(f: A => M[B])(implicit P: NonEmptyParallel[M]): M[Unit] = {
-    val gtb: P.F[Unit] = Reducible[T].nonEmptyTraverseVoid(ta)(a => P.parallel(f(a)))(P.apply)
+    val gtb: P.F[Unit] = Reducible[T].nonEmptyTraverseVoid(ta)(a => P.parallel(f(a)))(using P.apply)
     P.sequential(gtb)
   }
 
@@ -456,7 +456,7 @@ object Parallel extends ParallelArityFunctions2 {
     ta: T[A]
   )(f: A => M[B])(implicit T: Foldable[T], P: Parallel[M], B: Monoid[B]): M[B] = {
     val fb: P.F[B] =
-      Foldable[T].foldMapA(ta)(a => P.parallel(f(a)))(P.applicative, B)
+      Foldable[T].foldMapA(ta)(a => P.parallel(f(a)))(using P.applicative, B)
     P.sequential(fb)
   }
 
@@ -468,7 +468,7 @@ object Parallel extends ParallelArityFunctions2 {
     ta: T[A]
   )(f: A => M[B])(implicit T: Reducible[T], P: NonEmptyParallel[M], B: Semigroup[B]): M[B] = {
     val fb: P.F[B] =
-      T.reduceMapA(ta)(a => P.parallel(f(a)))(P.apply, B)
+      T.reduceMapA(ta)(a => P.parallel(f(a)))(using P.apply, B)
     P.sequential(fb)
   }
 

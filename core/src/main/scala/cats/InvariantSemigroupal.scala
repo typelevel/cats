@@ -87,5 +87,5 @@ object InvariantSemigroupal extends SemigroupalArityFunctions {
 private[cats] class InvariantSemigroupalSemigroup[F[_], A](f: InvariantSemigroupal[F], sg: Semigroup[A])
     extends Semigroup[F[A]] {
   def combine(a: F[A], b: F[A]): F[A] =
-    InvariantSemigroupal.imap2(a, b)(sg.combine)(a => (a, a))(f, f)
+    InvariantSemigroupal.imap2(a, b)(sg.combine)(a => (a, a))(using f, f)
 }

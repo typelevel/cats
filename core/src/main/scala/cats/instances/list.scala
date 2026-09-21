@@ -128,7 +128,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
         if (fa.isEmpty) G.pure(Nil)
         else
           G match {
-            case x: StackSafeMonad[G] => x.map(Traverse.traverseDirectly[G, A, B](fa)(f)(x))(_.toList)
+            case x: StackSafeMonad[G] => x.map(Traverse.traverseDirectly[G, A, B](fa)(f)(using x))(_.toList)
             case _                    =>
               G.map(Chain.traverseViaChain {
                 val as = collection.mutable.ArrayBuffer[A]()
@@ -142,7 +142,7 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
        */
       override def traverseVoid[G[_], A, B](fa: List[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
         G match {
-          case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa)(f)(x)
+          case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa)(f)(using x)
           case _                    =>
             // the cost of this is O(size log size)
             // c(n) = n + 2 * c(n/2) = n + 2(n/2 log (n/2)) = n + n (logn - 1) = n log n
@@ -198,13 +198,13 @@ trait ListInstances extends cats.kernel.instances.ListInstances {
       }
 
       override def mapAccumulate[S, A, B](init: S, fa: List[A])(f: (S, A) => (S, B)): (S, List[B]) =
-        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(using this)
 
       override def mapWithLongIndex[A, B](fa: List[A])(f: (A, Long) => B): List[B] =
-        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(using this)
 
       override def mapWithIndex[A, B](fa: List[A])(f: (A, Int) => B): List[B] =
-        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(using this)
 
       override def zipWithIndex[A](fa: List[A]): List[(A, Int)] =
         fa.zipWithIndex
@@ -329,7 +329,7 @@ private[instances] trait ListInstancesBinCompat0 {
       if (fa.isEmpty) G.pure(Nil)
       else
         G match {
-          case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(_.toList)
+          case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(using x))(_.toList)
           case _                    =>
             G.map(Chain.traverseFilterViaChain {
               val as = collection.mutable.ArrayBuffer[A]()

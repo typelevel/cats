@@ -42,7 +42,7 @@ trait OrderInstances extends kernel.instances.OrderInstances {
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
       def contramap[A, B](fa: Order[A])(f: B => A): Order[B] =
-        Order.by(f)(fa)
+        Order.by(f)(using fa)
 
       def product[A, B](fa: Order[A], fb: Order[B]): Order[(A, B)] = { (x, y) =>
         val z = fa.compare(x._1, y._1)
@@ -53,22 +53,22 @@ trait OrderInstances extends kernel.instances.OrderInstances {
   implicit def catsDeferForOrder: Defer[Order] = OrderInstances.catsDeferForOrderCache
 }
 object OrderInstances {
+  final private case class Deferred[A](fa: () => Order[A]) extends Order[A] {
+    private lazy val resolved: Order[A] = {
+      @tailrec
+      def loop(f: () => Order[A]): Order[A] =
+        f() match {
+          case Deferred(f) => loop(f)
+          case next        => next
+        }
+
+      loop(fa)
+    }
+    override def compare(x: A, y: A): Int = resolved.compare(x, y)
+  }
+
   private val catsDeferForOrderCache: Defer[Order] =
     new Defer[Order] {
-      case class Deferred[A](fa: () => Order[A]) extends Order[A] {
-        private lazy val resolved: Order[A] = {
-          @tailrec
-          def loop(f: () => Order[A]): Order[A] =
-            f() match {
-              case Deferred(f) => loop(f)
-              case next        => next
-            }
-
-          loop(fa)
-        }
-        override def compare(x: A, y: A): Int = resolved.compare(x, y)
-      }
-
       override def defer[A](fa: => Order[A]): Order[A] = {
         lazy val cachedFa = fa
         Deferred(() => cachedFa)

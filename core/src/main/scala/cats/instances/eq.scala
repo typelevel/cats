@@ -40,7 +40,7 @@ trait EqInstances extends kernel.instances.EqInstances {
        * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
        */
       def contramap[A, B](fa: Eq[A])(f: B => A): Eq[B] =
-        Eq.by(f)(fa)
+        Eq.by(f)(using fa)
 
       def product[A, B](fa: Eq[A], fb: Eq[B]): Eq[(A, B)] =
         (left, right) => fa.eqv(left._1, right._1) && fb.eqv(left._2, right._2)
@@ -49,22 +49,22 @@ trait EqInstances extends kernel.instances.EqInstances {
   implicit def catsDeferForEq: Defer[Eq] = EqInstances.catsDeferForEqCache
 }
 object EqInstances {
+  final private case class Deferred[A](fa: () => Eq[A]) extends Eq[A] {
+    private lazy val resolved: Eq[A] = {
+      @tailrec
+      def loop(f: () => Eq[A]): Eq[A] =
+        f() match {
+          case Deferred(f) => loop(f)
+          case next        => next
+        }
+
+      loop(fa)
+    }
+    override def eqv(x: A, y: A): Boolean = resolved.eqv(x, y)
+  }
+
   private val catsDeferForEqCache: Defer[Eq] =
     new Defer[Eq] {
-      case class Deferred[A](fa: () => Eq[A]) extends Eq[A] {
-        private lazy val resolved: Eq[A] = {
-          @tailrec
-          def loop(f: () => Eq[A]): Eq[A] =
-            f() match {
-              case Deferred(f) => loop(f)
-              case next        => next
-            }
-
-          loop(fa)
-        }
-        override def eqv(x: A, y: A): Boolean = resolved.eqv(x, y)
-      }
-
       override def defer[A](fa: => Eq[A]): Eq[A] = {
         lazy val cachedFa = fa
         Deferred(() => cachedFa)

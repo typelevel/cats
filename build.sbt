@@ -1,12 +1,12 @@
 ThisBuild / tlBaseVersion := "2.13"
 
-val scalaCheckVersion = "1.19.0"
+val scalaCheckVersion = "1.20.0"
 
 val disciplineVersion = "1.7.0"
 
 val disciplineMunitVersion = "2.0.0"
 
-val munitVersion = "1.3.4"
+val munitVersion = "1.3.6"
 
 val PrimaryJava = JavaSpec.temurin("8")
 val LTSJava = JavaSpec.temurin("17")
