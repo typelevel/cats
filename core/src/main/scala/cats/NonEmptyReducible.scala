@@ -25,14 +25,14 @@ import cats.Foldable.Source
 import cats.data.NonEmptyList
 
 /**
- * This class defines a `Reducible[F]` in terms of a `Foldable[G]`
- * together with a `split` method, `F[A]` => `(A, G[A])`.
+ * This class defines a `Reducible[F]` in terms of a `Foldable[G]` together with a `split` method, `F[A]` =>
+ * `(A, G[A])`.
  *
- * This class can be used on any type where the first value (`A`) and
- * the "rest" of the values (`G[A]`) can be easily found.
+ * This class can be used on any type where the first value (`A`) and the "rest" of the values (`G[A]`) can be easily
+ * found.
  *
- * This class is only a helper, does not define a typeclass and should not be used outside of Cats.
- * Also see the discussion: PR #3541 and issue #3069.
+ * This class is only a helper, does not define a typeclass and should not be used outside of Cats. Also see the
+ * discussion: PR #3541 and issue #3069.
  */
 abstract class NonEmptyReducible[F[_], G[_]](implicit
   override protected[cats] val G: Foldable[G]

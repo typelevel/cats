@@ -34,8 +34,8 @@ trait BoundedDistributiveLattice[@sp(Int, Long, Float, Double) A]
     with DistributiveLattice[A] { self =>
 
   /**
-   * Return a CommutativeRig using join and meet. Note this must obey the commutative rig laws since
-   * meet(a, one) = a, and meet and join are associative, commutative and distributive.
+   * Return a CommutativeRig using join and meet. Note this must obey the commutative rig laws since meet(a, one) = a,
+   * and meet and join are associative, commutative and distributive.
    */
   private[algebra] def asCommutativeRig: CommutativeRig[A] =
     new CommutativeRig[A] {

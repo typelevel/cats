@@ -88,9 +88,8 @@ object BinCodecInvariantMonoidalSuite {
   /**
    * Type class to read and write objects of type A to binary.
    *
-   * Obeys `forAll { (c: BinCodec[A], a: A) => c.read(c.writes(a)) == (Some(a), List())`,
-   * under the assumtion that `imap(f, g)` is always called with `f` and `g` such that
-   * `forAll { (a: A) => g(f(a)) == a }`.
+   * Obeys `forAll { (c: BinCodec[A], a: A) => c.read(c.writes(a)) == (Some(a), List())`, under the assumtion that
+   * `imap(f, g)` is always called with `f` and `g` such that `forAll { (a: A) => g(f(a)) == a }`.
    */
   trait BinCodec[A] extends Serializable { self =>
 

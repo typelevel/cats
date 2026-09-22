@@ -27,11 +27,10 @@ import scala.{specialized => sp}
 /**
  * Rng (pronounced "Rung") consists of:
  *
- *  - a commutative group for addition (+)
- *  - a semigroup for multiplication (*)
+ *   - a commutative group for addition (+)
+ *   - a semigroup for multiplication (*)
  *
- * Alternately, a Rng can be thought of as a ring without a
- * multiplicative identity (or as a semiring with an additive
+ * Alternately, a Rng can be thought of as a ring without a multiplicative identity (or as a semiring with an additive
  * inverse).
  *
  * Mnemonic: "Rng is a Ring without multiplicative 'I'dentity."

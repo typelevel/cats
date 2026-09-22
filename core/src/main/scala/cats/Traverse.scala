@@ -31,18 +31,16 @@ import cats.kernel.compat.scalaVersionSpecific.*
  *
  * Traversal over a structure with an effect.
  *
- * Traversing with the [[cats.Id]] effect is equivalent to [[cats.Functor]]#map.
- * Traversing with the [[cats.data.Const]] effect where the first type parameter has
- * a [[cats.Monoid]] instance is equivalent to [[cats.Foldable]]#fold.
+ * Traversing with the [[cats.Id]] effect is equivalent to [[cats.Functor]]#map. Traversing with the [[cats.data.Const]]
+ * effect where the first type parameter has a [[cats.Monoid]] instance is equivalent to [[cats.Foldable]]#fold.
  *
  * See: [[https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf The Essence of the Iterator Pattern]]
  */
 trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[F] { self =>
 
   /**
-   * Given a function which returns a G effect, thread this effect
-   * through the running of this function on all the values in F,
-   * returning an F[B] in a G context.
+   * Given a function which returns a G effect, thread this effect through the running of this function on all the
+   * values in F, returning an F[B] in a G context.
    *
    * Example:
    * {{{
@@ -57,10 +55,8 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[
   def traverse[G[_]: Applicative, A, B](fa: F[A])(f: A => G[B]): G[F[B]]
 
   /**
-   * Given a function which returns a G effect, thread this effect
-   * through the running of this function on all the values in F,
-   * returning an F[A] in a G context, ignoring the values
-   * returned by provided function.
+   * Given a function which returns a G effect, thread this effect through the running of this function on all the
+   * values in F, returning an F[A] in a G context, ignoring the values returned by provided function.
    *
    * Example:
    * {{{
@@ -91,8 +87,7 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[
     G.map(traverse(fa)(f))(F.flatten)
 
   /**
-   * Thread all the G effects through the F structure to invert the
-   * structure from F[G[A]] to G[F[A]].
+   * Thread all the G effects through the F structure to invert the structure from F[G[A]] to G[F[A]].
    *
    * Example:
    * {{{
@@ -109,8 +104,7 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[
     traverse(fga)(ga => ga)
 
   /**
-   * Thread all the G effects through the F structure and flatten to invert the
-   * structure from F[G[F[A]]] to G[F[A]].
+   * Thread all the G effects through the F structure and flatten to invert the structure from F[G[F[A]]] to G[F[A]].
    *
    * Example:
    * {{{
@@ -136,65 +130,57 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F] with UnorderedTraverse[
     traverse[Id, A, B](fa)(f)
 
   /**
-   * Akin to [[map]], but allows to keep track of a state value
-   * when calling the function.
+   * Akin to [[map]], but allows to keep track of a state value when calling the function.
    */
   def mapAccumulate[S, A, B](init: S, fa: F[A])(f: (S, A) => (S, B)): (S, F[B]) =
     traverse(fa)(a => State(s => f(s, a))).run(init).value
 
   /**
-   * Akin to [[map]], but also provides the value's index in structure
-   * F when calling the function.
+   * Akin to [[map]], but also provides the value's index in structure F when calling the function.
    */
   def mapWithIndex[A, B](fa: F[A])(f: (A, Int) => B): F[B] =
     mapAccumulate(0, fa)((i, a) => (i + 1) -> f(a, i))._2
 
   /**
-   * Akin to [[traverse]], but also provides the value's index in
-   * structure F when calling the function.
+   * Akin to [[traverse]], but also provides the value's index in structure F when calling the function.
    *
-   * This performs the traversal in a single pass but requires that
-   * effect G is monadic. An applicative traversal can be performed in
-   * two passes using [[zipWithIndex]] followed by [[traverse]].
+   * This performs the traversal in a single pass but requires that effect G is monadic. An applicative traversal can be
+   * performed in two passes using [[zipWithIndex]] followed by [[traverse]].
    */
   def traverseWithIndexM[G[_], A, B](fa: F[A])(f: (A, Int) => G[B])(implicit G: Monad[G]): G[F[B]] =
     traverse(fa)(a => StateT((s: Int) => G.map(f(a, s))(b => (s + 1, b)))).runA(0)
 
   /**
-   * Traverses through the structure F, pairing the values with
-   * assigned indices.
+   * Traverses through the structure F, pairing the values with assigned indices.
    *
-   * The behavior is consistent with the Scala collection library's
-   * `zipWithIndex` for collections such as `List`.
+   * The behavior is consistent with the Scala collection library's `zipWithIndex` for collections such as `List`.
    */
   def zipWithIndex[A](fa: F[A]): F[(A, Int)] =
     mapWithIndex(fa)((a, i) => (a, i))
 
   /**
-    * Same as [[traverseWithIndexM]] but the index type is [[Long]] instead of [[Int]].
-    */
+   * Same as [[traverseWithIndexM]] but the index type is [[Long]] instead of [[Int]].
+   */
   def traverseWithLongIndexM[G[_], A, B](fa: F[A])(f: (A, Long) => G[B])(implicit G: Monad[G]): G[F[B]] =
     traverse(fa)(a => StateT((s: Long) => G.map(f(a, s))(b => (s + 1, b)))).runA(0L)
 
   /**
-    * Same as [[mapWithIndex]] but the index type is [[Long]] instead of [[Int]].
-    */
+   * Same as [[mapWithIndex]] but the index type is [[Long]] instead of [[Int]].
+   */
   def mapWithLongIndex[A, B](fa: F[A])(f: (A, Long) => B): F[B] =
     traverseWithLongIndexM[cats.Id, A, B](fa)((a, long) => f(a, long))
 
   /**
-    * Same as [[zipWithIndex]] but the index type is [[Long]] instead of [[Int]].
-    */
+   * Same as [[zipWithIndex]] but the index type is [[Long]] instead of [[Int]].
+   */
   def zipWithLongIndex[A](fa: F[A]): F[(A, Long)] =
     mapWithLongIndex(fa)((a, long) => (a, long))
 
   /**
-   * If `fa` contains the element at index `idx`, 
-   * return the copy of `fa` where the element at `idx` is replaced with `b`. 
-   * If there is no element with such an index, return `None`. 
+   * If `fa` contains the element at index `idx`, return the copy of `fa` where the element at `idx` is replaced with
+   * `b`. If there is no element with such an index, return `None`.
    *
-   * The behavior is consistent with the Scala collection library's
-   * `updated` for collections such as `List`.
+   * The behavior is consistent with the Scala collection library's `updated` for collections such as `List`.
    */
   def updated_[A, B >: A](fa: F[A], idx: Long, b: B): Option[F[B]] = {
     if (idx < 0L)

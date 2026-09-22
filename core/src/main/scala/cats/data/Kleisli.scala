@@ -87,8 +87,8 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
     flatMapF(f)
 
   /**
-   * Tip to tail Kleisli arrow composition.
-   * Creates a function `A => F[C]` from [[run]] (`A => F[B]`) and the given Kleisli of `B => F[C]`.
+   * Tip to tail Kleisli arrow composition. Creates a function `A => F[C]` from [[run]] (`A => F[B]`) and the given
+   * Kleisli of `B => F[C]`.
    * {{{
    * scala> import cats.data.Kleisli, cats.implicits._
    * scala> val takeHead = Kleisli[Option, List[Int], Int](_.headOption)
@@ -167,19 +167,16 @@ object Kleisli
   /**
    * Internal API — shifts the execution of `run` in the `F` context.
    *
-   * Used to build Kleisli values for `F[_]` data types that implement `Monad`,
-   * in which case it is safer to trigger the `F[_]` context earlier.
+   * Used to build Kleisli values for `F[_]` data types that implement `Monad`, in which case it is safer to trigger the
+   * `F[_]` context earlier.
    *
-   * The requirement is for `FlatMap` as this will get used in operations
-   * that invoke `F.flatMap` (e.g. in `Kleisli#flatMap`). However we are
-   * doing discrimination based on inheritance and if we detect an
-   * `Applicative`, then we use it to trigger the `F[_]` context earlier.
+   * The requirement is for `FlatMap` as this will get used in operations that invoke `F.flatMap` (e.g. in
+   * `Kleisli#flatMap`). However we are doing discrimination based on inheritance and if we detect an `Applicative`,
+   * then we use it to trigger the `F[_]` context earlier.
    *
-   * Triggering the `F[_]` context earlier is important to avoid stack
-   * safety issues for `F` monads that have a stack safe `flatMap`
-   * implementation. For example `Eval` or `IO`. Without this the `Monad`
-   * instance is stack unsafe, even if the underlying `F` is stack safe
-   * in `flatMap`.
+   * Triggering the `F[_]` context earlier is important to avoid stack safety issues for `F` monads that have a stack
+   * safe `flatMap` implementation. For example `Eval` or `IO`. Without this the `Monad` instance is stack unsafe, even
+   * if the underlying `F` is stack safe in `flatMap`.
    */
   private[data] def shift[F[_], A, B](run: A => F[B])(implicit F: FlatMap[F]): Kleisli[F, A, B] =
     F match {
@@ -290,8 +287,8 @@ sealed private[data] trait KleisliFunctions {
     liftF(F.pure(x))
 
   /**
-   * Creates a Kleisli arrow which can lift an `A` into applicative context `F`.
-   * This is distinct from [[pure]] in that the input is what is lifted (and not ignored).
+   * Creates a Kleisli arrow which can lift an `A` into applicative context `F`. This is distinct from [[pure]] in that
+   * the input is what is lifted (and not ignored).
    * {{{
    * scala> Kleisli.ask[Option, Int].run(1)
    * res0: Option[Int]: Some(1)
@@ -327,8 +324,7 @@ sealed private[data] trait KleisliFunctions {
 sealed private[data] trait KleisliFunctionsBinCompat {
 
   /**
-   * Lifts a natural transformation of effects within a Kleisli
-   * to a transformation of Kleislis.
+   * Lifts a natural transformation of effects within a Kleisli to a transformation of Kleislis.
    *
    * Equivalent to running `mapK(f) on a Kleisli.
    *
@@ -421,8 +417,7 @@ sealed abstract private[data] class KleisliInstances0_5 extends KleisliInstances
     new KleisliContravariantMonoidal[F, A] { def F: ContravariantMonoidal[F] = F0 }
 
   /**
-   * Witness for: Kleisli[M, E, A] <-> (E, R) => A
-   * if M is Representable
+   * Witness for: Kleisli[M, E, A] <-> (E, R) => A if M is Representable
    */
   implicit def catsDataRepresentableForKleisli[M[_], R, E](implicit
     R: Representable.Aux[M, R],
