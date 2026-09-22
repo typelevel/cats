@@ -29,7 +29,50 @@ package data
  * It may also be said that `OptionT` is a monad transformer for `Option`.
  *
  * For more information, see the [[http://typelevel.org/cats/datatypes/optiont.html documentation]].
+ *
+ * Example 1: Mapping over OptionT
+ * {{{
+ * import cats.data.OptionT
+ * import cats.implicits._
+ *
+ * val result = OptionT(List(Option(1), None, Option(3)))
+ * result.map(_ + 1)
+ * // res0: cats.data.OptionT[List, Int] = OptionT(List(Some(2), None, Some(4)))
+ * }}}
+ *
+ * Example 2: Using `flatMap` to chain computations
+ * {{{
+ * val data = OptionT(List(Some(2), None))
+ * val doubled = data.flatMap(x => OptionT(List(Some(x * 2))))
+ * // doubled: cats.data.OptionT[List, Int] = OptionT(List(Some(4), None))
+ * }}}
+ *
+ * Example 3: Using `getOrElse` to provide a default value
+ * {{{
+ * val opt = OptionT(List(Option(5), None))
+ * val result = opt.getOrElse(0)
+ * // result: List[Int] = List(5, 0)
+ * }}}
+ *
+ * Example 4: Working with asynchronous computations using `Future`
+ * {{{
+ * import scala.concurrent.Future
+ * import scala.concurrent.ExecutionContext.Implicits.global
+ * import cats.data.OptionT
+ * import cats.implicits._
+ *
+ * val fetchUser: Future[Option[String]] = Future.successful(Some("Queen"))
+ * val userOptionT = OptionT(fetchUser)
+ *
+ * val greeting = for {
+ *   user <- userOptionT
+ * } yield s"Hello, $user!"
+ *
+ * greeting.value
+ * // res: scala.concurrent.Future[Option[String]] = Future(Success(Some("Hello, Queen!")))
+ * }}}
  */
+
 final case class OptionT[F[_], A](value: F[Option[A]]) {
 
   def fold[B](default: => B)(f: A => B)(implicit F: Functor[F]): F[B] =
