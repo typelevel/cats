@@ -47,8 +47,6 @@ private[syntax] trait FoldableSyntaxBinCompat1 {
 }
 
 final class NestedFoldableOps[F[_], G[_], A](private val fga: F[G[A]]) extends AnyVal {
-  // TODO: looks like these two methods below duplicate the same named methods from `Foldable.Ops`.
-  //       Perhaps it makes sense to deprecate one pair of them either here or there.
   def sequenceVoid(implicit F: Foldable[F], G: Applicative[G]): G[Unit] = F.sequenceVoid(fga)
   def sequence_(implicit F: Foldable[F], G: Applicative[G]): G[Unit] = sequenceVoid
 
@@ -64,8 +62,6 @@ final class NestedFoldableOps[F[_], G[_], A](private val fga: F[G[A]]) extends A
    * res0: Set[Int] = Set(1, 2, 3, 4)
    * }}}
    */
-  // TODO: looks like this method below duplicate the same named one from `Foldable.Ops`.
-  //       Perhaps it makes sense to deprecate one of them.
   def foldK(implicit F: Foldable[F], G: MonoidK[G]): G[A] = F.foldK(fga)
 }
 
