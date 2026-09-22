@@ -76,6 +76,31 @@ class OrderSuite extends CatsSuite {
     assert(OrderOfCmpSub.gt(OrderSuite.CmpSub(2, "ignored"), OrderSuite.CmpSub(1, "ignored")))
     assert(OrderOfCmpSub.eqv(OrderSuite.CmpSub(1, "a"), OrderSuite.CmpSub(1, "b")))
   }
+
+  // #4807: +0.0 and -0.0 must agree across eqv, compare, and derived Option eqv
+  test("#4807 Double signed zeros are equal under Order and Option") {
+    val pos = 0.0
+    val neg = -0.0
+    assert(Order[Double].eqv(pos, neg))
+    assertEquals(Order[Double].compare(pos, neg), 0)
+    assert(cats.kernel.Hash[Double].hash(pos) === cats.kernel.Hash[Double].hash(neg))
+    assert(Order[Option[Double]].eqv(Some(pos), Some(neg)))
+    assertEquals(Order[Option[Double]].compare(Some(pos), Some(neg)), 0)
+    assert((Some(pos): Option[Double]) === (Some(neg): Option[Double]))
+    assert(pos === neg)
+  }
+
+  test("#4807 Float signed zeros are equal under Order and Option") {
+    val pos = 0.0f
+    val neg = -0.0f
+    assert(Order[Float].eqv(pos, neg))
+    assertEquals(Order[Float].compare(pos, neg), 0)
+    assert(cats.kernel.Hash[Float].hash(pos) === cats.kernel.Hash[Float].hash(neg))
+    assert(Order[Option[Float]].eqv(Some(pos), Some(neg)))
+    assertEquals(Order[Option[Float]].compare(Some(pos), Some(neg)), 0)
+    assert((Some(pos): Option[Float]) === (Some(neg): Option[Float]))
+    assert(pos === neg)
+  }
 }
 
 object OrderSuite {

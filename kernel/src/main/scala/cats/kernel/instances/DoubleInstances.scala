@@ -36,9 +36,23 @@ class DoubleGroup extends CommutativeGroup[Double] {
 
 class DoubleOrder extends Order[Double] with Hash[Double] {
 
-  def hash(x: Double): Int = x.hashCode()
+  // Canonicalize +0.0 / -0.0 so Hash agrees with eqv (primitive ==).
+  // java.lang.Double.hashCode distinguishes the two zeros via bit patterns.
+  def hash(x: Double): Int =
+    java.lang.Double.hashCode(if (x == 0.0) 0.0 else x)
+
+  /**
+   * Compare using primitive relational operators so +0.0 and -0.0 are equal,
+   * matching [[eqv]] / IEEE floating equality. `java.lang.Double.compare`
+   * implements a total order that treats them as different, which made
+   * `Order[Option[Double]].eqv` disagree with `Order[Double].eqv` (#4807).
+   * NaN values fall through to `Double.compare` for a stable total order.
+   */
   def compare(x: Double, y: Double): Int =
-    java.lang.Double.compare(x, y)
+    if (x < y) -1
+    else if (x > y) 1
+    else if (x == y) 0
+    else java.lang.Double.compare(x, y)
 
   override def eqv(x: Double, y: Double): Boolean = x == y
   override def neqv(x: Double, y: Double): Boolean = x != y
