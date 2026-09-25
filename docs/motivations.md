@@ -15,7 +15,7 @@ page](CONTRIBUTING.md) to find out ways to give us feedback.
 #### Modularity
 
 We are trying to make the library modular. It will have a tight
-core which will contain only the [type classes](typeclasses.md),
+core which will contain only the [type classes](typeclasses/index.md),
 the bare minimum of data structures that are needed to support
 them, and type class instances for those data structures and standard
 library types.
