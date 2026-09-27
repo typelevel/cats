@@ -34,6 +34,7 @@ abstract class AllInstancesBinCompat
     with AllInstancesBinCompat7
     with AllInstancesBinCompat8
     with AllInstancesBinCompat9
+    with AllInstancesBinCompat11
 
 abstract private[cats] class AbstractAllInstances extends AbstractAnyValInstances with AllInstances
 
@@ -101,3 +102,5 @@ trait AllInstancesBinCompat8 extends InvariantInstances
 trait AllInstancesBinCompat9 extends DeadlineInstances
 
 trait AllInstancesBinCompat10 extends InvariantInstancesBinCompat0
+
+trait AllInstancesBinCompat11 extends CurrencyInstances
