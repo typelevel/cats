@@ -109,7 +109,7 @@ abstract class KleisliInstance1 {
 We can introduce new type classes for the sake of adding laws that don't apply to the parent type class, e.g. `CommutativeSemigroup` and
 `CommutativeArrow`.
 
-### Applicative instances for monad transformers</a>
+### Applicative instances for monad transformers
 
 We explicitly don't provide an instance of `Applicative` for e.g. `EitherT[F, String, *]` given an `Applicative[F]`.
 An attempt to construct one without a proper `Monad[F]` instance would be inconsistent in `ap` with the provided `Monad` instance
