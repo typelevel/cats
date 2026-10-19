@@ -212,7 +212,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    *
    * @see [[maximumOption]] for maximum instead of minimum.
    */
-  def minimumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
+  override def minimumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
     reduceLeftOption(fa)(A.min)
 
   /**
@@ -226,7 +226,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    *
    * @see [[minimumOption]] for minimum instead of maximum.
    */
-  def maximumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
+  override def maximumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
     reduceLeftOption(fa)(A.max)
 
   /**
@@ -1027,7 +1027,7 @@ object Foldable {
         val typeClassInstance: TypeClassType = tc
       }
   }
-  trait Ops[F[_], A] extends Serializable {
+  trait Ops[F[_], A] extends UnorderedFoldable.Ops[F, A] {
     type TypeClassType <: Foldable[F]
     def self: F[A]
     val typeClassInstance: TypeClassType
@@ -1041,8 +1041,9 @@ object Foldable {
       typeClassInstance.reduceRightToOption[A, B](self)(f)(g)
     def reduceLeftOption(f: (A, A) => A): Option[A] = typeClassInstance.reduceLeftOption[A](self)(f)
     def reduceRightOption(f: (A, Eval[A]) => Eval[A]): Eval[Option[A]] = typeClassInstance.reduceRightOption[A](self)(f)
-    def minimumOption(implicit A: Order[A]): Option[A] = typeClassInstance.minimumOption[A](self)(using A)
-    def maximumOption(implicit A: Order[A]): Option[A] = typeClassInstance.maximumOption[A](self)(using A)
+    // Keep these methods declared here for binary compatibility with existing Ops callers.
+    override def minimumOption(implicit A: Order[A]): Option[A] = typeClassInstance.minimumOption[A](self)(using A)
+    override def maximumOption(implicit A: Order[A]): Option[A] = typeClassInstance.maximumOption[A](self)(using A)
     def minimumByOption[B](f: A => B)(implicit ev$1: Order[B]): Option[A] =
       typeClassInstance.minimumByOption[A, B](self)(f)
     def maximumByOption[B](f: A => B)(implicit ev$1: Order[B]): Option[A] =
@@ -1100,7 +1101,8 @@ object Foldable {
   trait AllOps[F[_], A] extends Ops[F, A] with UnorderedFoldable.AllOps[F, A] {
     type TypeClassType <: Foldable[F]
   }
-  trait ToFoldableOps extends Serializable {
+  // Give the Foldable conversion priority over the inherited UnorderedFoldable conversion.
+  trait ToFoldableOps extends UnorderedFoldable.ToUnorderedFoldableOps {
     implicit def toFoldableOps[F[_], A](target: F[A])(implicit tc: Foldable[F]): Ops[F, A] {
       type TypeClassType = Foldable[F]
     } =

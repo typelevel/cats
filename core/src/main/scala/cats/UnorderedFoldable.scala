@@ -46,6 +46,28 @@ trait UnorderedFoldable[F[_]] extends Serializable {
   }
 
   /**
+   * Find a minimum element according to the `Order[A]`.
+   *
+   * Returns `None` if the structure is empty. If multiple elements compare as equal
+   * according to `Order[A]`, the returned representative is unspecified.
+   *
+   * @see [[maximumOption]] for maximum instead of minimum.
+   */
+  def minimumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
+    unorderedReduceOption(fa)(using CommutativeSemigroup.instance(A.min))
+
+  /**
+   * Find a maximum element according to the `Order[A]`.
+   *
+   * Returns `None` if the structure is empty. If multiple elements compare as equal
+   * according to `Order[A]`, the returned representative is unspecified.
+   *
+   * @see [[minimumOption]] for minimum instead of maximum.
+   */
+  def maximumOption[A](fa: F[A])(implicit A: Order[A]): Option[A] =
+    unorderedReduceOption(fa)(using CommutativeSemigroup.instance(A.max))
+
+  /**
    * Fold in a [[CommutativeApplicative]] context by mapping the `A` values to `G[B]`. combining
    * the `B` values using the given `CommutativeMonoid[B]` instance.
    *
@@ -201,6 +223,8 @@ object UnorderedFoldable
     def unorderedFoldMap[B](f: A => B)(implicit ev$1: CommutativeMonoid[B]): B =
       typeClassInstance.unorderedFoldMap[A, B](self)(f)
     def unorderedFold(implicit ev$1: CommutativeMonoid[A]): A = typeClassInstance.unorderedFold[A](self)
+    def minimumOption(implicit A: Order[A]): Option[A] = typeClassInstance.minimumOption[A](self)(using A)
+    def maximumOption(implicit A: Order[A]): Option[A] = typeClassInstance.maximumOption[A](self)(using A)
     def unorderedFoldMapA[G[_], B](
       f: A => G[B]
     )(implicit ev$1: CommutativeApplicative[G], ev$2: CommutativeMonoid[B]): G[B] =

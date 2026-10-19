@@ -36,6 +36,16 @@ trait UnorderedFoldableLaws[F[_]] {
   def unorderedReduceOptionConsistentWithUnorderedFold[A: CommutativeMonoid](fa: F[A]): IsEq[Option[A]] =
     F.unorderedReduceOption(fa) <-> (if (F.isEmpty(fa)) None else Some(F.unorderedFold(fa)))
 
+  def minimumOptionConsistentWithOrder[A: Order](fa: F[A]): Boolean =
+    F.minimumOption(fa).fold(F.isEmpty(fa)) { a =>
+      F.contains_(fa, a)(using Order[A]) && F.forall(fa)(Order[A].lteqv(a, _))
+    }
+
+  def maximumOptionConsistentWithOrder[A: Order](fa: F[A]): Boolean =
+    F.maximumOption(fa).fold(F.isEmpty(fa)) { a =>
+      F.contains_(fa, a)(using Order[A]) && F.forall(fa)(Order[A].gteqv(a, _))
+    }
+
   def forallConsistentWithExists[A](fa: F[A], p: A => Boolean): Boolean =
     if (F.forall(fa)(p)) {
       val negationExists = F.exists(fa)(a => !p(a))
