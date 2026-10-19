@@ -32,8 +32,8 @@ trait UnorderedFoldableSyntax extends UnorderedFoldable.ToUnorderedFoldableOps {
 final class UnorderedFoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
-   * Tests if this `F[A]` contains `v` using the `Eq` instance for `A`,
-   * named contains_ to avoid conflict with existing contains which uses universal equality.
+   * Tests if this `F[A]` contains `v` using the `Eq` instance for `A`, named `contains_` to avoid conflict with
+   * existing contains which uses universal equality.
    *
    * Example:
    * {{{
@@ -72,7 +72,8 @@ final class UnorderedFoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
   /**
    * Reduce this unordered structure using a [[CommutativeSemigroup]] instance.
    *
-   * @return `None` if empty, otherwise `Some` of the combined value.
+   * @return
+   *   `None` if empty, otherwise `Some` of the combined value.
    */
   def unorderedReduceOption(implicit A: CommutativeSemigroup[A], F: UnorderedFoldable[F]): Option[A] =
     F.unorderedReduceOption(fa)

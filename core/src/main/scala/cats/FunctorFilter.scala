@@ -31,9 +31,8 @@ trait FunctorFilter[F[_]] extends Serializable {
   def functor: Functor[F]
 
   /**
-   * A combined `map` and `filter`. Filtering is handled via `Option`
-   * instead of `Boolean` such that the output type `B` can be different than
-   * the input type `A`.
+   * A combined `map` and `filter`. Filtering is handled via `Option` instead of `Boolean` such that the output type `B`
+   * can be different than the input type `A`.
    *
    * Example:
    * {{{
@@ -48,8 +47,7 @@ trait FunctorFilter[F[_]] extends Serializable {
   def mapFilter[A, B](fa: F[A])(f: A => Option[B]): F[B]
 
   /**
-   * Similar to [[mapFilter]] but uses a partial function instead of a function
-   * that returns an `Option`.
+   * Similar to [[mapFilter]] but uses a partial function instead of a function that returns an `Option`.
    *
    * Example:
    * {{{
@@ -66,8 +64,7 @@ trait FunctorFilter[F[_]] extends Serializable {
     mapFilter(fa)(f.lift)
 
   /**
-   * "Flatten" out a structure by collapsing `Option`s.
-   * Equivalent to using `mapFilter` with `identity`.
+   * "Flatten" out a structure by collapsing `Option`s. Equivalent to using `mapFilter` with `identity`.
    *
    * Example:
    * {{{
@@ -81,16 +78,15 @@ trait FunctorFilter[F[_]] extends Serializable {
     mapFilter(fa)(identity)
 
   /**
-   * Apply a filter to a structure such that the output structure contains all
-   * `A` elements in the input structure that satisfy the predicate `f` but none
-   * that don't.
+   * Apply a filter to a structure such that the output structure contains all `A` elements in the input structure that
+   * satisfy the predicate `f` but none that don't.
    */
   def filter[A](fa: F[A])(f: A => Boolean): F[A] =
     mapFilter(fa)(a => if (f(a)) Some(a) else None)
 
   /**
-   * Apply a filter to a structure such that the output structure contains all
-   * `A` elements in the input structure that do not satisfy the predicate `f`.
+   * Apply a filter to a structure such that the output structure contains all `A` elements in the input structure that
+   * do not satisfy the predicate `f`.
    */
   def filterNot[A](fa: F[A])(f: A => Boolean): F[A] =
     mapFilter(fa)(Some(_).filterNot(f))

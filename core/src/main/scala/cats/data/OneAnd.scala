@@ -26,9 +26,8 @@ import scala.annotation.tailrec
 import kernel.compat.scalaVersionSpecific.*
 
 /**
- * A data type which represents a single element (head) and some other
- * structure (tail). As we have done in package.scala, this can be
- * used to represent a Stream which is guaranteed to not be empty:
+ * A data type which represents a single element (head) and some other structure (tail). As we have done in
+ * package.scala, this can be used to represent a Stream which is guaranteed to not be empty:
  *
  * {{{
  * type NonEmptyStream[A] = OneAnd[Stream, A]
@@ -104,10 +103,8 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) extends OneAndBinCompat0[F
   /**
    * Typesafe equality operator.
    *
-   * This method is similar to == except that it only allows two
-   * OneAnd[F, A] values to be compared to each other, and uses
-   * equality provided by Eq[_] instances, rather than using the
-   * universal equality provided by .equals.
+   * This method is similar to == except that it only allows two OneAnd[F, A] values to be compared to each other, and
+   * uses equality provided by Eq[_] instances, rather than using the universal equality provided by .equals.
    */
   def ===(that: OneAnd[F, A])(implicit A: Eq[A], FA: Eq[F[A]]): Boolean =
     A.eqv(head, that.head) && FA.eqv(tail, that.tail)
@@ -115,9 +112,8 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) extends OneAndBinCompat0[F
   /**
    * Typesafe stringification method.
    *
-   * This method is similar to .toString except that it stringifies
-   * values according to Show[_] instances, rather than using the
-   * universal .toString method.
+   * This method is similar to .toString except that it stringifies values according to Show[_] instances, rather than
+   * using the universal .toString method.
    */
   def show(implicit A: Show[A], FA: Show[F[A]]): String =
     s"OneAnd(${A.show(head)}, ${FA.show(tail)})"

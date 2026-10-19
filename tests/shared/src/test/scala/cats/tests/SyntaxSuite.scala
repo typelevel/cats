@@ -46,18 +46,14 @@ import scala.collection.immutable.{SortedMap, SortedSet}
 /**
  * Test that our syntax implicits are working.
  *
- * Each method should correspond to one type class worth of syntax.
- * Ideally, we should be testing every operator or method that we
- * expect to add to generic parameters. This file is a safeguard
- * against accidentally breaking (or removing) syntax which was
- * otherwise untested.
+ * Each method should correspond to one type class worth of syntax. Ideally, we should be testing every operator or
+ * method that we expect to add to generic parameters. This file is a safeguard against accidentally breaking (or
+ * removing) syntax which was otherwise untested.
  *
- * The strategy here is to create "mock" values of particular types,
- * and then ensure that the syntax we want is available. We never plan
- * to run any of these methods, so we don't need real values. All
- * values in the methods should be generic -- we rely on parametricity
- * to guarantee that the syntax will be available for any type with
- * the proper type class instance(s).
+ * The strategy here is to create "mock" values of particular types, and then ensure that the syntax we want is
+ * available. We never plan to run any of these methods, so we don't need real values. All values in the methods should
+ * be generic -- we rely on parametricity to guarantee that the syntax will be available for any type with the proper
+ * type class instance(s).
  *
  * None of these tests should ever run, or do any runtime checks.
  */

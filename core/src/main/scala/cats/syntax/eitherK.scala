@@ -33,7 +33,8 @@ final class EitherKOps[F[_], A](private val fa: F[A]) extends AnyVal {
   /**
    * Lift an `F[A]` into a `EitherK[F, G, A]` for any type constructor `G[_]`.
    *
-   * @see [[rightc]] to swap the order of `F` and `G` in the result type.
+   * @see
+   *   [[rightc]] to swap the order of `F` and `G` in the result type.
    *
    * Example:
    * {{{
@@ -49,7 +50,8 @@ final class EitherKOps[F[_], A](private val fa: F[A]) extends AnyVal {
   /**
    * Lift an `F[A]` into a `EitherK[G, F, A]` for any type constructor `G[_]`.
    *
-   * @see [[leftc]] to swap the order of `F` and `G` in the result type.
+   * @see
+   *   [[leftc]] to swap the order of `F` and `G` in the result type.
    *
    * Example:
    * {{{

@@ -44,8 +44,7 @@ trait CoflatMapLaws[F[_]] extends FunctorLaws[F] {
     fa.coflatten <-> fa.coflatMap(identity)
 
   /**
-   * The composition of `cats.data.Cokleisli` arrows is associative. This is
-   * analogous to [[coflatMapAssociativity]].
+   * The composition of `cats.data.Cokleisli` arrows is associative. This is analogous to [[coflatMapAssociativity]].
    */
   def cokleisliAssociativity[A, B, C, D](f: F[A] => B, g: F[B] => C, h: F[C] => D, fa: F[A]): IsEq[D] = {
     val (cf, cg, ch) = (Cokleisli(f), Cokleisli(g), Cokleisli(h))
