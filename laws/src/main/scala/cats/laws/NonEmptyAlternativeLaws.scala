@@ -40,6 +40,9 @@ trait NonEmptyAlternativeLaws[F[_]] extends ApplicativeLaws[F] with SemigroupKLa
   def nonEmptyAlternativeAppendKConsistentWithPureAndCombineK[A](fa: F[A], a: A): IsEq[F[A]] =
     fa.appendK(a) <-> (fa <+> a.pure[F])
 
+  def nonEmptyAlternativeAttemptOptionConsistentWithCombineKAndPure[A](fa: F[A]): IsEq[F[Option[A]]] =
+    F.attemptOption(fa) <-> (fa.map(Some(_): Option[A]) <+> Option.empty[A].pure[F])
+
   @deprecated("typo in the name, use nonEmptyAlternativePrependKConsistentWithPureAndCombineK instead", "2.14.0")
   private[laws] def nonEmptyAlternativePrependKConsitentWithPureAndCombineK[A](fa: F[A], a: A): IsEq[F[A]] =
     nonEmptyAlternativePrependKConsistentWithPureAndCombineK(fa, a)

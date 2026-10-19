@@ -45,6 +45,36 @@ trait NonEmptyAlternative[F[_]] extends Applicative[F] with SemigroupK[F] { self
    */
   def appendK[A](fa: F[A], a: A): F[A] = combineK(fa, pure(a))
 
+  /**
+   * Lift `fa` from `F[A]` into `F[Option[A]]` by surfacing every value `fa`
+   * produces as `Some(a)` and combining (via `combineK`) with `pure(None)`,
+   * so the result always succeeds at least once.  The additional `None`
+   * witnesses the possibility that `fa` produced no values.
+   *
+   * This is the standard `optional` combinator from parser-combinator
+   * libraries and matches Haskell's `Control.Applicative.optional`:
+   * `Just <$> fa <|> pure Nothing`.  For non-deterministic instances such
+   * as `List`, `attemptOption` always appends an extra `None`, which is
+   * consistent with the laws even if it can look surprising at first.
+   *
+   * Example:
+   * {{{
+   * scala> NonEmptyAlternative[Option].attemptOption(Option(5))
+   * res0: Option[Option[Int]] = Some(Some(5))
+   *
+   * scala> NonEmptyAlternative[Option].attemptOption(Option.empty[Int])
+   * res1: Option[Option[Int]] = Some(None)
+   *
+   * scala> NonEmptyAlternative[List].attemptOption(List(1, 2, 3))
+   * res2: List[Option[Int]] = List(Some(1), Some(2), Some(3), None)
+   *
+   * scala> NonEmptyAlternative[List].attemptOption(List.empty[Int])
+   * res3: List[Option[Int]] = List(None)
+   * }}}
+   */
+  def attemptOption[A](fa: F[A]): F[Option[A]] =
+    combineK(map(fa)((a: A) => Some(a): Option[A]), pure(Option.empty[A]))
+
   override def compose[G[_]: Applicative]: NonEmptyAlternative[λ[α => F[G[α]]]] =
     new ComposedNonEmptyAlternative[F, G] {
       val F = self
@@ -75,6 +105,7 @@ object NonEmptyAlternative {
     val typeClassInstance: TypeClassType
     def prependK(a: A): F[A] = typeClassInstance.prependK[A](a, self)
     def appendK(a: A): F[A] = typeClassInstance.appendK[A](self, a)
+    def attemptOption: F[Option[A]] = typeClassInstance.attemptOption[A](self)
   }
   trait AllOps[F[_], A] extends Ops[F, A] with Applicative.AllOps[F, A] with SemigroupK.AllOps[F, A] {
     type TypeClassType <: NonEmptyAlternative[F]
