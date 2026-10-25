@@ -499,7 +499,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    */
   def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyList[A] =
     // safe: sorting a NonEmptyList cannot produce an empty List
-    NonEmptyList.fromListUnsafe(toList.sortBy(f)(B.toOrdering))
+    NonEmptyList.fromListUnsafe(toList.sortBy(f)(using B.toOrdering))
 
   /**
    * Sorts this `NonEmptyList` according to an `Order`
@@ -514,7 +514,7 @@ final case class NonEmptyList[+A](head: A, tail: List[A]) extends NonEmptyCollec
    */
   def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyList[AA] =
     // safe: sorting a NonEmptyList cannot produce an empty List
-    NonEmptyList.fromListUnsafe(toList.sorted(AA.toOrdering))
+    NonEmptyList.fromListUnsafe(toList.sorted(using AA.toOrdering))
 
   /**
    * Groups elements inside this `NonEmptyList` according to the `Order`
@@ -916,13 +916,13 @@ sealed abstract private[data] class NonEmptyListInstances extends NonEmptyListIn
         fa.traverse(f)
 
       override def mapAccumulate[S, A, B](init: S, fa: NonEmptyList[A])(f: (S, A) => (S, B)): (S, NonEmptyList[B]) =
-        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(using this)
 
       override def mapWithIndex[A, B](fa: NonEmptyList[A])(f: (A, Int) => B): NonEmptyList[B] =
-        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(using this)
 
       override def mapWithLongIndex[A, B](fa: NonEmptyList[A])(f: (A, Long) => B): NonEmptyList[B] =
-        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(using this)
 
       override def zipWithIndex[A](fa: NonEmptyList[A]): NonEmptyList[(A, Int)] =
         fa.zipWithIndex

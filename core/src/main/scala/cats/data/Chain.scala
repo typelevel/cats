@@ -1051,16 +1051,16 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
     KernelStaticMethods.orderedHash((this: Chain[AA]).iterator)
 
   override def toString: String =
-    show(Show.fromToString)
+    show(using Show.fromToString)
 
   override def equals(o: Any): Boolean =
     o match {
       case thatChain: Chain[?] =>
-        (this: Chain[Any]).===(thatChain: Chain[Any])(Eq.fromUniversalEquals[Any])
+        (this: Chain[Any]).===(thatChain: Chain[Any])(using Eq.fromUniversalEquals[Any])
       case _ => false
     }
 
-  override def hashCode: Int = hash(Hash.fromUniversalHashCode[A])
+  override def hashCode: Int = hash(using Hash.fromUniversalHashCode[A])
 
   final def get(idx: Long): Option[A] =
     if (idx < 0) None
@@ -1081,8 +1081,8 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
 
   final def sortBy[B](f: A => B)(implicit B: Order[B]): Chain[A] =
     this match {
-      case Append(_, _) => Wrap(toVector.sortBy(f)(B.toOrdering))
-      case Wrap(seq)    => Wrap(seq.sortBy(f)(B.toOrdering))
+      case Append(_, _) => Wrap(toVector.sortBy(f)(using B.toOrdering))
+      case Wrap(seq)    => Wrap(seq.sortBy(f)(using B.toOrdering))
       case _            =>
         // Empty | Singleton(_)
         this
@@ -1090,8 +1090,8 @@ sealed abstract class Chain[+A] extends ChainCompat[A] {
 
   final def sorted[AA >: A](implicit AA: Order[AA]): Chain[AA] =
     this match {
-      case Append(_, _) => Wrap(toVector.sorted(AA.toOrdering))
-      case Wrap(seq)    => Wrap(seq.sorted(AA.toOrdering))
+      case Append(_, _) => Wrap(toVector.sorted(using AA.toOrdering))
+      case Wrap(seq)    => Wrap(seq.sorted(using AA.toOrdering))
       case _            =>
         // Empty | Singleton(_)
         this
@@ -1444,7 +1444,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
         else
           G match {
             case x: StackSafeMonad[G] =>
-              Traverse.traverseDirectly(fa.iterator)(f)(x)
+              Traverse.traverseDirectly(fa.iterator)(f)(using x)
             case _ =>
               traverseViaChain {
                 val as = collection.mutable.ArrayBuffer[A]()
@@ -1455,7 +1455,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
 
       override def traverseVoid[G[_], A, B](fa: Chain[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
         G match {
-          case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa.iterator)(f)(x)
+          case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa.iterator)(f)(using x)
           case _                    =>
             @tailrec
             def go(fa: NonEmpty[A], rhs: Chain[A], acc: G[Unit]): G[Unit] =
@@ -1492,13 +1492,13 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       }
 
       override def mapAccumulate[S, A, B](init: S, fa: Chain[A])(f: (S, A) => (S, B)): (S, Chain[B]) =
-        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(using this)
 
       override def mapWithIndex[A, B](fa: Chain[A])(f: (A, Int) => B): Chain[B] =
-        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(using this)
 
       override def mapWithLongIndex[A, B](fa: Chain[A])(f: (A, Long) => B): Chain[B] =
-        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(using this)
 
       override def zipWithIndex[A](fa: Chain[A]): Chain[(A, Int)] =
         fa.zipWithIndex
@@ -1600,7 +1600,7 @@ sealed abstract private[data] class ChainInstances extends ChainInstances1 {
       else
         G match {
           case x: StackSafeMonad[G] =>
-            TraverseFilter.traverseFilterDirectly(fa.iterator)(f)(x)
+            TraverseFilter.traverseFilterDirectly(fa.iterator)(f)(using x)
           case _ =>
             traverseFilterViaChain {
               val as = collection.mutable.ArrayBuffer[A]()

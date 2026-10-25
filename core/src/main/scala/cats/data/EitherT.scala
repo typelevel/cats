@@ -1102,10 +1102,10 @@ abstract private[data] class EitherTInstances1 extends EitherTInstances2 {
     new EitherTMonadError[F, L] {
       implicit val F = F0
       override def ensure[A](fa: EitherT[F, L, A])(error: => L)(predicate: (A) => Boolean): EitherT[F, L, A] =
-        fa.ensure(error)(predicate)(F)
+        fa.ensure(error)(predicate)(using F)
 
       override def ensureOr[A](fa: EitherT[F, L, A])(error: (A) => L)(predicate: (A) => Boolean): EitherT[F, L, A] =
-        fa.ensureOr(error)(predicate)(F)
+        fa.ensureOr(error)(predicate)(using F)
     }
 
   implicit def catsDataParallelForEitherTWithSequentialEffect[M[_]: Monad, E: Semigroup]

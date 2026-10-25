@@ -233,7 +233,7 @@ object SemigroupK extends ScalaVersionSpecificMonoidKInstances with SemigroupKIn
     def combineK(y: F[A]): F[A] = typeClassInstance.combineK[A](self, y)
     def <+>(y: F[A]): F[A] = typeClassInstance.combineK[A](self, y)
     def combineKEval(y: Eval[F[A]]): Eval[F[A]] = typeClassInstance.combineKEval[A](self, y)
-    def sum[B](fb: F[B])(implicit F: Functor[F]): F[Either[A, B]] = typeClassInstance.sum[A, B](self, fb)(F)
+    def sum[B](fb: F[B])(implicit F: Functor[F]): F[Either[A, B]] = typeClassInstance.sum[A, B](self, fb)(using F)
   }
   trait AllOps[F[_], A] extends Ops[F, A]
   trait ToSemigroupKOps extends Serializable {

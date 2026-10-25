@@ -106,7 +106,7 @@ private[cats] object ArraySeqInstances {
       def traverse[G[_], A, B](fa: ArraySeq[A])(f: A => G[B])(implicit G: Applicative[G]): G[ArraySeq[B]] =
         G match {
           case x: StackSafeMonad[G] =>
-            x.map(Traverse.traverseDirectly(fa.iterator)(f)(x))(_.iterator.to(ArraySeq.untagged))
+            x.map(Traverse.traverseDirectly(fa.iterator)(f)(using x))(_.iterator.to(ArraySeq.untagged))
           case _ =>
             G.map(Chain.traverseViaChain(fa)(f))(_.iterator.to(ArraySeq.untagged))
 
@@ -114,7 +114,7 @@ private[cats] object ArraySeqInstances {
 
       override def traverseVoid[G[_], A, B](fa: ArraySeq[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
         G match {
-          case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa)(f)(x)
+          case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa)(f)(using x)
           case _                    =>
             foldRight(fa, Eval.now(G.unit)) { (a, acc) =>
               G.map2Eval(f(a), acc) { (_, _) =>
@@ -124,7 +124,7 @@ private[cats] object ArraySeqInstances {
         }
 
       override def mapAccumulate[S, A, B](init: S, fa: ArraySeq[A])(f: (S, A) => (S, B)): (S, ArraySeq[B]) =
-        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(using this)
 
       override def mapWithIndex[A, B](fa: ArraySeq[A])(f: (A, Int) => B): ArraySeq[B] =
         ArraySeq.untagged.tabulate(n = fa.length) { i =>
@@ -235,7 +235,7 @@ private[cats] object ArraySeqInstances {
       )(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[ArraySeq[B]] =
         G match {
           case x: StackSafeMonad[G] =>
-            x.map(TraverseFilter.traverseFilterDirectly(fa.iterator)(f)(x))(
+            x.map(TraverseFilter.traverseFilterDirectly(fa.iterator)(f)(using x))(
               _.iterator.to(ArraySeq.untagged)
             )
           case _ =>

@@ -43,7 +43,7 @@ abstract private[data] class OneAndLowPriority4 {
         fa.head
 
       def map[A, B](fa: OneAnd[Stream, A])(f: A => B): OneAnd[Stream, B] =
-        fa.map(f)(cats.instances.stream.catsStdInstancesForStream)
+        fa.map(f)(using cats.instances.stream.catsStdInstancesForStream)
     }
 
   implicit val catsDataComonadForNonEmptyLazyList: Comonad[OneAnd[LazyList, *]] =
@@ -62,6 +62,6 @@ abstract private[data] class OneAndLowPriority4 {
         fa.head
 
       def map[A, B](fa: OneAnd[LazyList, A])(f: A => B): OneAnd[LazyList, B] =
-        fa.map(f)(cats.instances.lazyList.catsStdInstancesForLazyList)
+        fa.map(f)(using cats.instances.lazyList.catsStdInstancesForLazyList)
     }
 }

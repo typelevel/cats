@@ -57,25 +57,25 @@ trait PartialOrderingInstances {
     PartialOrderingInstances.catsStdDeferForPartialOrderingCache
 }
 object PartialOrderingInstances {
-  private val catsStdDeferForPartialOrderingCache: Defer[PartialOrdering] =
-    new Defer[PartialOrdering] {
-      case class Deferred[A](fa: () => PartialOrdering[A]) extends PartialOrdering[A] {
-        private lazy val resolve: PartialOrdering[A] = {
-          @tailrec
-          def loop(f: () => PartialOrdering[A]): PartialOrdering[A] =
-            f() match {
-              case Deferred(f) => loop(f)
-              case next        => next
-            }
-
-          loop(fa)
+  final private case class Deferred[A](fa: () => PartialOrdering[A]) extends PartialOrdering[A] {
+    private lazy val resolve: PartialOrdering[A] = {
+      @tailrec
+      def loop(f: () => PartialOrdering[A]): PartialOrdering[A] =
+        f() match {
+          case Deferred(f) => loop(f)
+          case next        => next
         }
 
-        override def tryCompare(x: A, y: A): Option[Int] = resolve.tryCompare(x, y)
+      loop(fa)
+    }
 
-        override def lteq(x: A, y: A): Boolean = resolve.lteq(x, y)
-      }
+    override def tryCompare(x: A, y: A): Option[Int] = resolve.tryCompare(x, y)
 
+    override def lteq(x: A, y: A): Boolean = resolve.lteq(x, y)
+  }
+
+  private val catsStdDeferForPartialOrderingCache: Defer[PartialOrdering] =
+    new Defer[PartialOrdering] {
       override def defer[A](fa: => PartialOrdering[A]): PartialOrdering[A] = {
         lazy val cachedFa = fa
         Deferred(() => cachedFa)

@@ -83,8 +83,8 @@ class ListPartialOrder[A](implicit ev: PartialOrder[A]) extends PartialOrder[Lis
   }
 }
 
-class ListHash[A](implicit ev: Hash[A]) extends ListEq[A]()(ev) with Hash[List[A]] {
-  def hash(x: List[A]): Int = StaticMethods.listHash(x)(ev)
+class ListHash[A](implicit ev: Hash[A]) extends ListEq[A]()(using ev) with Hash[List[A]] {
+  def hash(x: List[A]): Int = StaticMethods.listHash(x)(using ev)
 }
 
 class ListEq[A](implicit ev: Eq[A]) extends Eq[List[A]] {

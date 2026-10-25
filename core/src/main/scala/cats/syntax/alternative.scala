@@ -38,7 +38,7 @@ final class UniteOps[F[_], G[_], A](protected val fga: F[G[A]]) extends AnyVal w
 
   @deprecated("use a FlatMap-constrained version instead", "2.6.2")
   protected def unite(F: Monad[F], A: Alternative[F], G: Foldable[G]): F[A] =
-    A.unite(fga)(F, G)
+    A.unite(fga)(using F, G)
 }
 
 sealed private[syntax] trait UniteOpsBinCompat0[F[_], G[_], A] extends Any { self: UniteOps[F, G, A] =>
@@ -64,7 +64,7 @@ final class SeparateOps[F[_], G[_, _], A, B](protected val fgab: F[G[A, B]])
 
   @deprecated("use a FlatMap-constrained version instead", "2.6.2")
   protected def separate(F: Monad[F], A: Alternative[F], G: Bifoldable[G]): (F[A], F[B]) =
-    A.separate[G, A, B](fgab)(F, G)
+    A.separate[G, A, B](fgab)(using F, G)
 
   /**
    * See [[Alternative.separateFoldable]]

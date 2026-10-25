@@ -50,5 +50,5 @@ object ZipStream {
     }
 
   implicit def catsDataEqForZipStream[A: Eq]: Eq[ZipStream[A]] =
-    Eq.by((_: ZipStream[A]).value)(cats.kernel.instances.stream.catsKernelStdEqForStream[A])
+    Eq.by((_: ZipStream[A]).value)(using cats.kernel.instances.stream.catsKernelStdEqForStream[A])
 }

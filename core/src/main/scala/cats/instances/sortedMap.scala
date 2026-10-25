@@ -46,7 +46,7 @@ trait SortedMapInstances extends SortedMapInstances2 {
 
   @deprecated("Use catsStdShowForSortedMap override without Order", "2.2.0-M3")
   implicit def catsStdShowForSortedMap[A, B](orderA: Order[A], showA: Show[A], showB: Show[B]): Show[SortedMap[A, B]] =
-    catsStdShowForSortedMap(showA, showB)
+    catsStdShowForSortedMap(using showA, showB)
 
   implicit def catsStdInstancesForSortedMap[K]
     : Traverse[SortedMap[K, *]] & FlatMap[SortedMap[K, *]] & Align[SortedMap[K, *]] =
@@ -66,7 +66,7 @@ trait SortedMapInstances extends SortedMapInstances2 {
       }
 
       override def mapAccumulate[S, A, B](init: S, fa: SortedMap[K, A])(f: (S, A) => (S, B)): (S, SortedMap[K, B]) =
-        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(using this)
 
       def flatMap[A, B](fa: SortedMap[K, A])(f: A => SortedMap[K, B]): SortedMap[K, B] = {
         implicit val ordering: Ordering[K] = fa.ordering

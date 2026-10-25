@@ -80,7 +80,7 @@ final class FoldableOps[F[_], A](private val fa: F[A]) extends AnyVal {
     F.foldA[G, B](fa.asInstanceOf[F[G[B]]])
 
   private[syntax] def contains_(v: A, eq: Eq[A], F: Foldable[F]): Boolean =
-    F.contains_(fa, v)(eq)
+    F.contains_(fa, v)(using eq)
 
   /**
    * Intercalate with a prefix and a suffix
@@ -264,7 +264,7 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
   def partitionBifold[H[_, _], B, C](
     f: A => H[B, C]
   )(implicit A: Alternative[F], F: Foldable[F], H: Bifoldable[H]): (F[B], F[C]) =
-    F.partitionBifold[H, A, B, C](fa)(f)(A, H)
+    F.partitionBifold[H, A, B, C](fa)(f)(using A, H)
 
   /**
    * Separate this Foldable into a Tuple by an effectful separating function `A => G[H[B, C]]` for some `Bifoldable[H]`
@@ -281,7 +281,7 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
   def partitionBifoldM[G[_], H[_, _], B, C](
     f: A => G[H[B, C]]
   )(implicit A: Alternative[F], F: Foldable[F], M: Monad[G], H: Bifoldable[H]): G[(F[B], F[C])] =
-    F.partitionBifoldM[G, H, A, B, C](fa)(f)(A, M, H)
+    F.partitionBifoldM[G, H, A, B, C](fa)(f)(using A, M, H)
 
   /**
    * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]`
@@ -302,7 +302,7 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
   def partitionEitherM[G[_], B, C](
     f: A => G[Either[B, C]]
   )(implicit A: Alternative[F], F: Foldable[F], M: Monad[G]): G[(F[B], F[C])] =
-    F.partitionEitherM[G, A, B, C](fa)(f)(A, M)
+    F.partitionEitherM[G, A, B, C](fa)(f)(using A, M)
 
   def sliding2(implicit F: Foldable[F]): List[(A, A)] =
     F.sliding2(fa)

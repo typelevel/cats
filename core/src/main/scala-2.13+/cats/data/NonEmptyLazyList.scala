@@ -375,7 +375,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    */
   final def sortBy[B](f: A => B)(implicit B: Order[B]): NonEmptyLazyList[A] =
     // safe: sorting a NonEmptyList cannot produce an empty List
-    create(toLazyList.sortBy(f)(B.toOrdering))
+    create(toLazyList.sortBy(f)(using B.toOrdering))
 
   /**
    * Sorts this `NonEmptyList` according to an `Order`
@@ -389,7 +389,7 @@ class NonEmptyLazyListOps[A](private val value: NonEmptyLazyList[A])
    * }}}
    */
   final def sorted[AA >: A](implicit AA: Order[AA]): NonEmptyLazyList[AA] =
-    create(toLazyList.sorted(AA.toOrdering))
+    create(toLazyList.sorted(using AA.toOrdering))
 
   /**
    * Groups elements inside this `NonEmptyLazyList` according to the `Order`
@@ -564,7 +564,7 @@ sealed abstract private[data] class NonEmptyLazyListInstances extends NonEmptyLa
       type F[x] = OneAnd[ZipLazyList, x]
 
       def applicative: Applicative[OneAnd[ZipLazyList, *]] =
-        OneAnd.catsDataApplicativeForOneAnd(ZipLazyList.catsDataAlternativeForZipLazyList)
+        OneAnd.catsDataApplicativeForOneAnd(using ZipLazyList.catsDataAlternativeForZipLazyList)
       def monad: Monad[NonEmptyLazyList] = NonEmptyLazyList.catsDataInstancesForNonEmptyLazyList
 
       def sequential: OneAnd[ZipLazyList, *] ~> NonEmptyLazyList =

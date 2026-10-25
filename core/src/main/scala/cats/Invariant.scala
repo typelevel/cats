@@ -166,7 +166,7 @@ object Invariant extends ScalaVersionSpecificInvariantInstances with InvariantIn
   implicit def catsInstancesForFuture(implicit
     ec: ExecutionContext
   ): MonadThrow[Future] & CoflatMap[Future] =
-    cats.instances.future.catsStdInstancesForFuture(ec)
+    cats.instances.future.catsStdInstancesForFuture(using ec)
 
   implicit def catsContravariantMonoidalForOrder: ContravariantMonoidal[Order] =
     cats.instances.order.catsContravariantMonoidalForOrder

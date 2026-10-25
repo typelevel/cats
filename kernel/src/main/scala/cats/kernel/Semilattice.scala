@@ -70,9 +70,9 @@ trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any with Band[A] with
 
 abstract class SemilatticeFunctions[S[T] <: Semilattice[T]] extends SemigroupFunctions[S] {
   def asMeetPartialOrder[A](implicit s: S[A], ev: Eq[A]): PartialOrder[A] =
-    s.asMeetPartialOrder(ev)
+    s.asMeetPartialOrder(using ev)
   def asJoinPartialOrder[A](implicit s: S[A], ev: Eq[A]): PartialOrder[A] =
-    s.asJoinPartialOrder(ev)
+    s.asJoinPartialOrder(using ev)
 }
 
 object Semilattice extends SemilatticeFunctions[Semilattice] {

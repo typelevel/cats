@@ -131,7 +131,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
 
       final override def traverse[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Vector[B]] =
         G match {
-          case x: StackSafeMonad[G] => x.map(Traverse.traverseDirectly(fa)(f)(x))(_.toVector)
+          case x: StackSafeMonad[G] => x.map(Traverse.traverseDirectly(fa)(f)(using x))(_.toVector)
           case _                    => G.map(Chain.traverseViaChain(fa)(f))(_.toVector)
         }
 
@@ -147,7 +147,7 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
        */
       override def traverseVoid[G[_], A, B](fa: Vector[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] = {
         G match {
-          case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa)(f)(x)
+          case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa)(f)(using x)
           case _                    =>
             // the cost of this is O(size)
             // c(n) = 1 + 2 * c(n/2)
@@ -185,13 +185,13 @@ trait VectorInstances extends cats.kernel.instances.VectorInstances {
       }
 
       override def mapAccumulate[S, A, B](init: S, fa: Vector[A])(f: (S, A) => (S, B)): (S, Vector[B]) =
-        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(using this)
 
       override def mapWithIndex[A, B](fa: Vector[A])(f: (A, Int) => B): Vector[B] =
-        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(using this)
 
       override def mapWithLongIndex[A, B](fa: Vector[A])(f: (A, Long) => B): Vector[B] =
-        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(using this)
 
       override def zipWithIndex[A](fa: Vector[A]): Vector[(A, Int)] =
         fa.zipWithIndex
@@ -279,7 +279,7 @@ private[instances] trait VectorInstancesBinCompat0 {
 
     def traverseFilter[G[_], A, B](fa: Vector[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Vector[B]] =
       G match {
-        case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(_.toVector)
+        case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(using x))(_.toVector)
         case _                    =>
           G.map(Chain.traverseFilterViaChain(fa)(f))(_.toVector)
       }

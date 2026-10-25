@@ -75,6 +75,14 @@ sealed abstract class Eval[+A] extends Serializable { self =>
    *
    * Computation performed in f is always lazy, even when called on an
    * eager (Now) instance.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Eval
+   *
+   * scala> Eval.now(1).map(_ + 2).value
+   * res0: Int = 3
+   * }}}
    */
   def map[B](f: A => B): Eval[B] =
     flatMap(a => Now(f(a)))
@@ -90,6 +98,14 @@ sealed abstract class Eval[+A] extends Serializable { self =>
    *
    * Computation performed in f is always lazy, even when called on an
    * eager (Now) instance.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Eval
+   *
+   * scala> Eval.now(1).flatMap(x => Eval.now(x + 2)).value
+   * res0: Int = 3
+   * }}}
    */
   def flatMap[B](f: A => Eval[B]): Eval[B] =
     this match {
@@ -127,6 +143,20 @@ sealed abstract class Eval[+A] extends Serializable { self =>
    *
    * Practically, this means that when called on an Always[A] a
    * Later[A] with an equivalent computation will be returned.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Eval
+   *
+   * scala> var counter = 0
+   * scala> val memo = Eval.always { counter += 1; counter }.memoize
+   *
+   * scala> memo.value
+   * res0: Int = 1
+   *
+   * scala> memo.value
+   * res1: Int = 1
+   * }}}
    */
   def memoize: Eval[A]
 }
@@ -210,16 +240,66 @@ object Eval extends EvalInstances {
 
   /**
    * Construct an eager Eval[A] value (i.e. Now[A]).
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Eval
+   *
+   * scala> Eval.now(42).value
+   * res0: Int = 42
+   * }}}
    */
   def now[A](a: A): Eval[A] = Now(a)
 
   /**
    * Construct a lazy Eval[A] value with caching (i.e. Later[A]).
+   *
+   * The computation is performed once, the first time `.value` is
+   * called, and the result is memoized for subsequent calls.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Eval
+   *
+   * scala> var counter = 0
+   * scala> val lazyEval = Eval.later { counter += 1; counter }
+   *
+   * scala> counter
+   * res0: Int = 0
+   *
+   * scala> lazyEval.value
+   * res1: Int = 1
+   *
+   * scala> lazyEval.value
+   * res2: Int = 1
+   *
+   * scala> counter
+   * res3: Int = 1
+   * }}}
    */
   def later[A](a: => A): Eval[A] = new Later(() => a)
 
   /**
    * Construct a lazy Eval[A] value without caching (i.e. Always[A]).
+   *
+   * The computation is performed every time `.value` is called.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Eval
+   *
+   * scala> var counter = 0
+   * scala> val alwaysEval = Eval.always { counter += 1; counter }
+   *
+   * scala> alwaysEval.value
+   * res0: Int = 1
+   *
+   * scala> alwaysEval.value
+   * res1: Int = 2
+   *
+   * scala> counter
+   * res2: Int = 2
+   * }}}
    */
   def always[A](a: => A): Eval[A] = new Always(() => a)
 
@@ -228,6 +308,26 @@ object Eval extends EvalInstances {
    *
    * This is useful when you want to delay execution of an expression
    * which produces an Eval[A] value. Like .flatMap, it is stack-safe.
+   *
+   * Example:
+   * {{{
+   * scala> import cats.Eval
+   *
+   * scala> var built = false
+   * scala> val deferred = Eval.defer {
+   *      |   built = true
+   *      |   Eval.now(7)
+   *      | }
+   *
+   * scala> built
+   * res0: Boolean = false
+   *
+   * scala> deferred.value
+   * res1: Int = 7
+   *
+   * scala> built
+   * res2: Boolean = true
+   * }}}
    */
   def defer[A](a: => Eval[A]): Eval[A] =
     new Eval.Defer[A](() => a) {}

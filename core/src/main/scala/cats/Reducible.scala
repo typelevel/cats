@@ -72,7 +72,7 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
    * }}}
    */
   def reduceK[G[_], A](fga: F[G[A]])(implicit G: SemigroupK[G]): G[A] =
-    reduce(fga)(G.algebra)
+    reduce(fga)(using G.algebra)
 
   /**
    * Apply `f` to each element of `fa` and combine them using the
@@ -266,7 +266,7 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
    * @see [[maximumBy]] for maximum instead of minimum.
    */
   def minimumBy[A, B: Order](fa: F[A])(f: A => B): A =
-    minimum(fa)(Order.by(f))
+    minimum(fa)(using Order.by(f))
 
   /**
    * Find the maximum `A` item in this structure according to an `Order.by(f)`.
@@ -274,7 +274,7 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
    * @see [[minimumBy]] for minimum instead of maximum.
    */
   def maximumBy[A, B: Order](fa: F[A])(f: A => B): A =
-    maximum(fa)(Order.by(f))
+    maximum(fa)(using Order.by(f))
 
   /**
    * Find all the minimum `A` items in this structure.
@@ -309,7 +309,7 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
    * @see [[maximumByNel]] for maximum instead of minimum.
    */
   def minimumByNel[A, B: Order](fa: F[A])(f: A => B): NonEmptyList[A] =
-    minimumNel(fa)(Order.by(f))
+    minimumNel(fa)(using Order.by(f))
 
   /**
    * Find all the maximum `A` items in this structure according to an `Order.by(f)`.
@@ -318,7 +318,7 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
    * @see [[minimumByNel]] for minimum instead of maximum.
    */
   def maximumByNel[A, B: Order](fa: F[A])(f: A => B): NonEmptyList[A] =
-    maximumNel(fa)(Order.by(f))
+    maximumNel(fa)(using Order.by(f))
 
   /**
    * Intercalate/insert an element between the existing elements while reducing.
@@ -333,7 +333,7 @@ trait Reducible[F[_]] extends Foldable[F] { self =>
    * }}}
    */
   def nonEmptyIntercalate[A](fa: F[A], a: A)(implicit A: Semigroup[A]): A =
-    reduce(fa)(A.intercalate(a))
+    reduce(fa)(using A.intercalate(a))
 
   /**
    * Partition this Reducible by a separating function `A => Either[B, C]`
@@ -401,17 +401,17 @@ object Reducible {
     val typeClassInstance: TypeClassType
     def reduceLeft(f: (A, A) => A): A = typeClassInstance.reduceLeft[A](self)(f)
     def reduceRight(f: (A, Eval[A]) => Eval[A]): Eval[A] = typeClassInstance.reduceRight[A](self)(f)
-    def reduce(implicit A: Semigroup[A]): A = typeClassInstance.reduce[A](self)(A)
+    def reduce(implicit A: Semigroup[A]): A = typeClassInstance.reduce[A](self)(using A)
     def reduceK[G[_], B](implicit ev$1: A <:< G[B], G: SemigroupK[G]): G[B] =
-      typeClassInstance.reduceK[G, B](self.asInstanceOf[F[G[B]]])(G)
-    def reduceMap[B](f: A => B)(implicit B: Semigroup[B]): B = typeClassInstance.reduceMap[A, B](self)(f)(B)
+      typeClassInstance.reduceK[G, B](self.asInstanceOf[F[G[B]]])(using G)
+    def reduceMap[B](f: A => B)(implicit B: Semigroup[B]): B = typeClassInstance.reduceMap[A, B](self)(f)(using B)
     def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B = typeClassInstance.reduceLeftTo[A, B](self)(f)(g)
     def reduceLeftM[G[_], B](f: A => G[B])(g: (B, A) => G[B])(implicit G: FlatMap[G]): G[B] =
-      typeClassInstance.reduceLeftM[G, A, B](self)(f)(g)(G)
+      typeClassInstance.reduceLeftM[G, A, B](self)(f)(g)(using G)
     def reduceMapA[G[_], B](f: A => G[B])(implicit G: Apply[G], B: Semigroup[B]): G[B] =
-      typeClassInstance.reduceMapA[G, A, B](self)(f)(G, B)
+      typeClassInstance.reduceMapA[G, A, B](self)(f)(using G, B)
     def reduceMapM[G[_], B](f: A => G[B])(implicit G: FlatMap[G], B: Semigroup[B]): G[B] =
-      typeClassInstance.reduceMapM[G, A, B](self)(f)(G, B)
+      typeClassInstance.reduceMapM[G, A, B](self)(f)(using G, B)
     def reduceRightTo[B](f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
       typeClassInstance.reduceRightTo[A, B](self)(f)(g)
     def nonEmptyTraverseVoid[G[_], B](f: A => G[B])(implicit G: Apply[G]): G[Unit] =
@@ -423,17 +423,18 @@ object Reducible {
     def nonEmptySequence_[G[_], B](implicit ev$1: A <:< G[B], G: Apply[G]): G[Unit] =
       nonEmptySequenceVoid[G, B]
     def toNonEmptyList: NonEmptyList[A] = typeClassInstance.toNonEmptyList[A](self)
-    def minimum(implicit A: Order[A]): A = typeClassInstance.minimum[A](self)(A)
-    def maximum(implicit A: Order[A]): A = typeClassInstance.maximum[A](self)(A)
+    def minimum(implicit A: Order[A]): A = typeClassInstance.minimum[A](self)(using A)
+    def maximum(implicit A: Order[A]): A = typeClassInstance.maximum[A](self)(using A)
     def minimumBy[B](f: A => B)(implicit ev$1: Order[B]): A = typeClassInstance.minimumBy[A, B](self)(f)
     def maximumBy[B](f: A => B)(implicit ev$1: Order[B]): A = typeClassInstance.maximumBy[A, B](self)(f)
-    def minimumNel(implicit A: Order[A]): NonEmptyList[A] = typeClassInstance.minimumNel[A](self)(A)
-    def maximumNel(implicit A: Order[A]): NonEmptyList[A] = typeClassInstance.maximumNel[A](self)(A)
+    def minimumNel(implicit A: Order[A]): NonEmptyList[A] = typeClassInstance.minimumNel[A](self)(using A)
+    def maximumNel(implicit A: Order[A]): NonEmptyList[A] = typeClassInstance.maximumNel[A](self)(using A)
     def minimumByNel[B](f: A => B)(implicit ev$1: Order[B]): NonEmptyList[A] =
       typeClassInstance.minimumByNel[A, B](self)(f)
     def maximumByNel[B](f: A => B)(implicit ev$1: Order[B]): NonEmptyList[A] =
       typeClassInstance.maximumByNel[A, B](self)(f)
-    def nonEmptyIntercalate(a: A)(implicit A: Semigroup[A]): A = typeClassInstance.nonEmptyIntercalate[A](self, a)(A)
+    def nonEmptyIntercalate(a: A)(implicit A: Semigroup[A]): A =
+      typeClassInstance.nonEmptyIntercalate[A](self, a)(using A)
     def nonEmptyPartition[B, C](f: A => Either[B, C]): Ior[NonEmptyList[B], NonEmptyList[C]] =
       typeClassInstance.nonEmptyPartition[A, B, C](self)(f)
   }

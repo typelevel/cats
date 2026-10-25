@@ -133,14 +133,14 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
       final override def traverse[G[_], A, B](fa: Seq[A])(f: A => G[B])(implicit G: Applicative[G]): G[Seq[B]] =
         G match {
           case x: StackSafeMonad[G] =>
-            x.map(Traverse.traverseDirectly(fa)(f)(x))(_.toList)
+            x.map(Traverse.traverseDirectly(fa)(f)(using x))(_.toList)
           case _ =>
             G.map(Chain.traverseViaChain(fa.toIndexedSeq)(f))(_.toList)
         }
 
       override def traverseVoid[G[_], A, B](fa: Seq[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
         G match {
-          case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa)(f)(x)
+          case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa)(f)(using x)
           case _                    =>
             foldRight(fa, Eval.now(G.unit)) { (a, acc) =>
               G.map2Eval(f(a), acc) { (_, _) =>
@@ -217,7 +217,7 @@ trait SeqInstances extends cats.kernel.instances.SeqInstances {
 
     def traverseFilter[G[_], A, B](fa: Seq[A])(f: (A) => G[Option[B]])(implicit G: Applicative[G]): G[Seq[B]] =
       G match {
-        case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(_.toVector)
+        case x: StackSafeMonad[G] => x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(using x))(_.toVector)
         case _                    =>
           G.map(Chain.traverseFilterViaChain(fa.toIndexedSeq)(f))(_.toVector)
       }

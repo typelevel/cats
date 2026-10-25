@@ -126,11 +126,11 @@ final case class OneAnd[F[_], A](head: A, tail: F[A]) extends OneAndBinCompat0[F
 sealed private[data] trait OneAndBinCompat0[F[_], A] { self: OneAnd[F, A] =>
   // Kept for binary compatibility
   private[data] def unwrap(F: Alternative[F]): F[A] =
-    self.unwrap(F)
+    self.unwrap(using F)
 
   // Kept for binary compatibility
   private[data] def combine(other: OneAnd[F, A])(F: Alternative[F]): OneAnd[F, A] =
-    self.combine(other)(F)
+    self.combine(other)(using F)
 }
 
 @suppressUnusedImportWarningForScalaVersionSpecific
@@ -141,9 +141,9 @@ sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 w
   ): Parallel.Aux[OneAnd[M, *], OneAnd[F0, *]] =
     new Parallel[OneAnd[M, *]] {
       type F[x] = OneAnd[F0, x]
-      def monad: Monad[OneAnd[M, *]] = catsDataMonadForOneAnd(P.monad, Alternative[M])
+      def monad: Monad[OneAnd[M, *]] = catsDataMonadForOneAnd(using P.monad, Alternative[M])
 
-      def applicative: Applicative[OneAnd[F0, *]] = catsDataApplicativeForOneAnd(Alternative[F0])
+      def applicative: Applicative[OneAnd[F0, *]] = catsDataApplicativeForOneAnd(using Alternative[F0])
 
       def sequential: OneAnd[F0, *] ~> OneAnd[M, *] =
         new (OneAnd[F0, *] ~> OneAnd[M, *]) {
@@ -183,7 +183,7 @@ sealed abstract private[data] class OneAndInstances extends OneAndLowPriority0 w
   ): Monad[OneAnd[F, *]] =
     new FlatMap.AbstractFlatMap[OneAnd[F, *]] with Monad[OneAnd[F, *]] {
       override def map[A, B](fa: OneAnd[F, A])(f: A => B): OneAnd[F, B] =
-        fa.map(f)(monad)
+        fa.map(f)(using monad)
 
       def pure[A](x: A): OneAnd[F, A] =
         OneAnd(x, alternative.empty)

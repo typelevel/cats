@@ -102,7 +102,8 @@ final case class IorT[F[_], A, B](value: F[Ior[A, B]]) {
 
   def collectRight(implicit FA: Alternative[F], FM: FlatMap[F]): F[B] = FM.flatMap(value)(_.to[F, B])
 
-  def merge[AA >: A](implicit ev: B <:< AA, F: Functor[F], AA: Semigroup[AA]): F[AA] = F.map(value)(_.merge(ev, AA))
+  def merge[AA >: A](implicit ev: B <:< AA, F: Functor[F], AA: Semigroup[AA]): F[AA] =
+    F.map(value)(_.merge(using ev, AA))
 
   def show(implicit show: Show[F[Ior[A, B]]]): String = show.show(value)
 
@@ -529,7 +530,7 @@ abstract private[data] class IorTInstances extends IorTInstances1 {
 
       val applicative: Applicative[IorT[P.F, E, *]] = new Apply.AbstractApply[IorT[P.F, E, *]]
         with Applicative[IorT[P.F, E, *]] {
-        def pure[A](a: A): IorT[P.F, E, A] = IorT.pure(a)(FA)
+        def pure[A](a: A): IorT[P.F, E, A] = IorT.pure(a)(using FA)
         def ap[A, B](ff: IorT[P.F, E, A => B])(fa: IorT[P.F, E, A]): IorT[P.F, E, B] =
           IorT(FA.map2(ff.value, fa.value)((f, a) => IorA.ap(f)(a)))
       }
@@ -563,7 +564,7 @@ abstract private[data] class IorTInstances extends IorTInstances1 {
 
       val applicative: Applicative[IorT[P.F, E, *]] = new Apply.AbstractApply[IorT[P.F, E, *]]
         with Applicative[IorT[P.F, E, *]] {
-        def pure[A](a: A): IorT[P.F, E, A] = IorT.pure(a)(FA)
+        def pure[A](a: A): IorT[P.F, E, A] = IorT.pure(a)(using FA)
         def ap[A, B](ff: IorT[P.F, E, A => B])(fa: IorT[P.F, E, A]): IorT[P.F, E, B] =
           IorT(FA.map2(ff.value, fa.value)((f, a) => IorA.ap(f)(a)))
       }

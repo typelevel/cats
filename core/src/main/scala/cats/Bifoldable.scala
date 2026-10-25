@@ -132,8 +132,8 @@ object Bifoldable extends cats.instances.NTupleBitraverseInstances {
     def bifoldRight[C](c: Eval[C])(f: (A, Eval[C]) => Eval[C], g: (B, Eval[C]) => Eval[C]): Eval[C] =
       typeClassInstance.bifoldRight[A, B, C](self, c)(f, g)
     def bifoldMap[C](f: A => C, g: B => C)(implicit C: Monoid[C]): C =
-      typeClassInstance.bifoldMap[A, B, C](self)(f, g)(C)
-    def bifold(implicit A: Monoid[A], B: Monoid[B]): (A, B) = typeClassInstance.bifold[A, B](self)(A, B)
+      typeClassInstance.bifoldMap[A, B, C](self)(f, g)(using C)
+    def bifold(implicit A: Monoid[A], B: Monoid[B]): (A, B) = typeClassInstance.bifold[A, B](self)(using A, B)
   }
   trait AllOps[F[_, _], A, B] extends Ops[F, A, B]
   trait ToBifoldableOps extends Serializable {

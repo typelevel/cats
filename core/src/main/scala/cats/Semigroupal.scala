@@ -81,7 +81,7 @@ object Semigroupal extends SemigroupalArityFunctions with ScalaVersionSpecificSe
    * @see [[https://github.com/typelevel/cats/issues/4176 Changes in Future traverse behavior between 2.6 and 2.7]]
    */
   implicit def catsSemigroupalForFuture(implicit ec: ExecutionContext): Semigroupal[Future] =
-    cats.instances.future.catsStdInstancesForFuture(ec)
+    cats.instances.future.catsStdInstancesForFuture(using ec)
 
   implicit def catsSemigroupalForList: Semigroupal[List] = cats.instances.list.catsStdInstancesForList
   implicit def catsSemigroupalForSeq: Semigroupal[Seq] = cats.instances.seq.catsStdInstancesForSeq

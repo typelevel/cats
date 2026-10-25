@@ -127,7 +127,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
         else
           G match {
             case x: StackSafeMonad[G] =>
-              G.map(Traverse.traverseDirectly(fa)(f)(x))(c => fromIterableOnce(c.iterator))
+              G.map(Traverse.traverseDirectly(fa)(f)(using x))(c => fromIterableOnce(c.iterator))
             case _ =>
               G.map(Chain.traverseViaChain {
                 val as = collection.mutable.ArrayBuffer[A]()
@@ -140,7 +140,7 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
 
       override def traverseVoid[G[_], A, B](fa: Queue[A])(f: A => G[B])(implicit G: Applicative[G]): G[Unit] =
         G match {
-          case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa)(f)(x)
+          case x: StackSafeMonad[G] => Traverse.traverseVoidDirectly(fa)(f)(using x)
           case _                    =>
             foldRight(fa, Eval.now(G.unit)) { (a, acc) =>
               G.map2Eval(f(a), acc) { (_, _) =>
@@ -150,13 +150,13 @@ trait QueueInstances extends cats.kernel.instances.QueueInstances {
         }
 
       override def mapAccumulate[S, A, B](init: S, fa: Queue[A])(f: (S, A) => (S, B)): (S, Queue[B]) =
-        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(this)
+        StaticMethods.mapAccumulateFromStrictFunctor(init, fa, f)(using this)
 
       override def mapWithLongIndex[A, B](fa: Queue[A])(f: (A, Long) => B): Queue[B] =
-        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(this)
+        StaticMethods.mapWithLongIndexFromStrictFunctor(fa, f)(using this)
 
       override def mapWithIndex[A, B](fa: Queue[A])(f: (A, Int) => B): Queue[B] =
-        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(this)
+        StaticMethods.mapWithIndexFromStrictFunctor(fa, f)(using this)
 
       override def zipWithIndex[A](fa: Queue[A]): Queue[(A, Int)] =
         fa.zipWithIndex
@@ -248,7 +248,7 @@ private object QueueInstances {
       else
         G match {
           case x: StackSafeMonad[G] =>
-            x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(x))(c => traverse.fromIterableOnce(c.iterator))
+            x.map(TraverseFilter.traverseFilterDirectly(fa)(f)(using x))(c => traverse.fromIterableOnce(c.iterator))
           case _ =>
             G.map(Chain.traverseFilterViaChain {
               val as = collection.mutable.ArrayBuffer[A]()

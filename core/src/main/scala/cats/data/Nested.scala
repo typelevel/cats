@@ -115,7 +115,7 @@ sealed abstract private[data] class NestedInstances0 extends NestedInstances1 {
     F0: Representable[F],
     G0: Representable[G]
   ): Representable.Aux[Nested[F, G, *], (F0.Representation, G0.Representation)] = new Representable[Nested[F, G, *]] {
-    val FG = F0.compose(G0)
+    val FG = F0.compose(using G0)
 
     val F: Functor[Nested[F, G, *]] = new NestedFunctor[F, G] {
       val FG = F0.F.compose(using G0.F)
