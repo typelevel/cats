@@ -4,7 +4,7 @@ API Documentation: @:api(cats.data.EitherT)
 
 @:callout(warning)
 
-`EitherT` can interact poorly with more powerful effect types that provide concurrent computation, such as Cats Effect's `IO` or fs2's `Stream`. Because `IO` already provides its own error channel, `EitherT[IO, Throwable]` can lead to confusing behavior; prefer `IO`'s own error channel instead of carrying a second throwable error channel.
+`EitherT` can interact poorly with more powerful effect types that provide concurrent computation, such as Cats Effect's `IO` or fs2's `Stream`. Because `IO` already provides its own error channel, `EitherT[IO, Throwable, A]` can lead to confusing behavior; prefer `IO`'s own error channel instead of carrying a second throwable error channel.
 
 @:@
 

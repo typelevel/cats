@@ -92,8 +92,8 @@ def getReservedFundsForUser(userId: Long): Try[Option[Money]] = (
 ).value
 ```
 
-The `OptionT[Try, Money]` instance returned by `getReservedFundsForUser` will enclose a `None` value if any of the three composed methods returns an `OptionT` corresponding to `None`.
-Otherwise, if the result of all three calls contains `Some`, the final outcome will also contain `Some`.
+The `OptionT[Try, Money]` instance created by the for comprehension in `getReservedFundsForUser` will enclose a `None` value if any of the three composed methods returns an `OptionT` corresponding to `None`.
+Otherwise, if the result of all three calls contains `Some`, the final outcome will also contain `Some`. Calling `value` at the end removes the monad transformer.
 
 ## Pitfalls
 
@@ -101,7 +101,7 @@ In principle, monad transformers can be stacked to create data types with comple
 While powerful, this can lead to unwieldy type signatures and poor type inference. 
 The [Cats MTL](https://typelevel.org/cats-mtl/) project provides a capability based approach to extend effect types without requiring as much boilerplate.
 
-Some monad transformers can also interact poorly with more powerful effect types that provide concurrent computation, such as Cats Effect's `IO` or fs2's `Stream`. You should avoid `StateT` and `WriterT` and use the concurrent data types provided by those libraries instead. Because `IO` already provides its own error channel, `EitherT[IO, Throwable]` can also lead to confusing behavior; prefer `IO`'s own error channel instead.
+Some monad transformers can also interact poorly with more powerful effect types that provide concurrent computation, such as Cats Effect's `IO` or fs2's `Stream`. You should avoid `StateT` and `WriterT` and use the concurrent data types provided by those libraries instead. Because `IO` already provides its own error channel, `EitherT[IO, Throwable, A]` can also lead to confusing behavior; prefer `IO`'s own error channel instead.
 
 ## Recommended Usage
 

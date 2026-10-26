@@ -114,8 +114,8 @@ Links:
 
 1. Website: [typelevel.org/cats/](https://typelevel.org/cats/)
 2. ScalaDoc: [typelevel.org/cats/api/](https://typelevel.org/cats/api/)
-3. Type classes: [typelevel.org/cats/typeclasses.html](https://typelevel.org/cats/typeclasses.html)
-4. Data types: [typelevel.org/cats/datatypes.html](https://typelevel.org/cats/datatypes.html)
+3. Type classes: [typelevel.org/cats/typeclasses/](https://typelevel.org/cats/typeclasses/)
+4. Data types: [typelevel.org/cats/datatypes/](https://typelevel.org/cats/datatypes/)
 5. Algebra overview: [typelevel.org/cats/algebra.html](https://typelevel.org/cats/algebra.html)
 6. Glossary: [typelevel.org/cats/nomenclature.html](https://typelevel.org/cats/nomenclature.html)
 7. Resources for Learners: [typelevel.org/cats/resources_for_learners.html](https://typelevel.org/cats/resources_for_learners.html)

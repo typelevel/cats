@@ -22,14 +22,29 @@ follow up with any polishing that may need to be done.
 If you want to touch up some documentation or fix typos, feel free to
 skip these steps and jump straight to submitting a pull request.
 
- 1. [Find something that belongs in cats](#find-something-that-belongs-in-cats)
- 2. [Let us know you are working on it](#let-us-know-you-are-working-on-it)
- 3. [Build the project](#build-the-project)
- 4. [Implement your contribution](#write-code)
- 5. [Write tests](#write-tests)
- 6. [Write documentation](#contributing-documentation)
- 7. [Write examples](#write-examples)
- 8. [Submit pull request](#submit-a-pull-request)
+- [Contributor Guide](#contributor-guide)
+  - [About this document](#about-this-document)
+  - [How can I help?](#how-can-i-help)
+    - [Find something that belongs in Cats](#find-something-that-belongs-in-cats)
+      - [Cats subprojects](#cats-subprojects)
+    - [Let us know you are working on it](#let-us-know-you-are-working-on-it)
+    - [Build the project](#build-the-project)
+      - [Scala and Scala.js](#scala-and-scalajs)
+    - [Editor Setup Tips](#editor-setup-tips)
+    - [Write code](#write-code)
+    - [Attributions](#attributions)
+    - [Write tests](#write-tests)
+    - [Binary compatibility](#binary-compatibility)
+  - [Contributing documentation](#contributing-documentation)
+    - [source for the documentation](#source-for-the-documentation)
+    - [Generating the Site](#generating-the-site)
+    - [Previewing the site](#previewing-the-site)
+    - [Compiler verified documentation](#compiler-verified-documentation)
+    - [Write examples](#write-examples)
+    - [Submit a pull request](#submit-a-pull-request)
+  - [How did we do?](#how-did-we-do)
+  - [Getting in touch](#getting-in-touch)
+  - [Nix Cats Development Environment](#nix-cats-development-environment)
 
 ### Find something that belongs in Cats
 
@@ -50,7 +65,7 @@ pull request. The preferred ways to do that are to either:
 
 Things that belong in Cats generally have the following characteristics:
 
- * Their behavior is governed by well-defined [laws](https://typelevel.org/cats/typeclasses.html#laws).
+ * Their behavior is governed by well-defined [laws](https://typelevel.org/cats/typeclasses/index.html#laws).
  * They provide general abstractions.
 
 Laws help keep types consistent, and remove ambiguity or sensitivity
