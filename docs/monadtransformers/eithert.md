@@ -91,6 +91,20 @@ divisionProgramAsync("a", "b").value
 Note that when `F` is a monad, then `EitherT` will also form a monad, allowing
 monadic combinators such as `flatMap` to be used in composing `EitherT` values.
 
+## Extracting an `F[Either[A, B]]` from an `EitherT[F, A, B]`
+
+Use the `value` method defined on `EitherT` to retrieve the underlying `F[Either[A, B]]`:
+
+```scala mdoc:nest
+val errorT: EitherT[Future, String, Int] = EitherT.leftT("foo")
+
+val error: Future[Either[String, Int]] = errorT.value
+```
+
+## Right Bias
+
+Like `Either`, `EitherT` is _right-biased_, therefore plain `map` actually deals with the `Right` value. There are also certain methods in `EitherT` (that you're likely to need at some point) which map over the `Left` value, like `leftMap`, or over both `Left` and `Right` values, like `fold` or `bimap`.
+
 ## From `A` or `B` to `EitherT[F, A, B]`
 
 To obtain a left version or a right version of `EitherT` when given an `A` or a
@@ -146,6 +160,31 @@ val myOptionListET = EitherT.fromOptionF(myOptionList, "option not defined")
 val myOptionListETM = EitherT.fromOptionM(myOptionList, List("option not defined"))
 ```
 
+## From `OptionT[F, A] to `EitherT[F, A, B]`
+
+Another useful way to construct an `EitherT` instance is to use `OptionT`'s methods `toLeft` and `toRight`:
+
+```scala mdoc:silent
+abstract class BaseException(message: String) extends Exception(message)
+
+case class UserNotFoundException(message: String) extends BaseException(message)
+
+def getUserById(userId: Int): Future[Option[User]] = { /* ... */ ??? }
+
+def ensureUserExists(userId: Int): Future[Either[BaseException, User]] =
+  OptionT(getUserById(userId))
+    .toRight(left = UserNotFoundException(s"user not found, userId=$userId"))
+    .value
+```
+
+`toRight` is pretty analogous to the method `Either.fromOption` mentioned before: just as `fromOption` built an `Either` from an `Option`, `toRight` creates an `EitherT` from an `OptionT`.
+If the original `OptionT` stores `Some` value, it will be wrapped into `Right`; otherwise the value provided as the `left` parameter will be wrapped into a `Left`.
+To provide the `left` value within the monad, there is corresponding `toRightF` method.
+
+`toLeft` is `toRight`'s counterpart which wraps the `Some` value into `Left` and transforms `None` into `Right` enclosing the provided `right` value.
+This is less commonly used in practice, but can serve e.g. for enforcing uniqueness checks in code.
+We return `Left` if the value has been found, and `Right` if it doesn't yet exist in the system.
+
 ## From `ApplicativeError[F, E]` to `EitherT[F, E, A]`
 
 An `ApplicativeError[F, E]` or a `MonadError[F, E]`, can be converted into `EitherT[F, E, A]` 
@@ -157,14 +196,4 @@ val myFuture: Future[String] = Future.failed(new Exception())
 
 val myTryET: EitherT[Try, Throwable, Int] = myTry.attemptT
 val myFutureET: EitherT[Future, Throwable, String] = myFuture.attemptT
-```
-
-## Extracting an `F[Either[A, B]]` from an `EitherT[F, A, B]`
-
-Use the `value` method defined on `EitherT` to retrieve the underlying `F[Either[A, B]]`:
-
-```scala mdoc:nest
-val errorT: EitherT[Future, String, Int] = EitherT.leftT("foo")
-
-val error: Future[Either[String, Int]] = errorT.value
 ```
