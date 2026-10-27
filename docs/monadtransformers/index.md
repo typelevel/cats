@@ -10,7 +10,7 @@ import cats.data.OptionT
 
 An instance of [`OptionT[F, A]`](optiont.md) can be thought of as a wrapper over `F[Option[A]]`
 which adds a couple of useful methods specific to nested types that aren't available in `F` or `Option` itself.
-Most typically, your `F` will be `IO` from [Cats Effect](https://typelevel.org/cats-effect), or something like [doobie](https://typelevel.org/doobie/index.html)'s `ConnectionIO`).
+Most typically, your `F` will be `IO` from [Cats Effect](https://typelevel.org/cats-effect), or something like [doobie](https://typelevel.org/doobie/index.html)'s `ConnectionIO`.
 Wrappers such as `OptionT` are generally known as _monad transformers_.
 
 A quite common pattern is mapping the inner value stored inside an instance of `F[Option[A]]` to an instance of `F[Option[B]]` with a function of type `A => B`.
