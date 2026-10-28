@@ -28,7 +28,7 @@ package data
  *
  * It may also be said that `OptionT` is a monad transformer for `Option`.
  *
- * For more information, see the [[http://typelevel.org/cats/datatypes/optiont.html documentation]].
+ * For more information, see the [[http://typelevel.org/cats/monadtransformers/optiont.html documentation]].
  */
 final case class OptionT[F[_], A](value: F[Option[A]]) {
 

@@ -2,8 +2,14 @@
 
 API Documentation: @:api(cats.data.EitherT)
 
+@:callout(warning)
+
+`EitherT` can interact poorly with more powerful effect types that provide concurrent computation, such as Cats Effect's `IO` or fs2's `Stream`. Because `IO` already provides its own error channel, `EitherT[IO, Throwable, A]` can lead to confusing behavior; prefer `IO`'s own error channel instead of carrying a second throwable error channel.
+
+@:@
+
 `Either` can be used for error handling in most situations. However, when
-`Either` is placed into effectful types such as `Option` or`Future`, a large
+`Either` is placed into effectful types such as `Option`, a large
 amount of boilerplate is required to handle errors. For example, consider the
 following program:
 
@@ -65,8 +71,7 @@ handle the errors will increase dramatically.
 `EitherT[F[_], A, B]` is a lightweight wrapper for `F[Either[A, B]]` that makes
 it easy to compose `Either`s and `F`s together. To use `EitherT`, values of
 `Either`, `F`, `A`, and `B` are first converted into `EitherT`, and the
-resulting `EitherT` values are then composed using combinators. For example, the
-asynchronous division program can be rewritten as follows:
+resulting `EitherT` values are then composed using combinators. For example, the asynchronous division program can be rewritten as follows:
 
 ```scala mdoc:nest
 import cats.data.EitherT
@@ -86,7 +91,23 @@ divisionProgramAsync("a", "b").value
 Note that when `F` is a monad, then `EitherT` will also form a monad, allowing
 monadic combinators such as `flatMap` to be used in composing `EitherT` values.
 
-## From `A` or `B` to `EitherT[F, A, B]`
+## Extracting an `F[Either[A, B]]` from an `EitherT[F, A, B]`
+
+Use the `value` method defined on `EitherT` to retrieve the underlying `F[Either[A, B]]`:
+
+```scala mdoc:nest
+val errorT: EitherT[Future, String, Int] = EitherT.leftT("foo")
+
+val error: Future[Either[String, Int]] = errorT.value
+```
+
+## Right Bias
+
+Like `Either`, `EitherT` is _right-biased_, therefore plain `map` actually deals with the `Right` value. There are also certain methods in `EitherT` (that you're likely to need at some point) which map over the `Left` value, like `leftMap`, or over both `Left` and `Right` values, like `fold` or `bimap`.
+
+## Transforming to `EitherT[F, A, B]`
+
+### From `A` or `B`
 
 To obtain a left version or a right version of `EitherT` when given an `A` or a
 `B`, use `EitherT.leftT` and `EitherT.rightT` (which is an alias for
@@ -94,10 +115,10 @@ To obtain a left version or a right version of `EitherT` when given an `A` or a
 
 ```scala mdoc:silent
 val number: EitherT[Option, String, Int] = EitherT.rightT(5)
-val error: EitherT[Option, String, Int] = EitherT.leftT("Not a number")
+val numberError: EitherT[Option, String, Int] = EitherT.leftT("Not a number")
 ```
 
-## From `F[A]` or `F[B]` to `EitherT[F, A, B]`
+### From `F[A]` or `F[B]`
 
 Similarly, use `EitherT.left` and `EitherT.right` to convert an `F[A]` or an `F[B]`
 into an `EitherT`. It is also possible to use `EitherT.liftF` as an alias for
@@ -111,7 +132,7 @@ val number: EitherT[Option, String, Int] = EitherT.right(numberO)
 val error: EitherT[Option, String, Int] = EitherT.left(errorO)
 ```
 
-## From `Either[A, B]` or `F[Either[A, B]]` to `EitherT[F, A, B]`
+### From `Either[A, B]` or `F[Either[A, B]]`
 
 Use `EitherT.fromEither` to lift a value of `Either[A, B]` into `EitherT[F, A, B]`.
 An `F[Either[A, B]]` can be converted into `EitherT` using the `EitherT` constructor.
@@ -126,7 +147,7 @@ val errorET: EitherT[List, String, Int] = EitherT.fromEither(errorE)
 val numberFET: EitherT[List, String, Int] = EitherT(numberFE)
 ```
 
-## From `Option[B]` or `F[Option[B]]` to `EitherT[F, A, B]`
+### From `Option[B]` or `F[Option[B]]`
 
 An `Option[B]` or an `F[Option[B]]`, along with a default value, can be passed to
 `EitherT.fromOption` and `EitherT.fromOptionF`, respectively, to produce an
@@ -141,7 +162,34 @@ val myOptionListET = EitherT.fromOptionF(myOptionList, "option not defined")
 val myOptionListETM = EitherT.fromOptionM(myOptionList, List("option not defined"))
 ```
 
-## From `ApplicativeError[F, E]` to `EitherT[F, E, A]`
+### From `OptionT[F, A]`
+
+Another useful way to construct an `EitherT` instance is to use `OptionT`'s methods `toLeft` and `toRight`:
+
+```scala mdoc:silent
+import cats.data.OptionT
+
+abstract class BaseException(message: String) extends Exception(message)
+
+case class UserNotFoundException(message: String) extends BaseException(message)
+
+def getUserById(userId: Int): Future[Option[String]] = { /* ... */ ??? }
+
+def ensureUserExists(userId: Int): Future[Either[BaseException, String]] =
+  OptionT(getUserById(userId))
+    .toRight(left = UserNotFoundException(s"user not found, userId=$userId"))
+    .value
+```
+
+`toRight` is pretty analogous to the method `Either.fromOption` mentioned before: just as `fromOption` built an `Either` from an `Option`, `toRight` creates an `EitherT` from an `OptionT`.
+If the original `OptionT` stores `Some` value, it will be wrapped into `Right`; otherwise the value provided as the `left` parameter will be wrapped into a `Left`.
+To provide the `left` value within the monad, there is corresponding `toRightF` method.
+
+`toLeft` is `toRight`'s counterpart which wraps the `Some` value into `Left` and transforms `None` into `Right` enclosing the provided `right` value.
+This is less commonly used in practice, but can serve e.g. for enforcing uniqueness checks in code.
+We return `Left` if the value has been found, and `Right` if it doesn't yet exist in the system.
+
+### From `ApplicativeError[F, E]`
 
 An `ApplicativeError[F, E]` or a `MonadError[F, E]`, can be converted into `EitherT[F, E, A]` 
 using the `attemptT` method on them.
@@ -152,14 +200,4 @@ val myFuture: Future[String] = Future.failed(new Exception())
 
 val myTryET: EitherT[Try, Throwable, Int] = myTry.attemptT
 val myFutureET: EitherT[Future, Throwable, String] = myFuture.attemptT
-```
-
-## Extracting an `F[Either[A, B]]` from an `EitherT[F, A, B]`
-
-Use the `value` method defined on `EitherT` to retrieve the underlying `F[Either[A, B]]`:
-
-```scala mdoc:nest
-val errorT: EitherT[Future, String, Int] = EitherT.leftT("foo")
-
-val error: Future[Either[String, Int]] = errorT.value
 ```
