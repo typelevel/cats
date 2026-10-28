@@ -61,6 +61,24 @@
   <link rel="stylesheet" type="text/css" href="helium/site/icofont.min.css" />
     <link rel="stylesheet" type="text/css" href="helium/site/laika-helium.css" />
   <script src="helium/site/laika-helium.js"></script>
+    <script type="module">
+
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+mermaid.initialize({ 
+  startOnLoad: true,
+  theme: "base",
+  themeVariables: {
+    'darkMode': dark,
+    'primaryColor': dark ? '#f4f8fa' : '#f4f8fa', 
+    'primaryTextColor': dark ? '#385a70' : '#385a70',
+    'primaryBorderColor': dark ? '#8ebac7' : '#8ebac7',
+    'lineColor': dark ? '#385a70' : '#385a70',
+    'background': dark ? '#ffffff' : '#ffffff',
+  }
+});
+
+</script>
   
   
   <script> /* for avoiding page load transitions */ </script>
@@ -355,6 +373,26 @@
             </tr>
           </tbody>
         </table>
+        <p>Dependency diagram:</p>
+        <pre class="mermaid">graph TB
+    Semigroup --&gt; CommutativeSemigroup
+    Semigroup --&gt; Monoid
+    Semigroup --&gt; Band
+
+    CommutativeSemigroup --&gt; Semilattice
+    CommutativeSemigroup --&gt; CommutativeMonoid
+
+    Monoid --&gt; Group
+    Monoid --&gt; CommutativeMonoid
+
+    Band --&gt; Semilattice
+
+    Semilattice --&gt; BoundedSemilattice
+
+    CommutativeMonoid --&gt; CommutativeGroup
+    CommutativeMonoid --&gt; BoundedSemilattice
+
+    Group --&gt; CommutativeGroup</pre>
         <p>(For a description of what each column means, see <a href="#algebraic-properties-and-terminology">§algebraic properties and terminology</a>.)</p>
         
         <h2 id="ring-like-structures" class="section"><a class="anchor-link left" href="#ring-like-structures"><i class="icofont-laika link">&#xef71;</i></a>ring-like structures</h2>
@@ -368,11 +406,17 @@
               <th>Has <code>1</code>?</th>
               <th>Has <code>reciprocal</code>?</th>
               <th>Commutative <code>*</code>?</th>
+              <th>Has <code>gcd</code>/<code>lcm</code>?</th>
+              <th>Has <code>equot</code>/<code>emod</code>?</th>
+              <th>Idempotent <code>*</code>?</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>Semiring</td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -384,11 +428,37 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>Rig</td>
               <td></td>
               <td>✓</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>CommutativeSemiring</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>✓</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>CommutativeRng</td>
+              <td>✓</td>
+              <td></td>
+              <td></td>
+              <td>✓</td>
+              <td></td>
               <td></td>
               <td></td>
             </tr>
@@ -398,11 +468,27 @@
               <td>✓</td>
               <td></td>
               <td>✓</td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>Ring</td>
               <td>✓</td>
               <td>✓</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Semifield</td>
+              <td></td>
+              <td>✓</td>
+              <td>✓</td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
             </tr>
@@ -412,12 +498,8 @@
               <td>✓</td>
               <td></td>
               <td>✓</td>
-            </tr>
-            <tr>
-              <td>Semifield</td>
               <td></td>
-              <td>✓</td>
-              <td>✓</td>
+              <td></td>
               <td></td>
             </tr>
             <tr>
@@ -426,6 +508,59 @@
               <td>✓</td>
               <td>✓</td>
               <td>✓</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>DivisionRing</td>
+              <td>✓</td>
+              <td>✓</td>
+              <td>✓</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>BoolRng</td>
+              <td>✓</td>
+              <td></td>
+              <td></td>
+              <td>✓</td>
+              <td></td>
+              <td></td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>BoolRing</td>
+              <td>✓</td>
+              <td>✓</td>
+              <td></td>
+              <td>✓</td>
+              <td></td>
+              <td></td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>GCDRing</td>
+              <td>✓</td>
+              <td>✓</td>
+              <td></td>
+              <td>✓</td>
+              <td>✓</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>EuclideanRing</td>
+              <td>✓</td>
+              <td>✓</td>
+              <td></td>
+              <td>✓</td>
+              <td>✓</td>
+              <td>✓</td>
+              <td></td>
             </tr>
             <tr>
               <td>Field</td>
@@ -433,9 +568,45 @@
               <td>✓</td>
               <td>✓</td>
               <td>✓</td>
+              <td>✓</td>
+              <td>✓</td>
+              <td></td>
             </tr>
           </tbody>
         </table>
+        <p>Dependency diagram:</p>
+        <pre class="mermaid">graph TB
+    Semiring --&gt; Rng
+    Semiring --&gt; Rig
+    Semiring --&gt; CommutativeSemiring
+
+    Rng --&gt; Ring
+    Rig --&gt; Ring
+    Ring --&gt; CommutativeRing
+
+    Rng --&gt; CommutativeRng
+    CommutativeSemiring --&gt; CommutativeRng
+    Rig --&gt; CommutativeRig
+    CommutativeSemiring --&gt; CommutativeRig
+    CommutativeRng --&gt; CommutativeRing
+    CommutativeRig --&gt; CommutativeRing
+
+    Rig --&gt; Semifield
+    Semifield --&gt; CommutativeSemifield
+    CommutativeRig --&gt; CommutativeSemifield
+
+    Semifield --&gt; DivisionRing
+    Ring --&gt; DivisionRing
+    CommutativeRing --&gt; GCDRing
+    GCDRing --&gt; EuclideanRing
+
+    DivisionRing --&gt; Field
+    EuclideanRing --&gt; Field
+    CommutativeSemifield --&gt; Field
+
+    CommutativeRng --&gt; BoolRng
+    BoolRng --&gt; BoolRing
+    CommutativeRing --&gt; BoolRing</pre>
         <p>(For a description of what the terminology in each column means, see <a href="#algebraic-properties-and-terminology">§algebraic properties and terminology</a>.)</p>
         
         <h2 id="lattice-like-structures" class="section"><a class="anchor-link left" href="#lattice-like-structures"><i class="icofont-laika link">&#xef71;</i></a>lattice-like structures</h2>
@@ -479,6 +650,7 @@
               <th>Has <code>one</code>?</th>
               <th>Distributive</th>
               <th>Has <code>imp</code>?</th>
+              <th>Has <code>without</code>?</th>
               <th>Excludes middle?</th>
             </tr>
           </thead>
@@ -486,6 +658,7 @@
             <tr>
               <td>JoinSemilattice</td>
               <td>✓</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -502,12 +675,14 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>BoundedJoinSemilattice</td>
               <td>✓</td>
               <td></td>
               <td>✓</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -522,11 +697,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>Lattice</td>
               <td>✓</td>
               <td>✓</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -542,6 +719,7 @@
               <td>✓</td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>BoundedLattice</td>
@@ -549,6 +727,7 @@
               <td>✓</td>
               <td>✓</td>
               <td>✓</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -562,6 +741,7 @@
               <td>✓</td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>Heyting</td>
@@ -570,6 +750,18 @@
               <td>✓</td>
               <td>✓</td>
               <td>✓</td>
+              <td>✓</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>GenBool</td>
+              <td>✓</td>
+              <td>✓</td>
+              <td>✓</td>
+              <td></td>
+              <td>✓</td>
+              <td></td>
               <td>✓</td>
               <td></td>
             </tr>
@@ -582,9 +774,34 @@
               <td>✓</td>
               <td>✓</td>
               <td>✓</td>
+              <td>✓</td>
             </tr>
           </tbody>
         </table>
+        <p>Dependency diagram:</p>
+        <pre class="mermaid">graph TD
+    JoinSemilattice --&gt; BoundedJoinSemilattice
+    MeetSemilattice --&gt; BoundedMeetSemilattice
+
+    JoinSemilattice --&gt; Lattice
+    MeetSemilattice --&gt; Lattice
+
+    Lattice --&gt; DistributiveLattice
+
+    Lattice --&gt; BoundedLattice
+    BoundedJoinSemilattice --&gt; BoundedLattice
+    BoundedMeetSemilattice --&gt; BoundedLattice
+
+    DistributiveLattice --&gt; BoundedDistributiveLattice
+    BoundedLattice --&gt; BoundedDistributiveLattice
+
+    BoundedDistributiveLattice --&gt; Heyting
+
+    DistributiveLattice --&gt; GenBool
+    BoundedJoinSemilattice --&gt; GenBool
+
+    Heyting --&gt; Bool
+    GenBool --&gt; Bool</pre>
         <p>Note that a <code>BoundedDistributiveLattice</code> gives you a <code>CommutativeRig</code>, but not the other way around: rigs aren&#39;t distributive with <code>a + (b * c) = (a + b) * (a + c)</code>.</p>
         <p>Also, a <code>Bool</code> gives rise to a <code>BoolRing</code>, since each element can be defined as its own negation. Note, Bool&#39;s <code>.asBoolRing</code> is not an extension of the <code>.asCommutativeRig</code> method as the <code>plus</code> operations are defined differently.</p>
         
