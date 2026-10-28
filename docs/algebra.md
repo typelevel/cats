@@ -39,6 +39,30 @@ The most basic structures can be found in the `algebra` package. They all implem
 |CommutativeGroup    |           ✓|           ✓|        ✓|       ✓|           |
 |BoundedSemilattice  |           ✓|           ✓|        ✓|        |          ✓|
 
+Dependency diagram:
+
+```mermaid
+graph TB
+    Semigroup --> CommutativeSemigroup
+    Semigroup --> Monoid
+    Semigroup --> Band
+
+    CommutativeSemigroup --> Semilattice
+    CommutativeSemigroup --> CommutativeMonoid
+
+    Monoid --> Group
+    Monoid --> CommutativeMonoid
+
+    Band --> Semilattice
+
+    Semilattice --> BoundedSemilattice
+
+    CommutativeMonoid --> CommutativeGroup
+    CommutativeMonoid --> BoundedSemilattice
+
+    Group --> CommutativeGroup
+```
+
 (For a description of what each column means, see [§algebraic properties and terminology](#algebraic-properties-and-terminology).)
 
 ## ring-like structures
@@ -47,18 +71,61 @@ The `algebra.ring` package contains more sophisticated structures which combine 
 
 All ring-like structures are associative for both `+` and `*`, have commutative `+`, and have a `zero` element (an identity for `+`).
 
-|Name                |Has `negate`?|Has `1`?|Has `reciprocal`?|Commutative `*`?|
-|--------------------|-------------|--------|-----------------|----------------|
-|Semiring            |             |        |                 |                |
-|Rng                 |            ✓|        |                 |                |
-|Rig                 |             |       ✓|                 |                |
-|CommutativeRig      |             |       ✓|                 |               ✓|
-|Ring                |            ✓|       ✓|                 |                |
-|CommutativeRing     |            ✓|       ✓|                 |               ✓|
-|Semifield           |             |       ✓|                ✓|                |
-|CommutativeSemifield|             |       ✓|                ✓|               ✓|
-|Field               |            ✓|       ✓|                ✓|               ✓|
+| Name                 | Has `negate`?  | Has `1`?  | Has `reciprocal`?  | Commutative `*`?  | Has `gcd`/`lcm`?  | Has `equot`/`emod`?  | Idempotent `*`?  |
+|----------------------|----------------|-----------|--------------------|-------------------|-------------------|----------------------|------------------|
+| Semiring             |                |           |                    |                   |                   |                      |                  |
+| Rng                  | ✓             |           |                    |                   |                   |                      |                  |
+| Rig                  |                | ✓        |                    |                   |                   |                      |                  |
+| CommutativeSemiring  |                |           |                    | ✓                |                   |                      |                  |
+| CommutativeRng       | ✓             |           |                    | ✓                |                   |                      |                  |
+| CommutativeRig       |                | ✓        |                    | ✓                |                   |                      |                  |
+| Ring                 | ✓             | ✓        |                    |                   |                   |                      |                  |
+| Semifield            |                | ✓        | ✓                 |                   |                   |                      |                  |
+| CommutativeRing      | ✓             | ✓        |                    | ✓                |                   |                      |                  |
+| CommutativeSemifield |                | ✓        | ✓                 | ✓                |                   |                      |                  |
+| DivisionRing         | ✓             | ✓        | ✓                 |                   |                   |                      |                  |
+| BoolRng              | ✓             |           |                    | ✓                |                   |                      | ✓               |
+| BoolRing             | ✓             | ✓        |                    | ✓                |                   |                      | ✓               |
+| GCDRing              | ✓             | ✓        |                    | ✓                | ✓                |                      |                  |
+| EuclideanRing        | ✓             | ✓        |                    | ✓                | ✓                | ✓                   |                  |
+| Field                | ✓             | ✓        | ✓                 | ✓                | ✓                | ✓                   |                  |
 
+Dependency diagram:
+
+```mermaid
+graph TB
+    Semiring --> Rng
+    Semiring --> Rig
+    Semiring --> CommutativeSemiring
+
+    Rng --> Ring
+    Rig --> Ring
+    Ring --> CommutativeRing
+
+    Rng --> CommutativeRng
+    CommutativeSemiring --> CommutativeRng
+    Rig --> CommutativeRig
+    CommutativeSemiring --> CommutativeRig
+    CommutativeRng --> CommutativeRing
+    CommutativeRig --> CommutativeRing
+
+    Rig --> Semifield
+    Semifield --> CommutativeSemifield
+    CommutativeRig --> CommutativeSemifield
+
+    Semifield --> DivisionRing
+    Ring --> DivisionRing
+    CommutativeRing --> GCDRing
+    GCDRing --> EuclideanRing
+
+    DivisionRing --> Field
+    EuclideanRing --> Field
+    CommutativeSemifield --> Field
+
+    CommutativeRng --> BoolRng
+    BoolRng --> BoolRing
+    CommutativeRing --> BoolRing
+```
 
 (For a description of what the terminology in each column means, see [§algebraic properties and terminology](#algebraic-properties-and-terminology).)
 
@@ -88,18 +155,47 @@ The law of the excluded middle can be expressed as:
 
  - `(a ∨ (a → 0))` = `1`
 
-|Name                      |Has `join`?|Has `meet`?|Has `zero`?|Has `one`?|Distributive|Has `imp`?|Excludes middle?|
-|--------------------------|-----------|-----------|-----------|----------|------------|----------|----------------|
-|JoinSemilattice           |          ✓|           |           |          |            |          |                |
-|MeetSemilattice           |           |          ✓|           |          |            |          |                |
-|BoundedJoinSemilattice    |          ✓|           |          ✓|          |            |          |                |
-|BoundedMeetSemilattice    |           |          ✓|           |         ✓|            |          |                |
-|Lattice                   |          ✓|          ✓|           |          |            |          |                |
-|DistributiveLattice       |          ✓|          ✓|           |          |           ✓|          |                |
-|BoundedLattice            |          ✓|          ✓|          ✓|         ✓|            |          |                |
-|BoundedDistributiveLattice|          ✓|          ✓|          ✓|         ✓|           ✓|          |                |
-|Heyting                   |          ✓|          ✓|          ✓|         ✓|           ✓|         ✓|                |
-|Bool                      |          ✓|          ✓|          ✓|         ✓|           ✓|         ✓|               ✓|
+| Name                       | Has `join`? | Has `meet`? | Has `zero`? | Has `one`? | Distributive | Has `imp`? | Has `without`? | Excludes middle? |
+|----------------------------|-------------|-------------|-------------|------------|--------------|------------|----------------|------------------|
+| JoinSemilattice            | ✓          |             |             |            |              |            |                |                  |
+| MeetSemilattice            |             | ✓          |             |            |              |            |                |                  |
+| BoundedJoinSemilattice     | ✓          |             | ✓          |            |              |            |                |                  |
+| BoundedMeetSemilattice     |             | ✓          |             | ✓         |              |            |                |                  |
+| Lattice                    | ✓          | ✓          |             |            |              |            |                |                  |
+| DistributiveLattice        | ✓          | ✓          |             |            | ✓           |            |                |                  |
+| BoundedLattice             | ✓          | ✓          | ✓          | ✓         |              |            |                |                  |
+| BoundedDistributiveLattice | ✓          | ✓          | ✓          | ✓         | ✓           |            |                |                  |
+| Heyting                    | ✓          | ✓          | ✓          | ✓         | ✓           | ✓         |                |                  |
+| GenBool                    | ✓          | ✓          | ✓          |            | ✓           |            | ✓             |                  |
+| Bool                       | ✓          | ✓          | ✓          | ✓         | ✓           | ✓         | ✓             | ✓               |
+
+Dependency diagram:
+
+```mermaid
+graph TD
+    JoinSemilattice --> BoundedJoinSemilattice
+    MeetSemilattice --> BoundedMeetSemilattice
+
+    JoinSemilattice --> Lattice
+    MeetSemilattice --> Lattice
+
+    Lattice --> DistributiveLattice
+
+    Lattice --> BoundedLattice
+    BoundedJoinSemilattice --> BoundedLattice
+    BoundedMeetSemilattice --> BoundedLattice
+
+    DistributiveLattice --> BoundedDistributiveLattice
+    BoundedLattice --> BoundedDistributiveLattice
+
+    BoundedDistributiveLattice --> Heyting
+
+    DistributiveLattice --> GenBool
+    BoundedJoinSemilattice --> GenBool
+
+    Heyting --> Bool
+    GenBool --> Bool
+```
 
 Note that a `BoundedDistributiveLattice` gives you a `CommutativeRig`, but not the other way around: rigs aren't distributive with `a + (b * c) = (a + b) * (a + c)`.
 
