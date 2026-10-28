@@ -27,11 +27,10 @@ import scala.{specialized => sp}
 /**
  * Rig consists of:
  *
- *  - a commutative monoid for addition (+)
- *  - a monoid for multiplication (*)
+ *   - a commutative monoid for addition (+)
+ *   - a monoid for multiplication (*)
  *
- * Alternately, a Rig can be thought of as a ring without
- * multiplicative or additive inverses (or as a semiring with a
+ * Alternately, a Rig can be thought of as a ring without multiplicative or additive inverses (or as a semiring with a
  * multiplicative identity).
  *
  * Mnemonic: "Rig is a Ring without 'N'egation."

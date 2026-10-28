@@ -46,8 +46,8 @@ final class OptionIdOps[A](private val a: A) extends AnyVal {
   /**
    * Wrap a value in `Some`.
    *
-   * `3.some` is equivalent to `Some(3)`, but the former will have an inferred
-   * return type of `Option[Int]` while the latter will have `Some[Int]`.
+   * `3.some` is equivalent to `Some(3)`, but the former will have an inferred return type of `Option[Int]` while the
+   * latter will have `Some[Int]`.
    *
    * Example:
    * {{{
@@ -62,9 +62,8 @@ final class OptionIdOps[A](private val a: A) extends AnyVal {
 final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
 
   /**
-   * If the `Option` is a `Some`, return its value in a [[cats.data.Validated.Invalid]].
-   * If the `Option` is `None`, return the provided `B` value in a
-   * [[cats.data.Validated.Valid]].
+   * If the `Option` is a `Some`, return its value in a [[cats.data.Validated.Invalid]]. If the `Option` is `None`,
+   * return the provided `B` value in a [[cats.data.Validated.Valid]].
    *
    * Example:
    * {{{
@@ -83,9 +82,8 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
   def toInvalid[B](b: => B): Validated[A, B] = oa.fold[Validated[A, B]](Validated.Valid(b))(Validated.Invalid(_))
 
   /**
-   * If the `Option` is a `Some`, wrap its value in a [[cats.data.NonEmptyList]]
-   * and return it in a [[cats.data.Validated.Invalid]].
-   * If the `Option` is `None`, return the provided `B` value in a
+   * If the `Option` is a `Some`, wrap its value in a [[cats.data.NonEmptyList]] and return it in a
+   * [[cats.data.Validated.Invalid]]. If the `Option` is `None`, return the provided `B` value in a
    * [[cats.data.Validated.Valid]].
    *
    * Example:
@@ -106,9 +104,8 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
     oa.fold[ValidatedNel[A, B]](Validated.Valid(b))(Validated.invalidNel)
 
   /**
-   * If the `Option` is a `Some`, wrap its value in a [[cats.data.Chain]]
-   * and return it in a [[cats.data.Validated.Invalid]].
-   * If the `Option` is `None`, return the provided `B` value in a
+   * If the `Option` is a `Some`, wrap its value in a [[cats.data.Chain]] and return it in a
+   * [[cats.data.Validated.Invalid]]. If the `Option` is `None`, return the provided `B` value in a
    * [[cats.data.Validated.Valid]].
    *
    * Example:
@@ -129,9 +126,8 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
     oa.fold[ValidatedNec[A, B]](Validated.Valid(b))(Validated.invalidNec)
 
   /**
-   * If the `Option` is a `Some`, return its value in a [[cats.data.Validated.Valid]].
-   * If the `Option` is `None`, return the provided `B` value in a
-   * [[cats.data.Validated.Invalid]].
+   * If the `Option` is a `Some`, return its value in a [[cats.data.Validated.Valid]]. If the `Option` is `None`, return
+   * the provided `B` value in a [[cats.data.Validated.Invalid]].
    *
    * Example:
    * {{{
@@ -150,9 +146,8 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
   def toValid[B](b: => B): Validated[B, A] = oa.fold[Validated[B, A]](Validated.Invalid(b))(Validated.Valid(_))
 
   /**
-   * If the `Option` is a `Some`, return its value in a [[cats.data.Validated.Valid]].
-   * If the `Option` is `None`, wrap the provided `B` value in a [[cats.data.NonEmptyList]]
-   * and return the result in a [[cats.data.Validated.Invalid]].
+   * If the `Option` is a `Some`, return its value in a [[cats.data.Validated.Valid]]. If the `Option` is `None`, wrap
+   * the provided `B` value in a [[cats.data.NonEmptyList]] and return the result in a [[cats.data.Validated.Invalid]].
    *
    * Example:
    * {{{
@@ -172,9 +167,8 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
     oa.fold[ValidatedNel[B, A]](Validated.invalidNel(b))(Validated.Valid(_))
 
   /**
-   * If the `Option` is a `Some`, return its value in a [[cats.data.Validated.Valid]].
-   * If the `Option` is `None`, wrap the provided `B` value in a [[cats.data.Chain]]
-   * and return the result in a [[cats.data.Validated.Invalid]].
+   * If the `Option` is a `Some`, return its value in a [[cats.data.Validated.Valid]]. If the `Option` is `None`, wrap
+   * the provided `B` value in a [[cats.data.Chain]] and return the result in a [[cats.data.Validated.Invalid]].
    *
    * Example:
    * {{{
@@ -194,8 +188,8 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
     oa.fold[ValidatedNec[B, A]](Validated.invalidNec(b))(Validated.Valid(_))
 
   /**
-   * If the `Option` is a `Some`, return its value in a [[cats.data.Ior.Right]].
-   * If the `Option` is `None`, wrap the provided `B` value in a [[cats.data.Ior.Left]]
+   * If the `Option` is a `Some`, return its value in a [[cats.data.Ior.Right]]. If the `Option` is `None`, wrap the
+   * provided `B` value in a [[cats.data.Ior.Left]]
    *
    * Example:
    * {{{
@@ -214,8 +208,8 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
   def toRightIor[B](b: => B): Ior[B, A] = oa.fold[Ior[B, A]](Ior.Left(b))(Ior.Right(_))
 
   /**
-   * If the `Option` is a `Some`, return its value in a [[cats.data.Ior.Left]].
-   * If the `Option` is `None`, wrap the provided `B` value in a [[cats.data.Ior.Right]]
+   * If the `Option` is a `Some`, return its value in a [[cats.data.Ior.Left]]. If the `Option` is `None`, wrap the
+   * provided `B` value in a [[cats.data.Ior.Right]]
    *
    * Example:
    * {{{
@@ -234,9 +228,8 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
   def toLeftIor[B](b: => B): Ior[A, B] = oa.fold[Ior[A, B]](Ior.Right(b))(Ior.Left(_))
 
   /**
-   * If the `Option` is a `Some`, return its value in a [[scala.Right]].
-   * If the `Option` is `None`, wrap the provided `B` value in a [[cats.data.NonEmptyList]]
-   * and return the result in a [[scala.Left]].
+   * If the `Option` is a `Some`, return its value in a [[scala.Right]]. If the `Option` is `None`, wrap the provided
+   * `B` value in a [[cats.data.NonEmptyList]] and return the result in a [[scala.Left]].
    *
    * Example:
    * {{{
@@ -255,9 +248,8 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
   def toRightNel[B](b: => B): EitherNel[B, A] = oa.toRight(NonEmptyList.one(b))
 
   /**
-   * If the `Option` is a `Some`, return its value in a [[scala.Right]].
-   * If the `Option` is `None`, wrap the provided `B` value in a [[cats.data.NonEmptyChain]]
-   * and return the result in a [[scala.Left]].
+   * If the `Option` is a `Some`, return its value in a [[scala.Right]]. If the `Option` is `None`, wrap the provided
+   * `B` value in a [[cats.data.NonEmptyChain]] and return the result in a [[scala.Left]].
    *
    * Example:
    * {{{
@@ -276,10 +268,8 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
   def toRightNec[B](b: => B): EitherNec[B, A] = oa.toRight(NonEmptyChain.one(b))
 
   /**
-   * If the `Option` is a `Some`, wrap its value in a [[cats.data.NonEmptyList]]
-   * and return it in a [[scala.Left]].
-   * If the `Option` is `None`, return the provided `B` value in a
-   * [[scala.Right]].
+   * If the `Option` is a `Some`, wrap its value in a [[cats.data.NonEmptyList]] and return it in a [[scala.Left]]. If
+   * the `Option` is `None`, return the provided `B` value in a [[scala.Right]].
    *
    * Example:
    * {{{
@@ -299,10 +289,8 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
     oa.fold[EitherNel[A, B]](Right(b))(a => Left(NonEmptyList.one(a)))
 
   /**
-   * If the `Option` is a `Some`, wrap its value in a [[cats.data.NonEmptyChain]]
-   * and return it in a [[scala.Left]].
-   * If the `Option` is `None`, return the provided `B` value in a
-   * [[scala.Right]].
+   * If the `Option` is a `Some`, wrap its value in a [[cats.data.NonEmptyChain]] and return it in a [[scala.Left]]. If
+   * the `Option` is `None`, return the provided `B` value in a [[scala.Right]].
    *
    * Example:
    * {{{
@@ -322,8 +310,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
     oa.fold[EitherNec[A, B]](Right(b))(a => Left(NonEmptyChain.one(a)))
 
   /**
-   * If the `Option` is a `Some`, return its value. If the `Option` is `None`,
-   * return the `empty` value for `Monoid[A]`.
+   * If the `Option` is a `Some`, return its value. If the `Option` is `None`, return the `empty` value for `Monoid[A]`.
    *
    * Example:
    * {{{
@@ -356,9 +343,8 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
   def liftTo[F[_]]: LiftToPartiallyApplied[F, A] = new LiftToPartiallyApplied(oa)
 
   /**
-   * Raise to an F[Unit], as long as it has an ApplicativeError[F, A] instance
-   * If the option is empty, an empty unit effect is given.
-   * If the option contains an error, it is raised.
+   * Raise to an F[Unit], as long as it has an ApplicativeError[F, A] instance If the option is empty, an empty unit
+   * effect is given. If the option contains an error, it is raised.
    *
    * Example:
    * {{{

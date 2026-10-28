@@ -31,7 +31,8 @@ trait OrderingInstances {
     new ContravariantMonoidal[Ordering] {
 
       /**
-       * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
+       * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one
+       * mapping)
        */
       def unit: Ordering[Unit] = Order[Unit].toOrdering
 

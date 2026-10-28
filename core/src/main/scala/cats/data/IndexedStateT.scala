@@ -25,14 +25,12 @@ package data
 import cats.arrow.{Profunctor, Strong}
 
 /**
- * `IndexedStateT[F, SA, SB, A]` is a stateful computation in a context `F` yielding
- * a value of type `A`. The state transitions from a value of type `SA` to a value
- * of type `SB`.
+ * `IndexedStateT[F, SA, SB, A]` is a stateful computation in a context `F` yielding a value of type `A`. The state
+ * transitions from a value of type `SA` to a value of type `SB`.
  *
- * Note that for the `SA != SB` case, this is an indexed monad. Indexed monads
- * are monadic type constructors annotated by an additional type for effect
- * tracking purposes. In this case, the annotation tracks the initial state and
- * the resulting state.
+ * Note that for the `SA != SB` case, this is an indexed monad. Indexed monads are monadic type constructors annotated
+ * by an additional type for effect tracking purposes. In this case, the annotation tracks the initial state and the
+ * resulting state.
  *
  * Given `IndexedStateT[F, S, S, A]`, this yields the `StateT[F, S, A]` monad.
  */
@@ -85,14 +83,12 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
     F.flatMap(runF)(f => f(initial))
 
   /**
-   * Run with the provided initial state value and return the final state
-   * (discarding the final value).
+   * Run with the provided initial state value and return the final state (discarding the final value).
    */
   def runS(s: SA)(implicit F: FlatMap[F]): F[SB] = F.map(run(s))(_._1)
 
   /**
-   * Run with the provided initial state value and return the final value
-   * (discarding the final state).
+   * Run with the provided initial state value and return the final value (discarding the final state).
    */
   def runA(s: SA)(implicit F: FlatMap[F]): F[A] = F.map(run(s))(_._2)
 
@@ -102,14 +98,12 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
   def runEmpty(implicit S: Monoid[SA], F: FlatMap[F]): F[(SB, A)] = run(S.empty)
 
   /**
-   * Run with `S`'s empty monoid value as the initial state and return the final
-   * state (discarding the final value).
+   * Run with `S`'s empty monoid value as the initial state and return the final state (discarding the final value).
    */
   def runEmptyS(implicit S: Monoid[SA], F: FlatMap[F]): F[SB] = runS(S.empty)
 
   /**
-   * Run with `S`'s empty monoid value as the initial state and return the final
-   * value (discarding the final state).
+   * Run with `S`'s empty monoid value as the initial state and return the final value (discarding the final state).
    */
   def runEmptyA(implicit S: Monoid[SA], F: FlatMap[F]): F[A] = runA(S.empty)
 
@@ -146,8 +140,8 @@ final class IndexedStateT[F[_], SA, SB, A](val runF: F[SA => F[(SB, A)]]) extend
   /**
    * Transform the state used.
    *
-   * This is useful when you are working with many focused `StateT`s and want to pass in a
-   * global state containing the various states needed for each individual `StateT`.
+   * This is useful when you are working with many focused `StateT`s and want to pass in a global state containing the
+   * various states needed for each individual `StateT`.
    *
    * {{{
    * scala> import cats.syntax.all._ // needed for StateT.apply

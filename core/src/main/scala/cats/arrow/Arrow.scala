@@ -28,10 +28,10 @@ package arrow
 trait Arrow[F[_, _]] extends Category[F] with Strong[F] { self =>
 
   /**
-   *  Lift a function into the context of an Arrow.
+   * Lift a function into the context of an Arrow.
    *
-   * In the reference articles "Arrows are Promiscuous...", and in the corresponding Haskell
-   * library `Control.Arrow`, this function is called `arr`.
+   * In the reference articles "Arrows are Promiscuous...", and in the corresponding Haskell library `Control.Arrow`,
+   * this function is called `arr`.
    */
   def lift[A, B](f: A => B): F[A, B]
 
@@ -47,8 +47,7 @@ trait Arrow[F[_, _]] extends Category[F] with Strong[F] { self =>
   }
 
   /**
-   * Create a new computation `F` that splits its input between `f` and `g`
-   * and combines the output of each.
+   * Create a new computation `F` that splits its input between `f` and `g` and combines the output of each.
    *
    * Example:
    * {{{
@@ -61,8 +60,8 @@ trait Arrow[F[_, _]] extends Category[F] with Strong[F] { self =>
    * res0: (Long, Double) = (3,4.0)
    * }}}
    *
-   * Note that the arrow laws do not guarantee the non-interference between the _effects_ of
-   * `f` and `g` in the context of F. This means that `f *** g` may not be equivalent to `g *** f`.
+   * Note that the arrow laws do not guarantee the non-interference between the _effects_ of `f` and `g` in the context
+   * of F. This means that `f *** g` may not be equivalent to `g *** f`.
    */
 
   def split[A, B, C, D](f: F[A, B], g: F[C, D]): F[(A, C), (B, D)] =
@@ -81,8 +80,8 @@ trait Arrow[F[_, _]] extends Category[F] with Strong[F] { self =>
    * res0: (Int, Double) = (1,1.0)
    * }}}
    *
-   * Note that the arrow laws do not guarantee the non-interference between the _effects_ of
-   *  `f` and `g` in the context of F. This means that `f &&& g` may not be equivalent to `g &&& f`.
+   * Note that the arrow laws do not guarantee the non-interference between the _effects_ of `f` and `g` in the context
+   * of F. This means that `f &&& g` may not be equivalent to `g &&& f`.
    */
 
   def merge[A, B, C](f: F[A, B], g: F[A, C]): F[A, (B, C)] =

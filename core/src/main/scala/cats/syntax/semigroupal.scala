@@ -40,7 +40,8 @@ trait SemigroupalSyntax {
 final class SemigroupalOps2[F[_], A](private val fa: F[A]) extends AnyVal {
 
   /**
-   * @see [[Semigroupal.product]]
+   * @see
+   *   [[Semigroupal.product]]
    *
    * Example:
    * {{{

@@ -26,23 +26,18 @@ import ring.BoolRing
 import scala.{specialized => sp}
 
 /**
- * Boolean algebras are Heyting algebras with the additional
- * constraint that the law of the excluded middle is true
+ * Boolean algebras are Heyting algebras with the additional constraint that the law of the excluded middle is true
  * (equivalently, double-negation is true).
  *
- * This means that in addition to the laws Heyting algebras obey,
- * boolean algebras also obey the following:
+ * This means that in addition to the laws Heyting algebras obey, boolean algebras also obey the following:
  *
- *  - (a ∨ ¬a) = 1
- *  - ¬¬a = a
+ *   - (a ∨ ¬a) = 1
+ *   - ¬¬a = a
  *
- * Boolean algebras generalize classical logic: one is equivalent to
- * "true" and zero is equivalent to "false". Boolean algebras provide
- * additional logical operators such as `xor`, `nand`, `nor`, and
- * `nxor` which are commonly used.
+ * Boolean algebras generalize classical logic: one is equivalent to "true" and zero is equivalent to "false". Boolean
+ * algebras provide additional logical operators such as `xor`, `nand`, `nor`, and `nxor` which are commonly used.
  *
- * Every boolean algebras has a dual algebra, which involves reversing
- * true/false as well as and/or.
+ * Every boolean algebras has a dual algebra, which involves reversing true/false as well as and/or.
  */
 trait Bool[@sp(Int, Long) A] extends Any with Heyting[A] with GenBool[A] { self =>
   def imp(a: A, b: A): A = or(complement(a), b)
@@ -56,13 +51,12 @@ trait Bool[@sp(Int, Long) A] extends Any with Heyting[A] with GenBool[A] { self 
   override def dual: Bool[A] = new DualBool(this)
 
   /**
-   * Every Boolean algebra is a BoolRing, with multiplication defined as
-   * `and` and addition defined as `xor`. Bool does not extend BoolRing
-   * because, e.g. we might want a Bool[Int] and CommutativeRing[Int] to
-   * refer to different structures, by default.
+   * Every Boolean algebra is a BoolRing, with multiplication defined as `and` and addition defined as `xor`. Bool does
+   * not extend BoolRing because, e.g. we might want a Bool[Int] and CommutativeRing[Int] to refer to different
+   * structures, by default.
    *
-   * Note that the ring returned by this method is not an extension of
-   * the `Rig` returned from `BoundedDistributiveLattice.asCommutativeRig`.
+   * Note that the ring returned by this method is not an extension of the `Rig` returned from
+   * `BoundedDistributiveLattice.asCommutativeRig`.
    */
   override def asBoolRing: BoolRing[A] = new BoolRingFromBool(self)
 }
@@ -89,11 +83,11 @@ class BoolRingFromBool[A](orig: Bool[A]) extends BoolRngFromGenBool(orig) with B
 
 /**
  * Every Boolean ring gives rise to a Boolean algebra:
- *  - 0 and 1 are preserved;
- *  - ring multiplication (`times`) corresponds to `and`;
- *  - ring addition (`plus`) corresponds to `xor`;
- *  - `a or b` is then defined as `a xor b xor (a and b)`;
- *  - complement (`¬a`) is defined as `a xor 1`.
+ *   - 0 and 1 are preserved;
+ *   - ring multiplication (`times`) corresponds to `and`;
+ *   - ring addition (`plus`) corresponds to `xor`;
+ *   - `a or b` is then defined as `a xor b xor (a and b)`;
+ *   - complement (`¬a`) is defined as `a xor 1`.
  */
 class BoolFromBoolRing[A](orig: BoolRing[A]) extends GenBoolFromBoolRng(orig) with Bool[A] {
   def one: A = orig.one

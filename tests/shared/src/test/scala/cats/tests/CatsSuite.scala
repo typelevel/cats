@@ -43,8 +43,7 @@ trait TestSettings {
 }
 
 /**
- * An opinionated stack of traits to improve consistency and reduce
- * boilerplate in Cats tests.
+ * An opinionated stack of traits to improve consistency and reduce boilerplate in Cats tests.
  */
 trait CatsSuite extends munit.DisciplineSuite with TestSettings {
 

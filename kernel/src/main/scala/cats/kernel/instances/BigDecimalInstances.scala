@@ -30,12 +30,10 @@ trait BigDecimalInstances {
 }
 
 /**
- * Note that combining, removing, and inverting `BigDecimal` values will use unlimited precision
- * operations.
+ * Note that combining, removing, and inverting `BigDecimal` values will use unlimited precision operations.
  *
- * This matches the behavior of Scala 2.12 and earlier versions, but not Scala 2.13, which means
- * that `+` and `|+|` (or `sum` and `combineAll`) may not agree if you are working with values with
- * limited-precision `MathContext`s.
+ * This matches the behavior of Scala 2.12 and earlier versions, but not Scala 2.13, which means that `+` and `|+|` (or
+ * `sum` and `combineAll`) may not agree if you are working with values with limited-precision `MathContext`s.
  */
 class BigDecimalGroup extends CommutativeGroup[BigDecimal] {
   val empty: BigDecimal = BigDecimal(0)

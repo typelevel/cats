@@ -27,8 +27,8 @@ import cats.kernel.{CommutativeMonoid, CommutativeSemigroup, LowerBounded, Upper
 import scala.annotation.nowarn
 
 /**
- * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B`
- * [[Const]] can be seen as a type level version of `Function.const[A, B]: A => B => A`
+ * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B` [[Const]] can be seen as a
+ * type level version of `Function.const[A, B]: A => B => A`
  */
 final case class Const[A, B](getConst: A) {
 
@@ -66,7 +66,9 @@ object Const extends ConstInstances {
     Const(A.empty)
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[data] class OfPartiallyApplied[B](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](a: A): Const[A, B] = Const(a)
