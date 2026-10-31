@@ -22,6 +22,12 @@ state to an existing computation in the context of `F`.
 This definition could be confusing, but it will become clear after
 learning the `State` monad and by the example below.
 
+@:callout(warning)
+
+`StateT` interacts poorly with more powerful effect types that provide concurrent computation, such as Cats Effect's `IO` or fs2's `Stream`. You should instead use the concurrent data types provided by those libraries.
+
+@:@
+
 ## StateT and State Relationship
 
 `StateT` is a monad transformer for

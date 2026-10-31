@@ -50,7 +50,7 @@ pull request. The preferred ways to do that are to either:
 
 Things that belong in Cats generally have the following characteristics:
 
- * Their behavior is governed by well-defined [laws](https://typelevel.org/cats/typeclasses.html#laws).
+ * Their behavior is governed by well-defined [laws](https://typelevel.org/cats/typeclasses/index.html#laws).
  * They provide general abstractions.
 
 Laws help keep types consistent, and remove ambiguity or sensitivity
