@@ -84,7 +84,16 @@ sealed abstract class UnorderedFoldableSuite[F[_]](name: String)(implicit
     }
   }
 
+  test(s"UnorderedFoldable[$name].minimumOption/maximumOption syntax") {
+    implicit val F: UnorderedFoldable[F] = instance
+    forAll { (fa: F[Int]) =>
+      assert(fa.minimumOption === F.minimumOption(fa))
+      assert(fa.maximumOption === F.maximumOption(fa))
+    }
+  }
+
   checkAll("F[Int]", UnorderedFoldableTests[F](using instance).unorderedFoldable[Int, Int])
+  checkAll("F[Int]", UnorderedFoldableTests[F](using instance).unorderedFoldableOrder[Int])
 }
 
 final class UnorderedFoldableSetSuite extends UnorderedFoldableSuite[Set]("set") {
