@@ -134,8 +134,6 @@
 
   <ul class="nav-list">
     <li class="level1 nav-leaf"><a href="../">Cats</a></li>
-    <li class="level1 nav-leaf"><a href="../typeclasses.html">Type Classes</a></li>
-    <li class="level1 nav-leaf"><a href="../datatypes.html">Data Types</a></li>
     <li class="level1 nav-leaf"><a href="../algebra.html">Algebra</a></li>
     <li class="level1 nav-leaf"><a href="../alleycats.html">Alleycats</a></li>
     <li class="level1 nav-leaf"><a href="../motivations.html">Motivations</a></li>
@@ -150,6 +148,7 @@
     <li class="level1 nav-leaf"><a href="../guidelines.html">Guidelines</a></li>
     <li class="level1 nav-leaf"><a href="../typelevelEcosystem.html">Typelevel Ecosystem</a></li>
     <li class="level1 nav-header">Type Classes</li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/">Overview</a></li>
     <li class="level2 nav-leaf"><a href="../typeclasses/alternative.html">Alternative</a></li>
     <li class="level2 nav-leaf"><a href="../typeclasses/applicative.html">Applicative</a></li>
     <li class="level2 nav-leaf"><a href="../typeclasses/applicativemonaderror.html">ApplicativeError and MonadError</a></li>
@@ -179,27 +178,30 @@
     <li class="level2 nav-leaf"><a href="../typeclasses/show.html">Show</a></li>
     <li class="level2 nav-leaf"><a href="../typeclasses/traverse.html">Traverse</a></li>
     <li class="level1 nav-header">Data Types</li>
+    <li class="level2 nav-leaf"><a href="index.html">Overview</a></li>
     <li class="level2 nav-leaf"><a href="chain.html">Chain</a></li>
     <li class="level2 nav-leaf"><a href="const.html">Const</a></li>
-    <li class="level2 nav-leaf"><a href="contt.html">ContT</a></li>
-    <li class="level2 nav-leaf"><a href="eithert.html">EitherT</a></li>
     <li class="level2 nav-leaf"><a href="eval.html">Eval</a></li>
     <li class="level2 nav-leaf"><a href="freeapplicative.html">Free Applicative</a></li>
     <li class="level2 active nav-leaf"><a href="#">Free Monad</a></li>
     <li class="level2 nav-leaf"><a href="functionk.html">FunctionK</a></li>
     <li class="level2 nav-leaf"><a href="id.html">Id</a></li>
     <li class="level2 nav-leaf"><a href="ior.html">Ior</a></li>
-    <li class="level2 nav-leaf"><a href="iort.html">IorT</a></li>
     <li class="level2 nav-leaf"><a href="kleisli.html">Kleisli</a></li>
     <li class="level2 nav-leaf"><a href="nel.html">NonEmptyList</a></li>
-    <li class="level2 nav-leaf"><a href="nested.html">Nested</a></li>
     <li class="level2 nav-leaf"><a href="oneand.html">OneAnd</a></li>
-    <li class="level2 nav-leaf"><a href="optiont.html">OptionT</a></li>
     <li class="level2 nav-leaf"><a href="state.html">State</a></li>
-    <li class="level2 nav-leaf"><a href="statet.html">StateT</a></li>
     <li class="level2 nav-leaf"><a href="validated.html">Validated</a></li>
     <li class="level2 nav-leaf"><a href="writer.html">Writer</a></li>
-    <li class="level2 nav-leaf"><a href="writert.html">WriterT</a></li>
+    <li class="level1 nav-header">Monad Transformers</li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/">Overview</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/contt.html">ContT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/eithert.html">EitherT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/iort.html">IorT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/nested.html">Nested</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/optiont.html">OptionT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/statet.html">StateT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/writert.html">WriterT</a></li>
   </ul>
 
 </nav>
@@ -718,7 +720,7 @@
 </span><span class="keyword">import</span><span> </span><span class="type-name">TeletypeOps</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">state</span><span> = </span><span class="identifier">program</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">interpreter</span><span>)
-</span><span class="comment">// state: TeletypeState[Unit] = cats.data.IndexedStateT@24b97c38
+</span><span class="comment">// state: TeletypeState[Unit] = cats.data.IndexedStateT@50ad43e2
 </span><span class="keyword">val</span><span> </span><span class="identifier">initialState</span><span> = </span><span class="type-name">Nil</span><span>
 </span><span class="comment">// initialState: Nil.type = List()
 </span><span class="keyword">val</span><span> (</span><span class="identifier">stored</span><span>, </span><span class="identifier">_</span><span>) = </span><span class="identifier">state</span><span>.</span><span class="identifier">run</span><span>(</span><span class="identifier">initialState</span><span>).</span><span class="identifier">value</span><span>
@@ -789,7 +791,7 @@
 //       value = Success(value = Some(value = Left(value = Action(value = 7))))
 //     )
 //   ),
-//   f0 = scala.Function1$$Lambda$12088/0x00007ffb8efd3b20@bd5bb80
+//   f0 = scala.Function1$$Lambda$15004/0x00007f84fb6c7400@2020d4c5
 // )
 </span><span class="keyword">val</span><span> </span><span class="identifier">evaluated</span><span> = </span><span class="identifier">hoisted</span><span>.</span><span class="identifier">foldMap</span><span>(</span><span class="identifier">tryInterpreter</span><span>)
 </span><span class="comment">// evaluated: OptTry[Int] = OptionT(value = Success(value = Some(value = 12)))

@@ -134,8 +134,6 @@
 
   <ul class="nav-list">
     <li class="level1 nav-leaf"><a href="../">Cats</a></li>
-    <li class="level1 nav-leaf"><a href="../typeclasses.html">Type Classes</a></li>
-    <li class="level1 nav-leaf"><a href="../datatypes.html">Data Types</a></li>
     <li class="level1 nav-leaf"><a href="../algebra.html">Algebra</a></li>
     <li class="level1 nav-leaf"><a href="../alleycats.html">Alleycats</a></li>
     <li class="level1 nav-leaf"><a href="../motivations.html">Motivations</a></li>
@@ -150,6 +148,7 @@
     <li class="level1 nav-leaf"><a href="../guidelines.html">Guidelines</a></li>
     <li class="level1 nav-leaf"><a href="../typelevelEcosystem.html">Typelevel Ecosystem</a></li>
     <li class="level1 nav-header">Type Classes</li>
+    <li class="level2 nav-leaf"><a href="index.html">Overview</a></li>
     <li class="level2 nav-leaf"><a href="alternative.html">Alternative</a></li>
     <li class="level2 nav-leaf"><a href="applicative.html">Applicative</a></li>
     <li class="level2 nav-leaf"><a href="applicativemonaderror.html">ApplicativeError and MonadError</a></li>
@@ -179,27 +178,30 @@
     <li class="level2 nav-leaf"><a href="show.html">Show</a></li>
     <li class="level2 nav-leaf"><a href="traverse.html">Traverse</a></li>
     <li class="level1 nav-header">Data Types</li>
+    <li class="level2 nav-leaf"><a href="../datatypes/">Overview</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/chain.html">Chain</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/const.html">Const</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/contt.html">ContT</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/eithert.html">EitherT</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/eval.html">Eval</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/freeapplicative.html">Free Applicative</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/freemonad.html">Free Monad</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/functionk.html">FunctionK</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/id.html">Id</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/ior.html">Ior</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/iort.html">IorT</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/kleisli.html">Kleisli</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/nel.html">NonEmptyList</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/nested.html">Nested</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/oneand.html">OneAnd</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/optiont.html">OptionT</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/state.html">State</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/statet.html">StateT</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/validated.html">Validated</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/writer.html">Writer</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/writert.html">WriterT</a></li>
+    <li class="level1 nav-header">Monad Transformers</li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/">Overview</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/contt.html">ContT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/eithert.html">EitherT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/iort.html">IorT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/nested.html">Nested</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/optiont.html">OptionT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/statet.html">StateT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/writert.html">WriterT</a></li>
   </ul>
 
 </nav>
@@ -405,7 +407,7 @@
   }
 }</span></code></pre>
         <p>This sort of construction is called a monad transformer.</p>
-        <p>Cats has an <a href="../datatypes/optiont.html"><code>OptionT</code></a> monad transformer, which adds a lot of useful functions to the simple implementation above.</p>
+        <p>Cats has an <a href="../monadtransformers/optiont.html"><code>OptionT</code></a> monad transformer, which adds a lot of useful functions to the simple implementation above.</p>
         
         <h2 id="flatmap-a-weakened-monad" class="section"><a class="anchor-link left" href="#flatmap-a-weakened-monad"><i class="icofont-laika link">&#xef71;</i></a>FlatMap - a weakened Monad</h2>
         <p>A closely related type class is <code>FlatMap</code> which is identical to <code>Monad</code>, minus the <code>pure</code>

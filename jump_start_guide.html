@@ -134,8 +134,6 @@
 
   <ul class="nav-list">
     <li class="level1 nav-leaf"><a href="index.html">Cats</a></li>
-    <li class="level1 nav-leaf"><a href="typeclasses.html">Type Classes</a></li>
-    <li class="level1 nav-leaf"><a href="datatypes.html">Data Types</a></li>
     <li class="level1 nav-leaf"><a href="algebra.html">Algebra</a></li>
     <li class="level1 nav-leaf"><a href="alleycats.html">Alleycats</a></li>
     <li class="level1 nav-leaf"><a href="motivations.html">Motivations</a></li>
@@ -150,6 +148,7 @@
     <li class="level1 nav-leaf"><a href="guidelines.html">Guidelines</a></li>
     <li class="level1 nav-leaf"><a href="typelevelEcosystem.html">Typelevel Ecosystem</a></li>
     <li class="level1 nav-header">Type Classes</li>
+    <li class="level2 nav-leaf"><a href="typeclasses/">Overview</a></li>
     <li class="level2 nav-leaf"><a href="typeclasses/alternative.html">Alternative</a></li>
     <li class="level2 nav-leaf"><a href="typeclasses/applicative.html">Applicative</a></li>
     <li class="level2 nav-leaf"><a href="typeclasses/applicativemonaderror.html">ApplicativeError and MonadError</a></li>
@@ -179,27 +178,30 @@
     <li class="level2 nav-leaf"><a href="typeclasses/show.html">Show</a></li>
     <li class="level2 nav-leaf"><a href="typeclasses/traverse.html">Traverse</a></li>
     <li class="level1 nav-header">Data Types</li>
+    <li class="level2 nav-leaf"><a href="datatypes/">Overview</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/chain.html">Chain</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/const.html">Const</a></li>
-    <li class="level2 nav-leaf"><a href="datatypes/contt.html">ContT</a></li>
-    <li class="level2 nav-leaf"><a href="datatypes/eithert.html">EitherT</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/eval.html">Eval</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/freeapplicative.html">Free Applicative</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/freemonad.html">Free Monad</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/functionk.html">FunctionK</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/id.html">Id</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/ior.html">Ior</a></li>
-    <li class="level2 nav-leaf"><a href="datatypes/iort.html">IorT</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/kleisli.html">Kleisli</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/nel.html">NonEmptyList</a></li>
-    <li class="level2 nav-leaf"><a href="datatypes/nested.html">Nested</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/oneand.html">OneAnd</a></li>
-    <li class="level2 nav-leaf"><a href="datatypes/optiont.html">OptionT</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/state.html">State</a></li>
-    <li class="level2 nav-leaf"><a href="datatypes/statet.html">StateT</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/validated.html">Validated</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/writer.html">Writer</a></li>
-    <li class="level2 nav-leaf"><a href="datatypes/writert.html">WriterT</a></li>
+    <li class="level1 nav-header">Monad Transformers</li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/">Overview</a></li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/contt.html">ContT</a></li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/eithert.html">EitherT</a></li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/iort.html">IorT</a></li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/nested.html">Nested</a></li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/optiont.html">OptionT</a></li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/statet.html">StateT</a></li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/writert.html">WriterT</a></li>
   </ul>
 
 </nav>
@@ -218,9 +220,6 @@
     <li class="level2 nav-leaf"><a href="#traverse"><code>traverse</code></a></li>
     <li class="level2 nav-leaf"><a href="#sequence"><code>sequence</code></a></li>
     <li class="level2 nav-leaf"><a href="#flattraverse"><code>flatTraverse</code></a></li>
-    <li class="level1 nav-node"><a href="#monad-transformers">Monad Transformers</a></li>
-    <li class="level2 nav-leaf"><a href="#optiont">OptionT</a></li>
-    <li class="level2 nav-leaf"><a href="#eithert">EitherT</a></li>
     <li class="level1 nav-leaf"><a href="#common-issues">Common issues</a></li>
   </ul>
 
@@ -369,264 +368,6 @@
         <p>However, there is a neat shortcut for this called <code>flatTraverse</code>:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">computeOverValue3</span><span>: </span><span class="type-name">Future</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>]] = </span><span class="identifier">valueOpt</span><span>.</span><span class="identifier">flatTraverse</span><span>(</span><span class="identifier">compute</span><span>)</span></code></pre>
         <p>and that solves our problem for good.</p>
-        
-        <h1 id="monad-transformers" class="section"><a class="anchor-link left" href="#monad-transformers"><i class="icofont-laika link">&#xef71;</i></a>Monad Transformers</h1>
-        
-        <h2 id="optiont" class="section"><a class="anchor-link left" href="#optiont"><i class="icofont-laika link">&#xef71;</i></a>OptionT</h2>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">OptionT</span></code></pre>
-        <p>An instance of <a href="datatypes/optiont.html"><code>OptionT[F, A]</code></a> can be thought of as a wrapper over <code>F[Option[A]]</code>
-        which adds a couple of useful methods specific to nested types that aren&#39;t available in <code>F</code> or <code>Option</code> itself.
-        Most typically, your <code>F</code> will be <code>Future</code> (or sometimes slick&#39;s <code>DBIO</code>, but this requires having an implementation of Cats type classes like <code>Functor</code> or <code>Monad</code> for <code>DBIO</code>).
-        Wrappers such as <code>OptionT</code> are generally known as <em>monad transformers</em>.</p>
-        <p>A quite common pattern is mapping the inner value stored inside an instance of <code>F[Option[A]]</code> to an instance of <code>F[Option[B]]</code> with a function of type <code>A =&gt; B</code>.
-        This can be done with rather verbose syntax like:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">lazy</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">resultFuture</span><span>: </span><span class="type-name">Future</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">Int</span><span>]] = ???
-
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">mappedResultFuture</span><span>: </span><span class="type-name">Future</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">String</span><span>]] = </span><span class="identifier">resultFuture</span><span>.</span><span class="identifier">map</span><span> { </span><span class="identifier">maybeValue</span><span> =&gt;
-  </span><span class="identifier">maybeValue</span><span>.</span><span class="identifier">map</span><span> { </span><span class="identifier">value</span><span> =&gt;
-    </span><span class="comment">// Do something with the value and return String
-</span><span>    ???
-  }
-}</span></code></pre>
-        <p>With the use of <code>OptionT</code>, this can be simplified as follows:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">mappedResultFuture2</span><span>: </span><span class="type-name">OptionT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">String</span><span>] = </span><span class="type-name">OptionT</span><span>(</span><span class="identifier">resultFuture</span><span>).</span><span class="identifier">map</span><span> { </span><span class="identifier">value</span><span> =&gt;
-  </span><span class="comment">// Do something with the value and return String
-</span><span>  ???
-}</span></code></pre>
-        <p>The above <code>map</code> will return a value of type <code>OptionT[Future, String]</code>.</p>
-        <p>To get the underlying <code>Future[Option[String]]</code> value, simply call <code>.value</code> on the <code>OptionT</code> instance.
-        It&#39;s also a viable solution to fully switch to <code>OptionT[Future, A]</code> in method parameter/return types and completely (or almost completely) ditch <code>Future[Option[A]]</code> in type declarations.</p>
-        <p>There are several ways to construct an <code>OptionT</code> instance.
-        The method headers in the table below are slightly simplified: the type parameters and type classes required by each method are skipped.</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Method</th>
-              <th>Takes</th>
-              <th>Returns</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>OptionT.apply</code> or <code>OptionT(...)</code></td>
-              <td><code>F[Option[A]]</code></td>
-              <td><code>OptionT[F, A]</code></td>
-            </tr>
-            <tr>
-              <td><code>OptionT.fromOption</code></td>
-              <td><code>Option[A]</code></td>
-              <td><code>OptionT[F, A]</code></td>
-            </tr>
-            <tr>
-              <td><code>OptionT.liftF</code></td>
-              <td><code>F[A]</code></td>
-              <td><code>OptionT[F, A]</code></td>
-            </tr>
-            <tr>
-              <td><code>OptionT.pure</code></td>
-              <td><code>A</code></td>
-              <td><code>OptionT[F, A]</code></td>
-            </tr>
-          </tbody>
-        </table>
-        <p>In production code you&#39;ll most commonly use the <code>OptionT(...)</code> syntax in order to wrap an instance of <code>Future[Option[A]]</code> into <code>OptionT[F, A]</code>.
-        The other methods, in turn, prove useful to set up <code>OptionT</code>-typed dummy values in unit tests.</p>
-        <p>We have already come across one of <code>OptionT</code>&#39;s methods, namely <code>map</code>.
-        There are several other methods available and they mostly differ by the signature of the function they accept as the parameter.
-        As was the case with the previous table, the expected type classes are skipped.</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Method</th>
-              <th>Takes</th>
-              <th>Returns</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>map[B]</code></td>
-              <td><code>A =&gt; B</code></td>
-              <td><code>OptionT[F, B]</code></td>
-            </tr>
-            <tr>
-              <td><code>subflatMap[B]</code></td>
-              <td><code>A =&gt; Option[B]</code></td>
-              <td><code>OptionT[F, B]</code></td>
-            </tr>
-            <tr>
-              <td><code>semiflatMap[B]</code></td>
-              <td><code>A =&gt; F[B]</code></td>
-              <td><code>OptionT[F, B]</code></td>
-            </tr>
-            <tr>
-              <td><code>flatMapF[B]</code></td>
-              <td><code>A =&gt; F[Option[B]]</code></td>
-              <td><code>OptionT[F, B]</code></td>
-            </tr>
-            <tr>
-              <td><code>flatMap[B]</code></td>
-              <td><code>A =&gt; OptionT[F, B]</code></td>
-              <td><code>OptionT[F, B]</code></td>
-            </tr>
-          </tbody>
-        </table>
-        <p>In practice, you&#39;re most likely to use <code>map</code> and <code>semiflatMap</code>.</p>
-        <p>As is always the case with <code>flatMap</code> and <code>map</code>, you can use it not only explicitly, but also under the hood in <code>for</code> comprehensions, as in the example below:</p>
-        <pre><code class="nohighlight"><span class="keyword">class</span><span> </span><span class="type-name">Money</span><span> { </span><span class="comment">/* ... */</span><span> }
-
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">findUserById</span><span>(</span><span class="identifier">userId</span><span>: </span><span class="type-name">Long</span><span>): </span><span class="type-name">OptionT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">User</span><span>] = { </span><span class="comment">/* ... */</span><span> ??? }
-
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">findAccountById</span><span>(</span><span class="identifier">accountId</span><span>: </span><span class="type-name">Long</span><span>): </span><span class="type-name">OptionT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">Account</span><span>] = { </span><span class="comment">/* ... */</span><span> ??? }
-
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">getReservedFundsForAccount</span><span>(</span><span class="identifier">account</span><span>: </span><span class="type-name">Account</span><span>): </span><span class="type-name">OptionT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">Money</span><span>] = { </span><span class="comment">/* ... */</span><span> ??? }
-
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">getReservedFundsForUser</span><span>(</span><span class="identifier">userId</span><span>: </span><span class="type-name">Long</span><span>): </span><span class="type-name">OptionT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">Money</span><span>] = </span><span class="keyword">for</span><span> {
-  </span><span class="identifier">user</span><span> &lt;- </span><span class="identifier">findUserById</span><span>(</span><span class="identifier">userId</span><span>)
-  </span><span class="identifier">account</span><span> &lt;- </span><span class="identifier">findAccountById</span><span>(</span><span class="identifier">user</span><span>.</span><span class="identifier">accountId</span><span>)
-  </span><span class="identifier">funds</span><span> &lt;- </span><span class="identifier">getReservedFundsForAccount</span><span>(</span><span class="identifier">account</span><span>)
-} </span><span class="keyword">yield</span><span> </span><span class="identifier">funds</span></code></pre>
-        <p>The <code>OptionT[Future, Money]</code> instance returned by <code>getReservedFundsForUser</code> will enclose a <code>None</code> value if any of the three composed methods returns an <code>OptionT</code> corresponding to <code>None</code>.
-        Otherwise, if the result of all three calls contains <code>Some</code>, the final outcome will also contain <code>Some</code>.</p>
-        
-        <h2 id="eithert" class="section"><a class="anchor-link left" href="#eithert"><i class="icofont-laika link">&#xef71;</i></a>EitherT</h2>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">EitherT</span></code></pre>
-        <p><a href="datatypes/eithert.html"><code>EitherT[F, A, B]</code></a> is the monad transformer for <code>Either</code> — you can think of it as a wrapper over a <code>F[Either[A, B]]</code> value.</p>
-        <p>Just as in the above section, I simplified the method headers, skipping type parameters or their context bounds and lower bounds.</p>
-        <p>Let&#39;s have a quick look at how to create an <code>EitherT</code> instance:</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Method</th>
-              <th>Takes</th>
-              <th>Returns</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>EitherT.apply</code> or <code>EitherT(...)</code></td>
-              <td><code>F[Either[A, B]]</code></td>
-              <td><code>EitherT[F, A, B]</code></td>
-            </tr>
-            <tr>
-              <td><code>EitherT.fromEither</code></td>
-              <td><code>Either[A, B]</code></td>
-              <td><code>EitherT[F, A, B]</code> (wraps the provided <code>Either</code> value into <code>F</code>)</td>
-            </tr>
-            <tr>
-              <td><code>EitherT.right</code> or <code>EitherT.liftF</code></td>
-              <td><code>F[B]</code></td>
-              <td><code>EitherT[F, A, B]</code> (wraps value inside <code>F[B]</code> into <code>Right</code>)</td>
-            </tr>
-            <tr>
-              <td><code>EitherT.left</code></td>
-              <td><code>F[A]</code></td>
-              <td><code>EitherT[F, A, B]</code> (wraps value inside <code>F[B]</code> into <code>Left</code>)</td>
-            </tr>
-            <tr>
-              <td><code>EitherT.pure</code></td>
-              <td><code>A</code></td>
-              <td><code>EitherT[F, A, B]</code> (wraps value into <code>Right</code> and then into <code>F</code>)</td>
-            </tr>
-          </tbody>
-        </table>
-        <p>Another useful way to construct an <code>EitherT</code> instance is to use <code>OptionT</code>&#39;s methods <code>toLeft</code> and <code>toRight</code>:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">abstract</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">BaseException</span><span>(</span><span class="identifier">message</span><span>: </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">Exception</span><span>(</span><span class="identifier">message</span><span>)
-
-</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">UserNotFoundException</span><span>(</span><span class="identifier">message</span><span>: </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">BaseException</span><span>(</span><span class="identifier">message</span><span>)
-
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">getUserById</span><span>(</span><span class="identifier">userId</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">Future</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">User</span><span>]] = { </span><span class="comment">/* ... */</span><span> ??? }
-
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">ensureUserExists</span><span>(</span><span class="identifier">userId</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">BaseException</span><span>, </span><span class="type-name">User</span><span>] = {
-  </span><span class="type-name">OptionT</span><span>(</span><span class="identifier">getUserById</span><span>(</span><span class="identifier">userId</span><span>))
-    .</span><span class="identifier">toRight</span><span>(</span><span class="identifier">left</span><span> = </span><span class="type-name">UserNotFoundException</span><span>(</span><span class="string-literal">s&quot;user not found, userId=</span><span class="substitution">$userId</span><span class="string-literal">&quot;</span><span>))
-}</span></code></pre>
-        <p><code>toRight</code> is pretty analogous to the method <code>Either.fromOption</code> mentioned before: just as <code>fromOption</code> built an <code>Either</code> from an <code>Option</code>, <code>toRight</code> creates an <code>EitherT</code> from an <code>OptionT</code>.
-        If the original <code>OptionT</code> stores <code>Some</code> value, it will be wrapped into <code>Right</code>; otherwise the value provided as the <code>left</code> parameter will be wrapped into a <code>Left</code>.
-        To provide the <code>left</code> value within the monad, there is corresponding <code>toRightF</code> method.</p>
-        <p><code>toLeft</code> is <code>toRight</code>&#39;s counterpart which wraps the <code>Some</code> value into <code>Left</code> and transforms <code>None</code> into <code>Right</code> enclosing the provided <code>right</code> value.
-        This is less commonly used in practice, but can serve e.g. for enforcing uniqueness checks in code.
-        We return <code>Left</code> if the value has been found, and <code>Right</code> if it doesn&#39;t yet exist in the system.</p>
-        <p>The methods available in <code>EitherT</code> are pretty similar to those we&#39;ve seen in <code>OptionT</code>, but there are some notable differences.</p>
-        <p>You might get into some confusion at first when it comes to e.g. <code>map</code>.
-        In the case of <code>OptionT</code>, it was pretty obvious what should be done: <code>map</code> should go over the <code>Option</code> enclosed within <code>Future</code>, and then map the enclosed <code>Option</code> itself.
-        This is slightly less obvious in case of <code>EitherT</code>: should it map over both <code>Left</code> and <code>Right</code> values, or only the <code>Right</code> value?</p>
-        <p>The answer is that <code>EitherT</code> is <em>right-biased</em>, therefore plain <code>map</code> actually deals with the <code>Right</code> value.
-        This is unlike <code>Either</code> in the Scala standard library up to 2.11, which is in turn <em>unbiased</em>: there&#39;s no <code>map</code> available in <code>Either</code>, only for its left and right projections.</p>
-        <p>Having said that, let&#39;s take a quick look at the right-biased methods that <code>EitherT</code> offers:</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Method</th>
-              <th>Takes</th>
-              <th>Returns</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>map[D]</code></td>
-              <td><code>B =&gt; D</code></td>
-              <td><code>EitherT[F, A, D]</code></td>
-            </tr>
-            <tr>
-              <td><code>subflatMap[D]</code></td>
-              <td><code>B =&gt; Either[A, D]</code></td>
-              <td><code>EitherT[F, A, D]</code></td>
-            </tr>
-            <tr>
-              <td><code>semiflatMap[D]</code></td>
-              <td><code>B =&gt; F[D]</code></td>
-              <td><code>EitherT[F, A, D]</code></td>
-            </tr>
-            <tr>
-              <td><code>flatMapF[D]</code></td>
-              <td><code>B =&gt; F[Either[A, D]]</code></td>
-              <td><code>EitherT[F, A, D]</code></td>
-            </tr>
-            <tr>
-              <td><code>flatMap[D]</code></td>
-              <td><code>B =&gt; EitherT[F, A, D]</code></td>
-              <td><code>EitherT[F, A, D]</code></td>
-            </tr>
-          </tbody>
-        </table>
-        <p>As a side note, there are also certain methods in <code>EitherT</code> (that you&#39;re likely to need at some point) which map over the <code>Left</code> value, like <code>leftMap</code>, or over both <code>Left</code> and <code>Right</code> values, like <code>fold</code> or <code>bimap</code>.</p>
-        <p><code>EitherT</code> is very useful for fail-fast chained verifications:</p>
-        <pre><code class="nohighlight"><span>
-</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Item</span><span>(</span><span class="identifier">state</span><span>: </span><span class="type-name">String</span><span>)
-</span><span class="keyword">class</span><span> </span><span class="type-name">ItemOrder</span><span>  { </span><span class="comment">/* ... */</span><span> }
-
-</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">ItemNotFoundException</span><span>(</span><span class="identifier">message</span><span>: </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">BaseException</span><span>(</span><span class="identifier">message</span><span>)
-</span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">InvalidItemStateException</span><span>(</span><span class="identifier">message</span><span>: </span><span class="type-name">String</span><span>) </span><span class="keyword">extends</span><span> </span><span class="type-name">BaseException</span><span>(</span><span class="identifier">message</span><span>)
-
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">getItemById</span><span>(</span><span class="identifier">itemId</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">Future</span><span>[</span><span class="type-name">Option</span><span>[</span><span class="type-name">Item</span><span>]] = { </span><span class="comment">/* .. */</span><span> ??? }
-
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">ensureItemExists</span><span>(</span><span class="identifier">itemId</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">BaseException</span><span>, </span><span class="type-name">Item</span><span>] = {
-  </span><span class="type-name">OptionT</span><span>(</span><span class="identifier">getItemById</span><span>(</span><span class="identifier">itemId</span><span>))
-    .</span><span class="identifier">toRight</span><span>(</span><span class="type-name">ItemNotFoundException</span><span>(</span><span class="string-literal">s&quot;item not found, itemId = </span><span class="substitution">$itemId</span><span class="string-literal">&quot;</span><span>))
-}
-
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">ensureItemStateIs</span><span>(</span><span class="identifier">actual</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">expected</span><span>: </span><span class="type-name">String</span><span>): </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">BaseException</span><span>, </span><span class="type-name">Unit</span><span>] = {
-  </span><span class="comment">// Returns a Unit value wrapped into Right and then into Future if condition is true,
-</span><span>  </span><span class="comment">// otherwise the provided exception wrapped into Left and then into Future.
-</span><span>  </span><span class="type-name">EitherT</span><span>.</span><span class="identifier">cond</span><span>(</span><span class="identifier">actual</span><span> == </span><span class="identifier">expected</span><span>, (), </span><span class="type-name">InvalidItemStateException</span><span>(</span><span class="string-literal">s&quot;actual=</span><span class="substitution">$actual</span><span class="string-literal">, expected=</span><span class="substitution">$expected</span><span class="string-literal">&quot;</span><span>))
-}
-
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">placeOrderForItem</span><span>(</span><span class="identifier">userId</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">itemId</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">count</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">Future</span><span>[</span><span class="type-name">ItemOrder</span><span>] = { </span><span class="comment">/* ... */</span><span> ??? }
-
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">buyItem</span><span>(</span><span class="identifier">userId</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">itemId</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">count</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">EitherT</span><span>[</span><span class="type-name">Future</span><span>, </span><span class="type-name">BaseException</span><span>, </span><span class="type-name">ItemOrder</span><span>] = {
-  </span><span class="keyword">for</span><span> {
-    </span><span class="identifier">user</span><span> &lt;- </span><span class="identifier">ensureUserExists</span><span>(</span><span class="identifier">userId</span><span>)
-    </span><span class="identifier">item</span><span> &lt;- </span><span class="identifier">ensureItemExists</span><span>(</span><span class="identifier">itemId</span><span>)
-    </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">ensureItemStateIs</span><span>(</span><span class="identifier">item</span><span>.</span><span class="identifier">state</span><span>, </span><span class="string-literal">&quot;AVAILABLE_IN_STOCK&quot;</span><span>)
-    </span><span class="comment">// EitherT.liftF is necessary to make EitherT[Future, BaseException, ItemOrder] out of Future[ItemOrder]
-</span><span>    </span><span class="identifier">placedOrder</span><span> &lt;- </span><span class="type-name">EitherT</span><span>.</span><span class="identifier">liftF</span><span>(</span><span class="identifier">placeOrderForItem</span><span>(</span><span class="identifier">userId</span><span>, </span><span class="identifier">itemId</span><span>, </span><span class="identifier">count</span><span>))
-  } </span><span class="keyword">yield</span><span> </span><span class="identifier">placedOrder</span><span>
-}</span></code></pre>
-        <p>In the above example, we&#39;re running various checks against the item one by one.
-        If any of the checks fails, the resulting <code>EitherT</code> will contain a <code>Left</code> value.
-        Otherwise, if all of the checks yield a <code>Right</code> (of course we mean a <code>Right</code> wrapped into an <code>EitherT</code>), then the final outcome will also contain <code>Right</code>.
-        This is a fail-fast behavior: we&#39;re effectively stopping the <code>for</code> comprehension flow at the first <code>Left</code>-ish result.</p>
-        <p>If you&#39;re instead looking for validation that accumulates the errors (e.g. when dealing with user-provided form data), <code>cats.data.Validated</code> may be a good choice.</p>
         
         <h1 id="common-issues" class="section"><a class="anchor-link left" href="#common-issues"><i class="icofont-laika link">&#xef71;</i></a>Common issues</h1>
         <p>The Cats type class instances for standard library types are available in implicit scope and hence no longer have to be imported. If anything doesn&#39;t compile as expected, first make sure all the required Cats syntax implicits are in the scope — try importing <code>cats.syntax.all._</code> and see if the problem persists. The only exception is here is Cat&#39;s own <code>Order</code> and <code>PartialOrder</code> type classes which are available by importing <code>cats.implicits._</code>. 

@@ -134,8 +134,6 @@
 
   <ul class="nav-list">
     <li class="level1 active nav-leaf"><a href="#">Cats</a></li>
-    <li class="level1 nav-leaf"><a href="typeclasses.html">Type Classes</a></li>
-    <li class="level1 nav-leaf"><a href="datatypes.html">Data Types</a></li>
     <li class="level1 nav-leaf"><a href="algebra.html">Algebra</a></li>
     <li class="level1 nav-leaf"><a href="alleycats.html">Alleycats</a></li>
     <li class="level1 nav-leaf"><a href="motivations.html">Motivations</a></li>
@@ -150,6 +148,7 @@
     <li class="level1 nav-leaf"><a href="guidelines.html">Guidelines</a></li>
     <li class="level1 nav-leaf"><a href="typelevelEcosystem.html">Typelevel Ecosystem</a></li>
     <li class="level1 nav-header">Type Classes</li>
+    <li class="level2 nav-leaf"><a href="typeclasses/">Overview</a></li>
     <li class="level2 nav-leaf"><a href="typeclasses/alternative.html">Alternative</a></li>
     <li class="level2 nav-leaf"><a href="typeclasses/applicative.html">Applicative</a></li>
     <li class="level2 nav-leaf"><a href="typeclasses/applicativemonaderror.html">ApplicativeError and MonadError</a></li>
@@ -179,27 +178,30 @@
     <li class="level2 nav-leaf"><a href="typeclasses/show.html">Show</a></li>
     <li class="level2 nav-leaf"><a href="typeclasses/traverse.html">Traverse</a></li>
     <li class="level1 nav-header">Data Types</li>
+    <li class="level2 nav-leaf"><a href="datatypes/">Overview</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/chain.html">Chain</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/const.html">Const</a></li>
-    <li class="level2 nav-leaf"><a href="datatypes/contt.html">ContT</a></li>
-    <li class="level2 nav-leaf"><a href="datatypes/eithert.html">EitherT</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/eval.html">Eval</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/freeapplicative.html">Free Applicative</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/freemonad.html">Free Monad</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/functionk.html">FunctionK</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/id.html">Id</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/ior.html">Ior</a></li>
-    <li class="level2 nav-leaf"><a href="datatypes/iort.html">IorT</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/kleisli.html">Kleisli</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/nel.html">NonEmptyList</a></li>
-    <li class="level2 nav-leaf"><a href="datatypes/nested.html">Nested</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/oneand.html">OneAnd</a></li>
-    <li class="level2 nav-leaf"><a href="datatypes/optiont.html">OptionT</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/state.html">State</a></li>
-    <li class="level2 nav-leaf"><a href="datatypes/statet.html">StateT</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/validated.html">Validated</a></li>
     <li class="level2 nav-leaf"><a href="datatypes/writer.html">Writer</a></li>
-    <li class="level2 nav-leaf"><a href="datatypes/writert.html">WriterT</a></li>
+    <li class="level1 nav-header">Monad Transformers</li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/">Overview</a></li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/contt.html">ContT</a></li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/eithert.html">EitherT</a></li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/iort.html">IorT</a></li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/nested.html">Nested</a></li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/optiont.html">OptionT</a></li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/statet.html">StateT</a></li>
+    <li class="level2 nav-leaf"><a href="monadtransformers/writert.html">WriterT</a></li>
   </ul>
 
 </nav>
@@ -216,12 +218,12 @@
     <li class="level1 nav-node"><a href="#contributors">Contributors</a></li>
     <li class="level2 nav-leaf"><a href="#code-contributors">Code Contributors</a></li>
     <li class="level2 nav-leaf"><a href="#financial-contributors">Financial Contributors</a></li>
-    <li class="level2 nav-leaf"><a href="#getting-started">Getting Started</a></li>
+    <li class="level1 nav-node"><a href="#getting-started">Getting Started</a></li>
     <li class="level2 nav-leaf"><a href="#community">Community</a></li>
-    <li class="level2 nav-leaf"><a href="#binary-compatibility-and-versioning">Binary compatibility and versioning</a></li>
-    <li class="level2 nav-leaf"><a href="#adopters">Adopters</a></li>
-    <li class="level2 nav-leaf"><a href="#maintainers">Maintainers</a></li>
-    <li class="level2 nav-leaf"><a href="#copyright-and-license">Copyright and License</a></li>
+    <li class="level1 nav-leaf"><a href="#binary-compatibility-and-versioning">Binary Compatibility and Versioning</a></li>
+    <li class="level1 nav-leaf"><a href="#adopters">Adopters</a></li>
+    <li class="level1 nav-leaf"><a href="#maintainers">Maintainers</a></li>
+    <li class="level1 nav-leaf"><a href="#copyright-and-license">Copyright and License</a></li>
   </ul>
 
   <p class="footer"></p>
@@ -282,7 +284,7 @@
         </div></p>
         <script src="/cats/js/sponsors.js"></script>
         
-        <h3 id="getting-started" class="section"><a class="anchor-link left" href="#getting-started"><i class="icofont-laika link">&#xef71;</i></a>Getting Started</h3>
+        <h2 id="getting-started" class="section"><a class="anchor-link left" href="#getting-started"><i class="icofont-laika link">&#xef71;</i></a>Getting Started</h2>
         <p>Cats is available for <a href="http://www.scala-js.org/">Scala.js</a> and <a href="https://www.scala-native.org/">Scala Native</a>, as well as the standard JVM runtime.</p>
         <p>Cats relies on improved type inference via the fix for <a href="https://github.com/scala/bug/issues/2712">SI-2712</a>, which is not enabled by default. For <strong>Scala 2.12</strong> you should add the following to your <code>build.sbt</code>:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">scalacOptions</span><span> += </span><span class="string-literal">&quot;-Ypartial-unification&quot;</span></code></pre>
@@ -331,7 +333,7 @@
         <p>If you are being harassed, please contact one of <a href="#maintainers">us</a>
         immediately so that we can support you.</p>
         
-        <h3 id="binary-compatibility-and-versioning" class="section"><a class="anchor-link left" href="#binary-compatibility-and-versioning"><i class="icofont-laika link">&#xef71;</i></a>Binary compatibility and versioning</h3>
+        <h2 id="binary-compatibility-and-versioning" class="section"><a class="anchor-link left" href="#binary-compatibility-and-versioning"><i class="icofont-laika link">&#xef71;</i></a>Binary Compatibility and Versioning</h2>
         <p>After <code>1.0.0</code> release, we <a href="https://github.com/typelevel/cats/issues/1233">decided</a>
         to use <em>MAJOR.MINOR.PATCH</em> <a href="http://semver.org/">Semantic Versioning 2.0.0</a>
         going forward, which is different from the <em>EPOCH.MAJOR.MINOR</em> scheme common among
@@ -354,10 +356,10 @@
         cautious about. We will also consider using <code>organization</code> and package name for major
         versioning in the future. But that decision is yet to be made.</p>
         
-        <h3 id="adopters" class="section"><a class="anchor-link left" href="#adopters"><i class="icofont-laika link">&#xef71;</i></a>Adopters</h3>
+        <h2 id="adopters" class="section"><a class="anchor-link left" href="#adopters"><i class="icofont-laika link">&#xef71;</i></a>Adopters</h2>
         <p>A (non-exhaustive) list of companies that use Cats in production is featured on the <a href="ADOPTERS.html">Adopters page</a>. Don&#39;t see yours? <a href="https://github.com/typelevel/cats/edit/main/ADOPTERS.md">You can add it in a PR!</a> And if you can, consider <a href="https://opencollective.com/typelevel">supporting us</a>.</p>
         
-        <h3 id="maintainers" class="section"><a class="anchor-link left" href="#maintainers"><i class="icofont-laika link">&#xef71;</i></a>Maintainers</h3>
+        <h2 id="maintainers" class="section"><a class="anchor-link left" href="#maintainers"><i class="icofont-laika link">&#xef71;</i></a>Maintainers</h2>
         <p>The current maintainers (people who can merge pull requests) are:</p>
         <ul>
           <li><a href="https://github.com/rossabaker">rossabaker</a> Ross Baker</li>
@@ -388,7 +390,7 @@
         wait for more). For typos, documentation improvements or minor build fix we
         relax this to a single sign-off. More detail in the <a href="https://github.com/typelevel/cats/blob/main/PROCESS.md">process document</a>.</p>
         
-        <h3 id="copyright-and-license" class="section"><a class="anchor-link left" href="#copyright-and-license"><i class="icofont-laika link">&#xef71;</i></a>Copyright and License</h3>
+        <h2 id="copyright-and-license" class="section"><a class="anchor-link left" href="#copyright-and-license"><i class="icofont-laika link">&#xef71;</i></a>Copyright and License</h2>
         <p>All code is available to you under the MIT license, available at
         <a href="http://opensource.org/licenses/mit-license.php">http://opensource.org/licenses/mit-license.php</a> and also in the
         <a href="https://github.com/typelevel/cats/blob/main/COPYING">COPYING</a> file. The design is informed by many other

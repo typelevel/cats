@@ -134,8 +134,6 @@
 
   <ul class="nav-list">
     <li class="level1 nav-leaf"><a href="../">Cats</a></li>
-    <li class="level1 nav-leaf"><a href="../typeclasses.html">Type Classes</a></li>
-    <li class="level1 nav-leaf"><a href="../datatypes.html">Data Types</a></li>
     <li class="level1 nav-leaf"><a href="../algebra.html">Algebra</a></li>
     <li class="level1 nav-leaf"><a href="../alleycats.html">Alleycats</a></li>
     <li class="level1 nav-leaf"><a href="../motivations.html">Motivations</a></li>
@@ -150,6 +148,7 @@
     <li class="level1 nav-leaf"><a href="../guidelines.html">Guidelines</a></li>
     <li class="level1 nav-leaf"><a href="../typelevelEcosystem.html">Typelevel Ecosystem</a></li>
     <li class="level1 nav-header">Type Classes</li>
+    <li class="level2 nav-leaf"><a href="../typeclasses/">Overview</a></li>
     <li class="level2 nav-leaf"><a href="../typeclasses/alternative.html">Alternative</a></li>
     <li class="level2 nav-leaf"><a href="../typeclasses/applicative.html">Applicative</a></li>
     <li class="level2 nav-leaf"><a href="../typeclasses/applicativemonaderror.html">ApplicativeError and MonadError</a></li>
@@ -179,27 +178,30 @@
     <li class="level2 nav-leaf"><a href="../typeclasses/show.html">Show</a></li>
     <li class="level2 nav-leaf"><a href="../typeclasses/traverse.html">Traverse</a></li>
     <li class="level1 nav-header">Data Types</li>
+    <li class="level2 nav-leaf"><a href="index.html">Overview</a></li>
     <li class="level2 nav-leaf"><a href="chain.html">Chain</a></li>
     <li class="level2 nav-leaf"><a href="const.html">Const</a></li>
-    <li class="level2 nav-leaf"><a href="contt.html">ContT</a></li>
-    <li class="level2 nav-leaf"><a href="eithert.html">EitherT</a></li>
     <li class="level2 nav-leaf"><a href="eval.html">Eval</a></li>
     <li class="level2 nav-leaf"><a href="freeapplicative.html">Free Applicative</a></li>
     <li class="level2 nav-leaf"><a href="freemonad.html">Free Monad</a></li>
     <li class="level2 nav-leaf"><a href="functionk.html">FunctionK</a></li>
     <li class="level2 nav-leaf"><a href="id.html">Id</a></li>
     <li class="level2 nav-leaf"><a href="ior.html">Ior</a></li>
-    <li class="level2 nav-leaf"><a href="iort.html">IorT</a></li>
     <li class="level2 nav-leaf"><a href="kleisli.html">Kleisli</a></li>
     <li class="level2 nav-leaf"><a href="nel.html">NonEmptyList</a></li>
-    <li class="level2 nav-leaf"><a href="nested.html">Nested</a></li>
     <li class="level2 nav-leaf"><a href="oneand.html">OneAnd</a></li>
-    <li class="level2 nav-leaf"><a href="optiont.html">OptionT</a></li>
     <li class="level2 nav-leaf"><a href="state.html">State</a></li>
-    <li class="level2 nav-leaf"><a href="statet.html">StateT</a></li>
     <li class="level2 nav-leaf"><a href="validated.html">Validated</a></li>
     <li class="level2 active nav-leaf"><a href="#">Writer</a></li>
-    <li class="level2 nav-leaf"><a href="writert.html">WriterT</a></li>
+    <li class="level1 nav-header">Monad Transformers</li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/">Overview</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/contt.html">ContT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/eithert.html">EitherT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/iort.html">IorT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/nested.html">Nested</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/optiont.html">OptionT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/statet.html">StateT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/writert.html">WriterT</a></li>
   </ul>
 
 </nav>
@@ -362,9 +364,9 @@
 </span><span class="comment">// cats/data/package.scala
 </span><span class="keyword">type</span><span> </span><span class="type-name">Writer</span><span>[</span><span class="type-name">L</span><span>, </span><span class="type-name">V</span><span>] = </span><span class="type-name">WriterT</span><span>[</span><span class="type-name">Id</span><span>, </span><span class="type-name">L</span><span>, </span><span class="type-name">V</span><span>]</span></code></pre>
         <p>So, all the <a href="#operations">Operations</a> defined in the previous section
-        are actually coming from the <a href="writert.html">WriterT
+        are actually coming from the <a href="../monadtransformers/writert.html">WriterT
         datatype</a></p>
-        <p>Most of the <a href="writert.html"><code>WriterT</code></a> functions require a
+        <p>Most of the <a href="../monadtransformers/writert.html"><code>WriterT</code></a> functions require a
         <a href="../typeclasses/functor.html"><code>Functor[F]</code></a> or
         <a href="../typeclasses/monad.html"><code>Monad[F]</code></a>
         instance. However, Cats provides all the necessary instances for the

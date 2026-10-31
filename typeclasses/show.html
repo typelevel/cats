@@ -134,8 +134,6 @@
 
   <ul class="nav-list">
     <li class="level1 nav-leaf"><a href="../">Cats</a></li>
-    <li class="level1 nav-leaf"><a href="../typeclasses.html">Type Classes</a></li>
-    <li class="level1 nav-leaf"><a href="../datatypes.html">Data Types</a></li>
     <li class="level1 nav-leaf"><a href="../algebra.html">Algebra</a></li>
     <li class="level1 nav-leaf"><a href="../alleycats.html">Alleycats</a></li>
     <li class="level1 nav-leaf"><a href="../motivations.html">Motivations</a></li>
@@ -150,6 +148,7 @@
     <li class="level1 nav-leaf"><a href="../guidelines.html">Guidelines</a></li>
     <li class="level1 nav-leaf"><a href="../typelevelEcosystem.html">Typelevel Ecosystem</a></li>
     <li class="level1 nav-header">Type Classes</li>
+    <li class="level2 nav-leaf"><a href="index.html">Overview</a></li>
     <li class="level2 nav-leaf"><a href="alternative.html">Alternative</a></li>
     <li class="level2 nav-leaf"><a href="applicative.html">Applicative</a></li>
     <li class="level2 nav-leaf"><a href="applicativemonaderror.html">ApplicativeError and MonadError</a></li>
@@ -179,27 +178,30 @@
     <li class="level2 active nav-leaf"><a href="#">Show</a></li>
     <li class="level2 nav-leaf"><a href="traverse.html">Traverse</a></li>
     <li class="level1 nav-header">Data Types</li>
+    <li class="level2 nav-leaf"><a href="../datatypes/">Overview</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/chain.html">Chain</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/const.html">Const</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/contt.html">ContT</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/eithert.html">EitherT</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/eval.html">Eval</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/freeapplicative.html">Free Applicative</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/freemonad.html">Free Monad</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/functionk.html">FunctionK</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/id.html">Id</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/ior.html">Ior</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/iort.html">IorT</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/kleisli.html">Kleisli</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/nel.html">NonEmptyList</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/nested.html">Nested</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/oneand.html">OneAnd</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/optiont.html">OptionT</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/state.html">State</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/statet.html">StateT</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/validated.html">Validated</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/writer.html">Writer</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/writert.html">WriterT</a></li>
+    <li class="level1 nav-header">Monad Transformers</li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/">Overview</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/contt.html">ContT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/eithert.html">EitherT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/iort.html">IorT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/nested.html">Nested</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/optiont.html">OptionT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/statet.html">StateT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/writert.html">WriterT</a></li>
   </ul>
 
 </nav>
@@ -229,7 +231,7 @@
         Most often, this is unwanted behaviour, as the standard implementation of <code>toString</code> on non case classes is mostly gibberish.
         Consider the following example:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span>(</span><span class="keyword">new</span><span> {}).</span><span class="identifier">toString</span><span>
-</span><span class="comment">// res0: String = &quot;repl.MdocSession$MdocApp$$anon$1@72d52717&quot;</span></code></pre>
+</span><span class="comment">// res0: String = &quot;repl.MdocSession$MdocApp$$anon$1@5fa301bf&quot;</span></code></pre>
         <p>The fact that this code compiles is a design flaw of the Java API.
         We want to make things like this impossible, by offering the <code>toString</code> equivalent as a type class, instead of the root of the class hierarchy.
         In short, <code>Show</code> allows us to only have String-conversions defined for the data types we actually want.</p>
@@ -245,12 +247,12 @@
 </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Person</span><span>(</span><span class="identifier">name</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">age</span><span>: </span><span class="type-name">Int</span><span>)
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showPerson</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Person</span><span>] = </span><span class="type-name">Show</span><span>.</span><span class="identifier">show</span><span>(</span><span class="identifier">person</span><span> =&gt; </span><span class="identifier">person</span><span>.</span><span class="identifier">name</span><span>)
-</span><span class="comment">// showPerson: Show[Person] = cats.Show$$$Lambda$13217/0x00007ffb8f36f240@258b9bc0
+</span><span class="comment">// showPerson: Show[Person] = cats.Show$$$Lambda$15852/0x00007f84fba687c0@14a298a6
 </span><span>
 </span><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Department</span><span>(</span><span class="identifier">id</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">name</span><span>: </span><span class="type-name">String</span><span>)
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showDep</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Department</span><span>] = </span><span class="type-name">Show</span><span>.</span><span class="identifier">fromToString</span><span>
-</span><span class="comment">// showDep: Show[Department] = cats.Show$$$Lambda$12082/0x00007ffb8f0046a8@62aa04e</span></code></pre>
+</span><span class="comment">// showDep: Show[Department] = cats.Show$$$Lambda$15002/0x00007f84fb771eb8@2bf15808</span></code></pre>
         <p>This still may not seem useful to you, because case classes already automatically implement <code>toString</code>, while <code>show</code> would have to be implemented manually for each case class.
         Thankfully with the help of a small library called <a href="https://github.com/typelevel/kittens">kittens</a> a lot of type class instances including <code>Show</code> can be derived automatically!</p>
         <p>Cats also offers <code>Show</code> syntax to make working with it easier.

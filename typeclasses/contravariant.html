@@ -134,8 +134,6 @@
 
   <ul class="nav-list">
     <li class="level1 nav-leaf"><a href="../">Cats</a></li>
-    <li class="level1 nav-leaf"><a href="../typeclasses.html">Type Classes</a></li>
-    <li class="level1 nav-leaf"><a href="../datatypes.html">Data Types</a></li>
     <li class="level1 nav-leaf"><a href="../algebra.html">Algebra</a></li>
     <li class="level1 nav-leaf"><a href="../alleycats.html">Alleycats</a></li>
     <li class="level1 nav-leaf"><a href="../motivations.html">Motivations</a></li>
@@ -150,6 +148,7 @@
     <li class="level1 nav-leaf"><a href="../guidelines.html">Guidelines</a></li>
     <li class="level1 nav-leaf"><a href="../typelevelEcosystem.html">Typelevel Ecosystem</a></li>
     <li class="level1 nav-header">Type Classes</li>
+    <li class="level2 nav-leaf"><a href="index.html">Overview</a></li>
     <li class="level2 nav-leaf"><a href="alternative.html">Alternative</a></li>
     <li class="level2 nav-leaf"><a href="applicative.html">Applicative</a></li>
     <li class="level2 nav-leaf"><a href="applicativemonaderror.html">ApplicativeError and MonadError</a></li>
@@ -179,27 +178,30 @@
     <li class="level2 nav-leaf"><a href="show.html">Show</a></li>
     <li class="level2 nav-leaf"><a href="traverse.html">Traverse</a></li>
     <li class="level1 nav-header">Data Types</li>
+    <li class="level2 nav-leaf"><a href="../datatypes/">Overview</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/chain.html">Chain</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/const.html">Const</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/contt.html">ContT</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/eithert.html">EitherT</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/eval.html">Eval</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/freeapplicative.html">Free Applicative</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/freemonad.html">Free Monad</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/functionk.html">FunctionK</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/id.html">Id</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/ior.html">Ior</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/iort.html">IorT</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/kleisli.html">Kleisli</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/nel.html">NonEmptyList</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/nested.html">Nested</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/oneand.html">OneAnd</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/optiont.html">OptionT</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/state.html">State</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/statet.html">StateT</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/validated.html">Validated</a></li>
     <li class="level2 nav-leaf"><a href="../datatypes/writer.html">Writer</a></li>
-    <li class="level2 nav-leaf"><a href="../datatypes/writert.html">WriterT</a></li>
+    <li class="level1 nav-header">Monad Transformers</li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/">Overview</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/contt.html">ContT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/eithert.html">EitherT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/iort.html">IorT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/nested.html">Nested</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/optiont.html">OptionT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/statet.html">StateT</a></li>
+    <li class="level2 nav-leaf"><a href="../monadtransformers/writert.html">WriterT</a></li>
   </ul>
 
 </nav>
@@ -246,7 +248,7 @@
         <p>If we want to show a <code>Salary</code> instance, we can just convert it to a <code>Money</code> instance and show that instead.</p>
         <p>Let&#39;s use <code>Show</code>&#39;s <code>Contravariant</code>:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showSalary</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Salary</span><span>] = </span><span class="identifier">showMoney</span><span>.</span><span class="identifier">contramap</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">size</span><span>)
-</span><span class="comment">// showSalary: Show[Salary] = cats.Show$$anon$2$$Lambda$13218/0x00007ffb8f36f6b8@75650e91
+</span><span class="comment">// showSalary: Show[Salary] = cats.Show$$anon$2$$Lambda$15853/0x00007f84fba68c38@1fd0a17b
 </span><span>
 </span><span class="type-name">Salary</span><span>(</span><span class="type-name">Money</span><span>(</span><span class="number-literal">1000</span><span>)).</span><span class="identifier">show</span><span>
 </span><span class="comment">// res0: String = &quot;$1000&quot;</span></code></pre>
@@ -266,7 +268,7 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">math</span><span>.</span><span class="type-name">Ordered</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">moneyOrdering</span><span>: </span><span class="type-name">Ordering</span><span>[</span><span class="type-name">Money</span><span>] = </span><span class="type-name">Ordering</span><span>.</span><span class="identifier">by</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">amount</span><span>)
-</span><span class="comment">// moneyOrdering: Ordering[Money] = scala.math.Ordering$$anon$5@56590c87
+</span><span class="comment">// moneyOrdering: Ordering[Money] = scala.math.Ordering$$anon$5@6ad4ef0a
 </span><span>
 </span><span class="type-name">Money</span><span>(</span><span class="number-literal">100</span><span>) &lt; </span><span class="type-name">Money</span><span>(</span><span class="number-literal">200</span><span>)
 </span><span class="comment">// res3: Boolean = true</span></code></pre>
@@ -276,17 +278,17 @@
         <pre><code class="nohighlight"><span class="keyword">class</span><span> </span><span class="type-name">A</span><span>
 </span><span class="keyword">class</span><span> </span><span class="type-name">B</span><span> </span><span class="keyword">extends</span><span> </span><span class="type-name">A</span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">b</span><span>: </span><span class="type-name">B</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">B</span><span>
-</span><span class="comment">// b: B = repl.MdocSession$MdocApp$B@5722c38c
+</span><span class="comment">// b: B = repl.MdocSession$MdocApp$B@679a69c0
 </span><span class="keyword">val</span><span> </span><span class="identifier">a</span><span>: </span><span class="type-name">A</span><span> = </span><span class="identifier">b</span><span>
-</span><span class="comment">// a: A = repl.MdocSession$MdocApp$B@5722c38c
+</span><span class="comment">// a: A = repl.MdocSession$MdocApp$B@679a69c0
 </span><span class="keyword">val</span><span> </span><span class="identifier">showA</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">A</span><span>] = </span><span class="type-name">Show</span><span>.</span><span class="identifier">show</span><span>(</span><span class="identifier">a</span><span> =&gt; </span><span class="string-literal">&quot;a!&quot;</span><span>)
-</span><span class="comment">// showA: Show[A] = cats.Show$$$Lambda$13217/0x00007ffb8f36f240@51ff48ea
+</span><span class="comment">// showA: Show[A] = cats.Show$$$Lambda$15852/0x00007f84fba687c0@22f258cb
 </span><span class="keyword">val</span><span> </span><span class="identifier">showB1</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">B</span><span>] = </span><span class="identifier">showA</span><span>.</span><span class="identifier">contramap</span><span>(</span><span class="identifier">b</span><span> =&gt; </span><span class="identifier">b</span><span>: </span><span class="type-name">A</span><span>)
-</span><span class="comment">// showB1: Show[B] = cats.Show$$anon$2$$Lambda$13218/0x00007ffb8f36f6b8@3cad61f
+</span><span class="comment">// showB1: Show[B] = cats.Show$$anon$2$$Lambda$15853/0x00007f84fba68c38@3237d8de
 </span><span class="keyword">val</span><span> </span><span class="identifier">showB2</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">B</span><span>] = </span><span class="identifier">showA</span><span>.</span><span class="identifier">contramap</span><span>(</span><span class="identifier">identity</span><span>[</span><span class="type-name">A</span><span>])
-</span><span class="comment">// showB2: Show[B] = cats.Show$$anon$2$$Lambda$13218/0x00007ffb8f36f6b8@7a0be0cb
+</span><span class="comment">// showB2: Show[B] = cats.Show$$anon$2$$Lambda$15853/0x00007f84fba68c38@10bec3e4
 </span><span class="keyword">val</span><span> </span><span class="identifier">showB3</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">B</span><span>] = </span><span class="type-name">Contravariant</span><span>[</span><span class="type-name">Show</span><span>].</span><span class="identifier">narrow</span><span>[</span><span class="type-name">A</span><span>, </span><span class="type-name">B</span><span>](</span><span class="identifier">showA</span><span>)
-</span><span class="comment">// showB3: Show[B] = cats.Show$$$Lambda$13217/0x00007ffb8f36f240@51ff48ea</span></code></pre>
+</span><span class="comment">// showB3: Show[B] = cats.Show$$$Lambda$15852/0x00007f84fba687c0@22f258cb</span></code></pre>
         <p>Subtyping relationships are &quot;lifted backwards&quot; by contravariant functors, such that if <code>F</code> is a
         lawful contravariant functor and <code>B &lt;: A</code> then <code>F[A] &lt;: F[B]</code>, which is expressed by <code>Contravariant.narrow</code>.</p>
 
