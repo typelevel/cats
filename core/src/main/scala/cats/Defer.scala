@@ -57,7 +57,12 @@ trait Defer[F[_]] extends Serializable {
    *
    * example:
    *
-   * val parser: P[Int] = Defer[P].fix[Int] { rec => CharsIn("0123456789") | P("(") ~ rec ~ P(")") }
+   * {{{
+   * val parser: P[Int] =
+   *   Defer[P].fix[Int] { rec =>
+   *     CharsIn("0123456789") | P("(") ~ rec ~ P(")")
+   *   }
+   * }}}
    *
    * Note, fn may not yield a terminating value in which case both of the above F[A] run forever.
    */

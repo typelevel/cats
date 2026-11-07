@@ -25,8 +25,8 @@ import cats.data.Ior
 /**
  * The `cats` root package contains all the trait signatures of most Scala type classes.
  *
- * Cats type classes are implemented using the approach from the "[[https://i.cs.hku.hk/~bruno/papers/TypeClasses.pdf
- * Type classes as objects and implicits]]" article.
+ * Cats type classes are implemented using the approach from the "Type classes as objects and implicits" article
+ * ([[https://i.cs.hku.hk/~bruno/papers/TypeClasses.pdf]]).
  *
  * For each type class, `cats` provides four pieces:
  *   - Its '''signature''': a trait that is polymorphic on a type parameter. Type class traits inherit from other type

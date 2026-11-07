@@ -60,7 +60,7 @@ object DeMorgan extends DeMorganFunctions[DeMorgan] {
   @inline final def apply[@sp(Int, Long) A](implicit ev: DeMorgan[A]): DeMorgan[A] = ev
 
   /**
-   * Turn a [[Bool]] into a `DeMorgan` Used for binary compatibility.
+   * Turn a [[Bool]] into a `DeMorgan`. Used for binary compatibility.
    */
   final def fromBool[@sp(Int, Long) A](bool: Bool[A]): DeMorgan[A] =
     new DeMorgan[A] {

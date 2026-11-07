@@ -343,7 +343,7 @@ final class OptionOps[A](private val oa: Option[A]) extends AnyVal {
   def liftTo[F[_]]: LiftToPartiallyApplied[F, A] = new LiftToPartiallyApplied(oa)
 
   /**
-   * Raise to an F[Unit], as long as it has an ApplicativeError[F, A] instance If the option is empty, an empty unit
+   * Raise to an F[Unit], as long as it has an ApplicativeError[F, A] instance. If the option is empty, an empty unit
    * effect is given. If the option contains an error, it is raised.
    *
    * Example:

@@ -34,10 +34,12 @@ trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any with Band[A] with
    *
    * This method returns:
    *
-   *   - 0.0 if x = y
-   *   - -1.0 if x = combine(x, y)
-   *   - 1.0 if y = combine(x, y)
-   *   - NaN otherwise
+   * {{{
+   *  0.0 if x = y
+   * -1.0 if x = combine(x, y)
+   *  1.0 if y = combine(x, y)
+   *  NaN otherwise
+   * }}}
    */
   def asMeetPartialOrder(implicit ev: Eq[A]): PartialOrder[A] = (x, y) =>
     if (ev.eqv(x, y)) 0.0
@@ -52,10 +54,12 @@ trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any with Band[A] with
    *
    * This method returns:
    *
-   *   - 0.0 if x = y
-   *   - -1.0 if y = combine(x, y)
-   *   - 1.0 if x = combine(x, y)
-   *   - NaN otherwise
+   * {{{
+   *  0.0 if x = y
+   * -1.0 if y = combine(x, y)
+   *  1.0 if x = combine(x, y)
+   *  NaN otherwise
+   * }}}
    */
   def asJoinPartialOrder(implicit ev: Eq[A]): PartialOrder[A] = (x, y) =>
     if (ev.eqv(x, y)) 0.0

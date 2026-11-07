@@ -789,7 +789,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     }.toList
 
   /**
-   * Separate this Foldable into a Tuple by a separating function `A => Either[B, C]` Equivalent to `Functor#map` and
+   * Separate this Foldable into a Tuple by a separating function `A => Either[B, C]`. Equivalent to `Functor#map` and
    * then `Alternative#separate`.
    *
    * {{{
@@ -890,7 +890,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
     foldMap(fa)(f)
 
   /**
-   * Separate this Foldable into a Tuple by a separating function `A => H[B, C]` for some `Bifoldable[H]` Equivalent to
+   * Separate this Foldable into a Tuple by a separating function `A => H[B, C]` for some `Bifoldable[H]`. Equivalent to
    * `Functor#map` and then `Alternative#separate`.
    *
    * {{{
@@ -945,8 +945,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   }
 
   /**
-   * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]` Equivalent to
-   * `Traverse#traverse` over `Alternative#separate`
+   * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]`. Equivalent to
+   * `Traverse#traverse` over `Alternative#separate`.
    *
    * {{{
    * scala> import cats.syntax.all._, cats.Foldable, cats.Eval
@@ -993,7 +993,9 @@ object Foldable {
   /**
    * Isomorphic to
    *
+   * {{{
    * type Source[+A] = () => Option[(A, Source[A])]
+   * }}}
    *
    * (except that recursive type aliases are not allowed).
    *

@@ -90,7 +90,7 @@ object Eq
     (x, y) => eq1.eqv(x, y) && eq2.eqv(x, y)
 
   /**
-   * Return an Eq that gives the result of the or of this and that Note this is idempotent
+   * Return an Eq that gives the result of the or of this and that. Note this is idempotent.
    */
   def or[@sp A](eq1: Eq[A], eq2: Eq[A]): Eq[A] =
     (x, y) => eq1.eqv(x, y) || eq2.eqv(x, y)

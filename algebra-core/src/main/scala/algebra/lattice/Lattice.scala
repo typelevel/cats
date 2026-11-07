@@ -33,7 +33,9 @@ import scala.{specialized => sp}
  *
  * The join and meet operations are also linked by absorption laws:
  *
+ * {{{
  * meet(a, join(a, b)) = join(a, meet(a, b)) = a
+ * }}}
  */
 trait Lattice[@sp(Int, Long, Float, Double) A] extends Any with JoinSemilattice[A] with MeetSemilattice[A] { self =>
 

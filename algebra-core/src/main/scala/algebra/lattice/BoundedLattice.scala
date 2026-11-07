@@ -30,11 +30,15 @@ import scala.{specialized => sp}
  *
  * This means that for any a in A:
  *
+ * {{{
  * join(zero, a) = a = meet(one, a)
+ * }}}
  *
  * Or written using traditional notation:
  *
+ * {{{
  * (0 ∨ a) = a = (1 ∧ a)
+ * }}}
  */
 trait BoundedLattice[@sp(Int, Long, Float, Double) A]
     extends Any

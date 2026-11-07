@@ -28,7 +28,9 @@ import org.openjdk.jmh.annotations.*
 /**
  * To run:
  *
+ * {{{
  * bench/jmh:run -i 10 -wi 10 -f 2 -t 1 cats.bench.StateTBench
+ * }}}
  */
 @State(Scope.Thread)
 @BenchmarkMode(Array(Mode.Throughput))

@@ -31,7 +31,9 @@ import scala.{specialized => sp}
  *   - ¬(x∨y) = ¬x∧¬y
  *   - ¬(x∧y) = ¬¬(¬x∨¬y)
  *
- * For intuitionistic logic see [[Heyting]] For fuzzy logic see [[DeMorgan]]
+ * For intuitionistic logic see [[Heyting]].
+ *
+ * For fuzzy logic see [[DeMorgan]].
  */
 trait Logic[@sp(Int, Long) A] extends Any with BoundedDistributiveLattice[A] { self =>
   def and(a: A, b: A): A

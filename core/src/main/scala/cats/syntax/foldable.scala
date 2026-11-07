@@ -285,8 +285,8 @@ final class FoldableOps0[F[_], A](private val fa: F[A]) extends AnyVal {
     F.partitionBifoldM[G, H, A, B, C](fa)(f)(using A, M, H)
 
   /**
-   * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]` Equivalent to
-   * `Traverse#traverse` over `Alternative#separate`
+   * Separate this Foldable into a Tuple by an effectful separating function `A => G[Either[B, C]]`. Equivalent to
+   * `Traverse#traverse` over `Alternative#separate`.
    *
    * {{{
    * scala> import cats.syntax.all._, cats.Eval

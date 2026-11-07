@@ -30,7 +30,7 @@ package object evidence {
 
   /**
    * This type level equality represented by `Is` is referred to as "Leibniz equality", and it had the name "Leibniz" in
-   * the scalaz https://en.wikipedia.org/wiki/Gottfried_Wilhelm_Leibniz
+   * the scalaz. See https://en.wikipedia.org/wiki/Gottfried_Wilhelm_Leibniz
    */
   type Leibniz[A, B] = A Is B
 
