@@ -177,9 +177,9 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
    *
    * This will be an infinite loop, or it will return an F[Nothing].
    *
-   * Be careful using this. For instance, a List of length k will produce a list of length k^n at iteration
-   *   n. This means if k = 0, we return an empty list, if k = 1, we loop forever allocating single element lists, but
-   *      if we have a k > 1, we will allocate exponentially increasing memory and very quickly OOM.
+   * Be careful using this. For instance, a List of length k will produce a list of length k^n at iteration n. This
+   * means if k = 0, we return an empty list, if k = 1, we loop forever allocating single element lists, but if we have
+   * a k > 1, we will allocate exponentially increasing memory and very quickly OOM.
    */
 
   def foreverM[A, B](fa: F[A]): F[B] = {

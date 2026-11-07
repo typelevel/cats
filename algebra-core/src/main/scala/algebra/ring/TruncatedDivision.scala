@@ -36,7 +36,7 @@ import scala.{specialized => sp}
  *   - (4t) `r = 0` or `sign(r) = sign(x)`,
  *   - (4f) `r = 0` or `sign(r) = sign(y)`.
  *
- * where `sign` is the sign function, and the absolute value function `|x|` is defined as `|x| = x` if `x >=0`, and
+ * Here `sign` is the sign function, and the absolute value function `|x|` is defined as `|x| = x` if `x >=0`, and
  * `|x| = -x` otherwise.
  *
  * We define functions `tmod` and `tquot` such that: `q = tquot(x, y)` and `r = tmod(x, y)` obey rule (4t), (which

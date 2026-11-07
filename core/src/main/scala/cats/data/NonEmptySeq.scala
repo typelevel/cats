@@ -30,8 +30,9 @@ import scala.collection.mutable
 import scala.collection.immutable.{Seq, SortedMap, TreeMap, TreeSet}
 
 /**
- * A data type which represents a `Seq` guaranteed to contain at least one element. <br/> Note that the constructor is
- * `private` to prevent accidental construction of an empty `NonEmptySeq`. However, due to
+ * A data type which represents a `Seq` guaranteed to contain at least one element.
+ *
+ * Note that the constructor is `private` to prevent accidental construction of an empty `NonEmptySeq`. However, due to
  * https://issues.scala-lang.org/browse/SI-6601, on Scala 2.10, this may be bypassed due to a compiler bug.
  */
 final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonEmptyCollection[A, Seq, NonEmptySeq] {

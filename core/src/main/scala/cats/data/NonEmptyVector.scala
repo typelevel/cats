@@ -31,9 +31,10 @@ import scala.collection.mutable
 import scala.collection.immutable.{SortedMap, TreeMap, TreeSet, VectorBuilder}
 
 /**
- * A data type which represents a `Vector` guaranteed to contain at least one element. <br/> Note that the constructor
- * is `private` to prevent accidental construction of an empty `NonEmptyVector`. However, due to
- * https://issues.scala-lang.org/browse/SI-6601, on Scala 2.10, this may be bypassed due to a compiler bug.
+ * A data type which represents a `Vector` guaranteed to contain at least one element.
+ *
+ * Note that the constructor is `private` to prevent accidental construction of an empty `NonEmptyVector`. However, due
+ * to https://issues.scala-lang.org/browse/SI-6601, on Scala 2.10, this may be bypassed due to a compiler bug.
  */
 final class NonEmptyVector[+A] private (val toVector: Vector[A])
     extends AnyVal
