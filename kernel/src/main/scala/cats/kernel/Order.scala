@@ -33,11 +33,12 @@ import scala.{specialized => sp}
  *
  * The truth table for compare is defined as follows:
  *
- * | x <= y | x >= y | Int |                         |
- * |:-------|:-------|:----|:------------------------|
- * | true   | true   | = 0 | (corresponds to x == y) |
- * | true   | false  | < 0 | (corresponds to x < y)  |
- * | false  | true   | > 0 | (corresponds to x > y)  |
+ * {{{
+ * x <= y    x >= y      Int
+ * true      true        = 0     (corresponds to x == y)
+ * true      false       < 0     (corresponds to x < y)
+ * false     true        > 0     (corresponds to x > y)
+ * }}}
  *
  * By the totality law, x <= y and y <= x cannot be both false.
  */
