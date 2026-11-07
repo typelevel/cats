@@ -157,7 +157,9 @@ trait Monad[F[_]] extends FlatMap[F] with Applicative[F] {
   }
 
   /**
-   * Modifies the `A` value in `F[A]` with the supplied function, if the function is defined for the value. Example:
+   * Modifies the `A` value in `F[A]` with the supplied function, if the function is defined for the value.
+   *
+   * Example:
    * {{{
    * scala> import cats.syntax.all._
    *

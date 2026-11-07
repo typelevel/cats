@@ -917,8 +917,8 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
   }
 
   /**
-   * Separate this Foldable into a Tuple by an effectful separating function `A => G[H[B, C]]` for some `Bifoldable[H]`
-   * Equivalent to `Traverse#traverse` over `Alternative#separate`
+   * Separate this Foldable into a Tuple by an effectful separating function `A => G[H[B, C]]` for some `Bifoldable[H]`.
+   * Equivalent to `Traverse#traverse` over `Alternative#separate`.
    *
    * {{{
    * scala> import cats.syntax.all._, cats.Foldable, cats.data.Const

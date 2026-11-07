@@ -168,7 +168,9 @@ trait Functor[F[_]] extends Invariant[F] { self =>
   def tupleRight[A, B](fa: F[A], b: B): F[(A, B)] = map(fa)(a => (a, b))
 
   /**
-   * Modifies the `A` value in `F[A]` with the supplied function, if the function is defined for the value. Example:
+   * Modifies the `A` value in `F[A]` with the supplied function, if the function is defined for the value.
+   *
+   * Example:
    * {{{
    * scala> import cats.syntax.all._
    *

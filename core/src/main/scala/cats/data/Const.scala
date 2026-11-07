@@ -27,8 +27,9 @@ import cats.kernel.{CommutativeMonoid, CommutativeSemigroup, LowerBounded, Upper
 import scala.annotation.nowarn
 
 /**
- * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B` [[Const]] can be seen as a
- * type level version of `Function.const[A, B]: A => B => A`
+ * [[Const]] is a phantom type, it does not contain a value of its second type parameter `B`.
+ *
+ * [[Const]] can be seen as a type level version of `Function.const[A, B]: A => B => A`
  */
 final case class Const[A, B](getConst: A) {
 

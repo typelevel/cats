@@ -288,8 +288,10 @@ final class EitherOps[A, B](private val eab: Either[A, B]) extends AnyVal {
    *
    * If this `Either` is a `Left` then it will be returned as-is. If this `Either` is a `Right` and `that` `Either` is a
    * left, then `that` will be returned. If both `Either`s are `Right`s, then the `Semigroup[BB]` instance will be used
-   * to combine both values and return them as a `Right`. Note: If both `Either`s are `Left`s then their values are not
-   * combined. Use `Validated` if you prefer to combine `Left` values.
+   * to combine both values and return them as a `Right`.
+   *
+   * Note: If both `Either`s are `Left`s then their values are not combined. Use `Validated` if you prefer to combine
+   * `Left` values.
    *
    * Examples:
    * {{{

@@ -177,7 +177,7 @@ class NonEmptyChainOps[A](private val value: NonEmptyChain[A])
 
   /**
    * Yields to Some(a, Chain[A]) with `a` removed where `f` holds for the first time, otherwise yields None, if `a` was
-   * not found Traverses only until `a` is found.
+   * not found. Traverses only until `a` is found.
    */
   final def deleteFirst(f: A => Boolean): Option[(A, Chain[A])] =
     toChain.deleteFirst(f)
