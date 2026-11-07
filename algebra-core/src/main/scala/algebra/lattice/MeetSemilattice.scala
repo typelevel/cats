@@ -25,9 +25,8 @@ package lattice
 import scala.{specialized => sp}
 
 /**
- * A meet-semilattice (or lower semilattice) is a semilattice whose
- * operation is called "meet", and which can be thought of as a
- * greatest lower bound.
+ * A meet-semilattice (or lower semilattice) is a semilattice whose operation is called "meet", and which can be thought
+ * of as a greatest lower bound.
  */
 trait MeetSemilattice[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
   def meet(lhs: A, rhs: A): A
