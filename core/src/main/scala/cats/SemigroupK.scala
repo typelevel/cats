@@ -167,7 +167,7 @@ trait SemigroupK[F[_]] extends Serializable { self =>
     as.iterator.reduceOption(combineK[A])
 
   /**
-   * return a semigroupK that reverses the order so combineK(a, b) == reverse.combineK(b, a)
+   * Return a semigroupK that reverses the order so `combineK(a, b) == reverse.combineK(b, a)`
    */
   def reverse: SemigroupK[F] =
     new SemigroupK[F] {

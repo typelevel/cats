@@ -214,7 +214,7 @@ object Always {
 object Eval extends EvalInstances {
 
   /**
-   * A Leaf does not depend on any other Eval so calling .value does not trigger any flatMaps or defers
+   * A Leaf does not depend on any other `Eval` so calling `.value` does not trigger any `flatMap`s or `defer`s
    */
   sealed abstract class Leaf[+A] extends Eval[A]
 

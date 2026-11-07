@@ -104,7 +104,7 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
     as.reduceOption(combine)
 
   /**
-   * return a semigroup that reverses the order so combine(a, b) == reverse.combine(b, a)
+   * Return a semigroup that reverses the order so `combine(a, b) == reverse.combine(b, a)`
    */
   def reverse: Semigroup[A] =
     new Semigroup[A] {
