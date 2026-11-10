@@ -51,7 +51,7 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
   /**
    * Modify the output of the Kleisli function with `f`.
    * {{{
-   * scala> import cats.data.Kleisli, cats.implicits._
+   * scala> import cats.data.Kleisli, cats.syntax.all._
    * scala> val takeHead = Kleisli[Option, List[Int], Int](_.headOption)
    * scala> takeHead.map(_.toDouble).run(List(1))
    * res0: Option[Double] = Some(1.0)
@@ -90,7 +90,7 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
    * Tip to tail Kleisli arrow composition.
    * Creates a function `A => F[C]` from [[run]] (`A => F[B]`) and the given Kleisli of `B => F[C]`.
    * {{{
-   * scala> import cats.data.Kleisli, cats.implicits._
+   * scala> import cats.data.Kleisli, cats.syntax.all._
    * scala> val takeHead = Kleisli[Option, List[Int], Int](_.headOption)
    * scala> val plusOne = Kleisli[Option, Int, Int](i => Some(i + 1))
    * scala> (takeHead andThen plusOne).run(List(1))
@@ -115,7 +115,7 @@ final case class Kleisli[F[_], -A, B](run: A => F[B]) { self =>
   /**
    * Contramap the input using `f`, where `f` may modify the input type of the Kleisli arrow.
    * {{{
-   * scala> import cats.data.Kleisli, cats.implicits._
+   * scala> import cats.data.Kleisli, cats.syntax.all._
    * scala> type ParseResult[A] = Either[Throwable, A]
    * scala> val parseInt = Kleisli[ParseResult, String, Int](s => Either.catchNonFatal(s.toInt))
    * scala> parseInt.local[List[String]](_.combineAll).run(List("1", "2"))
@@ -250,7 +250,7 @@ sealed private[data] trait KleisliFunctions {
   /**
    * Creates a Kleisli that ignores its input `A` and returns the given `F[B]`.
    * {{{
-   * scala> import cats.data.Kleisli, cats.implicits._
+   * scala> import cats.data.Kleisli, cats.syntax.all._
    * scala> val takeHead = Kleisli((_:List[Int]).headOption)
    * scala> val makeList = Kleisli.liftF[Option, Unit, List[Int]](Some(List(1,2,3)))
    * scala> (makeList andThen takeHead).run(())
@@ -280,7 +280,7 @@ sealed private[data] trait KleisliFunctions {
   /**
    * Creates a Kleisli arrow ignoring its input and lifting the given `B` into applicative context `F`.
    * {{{
-   * scala> import cats.data.Kleisli, cats.implicits._
+   * scala> import cats.data.Kleisli, cats.syntax.all._
    * scala> val pureOpt = Kleisli.pure[Option, Unit, String]("beam me up!")
    * scala> pureOpt.run(())
    * res0: Option[String] = Some(beam me up!)

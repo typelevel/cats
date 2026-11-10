@@ -243,7 +243,7 @@ pair up (or apply functions to) values with the same key. Hence `Map[K, *]` has 
 
 ## Syntax
 
-Syntax for `Applicative` (or `Apply`) is available under the `cats.implicits._` import. The most
+Syntax for `Applicative` (or `Apply`) is available under the `cats.syntax.all._` import. The most
 interesting syntax is focused on composing independent effects: it works just like the methods
 for composition we saw above (`map3`, `tuple3`, etc.), but achieves a slightly friendlier syntax
 by enriching Scala's standard tuple types.

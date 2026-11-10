@@ -116,7 +116,7 @@ An attempt to construct one without a proper `Monad[F]` instance would be incons
 for `EitherT[F, String, *]`. Such an instance will be derived if you use `Nested` instead:
 
 ```scala
-import cats._, cats.data._, cats.implicits._
+import cats._, cats.data._, cats.syntax.all._
 
 val a = EitherT(List(Left("err"), Right(1)))
 val x = (a *> a).value
