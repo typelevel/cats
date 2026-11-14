@@ -367,7 +367,7 @@ sealed private[data] trait CommonIRWSTConstructors {
   /**
    * Same as [[liftF]], but expressed as a FunctionK for use with mapK
    * {{{
-   * scala> import cats._, data._, implicits._
+   * scala> import cats._, cats.data._, cats.syntax.all._
    * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, *]]
    * scala> val b: OptionT[RWST[Eval, Boolean, List[String], String, *], Int] = a.mapK(RWST.liftK)
    * scala> b.value.runEmpty(true).value

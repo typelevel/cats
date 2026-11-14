@@ -735,7 +735,7 @@ object OptionT extends OptionTInstances {
   /**
    * Same as [[liftF]], but expressed as a FunctionK for use with mapK
    * {{{
-   * scala> import cats._, data._,  syntax.all._
+   * scala> import cats._, cats.data._,  cats.syntax.all._
    * scala> val a: EitherT[Eval, String, Int] = 1.pure[EitherT[Eval, String, *]]
    * scala> val b: EitherT[OptionT[Eval, *], String, Int] = a.mapK(OptionT.liftK)
    * scala> b.value.value.value

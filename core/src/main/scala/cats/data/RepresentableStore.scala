@@ -80,7 +80,7 @@ final case class RepresentableStore[F[_], S, A](fa: F[A], index: S)(implicit R: 
    * Given a functorial computation on the index `S` peek at the value in that functor.
    *
    * {{{
-   *   import cats._, implicits._, data.Store
+   *   import cats._, cats.syntax.all._, data.Store
    *
    *   val initial = List("a", "b", "c")
    *   val store = Store(idx => initial.get(idx).getOrElse(""), 0)

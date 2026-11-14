@@ -263,7 +263,7 @@ sealed private[data] trait KleisliFunctions {
   /**
    * Same as [[liftF]], but expressed as a FunctionK for use with mapK
    * {{{
-   * scala> import cats._, data._, implicits._
+   * scala> import cats._, cats.data._, cats.syntax.all._
    * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, *]]
    * scala> val b: OptionT[Kleisli[Eval, String, *], Int] = a.mapK(Kleisli.liftK)
    * scala> b.value.run("").value
@@ -333,7 +333,7 @@ sealed private[data] trait KleisliFunctionsBinCompat {
    * Equivalent to running `mapK(f) on a Kleisli.
    *
    * {{{
-   * scala> import cats._, data._
+   * scala> import cats._, cats.data._
    * scala> val f: (List ~> Option) = λ[List ~> Option](_.headOption)
    *
    * scala> val k: Kleisli[List, String, Char] = Kleisli(_.toList)
