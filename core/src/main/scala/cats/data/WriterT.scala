@@ -354,7 +354,7 @@ object WriterT extends WriterTInstances with WriterTFunctions with WriterTFuncti
   /**
    * Same as [[liftF]], but expressed as a FunctionK for use with mapK
    * {{{
-   * scala> import cats._, data._, implicits._
+   * scala> import cats._, cats.data._, cats.syntax.all._
    * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, *]]
    * scala> val b: OptionT[WriterT[Eval, String, *], Int] = a.mapK(WriterT.liftK)
    * scala> b.value.run.value

@@ -43,7 +43,7 @@ final class ReducibleOps0[F[_], A](private val fa: F[A]) extends AnyVal {
    * given `SemigroupK[G]`.
    *
    * {{{
-   * scala> import cats._, cats.data._, cats.implicits._
+   * scala> import cats._, cats.data._, cats.syntax.all._
    * scala> val f: Int => Endo[String] = i => (s => s + i)
    * scala> val x: Endo[String] = NonEmptyList.of(1, 2, 3).reduceMapK(f)
    * scala> val a = x("foo")

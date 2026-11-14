@@ -108,7 +108,7 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
    *
    * Example:
    * {{{
-   * scala> import cats._, implicits._
+   * scala> import cats._, cats.syntax.all._
    *
    * scala> def pf: PartialFunction[String, String] = { case "error" => "ERROR" }
    *
@@ -132,7 +132,7 @@ final class ApplicativeErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal
    *
    * Example:
    * {{{
-   * scala> import cats._, implicits._
+   * scala> import cats._, cats.syntax.all._
    *
    * scala> val fa: Either[String, Int] = Left("wrong")
    *
