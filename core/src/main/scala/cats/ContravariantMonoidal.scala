@@ -22,8 +22,8 @@
 package cats
 
 /**
- * [[ContravariantMonoidal]] functors are functors that supply
- * a unit along the diagonal map for the `contramap2` operation.
+ * [[ContravariantMonoidal]] functors are functors that supply a unit along the diagonal map for the `contramap2`
+ * operation.
  *
  * Must obey the laws defined in cats.laws.ContravariantMonoidalLaws.
  *
@@ -33,9 +33,8 @@ package cats
 trait ContravariantMonoidal[F[_]] extends ContravariantSemigroupal[F] with InvariantMonoidal[F] {
 
   /**
-   * `trivial` produces an instance of `F` for any type `A`
-   * that is trivial with respect to `contramap2` along
-   * the diagonal
+   * `trivial` produces an instance of `F` for any type `A` that is trivial with respect to `contramap2` along the
+   * diagonal
    */
   def trivial[A]: F[A] = contramap(unit)(_ => ())
 

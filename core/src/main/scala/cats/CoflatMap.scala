@@ -29,8 +29,7 @@ package cats
 trait CoflatMap[F[_]] extends Functor[F] {
 
   /**
-   * `coflatMap` is the dual of `flatMap` on `FlatMap`. It applies
-   * a value in a context to a function that takes a value
+   * `coflatMap` is the dual of `flatMap` on `FlatMap`. It applies a value in a context to a function that takes a value
    * in a context and returns a normal value.
    *
    * Example:
@@ -48,8 +47,8 @@ trait CoflatMap[F[_]] extends Functor[F] {
   def coflatMap[A, B](fa: F[A])(f: F[A] => B): F[B]
 
   /**
-   * `coflatten` is the dual of `flatten` on `FlatMap`. Whereas flatten removes
-   * a layer of `F`, coflatten adds a layer of `F`
+   * `coflatten` is the dual of `flatten` on `FlatMap`. Whereas flatten removes a layer of `F`, coflatten adds a layer
+   * of `F`
    *
    * Example:
    * {{{

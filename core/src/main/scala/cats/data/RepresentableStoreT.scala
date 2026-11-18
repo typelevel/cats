@@ -43,8 +43,7 @@ final case class RepresentableStoreT[W[_], F[_], S, A](runF: W[F[A]], index: S)(
   def peek(s: S)(implicit W: Comonad[W]): A = W.extract(W.map(runF)(fa => F.index(fa)(s)))
 
   /**
-   * Peek at what the focus would be if the current focus where transformed
-   * with the given function.
+   * Peek at what the focus would be if the current focus where transformed with the given function.
    */
   def peeks(f: S => S)(implicit W: Comonad[W]): A = peek(f(index))
 
@@ -64,8 +63,7 @@ final case class RepresentableStoreT[W[_], F[_], S, A](runF: W[F[A]], index: S)(
   def extract(implicit W: Comonad[W]): A = peek(index)
 
   /**
-   * `coflatMap` is the dual of `flatMap` on `FlatMap`. It applies
-   * a value in a context to a function that takes a value
+   * `coflatMap` is the dual of `flatMap` on `FlatMap`. It applies a value in a context to a function that takes a value
    * in a context and returns a normal value.
    */
   def coflatMap[B](f: RepresentableStoreT[W, F, S, A] => B)(implicit W: Comonad[W]): RepresentableStoreT[W, F, S, B] =
@@ -75,8 +73,8 @@ final case class RepresentableStoreT[W[_], F[_], S, A](runF: W[F[A]], index: S)(
     )
 
   /**
-   * `coflatten` is the dual of `flatten` on `FlatMap`. Whereas flatten removes
-   * a layer of `F`, coflatten adds a layer of `F`
+   * `coflatten` is the dual of `flatten` on `FlatMap`. Whereas flatten removes a layer of `F`, coflatten adds a layer
+   * of `F`
    */
   def coflatten(implicit W: Comonad[W]): RepresentableStoreT[W, F, S, RepresentableStoreT[W, F, S, A]] =
     RepresentableStoreT(

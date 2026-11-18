@@ -51,8 +51,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
   def toNel: Option[NonEmptyList[A]] = NonEmptyList.fromList(la)
 
   /**
-   * Groups elements inside this `List` according to the `Order` of the keys
-   * produced by the given mapping function.
+   * Groups elements inside this `List` according to the `Order` of the keys produced by the given mapping function.
    *
    * {{{
    * scala> import cats.data.NonEmptyList
@@ -73,8 +72,8 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
   }
 
   /**
-   * Groups elements inside this `List` according to the `Order` of the keys
-   * produced by the given mapping monadic function.
+   * Groups elements inside this `List` according to the `Order` of the keys produced by the given mapping monadic
+   * function.
    *
    * {{{
    * scala> import cats.data.NonEmptyList
@@ -99,8 +98,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
   }
 
   /**
-   * Produces a `NonEmptyList` containing cumulative results of applying the
-   * operator going left to right.
+   * Produces a `NonEmptyList` containing cumulative results of applying the operator going left to right.
    *
    * Example:
    * {{{
@@ -120,8 +118,7 @@ final class ListOps[A](private val la: List[A]) extends AnyVal {
     NonEmptyList.fromListUnsafe(la.scanLeft(b)(f))
 
   /**
-   * Produces a `NonEmptyList` containing cumulative results of applying the
-   * operator going right to left.
+   * Produces a `NonEmptyList` containing cumulative results of applying the operator going right to left.
    *
    * Example:
    * {{{
@@ -148,8 +145,7 @@ private[syntax] trait ListSyntaxBinCompat0 {
 final private[syntax] class ListOpsBinCompat0[A](private val la: List[A]) extends AnyVal {
 
   /**
-   * Groups elements inside this `List` according to the `Order` of the keys
-   * produced by the given mapping function.
+   * Groups elements inside this `List` according to the `Order` of the keys produced by the given mapping function.
    *
    * {{{
    * scala> import cats.data.NonEmptyChain

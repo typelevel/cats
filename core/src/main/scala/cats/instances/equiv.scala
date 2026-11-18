@@ -29,8 +29,7 @@ trait EquivInstances {
     new ContravariantMonoidal[Equiv] {
 
       /**
-       * Defaults to trivially contracting the type
-       * to a point
+       * Defaults to trivially contracting the type to a point
        */
       def unit: Equiv[Unit] =
         new Equiv[Unit] {
@@ -40,7 +39,8 @@ trait EquivInstances {
       /**
        * Derive an `Equiv` for `B` given an `Equiv[A]` and a function `B => A`.
        *
-       * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one mapping)
+       * Note: resulting instances are law-abiding only when the functions used are injective (represent a one-to-one
+       * mapping)
        */
       def contramap[A, B](fa: Equiv[A])(f: B => A): Equiv[B] =
         new Equiv[B] {

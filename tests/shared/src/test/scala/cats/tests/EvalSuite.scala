@@ -45,20 +45,17 @@ class EvalSuite extends CatsSuite {
   implicit val eqThrow: Eq[Throwable] = Eq.allEqual
 
   /**
-   * This method creates a Eval[A] instance (along with a
-   * corresponding Spooky instance) from an initial `value` using the
-   * given `init` function.
+   * This method creates a Eval[A] instance (along with a corresponding Spooky instance) from an initial `value` using
+   * the given `init` function.
    *
-   * It will then proceed to call `value` 0-or-more times, verifying
-   * that the result is equal to `value`, and also that the
-   * appropriate number of evaluations are occurring using the
-   * `numCalls` function.
+   * It will then proceed to call `value` 0-or-more times, verifying that the result is equal to `value`, and also that
+   * the appropriate number of evaluations are occurring using the `numCalls` function.
    *
    * In other words, each invocation of run says:
    *
-   *  1. What underlying `value` to use.
-   *  2. How to create Eval instances (memoized, eager, or by-name).
-   *  3. How many times we expect the value to be computed.
+   *   1. What underlying `value` to use.
+   *   2. How to create Eval instances (memoized, eager, or by-name).
+   *   3. How many times we expect the value to be computed.
    */
   def runValue[A: Eq](value: A)(init: A => (Spooky, Eval[A]))(numCalls: Int => Int): Unit = {
     var spin = 0

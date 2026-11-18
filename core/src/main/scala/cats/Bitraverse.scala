@@ -84,11 +84,11 @@ trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
     bitraverse[Id, A, B, C, D](fab)(f, g)
 
   /**
-   *  Traverse over the left side of the structure.
-   *  For the right side, use the standard `traverse` from [[cats.Traverse]].
+   * Traverse over the left side of the structure. For the right side, use the standard `traverse` from
+   * [[cats.Traverse]].
    *
-   *  Example:
-   *  {{{
+   * Example:
+   * {{{
    *  scala> import cats.syntax.all._
    *
    *  scala> val intAndString: (Int, String) = (7, "test")
@@ -98,15 +98,14 @@ trait Bitraverse[F[_, _]] extends Bifoldable[F] with Bifunctor[F] { self =>
    *
    *  scala> Bitraverse[Tuple2].leftTraverse(intAndString)(i => Option(i).filter(_ < 5))
    *  res2: Option[(Int, String)] = None
-   *  }}}
+   * }}}
    */
 
   def leftTraverse[G[_], A, B, C](fab: F[A, B])(f: A => G[C])(implicit G: Applicative[G]): G[F[C, B]] =
     bitraverse(fab)(f, G.pure(_))
 
   /**
-   * Sequence the left side of the structure.
-   * For the right side, use the standard `sequence` from [[cats.Traverse]].
+   * Sequence the left side of the structure. For the right side, use the standard `sequence` from [[cats.Traverse]].
    *
    * Example:
    * {{{

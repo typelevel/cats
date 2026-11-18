@@ -34,8 +34,7 @@ private[arrow] class FunctionKMacroMethods extends FunctionKLift {
    *   val lifted: FunctionK[List, Option] = FunctionK.lift(headOption)
    * }}}
    *
-   * Note: This method has a macro implementation that returns a new
-   * `FunctionK` instance as follows:
+   * Note: This method has a macro implementation that returns a new `FunctionK` instance as follows:
    *
    * {{{
    *   new FunctionK[F, G] {

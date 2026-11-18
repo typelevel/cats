@@ -23,8 +23,8 @@ package cats
 package arrow
 
 /**
- * In a Commutative Arrow F[_, _], the split operation (or `***`) is commutative,
- * which means that there is non-interference between the effect of the paired arrows.
+ * In a Commutative Arrow F[_, _], the split operation (or `***`) is commutative, which means that there is
+ * non-interference between the effect of the paired arrows.
  *
  * Must obey the laws in CommutativeArrowLaws
  */
