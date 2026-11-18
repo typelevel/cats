@@ -61,7 +61,7 @@ sbt scalafixAll github:typelevel/cats/Cats_v1_0_0
 
 - [ ] FunctorFilter, MonadCombine, MonadFilter, MonadReader, MonadState, MonadTrans, MonadWriter and TraverseFilter are no longer in cats, the functionalities they provided are inhereted by the new cats-mtl project. Please check here for migration guide.
 
-- [ ] Several cats-core type class instances for cats.kernel were moved from their companion objects to separate traits and thus require imports from cats.instances.xxx._ (or the recommended import cats.implicits._) now. See #1659 for more details.
+- [ ] Several cats-core type class instances for cats.kernel were moved from their companion objects to separate traits and thus require imports from cats.syntax.xxx._ (or the recommended import cats.syntax.all._) now. See #1659 for more details.
 
 - [ ] foldLeftM is removed from Free, use foldM on Foldable instead, see #1117 for detail.
 

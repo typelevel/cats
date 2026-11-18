@@ -177,7 +177,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    *
    * Example:
    * {{{
-   * scala> import cats._, implicits._
+   * scala> import cats._, cats.syntax.all._
    *
    * scala> def pf: PartialFunction[String, String] = { case "error" => "ERROR" }
    *
@@ -237,7 +237,7 @@ trait ApplicativeError[F[_], E] extends Applicative[F] {
    * layer of the program:
    *
    * {{{
-   * scala> import cats._, data._, implicits._
+   * scala> import cats._, cats.data._, cats.syntax.all._
    *
    * scala> case class Err(msg: String)
    *

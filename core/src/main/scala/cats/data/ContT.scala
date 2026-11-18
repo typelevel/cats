@@ -101,7 +101,7 @@ object ContT {
   /**
    * Lifts the `M[B]` into an `ContT[M, A, B]`.
    * {{{
-   * scala> import cats._, data._,  implicits._
+   * scala> import cats._, cats.data._,  cats.syntax.all._
    * scala> val a: EitherT[Eval, String, Int] = 1.pure[EitherT[Eval, String, *]]
    * scala> val c: cats.data.ContT[EitherT[Eval, String, *], Int, Int] = ContT.liftF(a)
    * scala> c.run(EitherT.rightT(_)).value.value
@@ -116,7 +116,7 @@ object ContT {
   /**
    * Same as [[liftF]], but expressed as a FunctionK for use with mapK
    * {{{
-   * scala> import cats._, data._
+   * scala> import cats._, cats.data._
    * scala> trait Foo[F[_]] { def bar: F[Int] }
    * scala> def mapK[F[_], G[_]](fooF: Foo[F])(f: F ~> G): Foo[G] = new Foo[G] { def bar: G[Int] = f(fooF.bar) }
    * scala> val eitherTFoo = new Foo[EitherT[Eval, String, *]] { def bar = EitherT.rightT(1) }

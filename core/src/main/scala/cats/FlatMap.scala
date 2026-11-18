@@ -158,7 +158,7 @@ trait FlatMap[F[_]] extends Apply[F] with FlatMapArityFunctions[F] {
    * Apply a monadic function and discard the result while keeping the effect.
    *
    * {{{
-   * scala> import cats._, implicits._
+   * scala> import cats._, cats.syntax.all._
    * scala> Option(1).flatTap(_ => None)
    * res0: Option[Int] = None
    * scala> Option(1).flatTap(_ => Some("123"))

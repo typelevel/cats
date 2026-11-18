@@ -811,7 +811,7 @@ object EitherT extends EitherTInstances {
   /**
    * Same as [[liftF]], but expressed as a FunctionK for use with mapK
    * {{{
-   * scala> import cats._, data._, implicits._
+   * scala> import cats._, cats.data._, cats.syntax.all._
    * scala> val a: OptionT[Eval, Int] = 1.pure[OptionT[Eval, *]]
    * scala> val b: OptionT[EitherT[Eval, String, *], Int] = a.mapK(EitherT.liftK)
    * scala> b.value.value.value
@@ -825,7 +825,7 @@ object EitherT extends EitherTInstances {
    * Lifts an effect into EitherT, catching all errors from the effect and lifting them into EitherT's error channel.
    *
    * {{{
-   * scala> import cats._, data._, implicits._
+   * scala> import cats._, cats.data._, cats.syntax.all._
    * scala> val a: Option[Int] = None
    * scala> val b: EitherT[Option, Unit, Int] = EitherT.liftAttemptK[Option, Unit].apply(a)
    * scala> b.value

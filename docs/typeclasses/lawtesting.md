@@ -96,7 +96,7 @@ class TreeLawTests extends DisciplineSuite {
 }
 ```
 
-* `cats.implicits._` imports the instances we need for `Eq[Tree[Int]]`, which the laws use to compare trees.
+* `cats.syntax.all._` imports the instances we need for `Eq[Tree[Int]]`, which the laws use to compare trees.
 * `FunctorTests` contains the functor laws.
 * `AnyFunSuite` defines the style of ScalaTest.
 * `FunSuiteDiscipline` provides `checkAll`, and must be mixed into `AnyFunSuite`

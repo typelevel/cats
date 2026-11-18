@@ -55,7 +55,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    *
    * Example:
    * {{{
-   * scala> import cats.Foldable, cats.implicits._
+   * scala> import cats.Foldable, cats.syntax.all._
    * scala> val fa = Option(1)
    *
    * Folding by addition to zero:
@@ -89,7 +89,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    *
    * Example:
    * {{{
-   * scala> import cats.Foldable, cats.Eval, cats.implicits._
+   * scala> import cats.Foldable, cats.Eval, cats.syntax.all._
    * scala> val fa = Option(1)
    *
    * Folding by addition to zero:
@@ -505,7 +505,7 @@ trait Foldable[F[_]] extends UnorderedFoldable[F] with FoldableNFunctions[F] { s
    * combining them using the `MonoidK[G]` instance.
    *
    * {{{
-   * scala> import cats._, cats.implicits._
+   * scala> import cats._, cats.syntax.all._
    * scala> val f: Int => Endo[String] = i => (s => s + i)
    * scala> val x: Endo[String] = Foldable[List].foldMapK(List(1, 2, 3))(f)
    * scala> val a = x("foo")

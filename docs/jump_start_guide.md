@@ -218,7 +218,7 @@ and that solves our problem for good.
 
 # Common issues
 
-The Cats type class instances for standard library types are available in implicit scope and hence no longer have to be imported. If anything doesn't compile as expected, first make sure all the required Cats syntax implicits are in the scope — try importing ```cats.syntax.all._``` and see if the problem persists. The only exception is here is Cat's own ```Order``` and ```PartialOrder``` type classes which are available by importing ```cats.implicits._```. 
+The Cats type class instances for standard library types are available in implicit scope and hence no longer have to be imported. If anything doesn't compile as expected, first make sure all the required Cats syntax implicits are in the scope — try importing ```cats.syntax.all._``` and see if the problem persists.
 As mentioned before, though, it's better to use narrow imports, but if the code doesn't compile it's sometimes worth just importing the entire library to check if it solves the problem.
 
 If you're using `Futures`, make sure to provide an implicit `ExecutionContext` in the scope, otherwise Cats won't be able to infer implicit instances for `Future`'s type classes.
