@@ -255,7 +255,7 @@
 </span><span class="comment">// res7: String = &quot;Hello, World!&quot;</span></code></pre>
         <p>The import adds the <code>|+|</code> syntax.</p>
         <p><strong>Note</strong>: Beware that if you import a type class instance or its syntax twice, you will receive conflicting implicits with a less than helpful error message.
-        This usually happens when importing different type classes in the same hierarchy or when importing syntax enrichment for all type classes using <code>cats.syntax.all._</code> or <code>cats.implicits._</code> together with a more specific import like <code>cats.syntax.option._</code> or <code>cats.instances.either._</code>.
+        This usually happens when importing different type classes in the same hierarchy or when importing syntax enrichment for all type classes using <code>cats.syntax.all._</code> together with a more specific import like <code>cats.syntax.option._</code> or <code>cats.syntax.either._</code>.
         Below is an example of this phenomenon:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">all</span><span>.</span><span class="identifier">_</span><span>
 

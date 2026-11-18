@@ -299,7 +299,7 @@
   </span><span class="identifier">checkAll</span><span>(</span><span class="string-literal">&quot;Tree.FunctorLaws&quot;</span><span>, </span><span class="type-name">FunctorTests</span><span>[</span><span class="type-name">Tree</span><span>].</span><span class="identifier">functor</span><span>[</span><span class="type-name">Int</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">String</span><span>])
 }</span></code></pre>
         <ul>
-          <li><code>cats.implicits._</code> imports the instances we need for <code>Eq[Tree[Int]]</code>, which the laws use to compare trees.</li>
+          <li><code>cats.syntax.all._</code> imports the instances we need for <code>Eq[Tree[Int]]</code>, which the laws use to compare trees.</li>
           <li><code>FunctorTests</code> contains the functor laws.</li>
           <li><code>AnyFunSuite</code> defines the style of ScalaTest.</li>
           <li><code>FunSuiteDiscipline</code> provides <code>checkAll</code>, and must be mixed into <code>AnyFunSuite</code></li>

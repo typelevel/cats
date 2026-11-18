@@ -370,7 +370,7 @@
         <p>and that solves our problem for good.</p>
         
         <h1 id="common-issues" class="section"><a class="anchor-link left" href="#common-issues"><i class="icofont-laika link">&#xef71;</i></a>Common issues</h1>
-        <p>The Cats type class instances for standard library types are available in implicit scope and hence no longer have to be imported. If anything doesn&#39;t compile as expected, first make sure all the required Cats syntax implicits are in the scope — try importing <code>cats.syntax.all._</code> and see if the problem persists. The only exception is here is Cat&#39;s own <code>Order</code> and <code>PartialOrder</code> type classes which are available by importing <code>cats.implicits._</code>. 
+        <p>The Cats type class instances for standard library types are available in implicit scope and hence no longer have to be imported. If anything doesn&#39;t compile as expected, first make sure all the required Cats syntax implicits are in the scope — try importing <code>cats.syntax.all._</code> and see if the problem persists.
         As mentioned before, though, it&#39;s better to use narrow imports, but if the code doesn&#39;t compile it&#39;s sometimes worth just importing the entire library to check if it solves the problem.</p>
         <p>If you&#39;re using <code>Futures</code>, make sure to provide an implicit <code>ExecutionContext</code> in the scope, otherwise Cats won&#39;t be able to infer implicit instances for <code>Future</code>&#39;s type classes.</p>
         <p>IntelliJ sometimes reports errors in Cats-loaded code even though the source passes under scalac.
