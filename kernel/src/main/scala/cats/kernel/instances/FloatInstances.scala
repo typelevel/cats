@@ -47,10 +47,23 @@ class FloatGroup extends CommutativeGroup[Float] {
  */
 class FloatOrder extends Order[Float] with Hash[Float] {
 
-  def hash(x: Float): Int = x.hashCode()
+  // Canonicalize +0.0f / -0.0f so Hash agrees with eqv (primitive ==).
+  // java.lang.Float.hashCode distinguishes the two zeros via bit patterns.
+  def hash(x: Float): Int =
+    java.lang.Float.hashCode(if (x == 0.0f) 0.0f else x)
 
+  /**
+   * Compare using primitive relational operators so +0.0f and -0.0f are equal,
+   * matching [[eqv]] / IEEE floating equality. `java.lang.Float.compare`
+   * implements a total order that treats them as different, which made
+   * `Order[Option[Float]].eqv` disagree with `Order[Float].eqv` (#4807).
+   * NaN values fall through to `Float.compare` for a stable total order.
+   */
   def compare(x: Float, y: Float): Int =
-    java.lang.Float.compare(x, y)
+    if (x < y) -1
+    else if (x > y) 1
+    else if (x == y) 0
+    else java.lang.Float.compare(x, y)
 
   override def eqv(x: Float, y: Float): Boolean = x == y
   override def neqv(x: Float, y: Float): Boolean = x != y
