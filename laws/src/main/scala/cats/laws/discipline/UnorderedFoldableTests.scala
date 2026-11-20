@@ -33,6 +33,14 @@ import cats.instances.option.*
 trait UnorderedFoldableTests[F[_]] extends Laws {
   def laws: UnorderedFoldableLaws[F]
 
+  def unorderedFoldableOrder[A: Order](implicit ArbFA: Arbitrary[F[A]]): RuleSet =
+    new DefaultRuleSet(
+      name = "unorderedFoldableOrder",
+      parent = None,
+      "minimumOption consistent with Order" -> forAll(laws.minimumOptionConsistentWithOrder[A] _),
+      "maximumOption consistent with Order" -> forAll(laws.maximumOptionConsistentWithOrder[A] _)
+    )
+
   def unorderedFoldable[A: Arbitrary, B: Arbitrary](implicit
     ArbFA: Arbitrary[F[A]],
     ArbF: Arbitrary[A => B],
