@@ -154,4 +154,19 @@ class MonadSuite extends CatsSuite {
     assert(actual.value === 2)
   }
 
+  test("ifTrueM") {
+    val actual1: Eval[Int] = Eval.later(true).ifTrueM(Eval.later(1))
+    assert(actual1.value === 1)
+
+    val actual2: Eval[Int] = Eval.later(false).ifTrueM(Eval.later(1))
+    assert(actual2.value === 0)
+  }
+
+  test("ifFalseM") {
+    val actual1: Eval[Int] = Eval.later(true).ifFalseM(Eval.later(1))
+    assert(actual1.value === 0)
+
+    val actual2: Eval[Int] = Eval.later(false).ifFalseM(Eval.later(1))
+    assert(actual2.value === 1)
+  }
 }

@@ -33,11 +33,18 @@ trait MonadErrorSyntax {
 }
 
 final class MonadErrorOps[F[_], E, A](private val fa: F[A]) extends AnyVal {
+
   def ensure(error: => E)(predicate: A => Boolean)(implicit F: MonadError[F, E]): F[A] =
     F.ensure(fa)(error)(predicate)
 
   def ensureOr(error: A => E)(predicate: A => Boolean)(implicit F: MonadError[F, E]): F[A] =
     F.ensureOr(fa)(error)(predicate)
+
+  def ensureTrue(error: => E)(implicit env: F[A] <:< F[Boolean], F: MonadError[F, E]): F[Boolean] =
+    F.ensureTrue(fa)(error)
+
+  def ensureFalse(error: => E)(implicit env: F[A] <:< F[Boolean], F: MonadError[F, E]): F[Boolean] =
+    F.ensureFalse(fa)(error)
 
   /**
    * Turns a successful value into the error returned by a given partial function if it is
