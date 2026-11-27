@@ -25,7 +25,7 @@ package data
 import cats.Foldable
 import cats.kernel.CommutativeMonoid
 
-final case class WriterT[F[_], L, V](run: F[(L, V)]) {
+final case class WriterT[F[_], +L, +V](run: F[(L, V)]) {
 
   /**
    * Example:
