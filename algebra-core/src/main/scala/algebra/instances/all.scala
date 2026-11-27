@@ -34,6 +34,7 @@ trait AllInstances
     with CharInstances
     with DoubleInstances
     with FloatInstances
+    with Function1Instances
     with IntInstances
     with ListInstances
     with LongInstances
