@@ -350,6 +350,163 @@ final class NonEmptySeq[+A] private (val toSeq: Seq[A]) extends AnyVal with NonE
     NonEmptyMap.fromMapUnsafe(groupBy(f))
 
   /**
+   * Groups elements inside this `NonEmptySeq` according to the `Order`
+   * of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type B
+   * using the mapping function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.NonEmptySeq
+   * scala> import cats.syntax.all._
+   * scala> val neSeq = NonEmptySeq.of(12, -2, 3, -5)
+   * scala> val expectedResult = SortedMap(false -> NonEmptySeq.of("-2", "-5"), true -> NonEmptySeq.of("12", "3"))
+   * scala> val result = neSeq.groupMap(_ >= 0)(_.toString)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMap[K, B](key: A => K)(f: A => B)(implicit K: Order[K]): SortedMap[K, NonEmptySeq[B]] = {
+    implicit val ordering: Ordering[K] = K.toOrdering
+    var m = TreeMap.empty[K, mutable.Builder[B, Seq[B]]]
+
+    for { elem <- toSeq } {
+      val k = key(elem)
+
+      m.get(k) match {
+        case None          => m += ((k, Seq.newBuilder[B] += f(elem)))
+        case Some(builder) => builder += f(elem)
+      }
+    }
+
+    m.map { case (k, v) =>
+      (k, NonEmptySeq.fromSeqUnsafe(v.result()))
+    }: TreeMap[K, NonEmptySeq[B]]
+  }
+
+  /**
+   * Groups elements inside this `NonEmptySeq` according to the `Order`
+   * of the keys produced by the given key function.
+   * And each element in a group is transformed into a value of type B
+   * using the mapping function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyMap, NonEmptySeq}
+   * scala> import cats.syntax.all._
+   * scala> val neSeq = NonEmptySeq.of(12, -2, 3, -5)
+   * scala> val expectedResult = NonEmptyMap.of(false -> NonEmptySeq.of("-2", "-5"), true -> NonEmptySeq.of("12", "3"))
+   * scala> val result = neSeq.groupMapNem(_ >= 0)(_.toString)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapNem[K, B](key: A => K)(f: A => B)(implicit K: Order[K]): NonEmptyMap[K, NonEmptySeq[B]] =
+    NonEmptyMap.fromMapUnsafe(groupMap(key)(f))
+
+  /**
+   * Groups elements inside this `NonEmptySeq` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using their `Semigroup`.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.NonEmptySeq
+   * scala> import cats.syntax.all._
+   * scala> val neSeq = NonEmptySeq.of("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = neSeq.groupMapReduce(_.trim.toLowerCase)(_ => 1)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapReduce[K, B](key: A => K)(f: A => B)(implicit K: Order[K], B: Semigroup[B]): SortedMap[K, B] =
+    groupMapReduceWith(key)(f)(B.combine)
+
+  /**
+   * Groups elements inside this `NonEmptySeq` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using their `Semigroup`.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyMap, NonEmptySeq}
+   * scala> import cats.syntax.all._
+   * scala> val neSeq = NonEmptySeq.of("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = neSeq.groupMapReduceNem(_.trim.toLowerCase)(_ => 1)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapReduceNem[K, B](key: A => K)(f: A => B)(implicit K: Order[K], B: Semigroup[B]): NonEmptyMap[K, B] =
+    NonEmptyMap.fromMapUnsafe(groupMapReduce(key)(f))
+
+  /**
+   * Groups elements inside this `NonEmptySeq` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using the provided combine function.
+   *
+   * {{{
+   * scala> import scala.collection.immutable.SortedMap
+   * scala> import cats.data.NonEmptySeq
+   * scala> import cats.syntax.all._
+   * scala> val neSeq = NonEmptySeq.of("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = SortedMap("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = neSeq.groupMapReduceWith(_.trim.toLowerCase)(_ => 1)(_ + _)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapReduceWith[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit
+    K: Order[K]
+  ): SortedMap[K, B] = {
+    implicit val ordering: Ordering[K] = K.toOrdering
+    var m = TreeMap.empty[K, B]
+
+    for { elem <- toSeq } {
+      val k = key(elem)
+
+      m.get(k) match {
+        case Some(b) => m = m.updated(key = k, value = combine(b, f(elem)))
+        case None    => m += (k -> f(elem))
+      }
+    }
+
+    m
+  }
+
+  /**
+   * Groups elements inside this `NonEmptySeq` according to the `Order`
+   * of the keys produced by the given key function.
+   * Then each element in a group is transformed into a value of type B
+   * using the mapping function.
+   * And finally they are all reduced into a single value
+   * using the provided combine function.
+   *
+   * {{{
+   * scala> import cats.data.{NonEmptyMap, NonEmptySeq}
+   * scala> import cats.syntax.all._
+   * scala> val neSeq = NonEmptySeq.of("Hello", "World", "Goodbye", "World")
+   * scala> val expectedResult = NonEmptyMap.of("goodbye" -> 1, "hello" -> 1, "world" -> 2)
+   * scala> val result = neSeq.groupMapReduceWithNem(_.trim.toLowerCase)(_ => 1)(_ + _)
+   * scala> result === expectedResult
+   * res0: Boolean = true
+   * }}}
+   */
+  final def groupMapReduceWithNem[K, B](key: A => K)(f: A => B)(combine: (B, B) => B)(implicit
+    K: Order[K]
+  ): NonEmptyMap[K, B] =
+    NonEmptyMap.fromMapUnsafe(groupMapReduceWith(key)(f)(combine))
+
+  /**
    * Partitions elements in fixed size `NonEmptySeq`s.
    *
    * {{{
