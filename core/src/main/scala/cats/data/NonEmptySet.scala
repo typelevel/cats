@@ -31,9 +31,9 @@ import kernel.compat.scalaVersionSpecific.*
 /**
  * Actual implementation for [[cats.data.NonEmptySet]]
  *
- * @note This object is kept public for the sake of binary compatibility only
- *       and therefore is subject to changes in future versions of Cats.
- *       Do not use directly - use [[cats.data.NonEmptySet]] instead.
+ * @note
+ *   This object is kept public for the sake of binary compatibility only and therefore is subject to changes in future
+ *   versions of Cats. Do not use directly - use [[cats.data.NonEmptySet]] instead.
  */
 object NonEmptySetImpl extends NonEmptySetInstances with Newtype {
 
@@ -263,8 +263,8 @@ sealed class NonEmptySetOps[A](private[data] val value: NonEmptySet[A]) {
     toSortedSet.reduceLeft(f)
 
   /**
-   * Apply `f` to the "initial element" of this set and lazily combine it
-   * with every other value using the given function `g`.
+   * Apply `f` to the "initial element" of this set and lazily combine it with every other value using the given
+   * function `g`.
    */
   def reduceLeftTo[B](f: A => B)(g: (B, A) => B): B =
     tail.foldLeft(f(head))((b, a) => g(b, a))
@@ -276,8 +276,8 @@ sealed class NonEmptySetOps[A](private[data] val value: NonEmptySet[A]) {
     reduceRightTo(identity)(f)
 
   /**
-   * Apply `f` to the "initial element" of this set and lazily combine it
-   * with every other value using the given function `g`.
+   * Apply `f` to the "initial element" of this set and lazily combine it with every other value using the given
+   * function `g`.
    */
   def reduceRightTo[B](f: A => B)(g: (A, Eval[B]) => Eval[B]): Eval[B] =
     Always((head, tail)).flatMap { case (a, ga) =>
@@ -311,9 +311,8 @@ sealed class NonEmptySetOps[A](private[data] val value: NonEmptySet[A]) {
   /**
    * Typesafe stringification method.
    *
-   * This method is similar to .toString except that it stringifies
-   * values according to Show[_] instances, rather than using the
-   * universal .toString method.
+   * This method is similar to .toString except that it stringifies values according to Show[_] instances, rather than
+   * using the universal .toString method.
    */
   def show(implicit A: Show[A]): String =
     s"NonEmpty${Show[SortedSet[A]].show(toSortedSet)}"
@@ -321,10 +320,8 @@ sealed class NonEmptySetOps[A](private[data] val value: NonEmptySet[A]) {
   /**
    * Typesafe equality operator.
    *
-   * This method is similar to == except that it only allows two
-   * NonEmptySet[A] values to be compared to each other, and uses
-   * equality provided by Eq[_] instances, rather than using the
-   * universal equality provided by .equals.
+   * This method is similar to == except that it only allows two NonEmptySet[A] values to be compared to each other, and
+   * uses equality provided by Eq[_] instances, rather than using the universal equality provided by .equals.
    */
   def ===(that: NonEmptySet[A]): Boolean =
     Eq[SortedSet[A]].eqv(toSortedSet, that.toSortedSet)
@@ -358,8 +355,8 @@ sealed class NonEmptySetOps[A](private[data] val value: NonEmptySet[A]) {
     NonEmptySetImpl.create(cats.compat.SortedSet.zipWithIndex(toSortedSet))
 
   /**
-   * Groups elements inside this `NonEmptySet` according to the `Order`
-   * of the keys produced by the given mapping function.
+   * Groups elements inside this `NonEmptySet` according to the `Order` of the keys produced by the given mapping
+   * function.
    */
   def groupBy[B](f: A => B)(implicit B: Order[B]): NonEmptyMap[B, NonEmptySet[A]] =
     reduceLeftTo(a => NonEmptyMap.one(f(a), NonEmptySet.one(a))) { (acc, a) =>

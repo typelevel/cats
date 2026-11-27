@@ -26,9 +26,8 @@ import cats.kernel.CommutativeMonoid
 /**
  * Commutative Applicative.
  *
- * Further than an Applicative, which just allows composition of independent effectful functions,
- * in a Commutative Applicative those functions can be composed in any order, which guarantees
- * that their effects do not interfere.
+ * Further than an Applicative, which just allows composition of independent effectful functions, in a Commutative
+ * Applicative those functions can be composed in any order, which guarantees that their effects do not interfere.
  *
  * Must obey the laws defined in cats.laws.CommutativeApplicativeLaws.
  */

@@ -25,34 +25,28 @@ package lattice
 import scala.{specialized => sp}
 
 /**
- * Heyting algebras are bounded lattices that are also equipped with
- * an additional binary operation `imp` (for implication, also
- * written as →).
+ * Heyting algebras are bounded lattices that are also equipped with an additional binary operation `imp` (for
+ * implication, also written as →).
  *
  * Implication obeys the following laws:
  *
- *  - a → a = 1
- *  - a ∧ (a → b) = a ∧ b
- *  - b ∧ (a → b) = b
- *  - a → (b ∧ c) = (a → b) ∧ (a → c)
+ *   - a → a = 1
+ *   - a ∧ (a → b) = a ∧ b
+ *   - b ∧ (a → b) = b
+ *   - a → (b ∧ c) = (a → b) ∧ (a → c)
  *
- * In heyting algebras, `and` is equivalent to `meet` and `or` is
- * equivalent to `join`; both methods are available.
+ * In heyting algebras, `and` is equivalent to `meet` and `or` is equivalent to `join`; both methods are available.
  *
- * Heyting algebra also define `complement` operation (sometimes
- * written as ¬a). The complement of `a` is equivalent to `(a → 0)`,
- * and the following laws hold:
+ * Heyting algebra also define `complement` operation (sometimes written as ¬a). The complement of `a` is equivalent to
+ * `(a → 0)`, and the following laws hold:
  *
- *  - a ∧ ¬a = 0
+ *   - a ∧ ¬a = 0
  *
- * However, in Heyting algebras this operation is only a
- * pseudo-complement, since Heyting algebras do not necessarily
- * provide the law of the excluded middle. This means that there is no
- * guarantee that (a ∨ ¬a) = 1.
+ * However, in Heyting algebras this operation is only a pseudo-complement, since Heyting algebras do not necessarily
+ * provide the law of the excluded middle. This means that there is no guarantee that (a ∨ ¬a) = 1.
  *
- * Heyting algebras model intuitionistic logic. For a model of
- * classical logic, see the boolean algebra type class implemented as
- * `Bool`.
+ * Heyting algebras model intuitionistic logic. For a model of classical logic, see the boolean algebra type class
+ * implemented as `Bool`.
  */
 trait Heyting[@sp(Int, Long) A] extends Any with BoundedDistributiveLattice[A] { self =>
   def and(a: A, b: A): A

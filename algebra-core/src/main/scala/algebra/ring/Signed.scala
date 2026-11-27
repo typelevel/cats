@@ -31,22 +31,22 @@ import scala.{specialized => sp}
  *
  * The following laws holds:
  *
- * (1) if `a <= b` then `a + c <= b + c` (linear order),
- * (2) `signum(x) = -1` if `x < 0`, `signum(x) = 1` if `x > 0`, `signum(x) = 0` otherwise,
+ *   - (1) if `a <= b` then `a + c <= b + c` (linear order),
+ *   - (2) `signum(x) = -1` if `x < 0`, `signum(x) = 1` if `x > 0`, `signum(x) = 0` otherwise,
  *
  * Negative elements only appear when the scalar is taken from a additive abelian group. Then:
  *
- * (3) `abs(x) = -x` if `x < 0`, or `x` otherwise,
+ *   - (3) `abs(x) = -x` if `x < 0`, or `x` otherwise,
  *
  * Laws (1) and (2) lead to the triange inequality:
  *
- * (4) `abs(a + b) <= abs(a) + abs(b)`
+ *   - (4) `abs(a + b) <= abs(a) + abs(b)`
  *
  * Signed should never be extended in implementations, rather the [[Signed.forAdditiveCommutativeMonoid]] and
  * [[Signed.forAdditiveCommutativeGroup subtraits]].
  *
- * It's better to have the Signed hierarchy separate from the Ring/Order hierarchy, so that
- * we do not end up with duplicate implicits.
+ * It's better to have the Signed hierarchy separate from the Ring/Order hierarchy, so that we do not end up with
+ * duplicate implicits.
  */
 trait Signed[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any {
 

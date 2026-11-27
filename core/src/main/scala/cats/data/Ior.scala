@@ -31,18 +31,18 @@ import scala.annotation.tailrec
  * Represents a right-biased disjunction that is either an `A`, or a `B`, or both an `A` and a `B`.
  *
  * An instance of `A [[Ior]] B` is one of:
- *  - `[[Ior.Left Left]][A]`
- *  - `[[Ior.Right Right]][B]`
- *  - `[[Ior.Both Both]][A, B]`
+ *   - `[[Ior.Left Left]][A]`
+ *   - `[[Ior.Right Right]][B]`
+ *   - `[[Ior.Both Both]][A, B]`
  *
- * `A [[Ior]] B` is similar to `scala.util.Either[A, B]`, except that it can represent the simultaneous presence of
- * an `A` and a `B`. It is right-biased so methods such as `map` and `flatMap` operate on the
- * `B` value. Some methods, like `flatMap`, handle the presence of two [[Ior.Both Both]] values using a
- * `[[Semigroup]][A]`, while other methods, like [[toEither]], ignore the `A` value in a [[Ior.Both Both]].
+ * `A [[Ior]] B` is similar to `scala.util.Either[A, B]`, except that it can represent the simultaneous presence of an
+ * `A` and a `B`. It is right-biased so methods such as `map` and `flatMap` operate on the `B` value. Some methods, like
+ * `flatMap`, handle the presence of two [[Ior.Both Both]] values using a `[[Semigroup]][A]`, while other methods, like
+ * [[toEither]], ignore the `A` value in a [[Ior.Both Both]].
  *
- * `A [[Ior]] B` is isomorphic to `Either[Either[A, B], (A, B)]`, but provides methods biased toward `B`
- * values, regardless of whether the `B` values appear in a [[Ior.Right Right]] or a [[Ior.Both Both]].
- * The isomorphic `scala.util.Either` form can be accessed via the [[unwrap]] method.
+ * `A [[Ior]] B` is isomorphic to `Either[Either[A, B], (A, B)]`, but provides methods biased toward `B` values,
+ * regardless of whether the `B` values appear in a [[Ior.Right Right]] or a [[Ior.Both Both]]. The isomorphic
+ * `scala.util.Either` form can be accessed via the [[unwrap]] method.
  */
 sealed abstract class Ior[+A, +B] extends Product with Serializable {
 
@@ -1049,12 +1049,14 @@ sealed private[data] trait IorFunctions {
   /**
    * Create an `Ior` from two Options if at least one of them is defined.
    *
-   * @param oa an element (optional) for the left side of the `Ior`
-   * @param ob an element (optional) for the right side of the `Ior`
+   * @param oa
+   *   an element (optional) for the left side of the `Ior`
+   * @param ob
+   *   an element (optional) for the right side of the `Ior`
    *
-   * @return `None` if both `oa` and `ob` are `None`. Otherwise `Some` wrapping
-   * an [[Ior.Left]], [[Ior.Right]], or [[Ior.Both]] if `oa`, `ob`, or both are
-   * defined (respectively).
+   * @return
+   *   `None` if both `oa` and `ob` are `None`. Otherwise `Some` wrapping an [[Ior.Left]], [[Ior.Right]], or
+   *   [[Ior.Both]] if `oa`, `ob`, or both are defined (respectively).
    *
    * Example:
    * {{{
@@ -1084,10 +1086,11 @@ sealed private[data] trait IorFunctions {
 
   /**
    * Create an `Ior` from an `Either`.
-   * @param eab an `Either` from which the `Ior` should be created
+   * @param eab
+   *   an `Either` from which the `Ior` should be created
    *
-   * @return [[Ior.Left]] if the `Either` was a `Left`,
-   *         or [[Ior.Right]] if the `Either` was a `Right`
+   * @return
+   *   [[Ior.Left]] if the `Either` was a `Left`, or [[Ior.Right]] if the `Either` was a `Right`
    *
    * Example:
    * {{{

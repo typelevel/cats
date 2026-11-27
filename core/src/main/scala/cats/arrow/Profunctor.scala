@@ -23,8 +23,8 @@ package cats
 package arrow
 
 /**
- * A [[Profunctor]] is a [[Contravariant]] functor on its first type parameter
- * and a [[Functor]] on its second type parameter.
+ * A [[Profunctor]] is a [[Contravariant]] functor on its first type parameter and a [[Functor]] on its second type
+ * parameter.
  *
  * Must obey the laws defined in cats.laws.ProfunctorLaws.
  */
@@ -61,6 +61,7 @@ trait Profunctor[F[_, _]] extends Serializable { self =>
 
   /**
    * Narrows A into a subtype AA.
+   *
    * Example:
    * {{{
    * scala> import cats.syntax.profunctor._
@@ -76,6 +77,7 @@ trait Profunctor[F[_, _]] extends Serializable { self =>
 
   /**
    * Widens B into a supertype BB.
+   *
    * Example:
    * {{{
    * scala> import cats.syntax.profunctor._

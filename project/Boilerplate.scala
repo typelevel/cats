@@ -5,11 +5,13 @@ import scala.annotation.tailrec
 /**
  * Copied, with some modifications, from https://github.com/milessabin/shapeless/blob/master/project/Boilerplate.scala
  *
- * Generate a range of boilerplate classes, those offering alternatives with 0-22 params
- * and would be tedious to craft by hand
+ * Generate a range of boilerplate classes, those offering alternatives with 0-22 params and would be tedious to craft
+ * by hand
  *
- * @author Miles Sabin
- * @author Kevin Wright
+ * @author
+ *   Miles Sabin
+ * @author
+ *   Kevin Wright
  */
 object Boilerplate {
   import scala.StringContext.*
@@ -44,7 +46,7 @@ object Boilerplate {
   val header = "// auto-generated boilerplate by /project/Boilerplate.scala" // TODO: put something meaningful here?
 
   /**
-   * Returns a seq of the generated files.  As a side-effect, it actually generates them...
+   * Returns a seq of the generated files. As a side-effect, it actually generates them...
    */
   def gen(dir: File) =
     for (t <- templates) yield {

@@ -25,9 +25,9 @@ package free
 import cats.data.AndThen
 
 /**
- * The free contravariant functor on `F`. This is isomorphic to `F` as long as `F` itself is a
- * contravariant functor. The function from `F[A]` to `ContravariantCoyoneda[F,A]` exists even when
- * `F` is not a contravariant functor. Implemented using a List of functions for stack-safety.
+ * The free contravariant functor on `F`. This is isomorphic to `F` as long as `F` itself is a contravariant functor.
+ * The function from `F[A]` to `ContravariantCoyoneda[F,A]` exists even when `F` is not a contravariant functor.
+ * Implemented using a List of functions for stack-safety.
  */
 sealed abstract class ContravariantCoyoneda[F[_], A] extends Serializable { self =>
   import ContravariantCoyoneda.Aux
@@ -75,8 +75,7 @@ sealed abstract class ContravariantCoyoneda[F[_], A] extends Serializable { self
 object ContravariantCoyoneda {
 
   /**
-   * Lift the `Pivot` type member to a parameter. It is usually more convenient to use `Aux` than
-   * a refinment type.
+   * Lift the `Pivot` type member to a parameter. It is usually more convenient to use `Aux` than a refinment type.
    */
   type Aux[F[_], A, B] = ContravariantCoyoneda[F, A] { type Pivot = B }
 

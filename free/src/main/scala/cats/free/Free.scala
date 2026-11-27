@@ -27,9 +27,8 @@ import scala.annotation.tailrec
 import cats.arrow.FunctionK
 
 /**
- * A free operational monad for some functor `S`. Binding is done
- * using the heap instead of the stack, allowing tail-call
- * elimination.
+ * A free operational monad for some functor `S`. Binding is done using the heap instead of the stack, allowing
+ * tail-call elimination.
  */
 sealed abstract class Free[S[_], A] extends Product with Serializable with FreeFoldStep[S, A] {
 
@@ -41,12 +40,10 @@ sealed abstract class Free[S[_], A] extends Product with Serializable with FreeF
   /**
    * Modify the functor context `S` using transformation `f`.
    *
-   * This is effectively compiling your free monad into another
-   * language by changing the suspension functor using the given
-   * natural transformation `f`.
+   * This is effectively compiling your free monad into another language by changing the suspension functor using the
+   * given natural transformation `f`.
    *
-   * If your natural transformation is effectful, be careful. These
-   * effects will be applied by `mapK`.
+   * If your natural transformation is effectful, be careful. These effects will be applied by `mapK`.
    */
   final def mapK[T[_]](f: S ~> T): Free[T, A] =
     foldMap[Free[T, *]] { // this is safe because Free is stack safe
@@ -54,15 +51,14 @@ sealed abstract class Free[S[_], A] extends Product with Serializable with FreeF
     }
 
   /**
-   * Bind the given continuation to the result of this computation.
-   * All left-associated binds are reassociated to the right.
+   * Bind the given continuation to the result of this computation. All left-associated binds are reassociated to the
+   * right.
    */
   final def flatMap[B](f: A => Free[S, B]): Free[S, B] =
     FlatMapped(this, f)
 
   /**
-   * Catamorphism. Run the first given function if Pure, otherwise,
-   * the second given function.
+   * Catamorphism. Run the first given function if Pure, otherwise, the second given function.
    */
   final def fold[B](r: A => B, s: S[Free[S, A]] => B)(implicit S: Functor[S]): B =
     resume.fold(s, r)
@@ -95,8 +91,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable with FreeF
     }
 
   /**
-   * Run to completion, using a function that extracts the resumption
-   * from its suspension functor.
+   * Run to completion, using a function that extracts the resumption from its suspension functor.
    */
   final def go(f: S[Free[S, A]] => Free[S, A])(implicit S: Functor[S]): A = {
     @tailrec def loop(t: Free[S, A]): A =
@@ -108,15 +103,13 @@ sealed abstract class Free[S[_], A] extends Product with Serializable with FreeF
   }
 
   /**
-   * Run to completion, using the given comonad to extract the
-   * resumption.
+   * Run to completion, using the given comonad to extract the resumption.
    */
   final def run(implicit S: Comonad[S]): A =
     go(S.extract)
 
   /**
-   * Run to completion, using a function that maps the resumption
-   * from `S` to a monad `M`.
+   * Run to completion, using a function that maps the resumption from `S` to a monad `M`.
    */
   final def runM[M[_]](f: S[Free[S, A]] => M[Free[S, A]])(implicit S: Functor[S], M: Monad[M]): M[A] = {
     def step(t: S[Free[S, A]]): M[Either[S[Free[S, A]], A]] =
@@ -129,8 +122,7 @@ sealed abstract class Free[S[_], A] extends Product with Serializable with FreeF
   }
 
   /**
-   * Run to completion, using monadic recursion to evaluate the
-   * resumption in the context of `S`.
+   * Run to completion, using monadic recursion to evaluate the resumption in the context of `S`.
    */
   final def runTailRec(implicit S: Monad[S]): S[A] = {
     def step(rma: Free[S, A]): S[Either[Free[S, A], A]] =
@@ -155,8 +147,8 @@ sealed abstract class Free[S[_], A] extends Product with Serializable with FreeF
   /**
    * Catamorphism for `Free`.
    *
-   * Run to completion, mapping the suspension with the given
-   * transformation at each step and accumulating into the monad `M`.
+   * Run to completion, mapping the suspension with the given transformation at each step and accumulating into the
+   * monad `M`.
    *
    * This method uses `tailRecM` to provide stack-safety.
    */
@@ -168,17 +160,16 @@ sealed abstract class Free[S[_], A] extends Product with Serializable with FreeF
     })
 
   /**
-   * Compile your free monad into another language by changing the
-   * suspension functor using the given natural transformation `f`.
+   * Compile your free monad into another language by changing the suspension functor using the given natural
+   * transformation `f`.
    *
-   * If your natural transformation is effectful, be careful. These
-   * effects will be applied by `compile`.
+   * If your natural transformation is effectful, be careful. These effects will be applied by `compile`.
    */
   final def compile[T[_]](f: FunctionK[S, T]): Free[T, A] = mapK(f)
 
   /**
-   * Lift into `G` (typically a `EitherK`) given `InjectK`. Analogous
-   * to `Free.inject` but lifts programs rather than constructors.
+   * Lift into `G` (typically a `EitherK`) given `InjectK`. Analogous to `Free.inject` but lifts programs rather than
+   * constructors.
    *
    * {{{
    * scala> type Lo[A] = cats.data.EitherK[List, Option, A]
@@ -290,19 +281,19 @@ object Free extends FreeInstances {
     new FunctionK[Free[F, *], M] { def apply[A](f: Free[F, A]): M[A] = f.foldMap(fk) }
 
   /**
-   * This method is used to defer the application of an InjectK[F, G]
-   * instance. The actual work happens in
+   * This method is used to defer the application of an InjectK[F, G] instance. The actual work happens in
    * `FreeInjectKPartiallyApplied#apply`.
    *
-   * This method exists to allow the `F` and `G` parameters to be
-   * bound independently of the `A` parameter below.
+   * This method exists to allow the `F` and `G` parameters to be bound independently of the `A` parameter below.
    */
   @deprecated("use liftInject", "2.3.1")
   def inject[F[_], G[_]]: FreeInjectKPartiallyApplied[F, G] =
     new FreeInjectKPartiallyApplied
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[free] class FreeInjectKPartiallyApplied[F[_], G[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[A](fa: F[A])(implicit I: InjectK[F, G]): Free[G, A] =
@@ -310,18 +301,18 @@ object Free extends FreeInstances {
   }
 
   /**
-   * This method is used to defer the application of an InjectK[F, G]
-   * instance. The actual work happens in
+   * This method is used to defer the application of an InjectK[F, G] instance. The actual work happens in
    * `FreeLiftInjectKPartiallyApplied#apply`.
    *
-   * This method exists to allow the `G` parameter to be
-   * bound independently of the `F` and `A` parameters below.
+   * This method exists to allow the `G` parameter to be bound independently of the `F` and `A` parameters below.
    */
   def liftInject[G[_]]: FreeLiftInjectKPartiallyApplied[G] =
     new FreeLiftInjectKPartiallyApplied
 
   /**
-   * Uses the [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]] for ergonomics.
+   * Uses the
+   * [[http://typelevel.org/cats/guidelines.html#partially-applied-type-params Partially Applied Type Params technique]]
+   * for ergonomics.
    */
   final private[free] class FreeLiftInjectKPartiallyApplied[G[_]](private val dummy: Boolean = true) extends AnyVal {
     def apply[F[_], A](fa: F[A])(implicit I: InjectK[F, G]): Free[G, A] =

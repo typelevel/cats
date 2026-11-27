@@ -61,8 +61,7 @@ object StaticMethods extends cats.kernel.compat.HashCompat {
   }
 
   /**
-   * When you "own" this m, and will not mutate it again, this
-   * is safe to call. It is unsafe to call this, then mutate
+   * When you "own" this m, and will not mutate it again, this is safe to call. It is unsafe to call this, then mutate
    * the original collection.
    *
    * You are giving up ownership when calling this method

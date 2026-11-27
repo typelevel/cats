@@ -68,9 +68,8 @@ package object data extends ScalaVersionSpecificPackage {
   object IndexedState extends IndexedStateFunctions
 
   /**
-   * `StateT[F, S, A]` is similar to `Kleisli[F, S, A]` in that it takes an `S`
-   * argument and produces an `A` value wrapped in `F`. However, it also produces
-   * an `S` value representing the updated state (which is wrapped in the `F`
+   * `StateT[F, S, A]` is similar to `Kleisli[F, S, A]` in that it takes an `S` argument and produces an `A` value
+   * wrapped in `F`. However, it also produces an `S` value representing the updated state (which is wrapped in the `F`
    * context along with the `A` value.
    */
   type StateT[F[_], S, A] = IndexedStateT[F, S, S, A]
@@ -83,8 +82,8 @@ package object data extends ScalaVersionSpecificPackage {
   val IRWST = IndexedReaderWriterStateT
 
   /**
-   * Represents a stateful computation in a context `F[_]`, over state `S`, with an
-   * initial environment `E`, an accumulated log `L` and a result `A`.
+   * Represents a stateful computation in a context `F[_]`, over state `S`, with an initial environment `E`, an
+   * accumulated log `L` and a result `A`.
    */
   type ReaderWriterStateT[F[_], E, L, S, A] = IndexedReaderWriterStateT[F, E, L, S, S, A]
   object ReaderWriterStateT extends RWSTFunctions
